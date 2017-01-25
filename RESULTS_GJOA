@@ -1,0 +1,21 @@
+Initializing SSNET1
+Training model SSNET1, please wait
+On epoch: 20000/20000 -- 100.00%-- Loss: 243336576.0
+#### Scores ####
+RMSE train: 15599.10
+RMSE test: 40044.66
+R2 train: 0.94
+R2 test: 0.55
+#### ------ ####
+
+
+
+Initializing SSNET1
+Training model SSNET1, please wait
+On epoch: 3000/3000 -- 100.00%-- Loss: 0.042278364300727844
+#### Scores ####
+RMSE train: 0.15
+RMSE test: 0.44
+R2 train: 0.98
+R2 test: 0.77
+#### ------ ####

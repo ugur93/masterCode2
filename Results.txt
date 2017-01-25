@@ -1,0 +1,15 @@
+
+
+
+SIM: Data generated with sample-size of: 1000
+Initializing SSNET1
+Training model SSNET1, please wait
+On epoch: 20000/20000 -- 100.00%-- Loss: 551.2960205078125
+#### Scores ####
+RMSE train: 23.47
+RMSE test: 12.53
+R2 train: 0.98
+R2 test: 0.90
+#### ------ ####
+
+

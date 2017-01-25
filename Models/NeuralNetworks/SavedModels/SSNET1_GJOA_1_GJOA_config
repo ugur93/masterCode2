@@ -1,0 +1,11 @@
+-------------------------------------------------
+Input module Config: 
+ n_depth: 1 
+ n_width: 5 
+ n_inception: 3 
+ l2_weight: 0.0001-------------------------------------------------
+Fit config: 
+ epoch: 10000 
+ batch size: 1000 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x1035b0e10>, <Models.NeuralNetworks.base.EpochVerbose object at 0x1035b0dd8>]

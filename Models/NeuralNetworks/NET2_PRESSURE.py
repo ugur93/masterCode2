@@ -2,24 +2,30 @@
 from .base import *
 from .base_class import NN_BASE
 
-class SSNET1(NN_BASE):
+
+
+
+
+
+
+
+
+
+class SSNET2(NN_BASE):
 
 
     def __init__(self):
 
-        name='SSNET1'
+        name='SSNET2'
 
         # Input module config
         self.IM_n_inception = 3 #(n_inception, n_depth inception)
         self.IM_n_depth = 1
         self.IM_n_width = 15
-        self.l2weight = 0.00012
+        self.l2weight = 0.00005
         self.add_thresholded_output=True
 
-        self.input_tags=[['CHK'],['PWH']]
-
-
-
+        self.input_tags=['CHK','PWH']
         #Training config
         optimizer = 'rmsprop' #SGD(momentum=0.9,nesterov=True)
         loss = 'mse'
@@ -35,9 +41,11 @@ class SSNET1(NN_BASE):
         print('Initializing %s' % (self.model_name))
 
 
-        for key in self.input_tags.keys():
+
+
+        for key in self.input_tags:
             aux_input,input,merged_out,out=generate_input_module(n_depth=self.IM_n_depth, n_width=self.IM_n_width,
-                                                                    n_input=1, n_inception=self.IM_n_inception,
+                                                                    n_input=self.n_inputs, n_inception=self.IM_n_inception,
                                                                     l2_weight=self.l2weight, name=key,thresholded_output=self.add_thresholded_output)
             self.aux_inputs.append(aux_input)
             self.inputs.append(input)

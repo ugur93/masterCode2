@@ -1,0 +1,11 @@
+-------------------------------------------------
+Input module Config: 
+ n_depth: 1 
+ n_width: 5 
+ n_inception: 0 
+ l2_weight: 0.0001-------------------------------------------------
+Fit config: 
+ epoch: 100000 
+ batch size: 1000 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x113c449e8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x113c44a58>, <keras.callbacks.EarlyStopping object at 0x113c44a20>]

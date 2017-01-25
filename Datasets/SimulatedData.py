@@ -1,21 +1,20 @@
-
-
-
 import numpy as np
 
 from matplotlib import pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
 import pandas as pd
-import warnings
+from .base import *
 
 N_SAMPLES=1000
-CHOKE_FREQ=int(N_SAMPLES/40)
+CHOKE_FREQ=int(N_SAMPLES/50)
 N_WELLS=4
-N_SHUTDOWNS=1
+N_SHUTDOWNS=3
 N_SHUTDOWN_STEPS=3
 N_SHUTDOWN_SCALE=5
-np.random.seed(100)
+np.random.seed(150)
+
+WELL_NAMES=['F1','B2','D3','E1']
 
 def generateChokeConfig():
     choke_mean = np.random.randint(20, 80, 1)
@@ -37,13 +36,15 @@ def getSimulatedChokeData():
         for i in range(N_SHUTDOWN_STEPS):
             data[int(CHOKE_FREQ / N_SHUTDOWN_SCALE * (i+N_SHUTDOWN_STEPS-1)):int(CHOKE_FREQ / N_SHUTDOWN_SCALE * (i + N_SHUTDOWN_STEPS))] = \
                 int(next_choke_val / (2 ** (N_SHUTDOWN_STEPS-i))) * np.ones((int(CHOKE_FREQ / N_SHUTDOWN_SCALE), 1))
+        #   print(int(next_choke_val / (2 ** (N_SHUTDOWN_STEPS-i))))
+        #print('::::::::')
         return data
 
-    chkInputs=pd.DataFrame(index=range(0,N_SAMPLES),columns=['chk'+str(i) for i in range(1,N_WELLS+1)])
+    chkInputs=pd.DataFrame(index=range(0,N_SAMPLES),columns=[WELL_NAMES[i]+'_CHK' for i in range(0,N_WELLS)])
     for i in range(N_WELLS):
         choke_min,choke_max=generateChokeConfig()
         status_shutdown=False
-        shutdown_samples=np.random.randint(2,10,N_SHUTDOWNS)
+        shutdown_samples=np.random.randint(2,N_SAMPLES/CHOKE_FREQ,N_SHUTDOWNS)
 
         chk_data=np.zeros((N_SAMPLES,1))
         prev_sample=0
@@ -57,72 +58,69 @@ def getSimulatedChokeData():
             else:
                 chk_data[prev_sample:current_sample]=np.random.randint(choke_min,choke_max,1)*np.ones((CHOKE_FREQ,1))
             prev_sample=current_sample
-        chkInputs['chk'+str(i+1)]=chk_data
+        chkInputs[WELL_NAMES[i]+'_CHK']=chk_data
     return chkInputs
 
-def getSimulatedOilFieldData():
+def fetchSimulatedData():
 
-    chkInputs=getSimulatedChokeData()
-    wellOutputs=pd.DataFrame(index=range(0,N_SAMPLES),columns=['well_'+str(i) for i in range(1,N_WELLS+1)])
-    totalOutput=np.zeros((N_SAMPLES,1))
+    X=getSimulatedChokeData()
+    X_Q=pd.DataFrame(index=range(0,N_SAMPLES),columns=[WELL_NAMES[i]+'_QGAS' for i in range(0,N_WELLS)])
+
+    XT=pd.DataFrame()
+    Y=np.zeros((N_SAMPLES,1))
+    WELL_PARAMS={}
     for i in range(N_WELLS):
         a=np.random.randint(1,10,1)
         b=np.random.randint(0, 100, 1)
         c=np.linspace(0,10,N_SAMPLES)*np.random.rand()
-        noise = np.random.rand(N_SAMPLES, 1)*10
-        data=f_linear(a,b,c,chkInputs['chk'+str(i+1)])+noise
+        noise = np.random.rand(N_SAMPLES, 1)*25
+        data=f_linear(a,b,c,X[WELL_NAMES[i]+'_CHK'])+noise
         #print(data.shape)
-        wellOutputs['well_'+str(i+1)]=data
-        totalOutput+=data
+        X_Q[WELL_NAMES[i]+'_QGAS']=data
+        Y+=data
+        WELL_PARAMS[WELL_NAMES[i]]={'a':a,'b':b}
+        XT[WELL_NAMES[i]]=X[WELL_NAMES[i]+'_CHK']
+        x_toggle=np.array([0 if val == 0 else 1 for val in X[WELL_NAMES[i]+'_CHK']])
+        XT[WELL_NAMES[i]+'_b']=b*np.ones((N_SAMPLES,1))*x_toggle.reshape(N_SAMPLES,1)
 
 
-    totalOutput=pd.DataFrame(totalOutput,columns=['Q'])
+    #print_rank(XT,'Simulated')
 
-    plotData(chkInputs, wellOutputs, totalOutput)
 
-    #chkInputs=scale(chkInputs,chkInputs_scaler)
-    #wellOutputs = scale(wellOutputs,wellOutputs_scaler)
-    #totalOutput = scale(totalOutput,totalOutput_scaler)
+    Y=pd.DataFrame(Y,columns=['GJOA_QGAS'])
+
+    #plotData(X, X_Q, Y)
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
-    return chkInputs,wellOutputs,totalOutput
+
+    SimData=DataContainer(X,Y,X_Q,params=WELL_PARAMS,name='Simulated')
+    return SimData
 
 def f_linear(a,b,c,x):
-    return a*x.values.reshape(N_SAMPLES,1)+b*np.ones((N_SAMPLES,1))+c.reshape((N_SAMPLES,1))
-
-def scale(data,scaler):
-    cols=data.columns
-    data=scaler.fit_transform(data)
-
-    return pd.DataFrame(data=data,columns=cols)
+    x_toggle=np.array([0 if val==0 else 1 for val in x])
+    return a*x.values.reshape(N_SAMPLES,1)+b*np.ones((N_SAMPLES,1))*x_toggle.reshape(N_SAMPLES,1)#+c.reshape((N_SAMPLES,1))
 
 
-def plotData(chkInputs,wellOutputs,totalOutput):
-    plotChokeInputs(chkInputs)
-    plotWellOutputs(wellOutputs)
+def plotData(X,X_Q,Y):
+    plotChokeInputs(X)
+    plotWellOutputs(X_Q)
     plt.figure()
-    plt.plot(totalOutput)
+    plt.plot(Y)
     plt.show()
-def plotChokeInputs(chokeInputs):
-    plt.subplot(2,2,1)
-    plt.plot(chokeInputs['chk1'])
-    plt.subplot(2,2,2)
-    plt.plot(chokeInputs['chk2'])
-    plt.subplot(2,2, 3)
-    plt.plot(chokeInputs['chk3'])
-    plt.subplot(2, 2, 4)
-    plt.plot(chokeInputs['chk4'])
+def plotChokeInputs(X):
 
-def plotWellOutputs(wellOutputs):
+
+    for i in range(1,N_WELLS+1):
+        plt.subplot(2,2,i)
+        plt.plot(X[WELL_NAMES[i-1]+'_CHK'])
+        plt.title(WELL_NAMES[i-1]+'_CHK')
+
+
+def plotWellOutputs(X_Q):
    # plt.figure()
-    plt.subplot(2,2,1)
-    plt.plot(wellOutputs['well_1'])
-    plt.subplot(2,2,2)
-    plt.plot(wellOutputs['well_2'])
-    plt.subplot(2,2, 3)
-    plt.plot(wellOutputs['well_3'])
-    plt.subplot(2, 2, 4)
-    plt.plot(wellOutputs['well_4'])
-    plt.title('Well outputs')
 
-
+   for i in range(1,N_WELLS+1):
+       plt.subplot(2, 2, i)
+       plt.plot(X_Q[WELL_NAMES[i-1]+'_QGAS'])
+       #plt.title('well_'+str(i))
+   #plt.show()
