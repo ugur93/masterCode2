@@ -1,5 +1,5 @@
 
-from sklearn.preprocessing import StandardScaler,MinMaxScaler,MaxAbsScaler
+from sklearn.preprocessing import StandardScaler,MinMaxScaler,MaxAbsScaler,FunctionTransformer
 import pandas as pd
 import numpy as np
 
@@ -12,9 +12,21 @@ def print_rank(X,name):
     else:
         print('Rank of ' + str(rank) + ' is not full rank')
 
+def func_transform(x,scaler):
+    return x/scaler
+def inverse_func_transform(x,scaler):
+    return x*scaler
 
+def get_cols_that_ends_with(df,tag):
+
+    cols=[]
+
+    for col in df.columns:
+        if col.split('_')[-1]==tag:
+            cols.append(col)
+    return cols
 class DataContainer:
-    def __init__(self,X,Y,Y_Q,params=None,name='unnamed'):
+    def __init__(self,X,Y,Y_Q,params=None,name='unnamed',Y_SCALE=100000):
         #print(params)
         self.name=name
         self.X=X
@@ -24,52 +36,66 @@ class DataContainer:
         self.data_size=X.shape[0]
         self.n_cols=X.shape[1]
 
-        self.X_SCALER=MaxAbsScaler()
-        self.Y_SCALER=MaxAbsScaler()
-        self.Y_Q_SCALER=MinMaxScaler()
+
+        self.Y_SCALE=Y_SCALE#458376.372582837
+        #self.Y_SCALE=100
+
+        self.X_SCALER=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':100},inv_kw_args={'scaler':100})
+        self.Y_scaler=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':self.Y_SCALE},inv_kw_args={'scaler':self.Y_SCALE})
+
+
+        #self.Y_scaler=MinMaxScaler()
+
 
         self.X_transformed = None
         self.Y_transformed = None
         self.Y_Q_transformed=None
 
-
         self.transformed=False
-        self.transform()
+        self.init_transform()
+
+        #print(self.Y.columns)
+        #print(self.Y_scaler.scale_)
+        #print(1/2.18161332e-06)
 
 
 
-    def transform(self):
-        if not self.transformed:
-            X_cols = self.X.columns
-            X_scaled = self.X_SCALER.fit_transform(self.X)
+    def init_transform(self):
+        X_cols = self.X.columns
+        X_scaled = self.X_SCALER.transform(self.X)
 
-            self.X_transformed = pd.DataFrame(data=X_scaled, columns=X_cols)
+        self.X_transformed = pd.DataFrame(data=X_scaled, columns=X_cols)
 
-            Y_cols = self.Y.columns
-            Y_scaled = self.Y_SCALER.fit_transform(self.Y)
+        Y_cols = self.Y.columns
 
-            self.Y_transformed = pd.DataFrame(data=Y_scaled, columns=Y_cols)
+        Y_scaled=self.Y_scaler.transform(self.Y)
 
-            Y_Q_cols=self.Y_Q.columns
-            Y_Q_scaled=self.Y_SCALER.transform(self.Y_Q)
-            self.Y_Q_transformed=pd.DataFrame(data=Y_Q_scaled,columns=Y_Q_cols)
+        self.Y_transformed = pd.DataFrame(data=Y_scaled, columns=Y_cols)
 
-            self.transformed=True
+    def transform_Y_with_new_scale(self,scale=100):
+        self.Y_scaler=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,
+                                          kw_args={'scaler':scale},inv_kw_args={'scaler':scale})
+        Y_cols = self.Y.columns
 
-    def inverse_transform_using_scaler(self,data,scaler_type):
-        if self.transformed:
-            if scaler_type=='X':
-                return self.X_SCALER.inverse_transform(data)
-            else:
-                return self.Y_SCALER.inverse_transform(data)
-        return None
-    def transform_using_scaler(self,data,scaler_type):
-        if self.transformed:
-            if scaler_type=='X':
-                return self.X_SCALER.transform(data)
-            else:
-                return self.Y_SCALER.transform(data)
-        return None
+        Y_scaled = self.Y_scaler.transform(self.Y)
+
+        self.Y_transformed = pd.DataFrame(data=Y_scaled, columns=Y_cols)
+
+
+
+
+
+    def inverse_transform(self,data,scaler_type):
+        if scaler_type=='X':
+            return self.X_SCALER.inverse_transform(data)
+        else:
+            return self.Y_SCALER.inverse_transform(data)
+
+    def transform(self,data,scaler_type):
+        if scaler_type=='X':
+            return self.X_SCALER.transform(data)
+        else:
+            return self.Y_SCALER.transform(data)
     def __str__(self):
 
         s=self.name+'\n'

@@ -1,7 +1,7 @@
 
 import Models.NeuralNetworks.NET1 as NN1
 import Models.NeuralNetworks.NN_external as NNE
-from Models.NeuralNetworks import NET2_PRESSURE
+from Models.NeuralNetworks import NET2_PRESSURE,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2
 import DataManager as DM
 from sklearn import model_selection
 from sklearn import metrics
@@ -10,13 +10,15 @@ import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
 import seaborn
+from sklearn import ensemble
 
-EXTERNAL=False
-def train_test_split(X,Y,test_size):
+MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
+def train_test_split(X,Y,Y_Q,test_size):
     split_length=int(len(X)*(1-test_size))
     X_train,X_test=X[0:split_length],X[split_length-1:-1]
     Y_train,Y_test=Y[0:split_length],Y[split_length-1:-1]
-    return X_train,X_test,Y_train,Y_test
+    Y_Q_train, Y_Q_test = Y_Q[0:split_length], Y_Q[split_length - 1:-1]
+    return X_train,X_test,Y_train,Y_test,Y_Q_train, Y_Q_test
 
 def getTrainTestSplit(input,output,train_index,test_index):
     input_train, output_train = {'input1': input['input1'][train_index], 'input2': input['input2'][train_index]}, {
@@ -27,127 +29,158 @@ def getTrainTestSplit(input,output,train_index,test_index):
     return input_train,output_train,input_test,output_test
 
 def validate_train_test_split(Data):
-    X=Data.X_transformed
-    Y=Data.Y_transformed
+    #Data.transform_Y_with_new_scale(100)
+    X=Data.X_transformed#[300:-1]
+    Y=Data.Y_transformed#[300:-1]
+    Y_Q=Data.Y_Q_transformed
+    #X, Y = remove_chk_zeros(X, Y, 'F1')
+    X, X_test, Y, Y_test, _, _ = train_test_split(X, Y, Y, test_size=0.1)
+    X_train, X_val, Y_train, Y_val, _, _ = train_test_split(X, Y, Y, test_size=0.2)
 
 
 
-    #print(Data)
-
-    X_train, X_test, Y_train, Y_test=train_test_split(X, Y,test_size=0.2)
-
-
-
-    if EXTERNAL:
-        model = NNE.SSNET_EXTERNAL('SSNET1_GJOA_1_GJOA')
-        model.initialize_thresholds(Data, True)
-        #model.fit(X_train, Y_train)
-        #model.save_model_to_file('SSNET1_GJOA_1' + Data.name, save_weights=True)
-    else:
-        model=NN1.SSNET1()
-        #model=NET2_PRESSURE.SSNET2()
-        model.initialize_thresholds(Data,True)
-
-        #print_weights(model)
-        model.fit(X_train, Y_train)
-
-        model.save_model_to_file('SSNET1_GJOA_double_inception_w10_depth2_newscaler2_pressure_' + Data.name, save_weights=True)
-    #print_weights(model)
-
-    #model = SVR(C=100, gamma=0.0005)
+    #params = {'n_estimators': 500, 'max_depth': 4, 'min_samples_split': 2,
+    #          'learning_rate': 0.01, 'loss': 'ls'}
+    #model=ensemble.GradientBoostingRegressor(**params)
+    #model = SVR(C=1000, gamma=0.001,epsilon=0.0001)
     #model.fit(X_train,Y_train)
+    #scores= print_scores(model, X_train, X_test, Y_train, Y_test)
+    #lotTrueAndPredicted(model, X_train, X_test, Y_train, Y_test)
+    #plotPressure(model, X_train, X_test, Y_train, Y_test)
+    #exit()
+
+    #model=NCNET_CHKPRES.SSNET3_PRESSURE()
+
+    #model = NET2_PRESSURE.SSNET2()
+
+    #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
+    MODEL_SAVEFILE_NAME='NCNET1_2_W_ONOFF'
+    model = NN1.SSNET1()
+    #model=NCNET1_GJOA2.NCNET1_GJOA2()
+    #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
+    #model=NET_MISC.NETTEST()
+
+    #model=NET3.SSNET3()
+
+    #model.update_model()
+
+    model.initialize_chk_thresholds(Data, True)
+    model.fit(X_train,Y_train,X_val,Y_val)
+
+    #EVAL
 
 
-
-    score_test=metrics.mean_squared_error(Y_test,model.predict(X_test))
-    score_train = metrics.mean_squared_error(Y_train, model.predict(X_train))
-    score_test_r2 = metrics.r2_score(Y_test, model.predict(X_test))
-    score_train_r2 = metrics.r2_score(Y_train, model.predict(X_train))
-
-    print('#### Scores ####')
-    print("RMSE train: %0.2f" % (np.sqrt(score_train)))
-    print("RMSE test: %0.2f" % (np.sqrt(score_test)))
-    print("R2 train: %0.2f" % (score_train_r2))
-    print("R2 test: %0.2f" % (score_test_r2))
-    print('#### ------ ####')
-    plotTrueAndPredicted(model, X_train, X_test, Y_train, Y_test)
-    try:
-        plotTrainingHistory(model)
-    except(AttributeError):
-        pass
-    try:
-        plotWellOutput(model,Data.X_transformed,Data.Y_Q_transformed)
-    except(AttributeError):
-        pass
+    scores = print_scores(model, X_train, X_val, Y_train, Y_val)
+    #exit()
+    model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
+    input_cols_scatter =[] #['F1_CHK','B2_CHK','D3_CHK','E1_CHK','E1_PDC']
+    output_cols_scatter =[]# ['GJOA_QGAS']
+    output_cols_plot=[]
+    model.visualize_scatter(X_train, X_val, Y_train, Y_val, input_cols=input_cols_scatter,output_cols=output_cols_scatter)
+    model.visualize_plot(X_train, X_val, Y_train, Y_val, output_cols=output_cols_plot)
     plt.show()
-    #visualizeResults(model, chkInputs, wellOutputs, chk_train, chk_test, Q_train, Q_test)
 
 
+def validateRepeat(Data):
+    X = Data.X_transformed  # [300:-1]
+    Y = Data.Y_transformed  # [300:-1]
+
+    X, X_test, Y, Y_test, _, _ = train_test_split(X, Y, Y, test_size=0.1)
+    X_train, X_val, Y_train, Y_val, _, _ = train_test_split(X, Y, Y, test_size=0.2)
+
+    N_REPEAT=10
 
 
+    mse_train_list=[]
+    mse_test_list=[]
+    r2_train_list=[]
+    r2_test_list=[]
 
+
+    for i in range(N_REPEAT):
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        model = NN1.SSNET1()
+        model.initialize_chk_thresholds(Data, True)
+        model.fit(X_train, Y_train, X_val, Y_val)
+        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2 = model.evaluate(X_train, X_val, Y_train,
+                                                                                        Y_val)
+        del model
+
+        mse_train_list.append(score_train_MSE[-1])
+        mse_test_list.append(score_test_MSE[-1])
+        r2_train_list.append(score_train_r2[-1])
+        r2_test_list.append(score_test_r2[-1])
+
+    RMSE_TRAIN=np.mean(np.sqrt(mse_train_list))
+    RMSE_TEST=np.mean(np.sqrt(mse_test_list))
+    R2_TEST=np.mean(r2_test_list)
+    R2_TRAIN=np.mean(r2_train_list)
+
+
+    s_rmse = "Accuracy RMSE \n TRAIN: %0.2f (+/- %0.2f) \n VAL: %0.2f (+/- %0.2f)" % (RMSE_TRAIN, np.std(np.sqrt(mse_train_list)) * 2,RMSE_TEST, np.std(np.sqrt(mse_test_list)) * 2)
+    s_r2 = "Accuracy R2 \n TRAIN: %0.2f (+/- %0.2f) \n VAL: %0.2f (+/- %0.2f)" % (
+    R2_TRAIN, np.std(r2_train_list) * 2, R2_TEST, np.std(r2_test_list) * 2)
+
+    print(s_rmse)
+    print(s_r2)
 
 
 def validateCV(Data,cv=10):
     #input, output = DM.get_concrete_data()
 
-    X=Data.X
-    Y=Data.Y
-    X, X_test, Y, Y_test = train_test_split(X, Y, test_size=0.2)
+    X=Data.X_transformed
+    Y=Data.Y_transformed
+    X, X_test, Y, Y_test,_,_ = train_test_split(X, Y,Y ,test_size=0.1)
 
-    kfold=model_selection.TimeSeriesSplit(n_splits=10)
+    kfold=model_selection.KFold(n_splits=5,random_state=False)
 
-    scores=np.empty(shape=(0,))
+    scores_rmse_train=np.empty(shape=(0,))
+    scores_r2_test = np.empty(shape=(0,))
+    scores_rmse_test = np.empty(shape=(0,))
+    scores_r2_train = np.empty(shape=(0,))
+
+    rmse_train_list = []
+    rmse_test_list = []
+    r2_train_list = []
+    r2_test_list = []
     #zprint scores
     #print(chkInputs.index)
+    i=1
     for train_index,test_index in kfold.split(X.index):
         #print("TRAIN:", train_index, "TEST:", test_index)
         #print(chkInputs[test_index])
-        model = NN1.SSNET1()
+
+        #print('Train index: {}'.format(train_index))
+        #print('Val index: {}'.format(test_index))
+        #model = NN1.SSNET1()
+        model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        model.initialize_chk_thresholds(Data, True)
         X_train=X.iloc[train_index]
         X_val=X.iloc[test_index]
         Y_train=Y.iloc[train_index]
         Y_val=Y.iloc[test_index]
-        model.fit(X_train, Y_train)
-        scores=np.append(scores,np.sqrt(metrics.mean_squared_error(X_val,model.predict(Y_val))))
-        #print(scores)
+        model.fit(X_train, Y_train,X_val,Y_val)
+        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2 = model.evaluate(X_train, X_val, Y_train,
+                                                                                        Y_val)
+
+        rmse_train_list.append(np.sqrt(score_train_MSE[-1]))
+        rmse_test_list.append(np.sqrt(score_test_MSE[-1]))
+        r2_train_list.append(score_train_r2[-1])
+        r2_test_list.append(score_test_r2[-1])
+        print('Scores on fold: {} \n RMSE: {} \n R2: {}'.format(i,rmse_test_list[-1],r2_test_list[-1]))
         del model
+        i+=1
+    RMSE_TRAIN = np.mean(rmse_train_list)
+    RMSE_TEST = np.mean(rmse_test_list)
+    R2_TEST = np.mean(r2_test_list)
+    R2_TRAIN = np.mean(r2_train_list)
+    s_rmse = "Accuracy RMSE \n TRAIN: %0.2f (+/- %0.2f) \n TEST: %0.2f (+/- %0.2f)" % (
+    RMSE_TRAIN, np.std(rmse_train_list) * 2, RMSE_TEST, np.std(rmse_test_list) * 2)
+    s_r2 = "Accuracy R2 \n TRAIN: %0.2f (+/- %0.2f) \n TEST: %0.2f (+/- %0.2f)" % (
+        R2_TRAIN, np.std(r2_train_list) * 2, R2_TEST, np.std(r2_test_list) * 2)
 
-    print("Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2))
-
-    print(scores)
-
-def plotTrueAndPredicted(model,X_train, X_test, Y_train, Y_test):
-
-    plt.figure()
-    plt.plot(Y_train.index,Y_train,color='blue',label='Y_true - train')
-    plt.plot(Y_train.index,model.predict(X_train),color='black',label='Y_pred - train')
-
-
-    plt.plot(Y_test.index,Y_test,color='red',label='Y_true - test')
-    plt.plot(Y_test.index,model.predict(X_test),color='green',label='Y_pred - test')
-
-    #plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-               ncol=2, mode="expand", borderaxespad=0.,fontsize=20)
-
-
-
-
-    plt.figure()
-
-    for i,key in zip(range(4),X_train):
-        plt.subplot(2,2,i+1)
-        plt.scatter(X_train[key], Y_train, color='blue', label='Y_true - train')
-        plt.scatter(X_train[key], model.predict(X_train), color='black', label='Y_pred - train')
-
-        plt.scatter(X_test[key], Y_test, color='red', label='Y_true - test')
-        plt.scatter(X_test[key], model.predict(X_test), color='green', label='Y_pred - test')
-
-        # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-        plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                   ncol=2, mode="expand", borderaxespad=0., fontsize=20)
-    #plt.show()
+    print(s_rmse)
+    print(s_r2)
 
 def plotTrainingHistory(model):
     history = model.get_history()
@@ -157,52 +190,33 @@ def plotTrainingHistory(model):
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     #plt.show()
-def plotWellOutput(model,X,X_Q):
-    WELL_NAMES = ['F1', 'B2', 'D3', 'E1']
-    plt.figure()
-    for i,key in zip(range(len(WELL_NAMES)),X.columns):
-        name=WELL_NAMES[i]+'_QGAS'
-        X_Q_predicted=model.predict_well_output(X,WELL_NAMES[i])
-        plt.subplot(2,2,i+1)
-        plt.plot(X_Q[name], label=name + '_output_true',color='blue')
-        plt.plot(X_Q_predicted,color='red',label=name+'_output_predicted')
-        plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                   ncol=2, mode="expand", borderaxespad=0., fontsize=10)
-        plt.title(key)
-    plt.figure()
-    i=1
-    for i,well_name in zip(range(4),WELL_NAMES):
-        key=well_name+'_CHK'
-        name=well_name+'_QGAS'
-        data=model.predict_well_output(X,well_name)
-        plt.subplot(2,2,i+1)
-        plt.scatter(X[key],X_Q[name], label=name + '_output_true',color='blue')
-        plt.scatter(X[key],data,color='red',label=name+'_output_predicted')
-        plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                   ncol=2, mode="expand", borderaxespad=0., fontsize=10)
-        plt.title(key)
-        i+=1
 
+def print_scores(model,X_train,X_test,Y_train,Y_test):
+    score_train_MSE, score_test_MSE, score_train_r2, score_test_r2 = model.evaluate(X_train, X_test, Y_train, Y_test)
 
-def print_weights(model):
-    try:
-        print('')
-        print(model.get_layer_weights('dense_1'))
-        print(model.get_layer_weights('dense_2'))
-        print(model.get_layer_weights('dense_3'))
-        print(model.get_layer_weights('dense_4'))
-        print(model.get_layer_weights('E1_CHK'))
-        print('')
-    except(AttributeError):
-        print('Error with layer names')
+    #score_train_r2=metrics.r2_score(Y_train,model.predict(X_train))
+    #score_test_r2 = metrics.r2_score(Y_test,model.predict(X_test))
+    #score_train_MSE=metrics.mean_squared_error(Y_train,model.predict(X_train))
+    #score_test_MSE = metrics.mean_squared_error(Y_test, model.predict(X_test))
 
-    try:
-        print('')
-        print('F1: '+str(model.get_layer_weights('F1_CHK_out')))
-        print('B2: '+str(model.get_layer_weights('B2_CHK_out')))
-        print('D3: '+str(model.get_layer_weights('D3_CHK_out')))
-        print('E1: '+str(model.get_layer_weights('E1_CHK_out')))
-        print(model.get_layer_weights('E1_CHK'))
-        print('')
-    except(AttributeError):
-        print('Error with layer names')
+    # scores='#### Scores #### \n RMSE train {0:0.2f} \n RMSE test: {1:0.2f} ' \
+    #       '\n R2 train: {2:0.2f} \n R2 test: {3:0.2f} \n#### ------ ####'.format(np.sqrt(score_train),np.sqrt(score_test),score_train_r2,score_test_r2)
+    scores = '#### Scores #### \n RMSE train {} \n RMSE test: {} ' \
+             '\n R2 train: {} \n R2 test: {} \n#### ------ ####'.format(np.sqrt(score_train_MSE),
+                                                                        np.sqrt(score_test_MSE), score_train_r2,
+                                                                        score_test_r2)
+    print(scores)
+    return scores
+
+def remove_chk_zeros(X,Y,well):
+
+    X_cols=[well+'_PDC',well+'_CHK']
+    Y_cols=[well+'_PWH']
+
+    Y=Y[Y_cols]
+    X=X[X_cols]
+
+    ind=X[well+'_CHK']<0.05
+    Y=Y[~ind]
+    X=X[~ind]
+    return X,Y

@@ -5,15 +5,20 @@ import pandas as pd
 from .base import *
 import matplotlib.pyplot as plt
 import numpy as np
+from sklearn.linear_model import Ridge
 DATA_PATH='Datasets/Data/'
 FILENAME='STABLE_GJOA.csv'
 
-SENSORS=['PWH','PBH','PDC','QGAS','CHK']
+SENSORS=['CHK','PWH','PBH','PDC','QGAS']
 GJOA_QGAS_COL='GJOA_SEP_1_QGAS_'
 data_type = 'mea'
 
-X_COLS=['CHK','PWH']
-Y_Q_COLS=['QGAS']
+X_COLS=['CHK','PWH','PBH','PDC','QGAS']
+#X_COLS=['CHK']
+#Y_Q_COLS=['QGAS']
+#Y_COLS=['QGAS']
+Y_COLS=['PBH','PWH','PDC','QGAS']
+#Y_COLS=['PWH']
 
 X_COLS_MULTI=[('CHK','QGAS')]
 
@@ -24,7 +29,7 @@ MULTI_INPUT=True
 
 
 
-
+tags=['F1','B2','D3','E1']
 def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
 
@@ -40,20 +45,91 @@ def fetch_gjoa_data():
 
     X,Y,Y_Q=data_to_X_Y(data)
 
-    #print_rank(X,'GJOA')
+    Y=add_diff(Y)
+
+    Y=addModify(X,Y,'E1_PWH')
+    X = addModify(Y, X, 'E1_PDC')
+    X['time']=np.arange(0,len(X.index))
 
 
 
 
-    GjoaData=DataContainer(X,Y,Y_Q,name='GJOA')
+    #ind=X['F1_CHK']<5
+    #X=X[~ind]
+    #Y=Y[~ind]
 
-    #plt.plot(GjoaData.X['D3_PWH'])
+    #a=X['F1_CHK']*np.sqrt(2000*Y['F1_deltap'])*10.1
+    #a=Y['F1_deltap']*100.5*2000
+    #plt.plot(a,color='red')
+    #plt.plot((Y['F1_QGAS']/X['F1_CHK'])**2,color='blue')
     #plt.show()
+
+    #print_rank(X,'GJOA')
+    GjoaData=DataContainer(X,Y,Y_Q,name='GJOA')
+    #plt.plot(GjoaData.Y_transformed['GJOA_QGAS'])
+    #plt.show()
+
+    #plot_scaled(GjoaData,'CHK')
+    #splot_scaled(GjoaData, 'PWH')
+    #plt.subplot(2,1,1)
+    #plt.plot(GjoaData.Y_transformed)
+    #plt.subplot(2,1,2)
+    #plt.plot(GjoaData.Y)
+    #plot_pressure(X)
+    #plt.show()
+
     #exit()
     #print(data['WELL_F1'])
     #plot_scatter(data['WELL_E1'],'E1_CHK_mea','GJOA_QGAS',GJOA_SEP_1)
     #visualizeData(GjoaData.X_transformed)
     return GjoaData
+def plot_pressure(X):
+    pressures=['PDC','PWH']
+
+
+    for pres in pressures:
+        plt.figure()
+        for tag in tags:
+            name=tag+'_'+pres
+            plt.plot(X[name],label=name)
+        plt.legend()
+
+    pres_y = 'PDC'
+    pres_x = 'CHK'
+    plt.figure()
+    i=1
+    for tag in tags:
+        namey=tag+'_'+pres_y
+        namex=tag+'_'+pres_x
+        plt.subplot(2,2,i)
+        plt.scatter(X[namex],X[namey])
+        plt.xlabel(namex)
+        plt.ylabel(namey)
+        i+=1
+    pres_y = 'PWH'
+    pres_x = 'CHK'
+    plt.figure()
+    i = 1
+    for tag in tags:
+        namey = tag + '_' + pres_y
+        namex = tag + '_' + pres_x
+        plt.subplot(2, 2, i)
+        plt.scatter(X[namex], X[namey])
+        plt.xlabel(namex)
+        plt.ylabel(namey)
+        i += 1
+    pres_y = 'PWH'
+    pres_x = 'PDC'
+    plt.figure()
+    i = 1
+    for tag in tags:
+        namey = tag + '_' + pres_y
+        namex = tag + '_' + pres_x
+        plt.subplot(2, 2, i)
+        plt.scatter(X[namex], X[namey])
+        plt.xlabel(namex)
+        plt.ylabel(namey)
+        i += 1
 
 def generate_well_headers(name,type='mea'):
 
@@ -90,6 +166,8 @@ def data_to_X_Y(data):
     Y_Q=pd.DataFrame()
     X=pd.DataFrame()
     Y=pd.DataFrame()
+
+
     for key in data:
         for sensor in data[key].columns:
             sensor_splitted = sensor.split('_')
@@ -98,10 +176,78 @@ def data_to_X_Y(data):
                     X[sensor_splitted[0]+'_'+sensor_splitted[1]]=data[key][sensor]
                     if col=='CHK':
                         X[X<0]=0
-            for col in Y_Q_COLS:
-                if sensor_splitted[1]==col and sensor_splitted[0]!='GJOA':
-                    Y_Q[sensor_splitted[0]+'_'+sensor_splitted[1]]=data[key][sensor]
+            #for col in Y_Q_COLS:
+            #    if sensor_splitted[1]==col and sensor_splitted[0]!='GJOA':
+            #        Y_Q[sensor_splitted[0]+'_'+sensor_splitted[1]]=data[key][sensor]
+            for col in Y_COLS:
+                if sensor_splitted[1] == col and sensor_splitted[0] != 'GJOA' and sensor_splitted[0]:
+                    Y[sensor_splitted[0] + '_' + sensor_splitted[1]] = data[key][sensor]
     Y['GJOA_QGAS']=data['GJOA_SEP_1']
     return X,Y,Y_Q
 
 
+def plot_scaled(data,ending):
+    X=data.X
+    X_scaled=data.X_transformed
+
+    for i in range(4):
+        plt.figure()
+        plt.subplot(2,1,1)
+        name=tags[i]+'_'+ending
+        plt.plot(X [name],color='blue',label='Original')
+        plt.title(name+' - ORIGINAL')
+        plt.subplot(2,1,2)
+        plt.plot(X_scaled[name],color='blue',label='Transformed')
+        plt.title(name+'- Transformed')
+    plt.show()
+
+def add_diff(X):
+    for key in tags:
+        PWH_tag=key+'_'+'PWH'
+        PDC_tag=key+'_'+'PDC'
+
+        X[key+'_deltap']=X[PWH_tag]-X[PDC_tag]
+    return X
+
+
+def plot_scatter(X):
+    pressures = ['PDC', 'PWH','deltap']
+    for tag in tags:
+        plt.figure()
+        i=1
+        for pres in pressures:
+            tag_y = tag + '_' + pres
+            tag_x=tag+'_'+'CHK'
+            plt.subplot(1,3,i)
+            i+=1
+            plt.scatter(X[tag_x],X[tag_y], label=tag_y)
+            plt.xlabel(tag_x)
+            plt.ylabel(tag_y)
+            plt.title(tag_y)
+        #plt.legend()
+
+def addModify(X,Y,type):
+
+    t = np.arange(0, len(X.index))
+    t = t.reshape((len(t), 1))
+    YPWH = Y[type]
+    YPWH = YPWH.reshape((len(YPWH), 1))
+
+
+    a = 5
+    b = 2
+
+    model = Ridge()
+    model.fit(t, YPWH)
+
+    a=model.coef_
+    b=model.intercept_
+
+    Y_new=YPWH-model.predict(t)
+
+    Y[type+'_tweaked']=Y_new
+
+    #plt.plot(t, model.predict(t), color='red')
+    #plt.plot(t, Y_new, color='blue')
+    #plt.show()
+    return Y

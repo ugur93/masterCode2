@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Merge, Input, merge,Layer,Dropout
+from keras.layers import Dense, Activation, Merge, Input, merge,Layer,Dropout,MaxoutDense
 from keras.models import Model
 try:
     from keras.utils.visualize_util import plot
@@ -15,56 +15,39 @@ from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import matplotlib.pyplot as plt
 from keras.optimizers import SGD
+from sklearn import metrics
+import keras
 
-
+INIT='glorot_uniform'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
 
     inception_outputs=[]
-
     for i in range(n_inception):
-        out_temp=Dense(n_width, init='glorot_normal', activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
+        out_temp=Dense(n_width, init=INIT, activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
         for j in range(n_depth-1):
-            out_temp = Dense(n_width, init='glorot_normal',activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(out_temp)
+            out_temp = Dense(n_width, init=INIT,activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(out_temp)
         inception_outputs.append(out_temp)
     output_merged = merge(inception_outputs, mode='sum')
     return output_merged
 
 
 def add_layers(input_layer,n_depth,n_width,l2_weight):
-    output_layer=Dense(n_width, activation='relu',init='glorot_normal', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
+    output_layer=Dense(n_width, activation='relu',init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
     #output_layer=Activation('relu')(output_layer)
     for i in range(n_depth-1):
-        output_layer = Dense(n_width, activation='relu', init='glorot_normal', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(output_layer)
+        output_layer = Dense(n_width, activation='relu', init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(output_layer)
         #output_layer=Activation('relu')(output_layer)
     return output_layer
 
-
-def generate_input_module(n_depth, n_width, l2_weight,name, n_input, thresholded_output, n_inception=0):
-
-    input_layer = Input(shape=(n_input,), dtype='float32', name=name)
-
-    if n_depth == 0:
-        temp_output = input_layer
-    else:
-        if n_inception>1:
-            temp_output = generate_inception_module(input_layer,n_inception,n_depth,n_width,l2_weight)
-            temp_output = add_layers(temp_output, 1, n_width, l2_weight)
-            temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
-            temp_output = add_layers(temp_output, 1, n_width, l2_weight)
-        else:
-            temp_output=add_layers(input_layer,n_depth,n_width,l2_weight)
-
-    if thresholded_output:
-        output_layer = Dense(1,init='glorot_normal', W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight),bias=True)(temp_output)
-        aux_input, merged_output = add_thresholded_output(output_layer,n_input,name)
-    else:
-        output_layer = Dense(1,init='glorot_normal', W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight),bias=True, name=name + '_out')(temp_output)
-
-        merged_output = output_layer
-        aux_input = input_layer
-
-    return aux_input,input_layer,merged_output,output_layer
-
+def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
+    output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),
+                         b_regularizer=l2(l2_weight), bias=True)(input_layer)
+    # output_layer=Activation('relu')(output_layer)
+    for i in range(n_depth - 1):
+        output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),
+                             b_regularizer=l2(l2_weight), bias=True)(output_layer)
+        # output_layer=Activation('relu')(output_layer)
+    return output_layer
 
 def add_thresholded_output(output_layer,n_input,name):
     aux_input = Input(shape=(1,), dtype='float32', name='aux_' + name)
@@ -108,26 +91,29 @@ def plotModel(model,file_name):
 
 def addToggledInput(X,thresholds):
     new_X=X.copy()
-    for key in X.keys():
-        toggled_X=np.array([0 if x<thresholds[key] else 1 for x in X[key][:,0]])
+    for key in thresholds.keys():
+        toggled_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key][:,0]])
         new_X.update({'aux_'+key:toggled_X})
     return new_X
 
 
-def df2dict(df,input_tags,data_type):
+def df2dict(df,input_tags,output_tags,data_type):
     data={}
     if data_type=='X':
         for key in input_tags:
             input_data=()
-            for i in range(len(input_tags[key])):
-                tag=input_tags[key][i]
-                if type(tag) is not int:
-                    input_data+=(df[tag],)
+            for tag in input_tags[key]:
+                input_data+=(df[tag],)
             data[key]=np.vstack(input_data).T
     else:
-        for key in df.columns:
-            data[key]=df[key]
+        for key in output_tags:
+            output_data=()
+            for tag in output_tags[key]:
+                output_data+=(df[tag],)
+            data[key]=np.vstack(output_data).T
+
     return data
+
 
 def addDummyOutput(X,Y):
 
@@ -137,5 +123,41 @@ def addDummyOutput(X,Y):
     return new_Y
 
 
+def find_tag_that_ends_with(lst,end):
+    for tag in lst:
+        if tag.split('_')[-1]==end:
+            return tag
+    return False
 
+
+def output_tags_to_index(output_tags):
+    output_tag_index={}
+    i=0
+    for key in output_tags.keys():
+        for tag in output_tags[key]:
+            output_tag_index[tag]=i
+            i+=1
+
+    n_outputs=i
+    return output_tag_index,n_outputs
+
+def tags_to_list(tags):
+
+    tags_list=[]
+    for key in tags:
+        for tag in tags[key]:
+            tags_list.append(tag)
+    return tags_list
+def tags_to_list_restricted(tags,selected_tags):
+
+    tags_list=[]
+    for key in tags:
+        for tag in tags[key]:
+            if ends_with(tag,selected_tags):
+                tags_list.append(tag)
+    return tags_list
+
+def ends_with(tag,endings):
+
+    return tag.split('_')[-1] in endings
 

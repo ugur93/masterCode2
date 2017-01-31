@@ -16,9 +16,9 @@ class NN_BASE:
         self.threshold=5
         self.history = LossHistory()
 
-        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.0001, patience=1000, verbose=1, mode='min')
+        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00001, patience=500, verbose=1, mode='min')
         #self.TB=keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=1, write_graph=True, write_images=True)
-        self.callbacks=[self.history,EpochVerbose()]
+        self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
         self.model = None
@@ -29,59 +29,64 @@ class NN_BASE:
 
 
         self.chk_thresholds={}
+        self.output_index,self.n_outputs = output_tags_to_index(self.output_tags)
 
-        self.input_names=['F1','B2','D3','E1']
-        self.generate_input_tags()
+
         self.initialize_model()
         plotModel(self.model,self.model_name)
 
     def initialize_model(self):
         pass
 
-    def preprocess_data(self,X,Y=[]):
-        X_dict = df2dict(X,self.input_tags,'X')
+    def preprocess_data(self,X,Y=[],Y_Q=[]):
+        X_dict = df2dict(X,self.input_tags,self.output_tags,'X')
+        X_dict = addToggledInput(X_dict, self.chk_thresholds)
         if len(Y)>0:
-            Y_dict = df2dict(Y,self.input_tags,'Y')
-            Y_dict = addDummyOutput(X_dict, Y_dict)
+            Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
         else:
             Y_dict=[]
-        X_dict = addToggledInput(X_dict, self.chk_thresholds)
         return X_dict,Y_dict
 
-    def fit(self, X, Y,X_val=[],Y_val=[]):
+    def fit(self, X, Y,X_val,Y_val):
+
+        print(self.get_config())
         print ('Training model %s, please wait' % (self.model_name))
         print('Training data sample-size: '+str(len(X)))
 
         X_dict,Y_dict=self.preprocess_data(X,Y)
-        #print(X_dict)
-        #self.debug(X_dict,Y_dict)
-        #Early stopping
-        validation_data=None
-        if len(X_val)>0 and len(Y_val)>0:
-            X_val_dict,Y_val_dict=self.preprocess_data(X_val,Y_val)
-            validation_data=(X_val_dict,Y_val_dict)
-            self.callbacks.append(self.Earlystopping)
+        X_val_dict,Y_val_dict=self.preprocess_data(X_val,Y_val)
+
+        #self.debug(X_dict,Y_dict,True)
+
+
         self.model.fit(X_dict, Y_dict, nb_epoch=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
-                       callbacks=self.callbacks,shuffle=False,validation_data=validation_data)
+                       callbacks=self.callbacks,shuffle=True,validation_data=(X_val_dict,Y_val_dict))
 
-    def predict(self, X):
+    def predict(self, X,tag=False):
         X_dict,_=self.preprocess_data(X)
-        #X_dict = addToggledInput(X_dict,self.chk_thresholds)
-        return self.model.predict(X_dict)[0]
+        predicted_data=self.model.predict(X_dict)
 
-    def predict_well_output(self, X, tag):
-        X_dict,_=self.preprocess_data(X)
-        #X_dict = addToggledInput(X_dict,self.chk_thresholds)
-        return self.model.predict(X_dict)[self.input_tags[tag][0]]
+        data_tuple=()
+        #print(predicted_data.shape)
+        for i in range(self.n_outputs):
+            data_tuple+=(predicted_data[i],)
+        predicted_data_reshaped=np.hstack(data_tuple)
+        if self.model_name=='SSNET3' or self.n_outputs==1:
+            predicted_data_reshaped=np.array(predicted_data)
+
+
+        if tag==False:
+            return predicted_data_reshaped
+        else:
+            return predicted_data_reshaped[:,self.output_index[tag]]
 
     def get_history(self):
         return self.history.losses
 
-
     def get_layer_weights(self,layer_name):
         return self.model.get_layer(layer_name).get_weights()
 
-    def save_model_to_file(self,name,save_weights=True):
+    def save_model_to_file(self,name,scores,save_weights=True):
         PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
         if save_weights:
             self.model.save(PATH+name+'.h5')
@@ -92,6 +97,8 @@ class NN_BASE:
         #Save config:
         f=open(PATH+name+'_config','w')
         f.write(self.get_config())
+        f.write('\n')
+        f.write(scores)
         f.close()
 
         plotModel(self.model,name)
@@ -99,44 +106,125 @@ class NN_BASE:
     def get_config(self):
         s = '-------------------------------------------------\n'
         s+='Input module Config: \n'
-        s+=' n_depth: {} \n n_width: {} \n n_inception: {} \n l2_weight: {} \n Threshold: {} \n'.format(self.IM_n_depth,self.IM_n_width,self.IM_n_inception,self.l2weight,self.add_thresholded_output)
+        s+=' n_depth: {} \n n_width: {} \n n_inception: {} \n l2_weight: {} \n Threshold: {} \n'.format(self.n_depth,self.n_width,self.n_inception,self.l2weight,self.add_thresholded_output)
         s+='-------------------------------------------------\n'
         s+='Fit config: \n epoch: {} \n batch size: {} \n verbose: {} \n callbacks: {} \n optimizer: {} \n'.format(self.nb_epoch,
                                                                                                   self.batch_size,
                                                                                                   self.verbose,
                                                                                                      self.callbacks,self.optimizer)
+        s += '-------------------------------------------------\n'
+        s+='Input tags: \n {} \n'.format(self.input_tags)
+        s+='Output tags: \n {} \n'.format(self.output_tags)
         return s
 
-    def initialize_thresholds(self,data,scaled=True):
-
+    def initialize_chk_thresholds(self,data,scaled=True):
         col_length=len(data.X_transformed.columns)
         if scaled:
-            thresh_transformed=data.transform_using_scaler([[self.threshold for i in range(col_length)]],'X')
+            thresh_transformed=data.transform([[self.threshold for i in range(col_length)]],'X')
         else:
             thresh_transformed=[[self.threshold for i in range(col_length)]]
-        for key,tag_tuple in self.input_tags.items():
-            chk_index=data.X_transformed.columns.get_loc(tag_tuple[1])
-            tag_name=tag_tuple[1].split('_')[0]
-            self.chk_thresholds[tag_name]=thresh_transformed[0][chk_index]
+        for key,tag_list in self.input_tags.items():
+            tag=find_tag_that_ends_with(tag_list,'CHK')
+            if tag:
+                chk_index=data.X_transformed.columns.get_loc(tag)
+                self.chk_thresholds[key]=thresh_transformed[0][chk_index]
 
 
-    def debug(self,X_toggled,Y):
-        for i,key in zip(range(1,5),self.chk_thresholds):
-            plt.subplot(2,2,i)
-            plt.plot(X_toggled['aux_'+key],color='red')
-            plt.plot(X_toggled[key],color='blue')
-        plt.figure()
-        plt.plot(Y['GJOA_QGAS'])
-        plt.show()
 
-    def generate_input_tags(self):
+    def debug(self,X_toggled,Y,plot=True):
+        print('### DEBUG ###')
+        print('CHK thresholds: ')
+        print(self.chk_thresholds)
+        print('-----------------------------------')
+        print('OUTPUT INDEX')
+        print(self.output_index)
+        print('-----------------------------------')
+        print('INPUT TAGS')
+        print(self.input_tags)
+        print('-----------------------------------')
+        print('OUTPUT TAGS')
+        print(self.output_tags)
+        print('-----------------------------------')
+        print('output_tags_to_list function')
+        print(tags_to_list(self.output_tags))
+        print('-----------------------------------')
+        print('### --- ###')
+        if plot:
+            for i,key in zip(range(1,5),self.chk_thresholds):
+                plt.subplot(2,2,i)
+                plt.plot(X_toggled['aux_'+key],color='red')
+                plt.plot(X_toggled[key],color='blue')
+            plt.figure()
+            plt.plot(Y['GJOA_QGAS'])
+            plt.show()
 
-        self.n_inputs=len(self.input_tags)
-        temp_input_tags={}
-        for i in range(len(self.input_names)+len(self.input_tags)-1):
-            temp_input_tags[self.input_names[i]]=(i+1,)
-            for tag_end in self.input_tags:
-                temp_input_tags[self.input_names[i]]+=(self.input_names[i]+'_'+tag_end,)
-        self.input_tags=temp_input_tags
-        print(temp_input_tags)
+    def evaluate(self,X_train,X_test,Y_train,Y_test):
+
+        cols=tags_to_list(self.output_tags)
+        cols2='GJOA_QGAS'
+        score_test_MSE = metrics.mean_squared_error(Y_test[cols], self.predict(X_test), multioutput='raw_values')
+        score_train_MSE = metrics.mean_squared_error(Y_train[cols], self.predict(X_train), multioutput='raw_values')
+        score_test_r2 = metrics.r2_score(Y_test[cols], self.predict(X_test), multioutput='raw_values')
+        score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
+
+        return score_train_MSE,score_test_MSE,score_train_r2,score_test_r2
+
+    def visualize_plot(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
+
+        if len(output_cols)==0:
+            output_cols=tags_to_list(self.output_tags)
+
+        for output_tag in output_cols:
+            plt.figure()
+            plt.plot(Y_train.index, Y_train[output_tag], color='blue', label=output_tag+'_true - train')
+            plt.plot(Y_train.index, self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
+
+            plt.plot(Y_test.index, Y_test[output_tag], color='red', label=output_tag+'_true - test')
+            plt.plot(Y_test.index, self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
+
+            # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                       ncol=2, mode="expand", borderaxespad=0., fontsize=20)
+
+
+    def visualize_scatter(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
+        if len(input_cols)==0:
+            input_cols=tags_to_list(self.input_tags)
+        if len(output_cols)==0:
+            output_cols=tags_to_list(self.output_tags)
+
+        len_input_cols=self.n_inputs
+        #len_input_cols=len(input_cols)
+        #len_output_cols=len(output_cols)
+
+        if len_input_cols<=4:
+            sp_y=2
+            sp_x=int(len_input_cols/sp_y+0.5)
+        else:
+            sp_y = int(len_input_cols/2)
+            sp_x = int(len_input_cols/sp_y+0.5)
+
+        print(sp_y,sp_x,len_input_cols)
+        i=1
+        sp_x=2
+        sp_y=2
+        for output_tag in output_cols:
+            #plt.figure()
+            #i=1
+            for input_tag in input_cols:
+                if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS':
+                    plt.subplot(sp_y, sp_x, i)
+                    i+=1
+                    plt.scatter(X_train[input_tag], Y_train[output_tag], color='blue', label=output_tag+'_true - train')
+                    plt.scatter(X_train[input_tag], self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
+
+                    plt.scatter(X_test[input_tag], Y_test[output_tag], color='red', label=output_tag+'_true - test')
+                    plt.scatter(X_test[input_tag], self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
+
+                    plt.xlabel(input_tag)
+                    plt.ylabel(output_tag)
+                    plt.title(input_tag +' vs '+output_tag)
+
+                    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                               ncol=2, mode="expand", borderaxespad=0., fontsize=15)
 

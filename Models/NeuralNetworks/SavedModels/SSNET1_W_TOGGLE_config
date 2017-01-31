@@ -1,0 +1,26 @@
+-------------------------------------------------
+Input module Config: 
+ n_depth: 2 
+ n_width: 20 
+ n_inception: 0 
+ l2_weight: 0.001 
+ Threshold: True 
+-------------------------------------------------
+Fit config: 
+ epoch: 15000 
+ batch size: 1000 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x10e49a3c8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x10e49a5c0>] 
+ optimizer: adam 
+-------------------------------------------------
+Input tags: 
+ {'F1': ['F1_CHK'], 'B2': ['B2_CHK'], 'D3': ['D3_CHK'], 'E1': ['E1_CHK']} 
+Output tags: 
+ {'F1_out': ['F1_QGAS'], 'B2_out': ['B2_QGAS'], 'D3_out': ['D3_QGAS'], 'E1_out': ['E1_QGAS'], 'GJOA_QGAS': ['GJOA_QGAS']} 
+
+#### Scores #### 
+ RMSE train [ 0.1134184   0.05808137  0.17272656  0.584856    0.11186992] 
+ RMSE test: [ 0.39183553  0.06045258  0.41700727  0.20776701  0.26935865] 
+ R2 train: [ 0.76975557  0.96201914  0.57903229  0.31179974  0.97274618] 
+ R2 test: [-8.53215038  0.96849622  0.         -1.48978303 -1.05452284] 
+#### ------ ####
