@@ -19,13 +19,13 @@ class SSNET3_PRESSURE(NN_BASE):
 
 
         self.n_inputs=4
-        self.n_outputs=1
-
+        self.n_outputs=8
+        self.SCALE=100000
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 2
-        self.n_width = 20
-        self.l2weight = 0.001
+        self.n_depth = 3
+        self.n_width = 25
+        self.l2weight = 0.00001
         self.add_thresholded_output=True
 
         #self.output_tags = {
@@ -34,11 +34,11 @@ class SSNET3_PRESSURE(NN_BASE):
 
         self.output_tags = {
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC'],
-            'GJOA_QGAS':['GJOA_QGAS'],
+            #'MAIN_OUTPUT':['GJOA_QGAS'],
             #'MAIN_OUTPUT': ['F1_deltap', 'B2_deltap', 'D3_deltap', 'E1_deltap']
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC']
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC']
-            #'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
+            'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
          }
 
 
@@ -82,7 +82,7 @@ class SSNET3_PRESSURE(NN_BASE):
         outs=[]
         for name in self.input_tags.keys():
             input=Input(shape=(self.n_inputs,), dtype='float32', name=name)
-            out=add_layers(input, n_depth=1, n_width=20, l2_weight=self.l2weight)
+            out=add_layers(input, n_depth=self.n_depth, n_width=self.n_width, l2_weight=self.l2weight)
 
             self.inputs.append(input)
             outs.append(out)
@@ -108,9 +108,9 @@ class SSNET3_PRESSURE(NN_BASE):
 
 
         #main_model = generate_inception_module(main_input, 3, 1, 10, self.l2weight)
-        main_model = add_layers(main_input, self.n_depth,self.n_width, self.l2weight)
+        main_model = add_layers(main_input, n_depth=self.n_depth,n_width=self.n_width, l2_weight=self.l2weight)
         #main_output=merge([PWH_out,PDC_out],mode='sum',name='MAIN_OUTPUT')
-        main_output = Dense(self.n_outputs,name='GJOA_QGAS')(main_model)
+        main_output = Dense(self.n_outputs,name='MAIN_OUTPUT')(main_model)
 
         self.model = Model(input=main_input, output=main_output)
         self.model.compile(optimizer=self.optimizer, loss=self.loss)

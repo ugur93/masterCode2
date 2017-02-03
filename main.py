@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 
 if __name__=='__main__':
 
-    GjoaData=Gjoa.fetch_gjoa_data()
+    GjoaData=GJOA2.fetch_gjoa_data()
 
 
     #SimData = SimulatedData.fetchSimulatedData()
@@ -18,8 +18,8 @@ if __name__=='__main__':
 
     #print(chkInputs.columns)
 
-    #Validate.validate_train_test_split(GjoaData)
+    Validate.validate_train_test_split(GjoaData)
 
-    Validate.validateRepeat(GjoaData)
+    #Validate.validateRepeat(GjoaData)
     #Validate.validateCV(GjoaData)
     #NN1.SSNET1()

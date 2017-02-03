@@ -5,6 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.utils import shuffle
 import pandas as pd
 from .base import *
+from matplotlib import cm
 
 N_SAMPLES=1000
 CHOKE_FREQ=int(N_SAMPLES/50)
@@ -12,7 +13,7 @@ N_WELLS=4
 N_SHUTDOWNS=3
 N_SHUTDOWN_STEPS=3
 N_SHUTDOWN_SCALE=5
-np.random.seed(150)
+np.random.seed(151)
 
 WELL_NAMES=['F1','B2','D3','E1']
 
@@ -71,7 +72,7 @@ def fetchSimulatedData():
     WELL_PARAMS={}
     for i in range(N_WELLS):
         a=np.random.randint(1,10,1)
-        b=np.random.randint(0, 100, 1)
+        b=np.random.randint(1, 100, 1)
         c=np.linspace(0,10,N_SAMPLES)*np.random.rand()
         noise = np.random.rand(N_SAMPLES, 1)*25
         data=f_linear(a,b,c,X[WELL_NAMES[i]+'_CHK'])+noise
@@ -95,8 +96,8 @@ def fetchSimulatedData():
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
 
-
-    SimData=DataContainer(X,Y,X_Q,params=WELL_PARAMS,name='Simulated')
+    #plotChokeInputs(X)
+    SimData=DataContainer(X,Y,X_Q,params=WELL_PARAMS,name='Simulated',Y_SCALE=100)
     print(SimData.Y.columns)
     return SimData
 
@@ -106,25 +107,27 @@ def f_linear(a,b,c,x):
 
 
 def plotData(X,X_Q,Y):
+    plt.subplot(2,1,1)
     plotChokeInputs(X)
+    plt.subplot(2,1,2)
     plotWellOutputs(X_Q)
     plt.figure()
-    plt.plot(Y)
+    plt.plot(Y['GJOA_QGAS'])
     plt.show()
 def plotChokeInputs(X):
-
-
     for i in range(1,N_WELLS+1):
-        plt.subplot(2,2,i)
-        plt.plot(X[WELL_NAMES[i-1]+'_CHK'])
-        plt.title(WELL_NAMES[i-1]+'_CHK')
+        #plt.subplot(2,2,i)
+        plt.plot(X[WELL_NAMES[i-1]+'_CHK'],label=WELL_NAMES[i-1]+'_CHK')
+    plt.title('CHK INPUTS')
+    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+               ncol=4, mode="expand", borderaxespad=0., fontsize=10)
 
 
 def plotWellOutputs(X_Q):
-   # plt.figure()
-
    for i in range(1,N_WELLS+1):
-       plt.subplot(2, 2, i)
-       plt.plot(X_Q[WELL_NAMES[i-1]+'_QGAS'])
-       #plt.title('well_'+str(i))
+       #plt.subplot(2, 2, i)
+       plt.plot(X_Q[WELL_NAMES[i-1]+'_QGAS'],label=WELL_NAMES[i-1]+'_QGAS')
+   plt.title('WELL OUTPUTS')
+   plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+              ncol=4, mode="expand", borderaxespad=0., fontsize=10)
    #plt.show()

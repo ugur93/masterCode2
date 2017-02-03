@@ -22,11 +22,12 @@ class SSNET1(NN_BASE):
 
         self.n_inputs=1
         self.n_outputs=5
+        self.SCALE=100#100000
 
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 2
-        self.n_width = 20
+        self.n_depth = 1
+        self.n_width = 5
         self.l2weight = 0.001
         self.add_thresholded_output=False
 
@@ -103,14 +104,14 @@ class SSNET1(NN_BASE):
             if n_inception > 1:
                 #temp_output = add_layers(input_layer, 1, n_width, l2_weight)
                 temp_output = generate_inception_module(input_layer, n_inception, n_depth, n_width, l2_weight)
-                temp_output = add_layers(temp_output, 1, n_width, l2_weight)
+                #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
                 temp_output = add_layers(input_layer, n_depth, n_width, l2_weight)
 
         if thresholded_output:
-            output_layer = Dense(1)(temp_output)
+            output_layer = Dense(1,W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(temp_output)
             # output_layer = Dense(1,init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight),bias=True)(temp_output)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:

@@ -21,12 +21,13 @@ class NCNET_VANILLA(NN_BASE):
 
         self.n_inputs=7
         self.n_outputs=1
+        self.SCALE=100
 
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 2
-        self.n_width = 40
-        self.l2weight = 0.001
+        self.n_depth = 1
+        self.n_width = 5
+        self.l2weight = 0.0001
         self.add_thresholded_output=True
 
         self.output_tags = {
@@ -37,7 +38,7 @@ class NCNET_VANILLA(NN_BASE):
             'D1_out':['D1_QOIL'],
             'B3_out':['B3_QOIL'],
             'B1_out':['B1_QOIL'],
-            'GJOA_TOTAL': ['GJOA_TOTAL_QOIL']
+            'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']
 
         }
 
@@ -68,7 +69,7 @@ class NCNET_VANILLA(NN_BASE):
         self.loss_weights=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0]
 
         #Training config
-        optimizer = 'rmsprop' #SGD(momentum=0.9,nesterov=True)
+        optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
         loss = 'mse'
         nb_epoch = 10000
         batch_size = 64

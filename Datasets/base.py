@@ -75,6 +75,7 @@ class DataContainer:
     def transform_Y_with_new_scale(self,scale=100):
         self.Y_scaler=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,
                                           kw_args={'scaler':scale},inv_kw_args={'scaler':scale})
+        self.Y_SCALE=scale
         Y_cols = self.Y.columns
 
         Y_scaled = self.Y_scaler.transform(self.Y)

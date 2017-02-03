@@ -50,6 +50,7 @@ class NN_BASE:
     def fit(self, X, Y,X_val,Y_val):
 
         print(self.get_config())
+        #print(self.model.summary())
         print ('Training model %s, please wait' % (self.model_name))
         print('Training data sample-size: '+str(len(X)))
 
@@ -104,7 +105,12 @@ class NN_BASE:
         plotModel(self.model,name)
 
     def get_config(self):
-        s = '-------------------------------------------------\n'
+        s='CHK thresholds: \n'
+        s+=str(self.chk_thresholds)+'\n'
+        s+='----------------------------------- \n'
+        s+='OUTPUT INDEX \n'
+        s+=str(self.output_index)+'\n'
+        s+= '-------------------------------------------------\n'
         s+='Input module Config: \n'
         s+=' n_depth: {} \n n_width: {} \n n_inception: {} \n l2_weight: {} \n Threshold: {} \n'.format(self.n_depth,self.n_width,self.n_inception,self.l2weight,self.add_thresholded_output)
         s+='-------------------------------------------------\n'
@@ -119,6 +125,7 @@ class NN_BASE:
 
     def initialize_chk_thresholds(self,data,scaled=True):
         col_length=len(data.X_transformed.columns)
+        self.SCALE=data.Y_SCALE
         if scaled:
             thresh_transformed=data.transform([[self.threshold for i in range(col_length)]],'X')
         else:
@@ -161,9 +168,10 @@ class NN_BASE:
     def evaluate(self,X_train,X_test,Y_train,Y_test):
 
         cols=tags_to_list(self.output_tags)
+        print(cols)
         cols2='GJOA_QGAS'
-        score_test_MSE = metrics.mean_squared_error(Y_test[cols], self.predict(X_test), multioutput='raw_values')
-        score_train_MSE = metrics.mean_squared_error(Y_train[cols], self.predict(X_train), multioutput='raw_values')
+        score_test_MSE = metrics.mean_squared_error(self.SCALE*Y_test[cols], self.SCALE*self.predict(X_test), multioutput='raw_values')
+        score_train_MSE = metrics.mean_squared_error(self.SCALE*Y_train[cols], self.SCALE*self.predict(X_train), multioutput='raw_values')
         score_test_r2 = metrics.r2_score(Y_test[cols], self.predict(X_test), multioutput='raw_values')
         score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
 
@@ -174,18 +182,43 @@ class NN_BASE:
         if len(output_cols)==0:
             output_cols=tags_to_list(self.output_tags)
 
+        sp_y=2
+        sp_x=4
+        i=1
+        plt.figure()
         for output_tag in output_cols:
-            plt.figure()
-            plt.plot(Y_train.index, Y_train[output_tag], color='blue', label=output_tag+'_true - train')
-            plt.plot(Y_train.index, self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
+            if output_tag=='GJOA_QGAS':
+                plt.figure()
+            else:
+                plt.subplot(sp_y,sp_x,i)
+                i+=1
+            plt.scatter(Y_train.index, self.SCALE*Y_train[output_tag], color='blue', label=output_tag+'_true - train')
+            plt.scatter(Y_train.index, self.SCALE*self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
 
-            plt.plot(Y_test.index, Y_test[output_tag], color='red', label=output_tag+'_true - test')
-            plt.plot(Y_test.index, self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
-
+            plt.scatter(Y_test.index, self.SCALE*Y_test[output_tag], color='red', label=output_tag+'_true - test')
+            plt.scatter(Y_test.index, self.SCALE*self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
+            plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
             plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                       ncol=2, mode="expand", borderaxespad=0., fontsize=20)
+                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+        i = 1
+        plt.figure()
+        for output_tag in output_cols:
+            if output_tag == 'GJOA_QGAS':
+                plt.figure()
+            else:
+                plt.subplot(sp_y, sp_x, i)
+                i += 1
 
+            plt.scatter(Y_train.index, self.SCALE*Y_train[output_tag]-self.SCALE*self.predict(X_train, output_tag), color='black',
+                        label=output_tag + '_train_(true-pred)')
+
+            plt.scatter(Y_test.index, self.SCALE*Y_test[output_tag]-self.SCALE*self.predict(X_test, output_tag), color='green',
+                        label=output_tag + '__test_(true-pred)')
+            plt.title(output_tag)
+            # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
     def visualize_scatter(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
         if len(input_cols)==0:
@@ -193,7 +226,7 @@ class NN_BASE:
         if len(output_cols)==0:
             output_cols=tags_to_list(self.output_tags)
 
-        len_input_cols=self.n_inputs
+        len_input_cols=len(input_cols)#self.n_inputs
         #len_input_cols=len(input_cols)
         #len_output_cols=len(output_cols)
 
@@ -207,19 +240,20 @@ class NN_BASE:
         print(sp_y,sp_x,len_input_cols)
         i=1
         sp_x=2
-        sp_y=2
+        sp_y=1
+
         for output_tag in output_cols:
-            #plt.figure()
-            #i=1
+            plt.figure()
+            i=1
             for input_tag in input_cols:
                 if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS':
                     plt.subplot(sp_y, sp_x, i)
                     i+=1
-                    plt.scatter(X_train[input_tag], Y_train[output_tag], color='blue', label=output_tag+'_true - train')
-                    plt.scatter(X_train[input_tag], self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
+                    plt.scatter(X_train[input_tag], self.SCALE*Y_train[output_tag], color='blue', label=output_tag+'_true - train')
+                    plt.scatter(X_train[input_tag], self.SCALE*self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
 
-                    plt.scatter(X_test[input_tag], Y_test[output_tag], color='red', label=output_tag+'_true - test')
-                    plt.scatter(X_test[input_tag], self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
+                    plt.scatter(X_test[input_tag], self.SCALE*Y_test[output_tag], color='red', label=output_tag+'_true - test')
+                    plt.scatter(X_test[input_tag], self.SCALE*self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
 
                     plt.xlabel(input_tag)
                     plt.ylabel(output_tag)
@@ -228,3 +262,96 @@ class NN_BASE:
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
                                ncol=2, mode="expand", borderaxespad=0., fontsize=15)
 
+    def visualize_plot_zeros(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
+
+        if len(output_cols)==0:
+            output_cols=tags_to_list(self.output_tags)
+
+        sp_y=2
+        sp_x=4
+        i=1
+        plt.figure()
+        for output_tag in output_cols:
+            if output_tag=='GJOA_QGAS':
+                plt.figure()
+            else:
+                plt.subplot(sp_y,sp_x,i)
+                i+=1
+            well=output_tag.split('_')[0]
+            ind_train=X_train[well+'_CHK']>0.05
+            ind_test = X_test[well + '_CHK'] > 0.05
+            print(ind_train[ind_train].shape,Y_train.shape,Y_train[output_tag][ind_train].shape)
+            plt.scatter(Y_train.index[ind_train], self.SCALE*Y_train[output_tag][ind_train], color='blue', label=output_tag+'_true - train')
+            plt.scatter(Y_train.index[ind_train], self.SCALE*self.predict(X_train, output_tag)[ind_train], color='black', label=output_tag+'_pred - train')
+
+            plt.scatter(Y_test.index[ind_test], self.SCALE*Y_test[output_tag][ind_test], color='red', label=output_tag+'_true - test')
+            plt.scatter(Y_test.index[ind_test], self.SCALE*self.predict(X_test, output_tag)[ind_test], color='green', label=output_tag+'_pred - test')
+            plt.title(output_tag)
+            # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+        i = 1
+        plt.figure()
+        for output_tag in output_cols:
+            if output_tag == 'GJOA_QGAS':
+                plt.figure()
+            else:
+                plt.subplot(sp_y, sp_x, i)
+                i += 1
+            well = output_tag.split('_')[0]
+            ind_train = X_train[well + '_CHK'] > 0.05
+            ind_test = X_test[well + '_CHK'] > 0.05
+            plt.scatter(Y_train.index[ind_train], (self.SCALE*Y_train[output_tag]-self.SCALE*self.predict(X_train, output_tag))[ind_train], color='black',
+                        label=output_tag + '_train_(true-pred)')
+
+            plt.scatter(Y_test.index[ind_test], (self.SCALE*Y_test[output_tag]-self.SCALE*self.predict(X_test, output_tag))[ind_test], color='green',
+                        label=output_tag + '__test_(true-pred)')
+            plt.title(output_tag)
+            # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+
+    def visualize_scatter_zeros(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
+        if len(input_cols)==0:
+            input_cols=tags_to_list(self.input_tags)
+        if len(output_cols)==0:
+            output_cols=tags_to_list(self.output_tags)
+
+        len_input_cols=len(input_cols)#self.n_inputs
+        #len_input_cols=len(input_cols)
+        #len_output_cols=len(output_cols)
+
+        if len_input_cols<=4:
+            sp_y=2
+            sp_x=int(len_input_cols/sp_y+0.5)
+        else:
+            sp_y = int(len_input_cols/2)
+            sp_x = int(len_input_cols/sp_y+0.5)
+
+        print(sp_y,sp_x,len_input_cols)
+        i=1
+        sp_x=2
+        sp_y=4
+
+        for output_tag in output_cols:
+            #plt.figure()
+            #i=1
+            well = output_tag.split('_')[0]
+            ind_train = X_train[well + '_CHK'] > 0.05
+            ind_test = X_test[well + '_CHK'] > 0.05
+            for input_tag in input_cols:
+                if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS':
+                    plt.subplot(sp_y, sp_x, i)
+                    i+=1
+                    plt.scatter(X_train[input_tag][ind_train], self.SCALE*Y_train[output_tag][ind_train], color='blue', label=output_tag+'_true - train')
+                    plt.scatter(X_train[input_tag][ind_train], self.SCALE*self.predict(X_train, output_tag)[ind_train], color='black', label=output_tag+'_pred - train')
+
+                    plt.scatter(X_test[input_tag][ind_test], self.SCALE*Y_test[output_tag][ind_test], color='red', label=output_tag+'_true - test')
+                    plt.scatter(X_test[input_tag][ind_test], self.SCALE*self.predict(X_test, output_tag)[ind_test], color='green', label=output_tag+'_pred - test')
+
+                    plt.xlabel(input_tag)
+                    plt.ylabel(output_tag)
+                    plt.title(input_tag +' vs '+output_tag)
+
+                    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                               ncol=2, mode="expand", borderaxespad=0., fontsize=15)

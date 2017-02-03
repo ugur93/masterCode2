@@ -29,13 +29,14 @@ def getTrainTestSplit(input,output,train_index,test_index):
     return input_train,output_train,input_test,output_test
 
 def validate_train_test_split(Data):
-    #Data.transform_Y_with_new_scale(100)
+    Data.transform_Y_with_new_scale(1000)
     X=Data.X_transformed#[300:-1]
     Y=Data.Y_transformed#[300:-1]
     Y_Q=Data.Y_Q_transformed
     #X, Y = remove_chk_zeros(X, Y, 'F1')
     X, X_test, Y, Y_test, _, _ = train_test_split(X, Y, Y, test_size=0.1)
     X_train, X_val, Y_train, Y_val, _, _ = train_test_split(X, Y, Y, test_size=0.2)
+
 
 
 
@@ -54,13 +55,13 @@ def validate_train_test_split(Data):
     #model = NET2_PRESSURE.SSNET2()
 
     #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
-    MODEL_SAVEFILE_NAME='NCNET1_2_W_ONOFF'
-    model = NN1.SSNET1()
-    #model=NCNET1_GJOA2.NCNET1_GJOA2()
+    MODEL_SAVEFILE_NAME='NCNET1_2_WITHOUT_ONOFF'
+    #model = NN1.SSNET1()
+    model=NCNET1_GJOA2.NCNET1_GJOA2()
     #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
     #model=NET_MISC.NETTEST()
 
-    #model=NET3.SSNET3()
+    #model=NET3.SS NET3()
 
     #model.update_model()
 
@@ -73,7 +74,7 @@ def validate_train_test_split(Data):
     scores = print_scores(model, X_train, X_val, Y_train, Y_val)
     #exit()
     model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
-    input_cols_scatter =[] #['F1_CHK','B2_CHK','D3_CHK','E1_CHK','E1_PDC']
+    input_cols_scatter =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
     output_cols_scatter =[]# ['GJOA_QGAS']
     output_cols_plot=[]
     model.visualize_scatter(X_train, X_val, Y_train, Y_val, input_cols=input_cols_scatter,output_cols=output_cols_scatter)
@@ -99,8 +100,11 @@ def validateRepeat(Data):
 
     for i in range(N_REPEAT):
         #model = NCNET_CHKPRES.SSNET3_PRESSURE()
-        model = NN1.SSNET1()
+        #model = NN1.SSNET1()
+        model=NET2_PRESSURE.SSNET2()
         model.initialize_chk_thresholds(Data, True)
+        conf=model.get_config()
+        model_name=model.model_name
         model.fit(X_train, Y_train, X_val, Y_val)
         score_train_MSE, score_test_MSE, score_train_r2, score_test_r2 = model.evaluate(X_train, X_val, Y_train,
                                                                                         Y_val)
@@ -123,6 +127,9 @@ def validateRepeat(Data):
 
     print(s_rmse)
     print(s_r2)
+    save_to_file(model_name + '_NREPEAT' + str(N_REPEAT)+'_results_PDC_PWH_PBH',conf+s_rmse+s_r2+'\n NREPEAT: '+str(N_REPEAT))
+
+
 
 
 def validateCV(Data,cv=10):
@@ -182,6 +189,7 @@ def validateCV(Data,cv=10):
     print(s_rmse)
     print(s_r2)
 
+
 def plotTrainingHistory(model):
     history = model.get_history()
     plt.figure()
@@ -220,3 +228,8 @@ def remove_chk_zeros(X,Y,well):
     Y=Y[~ind]
     X=X[~ind]
     return X,Y
+def save_to_file(filename,str):
+    PATH = '/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/'
+    f = open(PATH + filename + '_config', 'w')
+    f.write(str)
+    f.close()

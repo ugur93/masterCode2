@@ -27,7 +27,7 @@ def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weig
         for j in range(n_depth-1):
             out_temp = Dense(n_width, init=INIT,activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(out_temp)
         inception_outputs.append(out_temp)
-    output_merged = merge(inception_outputs, mode='sum')
+    output_merged = merge(inception_outputs, mode='concat')
     return output_merged
 
 

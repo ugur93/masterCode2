@@ -19,14 +19,15 @@ class NCNET1_GJOA2(NN_BASE):
         name='NCNET1_2'
 
 
-        self.n_inputs=2
+        self.n_inputs=3
         self.n_outputs=8
+        self.SCALE=100
 
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight = 0.00001
+        self.l2weight = 0.0001
         self.add_thresholded_output=True
 
         self.output_tags = {
@@ -34,22 +35,22 @@ class NCNET1_GJOA2(NN_BASE):
             'C2_out': ['C2_QOIL'],
             'C3_out': ['C3_QOIL'],
             'C4_out': ['C4_QOIL'],
-            'D1_out':['D1_QOIL'],
-            'B3_out':['B3_QOIL'],
-            'B1_out':['B1_QOIL'],
-            'GJOA_TOTAL': ['GJOA_TOTAL_QOIL']
+            'D1_out': ['D1_QOIL'],
+            'B3_out': ['B3_QOIL'],
+            'B1_out': ['B1_QOIL'],
+            'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']
 
         }
 
 
         self.input_tags={
-            'C1':['C1_CHK'],
-            'C2':['C2_CHK'],
-            'C3':['C3_CHK'],
-            'C4':['C4_CHK'],
-            'D1':['D1_CHK'],
-            'B3':['B3_CHK'],
-            'B1':['B1_CHK']
+            'C1':['C1_CHK','C1_PDC','C1_PWH'],
+            'C2':['C2_CHK','C2_PDC','C2_PWH'],
+            'C3':['C3_CHK','C3_PDC','C3_PWH'],
+            'C4':['C4_CHK','C4_PDC','C4_PWH'],
+            'D1':['D1_CHK','D1_PDC','D1_PWH'],
+            'B3':['B3_CHK','B3_PDC','B3_PWH'],
+            'B1':['B1_CHK','B1_PDC','B1_PWH']
         }
 
         #self.input_tags=['C1','C2','C3','C4','D1','B3','B1']
@@ -59,7 +60,7 @@ class NCNET1_GJOA2(NN_BASE):
         #Training config
         optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
         loss = 'mse'
-        nb_epoch = 10000
+        nb_epoch = 5000
         batch_size = 1000
         verbose = 0
 
@@ -73,7 +74,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         for key in self.input_tags.keys():
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=self.n_depth, n_width=self.n_width,
-                                                                    n_input=2, n_inception=self.n_inception,
+                                                                    n_input=self.n_inputs, n_inception=self.n_inception,
                                                                     l2_weight=self.l2weight, name=key,thresholded_output=self.add_thresholded_output)
             self.aux_inputs.append(aux_input)
             self.inputs.append(input)
@@ -110,7 +111,7 @@ class NCNET1_GJOA2(NN_BASE):
             if n_inception > 1:
                 #temp_output = add_layers(input_layer, 1, n_width, l2_weight)
                 temp_output = generate_inception_module(input_layer, n_inception, n_depth, n_width, l2_weight)
-                temp_output = add_layers(temp_output, 2, n_width, l2_weight)
+                temp_output = add_layers(temp_output, 1, n_width*n_inception, l2_weight)
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:

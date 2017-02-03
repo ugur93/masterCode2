@@ -8,24 +8,23 @@ Input module Config:
  n_depth: 2 
  n_width: 20 
  n_inception: 0 
- l2_weight: 0.001 
+ l2_weight: 0.0001 
  Threshold: True 
 -------------------------------------------------
 Fit config: 
  epoch: 5000 
  batch size: 64 
  verbose: 0 
- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x1035b2358>, <Models.NeuralNetworks.base.EpochVerbose object at 0x1035b2dd8>, <keras.callbacks.EarlyStopping object at 0x1035b2b70>] 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x113abfdd8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x113abf7f0>, <keras.callbacks.EarlyStopping object at 0x113abfef0>] 
  optimizer: adam 
 -------------------------------------------------
 Input tags: 
- {'F1': ['F1_CHK'], 'B2': ['B2_CHK'], 'D3': ['D3_CHK'], 'E1': ['E1_CHK']} 
+ {'F1': ['F1_CHK', 'F1_PDC'], 'B2': ['B2_CHK', 'B2_PDC'], 'D3': ['D3_CHK', 'D3_PDC'], 'E1': ['E1_CHK', 'E1_PDC']} 
 Output tags: 
  {'F1_out': ['F1_QGAS'], 'B2_out': ['B2_QGAS'], 'D3_out': ['D3_QGAS'], 'E1_out': ['E1_QGAS'], 'GJOA_QGAS': ['GJOA_QGAS']} 
-
-#### Scores #### 
- RMSE train [ 0.06866215  0.03353149  0.07684831  0.39289571  0.08949732] 
- RMSE test: [ 0.16036351  0.09113783  0.41256391  1.10853589  0.22708903] 
- R2 train: [ 0.90808067  0.98279093  0.90178576  0.58038868  0.98059894] 
- R2 test: [ 0.36281429  0.94363368 -0.57349127 -1.58317709  0.91995383] 
-#### ------ ####
+Accuracy RMSE 
+ TRAIN: 8386.83 (+/- 966.77) 
+ VAL: 17193.78 (+/- 1719.47)Accuracy R2 
+ TRAIN: 0.98 (+/- 0.00) 
+ VAL: 0.95 (+/- 0.01)
+ NREPEAT: 10
