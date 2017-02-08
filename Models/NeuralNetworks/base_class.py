@@ -29,7 +29,7 @@ class NN_BASE:
 
 
         self.chk_thresholds={}
-        self.output_index,self.n_outputs = output_tags_to_index(self.output_tags)
+        self.output_index,self.n_outputs = output_tags_to_index(self.output_tags_list)
 
 
         self.initialize_model()
@@ -74,7 +74,7 @@ class NN_BASE:
         predicted_data_reshaped=np.hstack(data_tuple)
         if self.model_name=='SSNET3' or self.n_outputs==1:
             predicted_data_reshaped=np.array(predicted_data)
-
+        #predicted_data_reshaped = np.array(predicted_data)
 
         if tag==False:
             return predicted_data_reshaped
@@ -88,7 +88,8 @@ class NN_BASE:
         return self.model.get_layer(layer_name).get_weights()
 
     def save_model_to_file(self,name,scores,save_weights=True):
-        PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
+        #PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
+        PATH='C:/users/ugurac/Documents/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/model_figures'
         if save_weights:
             self.model.save(PATH+name+'.h5')
         else:
@@ -167,7 +168,7 @@ class NN_BASE:
 
     def evaluate(self,X_train,X_test,Y_train,Y_test):
 
-        cols=tags_to_list(self.output_tags)
+        cols=self.output_tags_list#tags_to_list(self.output_tags)
         print(cols)
         cols2='GJOA_QGAS'
         score_test_MSE = metrics.mean_squared_error(self.SCALE*Y_test[cols], self.SCALE*self.predict(X_test), multioutput='raw_values')
@@ -183,7 +184,7 @@ class NN_BASE:
             output_cols=tags_to_list(self.output_tags)
 
         sp_y=2
-        sp_x=1
+        sp_x=4
         i=1
         plt.figure()
         for output_tag in output_cols:
@@ -199,8 +200,8 @@ class NN_BASE:
             plt.scatter(Y_test.index, self.SCALE*self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
             plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+            #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+            #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
         i = 1
         plt.figure()
         for output_tag in output_cols:
@@ -217,9 +218,55 @@ class NN_BASE:
                         label=output_tag + '__test_(true-pred)')
             plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+            #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+            #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+    def visualize_plot2(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
 
+        if len(output_cols)==0:
+            output_cols=tags_to_list(self.output_tags)
+        input_cols=tags_to_list(self.input_tags)
+        sp_y=4
+        sp_x=1
+        i=1
+        plt.figure()
+        for output_tag in output_cols:
+            i=1
+            tag = output_tag
+            plt.subplot(sp_y, sp_x, i)
+            plt.scatter(Y_train.index, self.SCALE * Y_train[tag], color='blue', label=tag + '_true - train')
+            plt.scatter(Y_train.index, self.SCALE * self.predict(X_train, tag), color='black',
+                        label=tag + '_pred - train')
+            plt.scatter(Y_test.index, self.SCALE * Y_test[tag], color='red', label=tag + '_true - test')
+            plt.scatter(Y_test.index, self.SCALE * self.predict(X_test, tag), color='green', label=tag + '_pred - test')
+            for input_tag in input_cols:
+                if input_tag.split('_')[0]==output_tag.split('_')[0]:
+                    i += 1
+                    plt.subplot(sp_y, sp_x, i)
+                    tag=input_tag
+                    plt.scatter(Y_train.index, self.SCALE*X_train[tag], color='black', label=tag+'_true - train')
+                    plt.scatter(Y_test.index, self.SCALE*X_test[tag], color='blue', label=tag+'_true - test')
+                    plt.title(tag)
+                    # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+                    #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                    #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+        i = 1
+        plt.figure()
+        for output_tag in output_cols:
+            if output_tag == 'GJOA_QGAS':
+                plt.figure()
+            else:
+                plt.subplot(sp_y, sp_x, i)
+                i += 1
+
+            plt.scatter(Y_train.index, self.SCALE*Y_train[output_tag]-self.SCALE*self.predict(X_train, output_tag), color='black',
+                        label=output_tag + '_train_(true-pred)')
+
+            plt.scatter(Y_test.index, self.SCALE*Y_test[output_tag]-self.SCALE*self.predict(X_test, output_tag), color='green',
+                        label=output_tag + '__test_(true-pred)')
+            plt.title(output_tag)
+            # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+            #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+            #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
     def visualize_scatter(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
         if len(input_cols)==0:
             input_cols=tags_to_list(self.input_tags)
@@ -231,15 +278,15 @@ class NN_BASE:
         #len_output_cols=len(output_cols)
 
         if len_input_cols<=4:
-            sp_y=2
-            sp_x=int(len_input_cols/sp_y+0.5)
+            sp_x=1
+            sp_y=int(len_input_cols/sp_x+0.5)
         else:
             sp_y = int(len_input_cols/2)
             sp_x = int(len_input_cols/sp_y+0.5)
 
         print(sp_y,sp_x,len_input_cols)
         i=1
-        sp_x=2
+        sp_x=self.n_inputs
         sp_y=1
 
         for output_tag in output_cols:

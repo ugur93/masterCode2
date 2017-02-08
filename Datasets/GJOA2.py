@@ -51,12 +51,23 @@ def fetch_gjoa_data():
 
     X,Y=data_to_X_Y(data,'mea')
     sum_oil = np.zeros((len(Y), 1))  # Y['C1_QOIL']
+
+    tags=[]
     for key in well_names:
         name = key + '_' + 'QOIL'
+        tags.append(name)
         # if key!='C1':
-        sum_oil += Y[name].reshape((len(Y), 1))
-
+        #sum_oil += Y[name]
+    sum_oil=Y[tags].sum(axis=1)
     Y['GJOA_TOTAL_QOIL_SUM']=sum_oil
+
+
+    tags=['GJOA_TOTAL_QOIL','GJOA_TOTAL_QWAT']
+
+    #plt.plot(Y['GJOA_TOTAL_QOIL_SUM'],color='red')
+    #plt.plot(Y['GJOA_TOTAL_QOIL'],color='blue')
+    #plt.show()
+    #plot_together(X,Y,tags)
 
     #plot_values(X,Y)
     '''''
@@ -130,3 +141,13 @@ def data_to_X_Y(data,type):
     return X,Y
 
 
+def plot_together(X,Y,tags):
+    i=1
+    for tag in tags:
+        plt.subplot(2, 1, i)
+        i+=1
+        plt.scatter(np.arange(0, len(Y)), Y[tag],color='black')
+        plt.xlabel('Time')
+        plt.ylabel(tag)
+        plt.title(tag)
+    plt.show()

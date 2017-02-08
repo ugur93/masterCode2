@@ -133,10 +133,10 @@ def find_tag_that_ends_with(lst,end):
 def output_tags_to_index(output_tags):
     output_tag_index={}
     i=0
-    for key in output_tags.keys():
-        for tag in output_tags[key]:
-            output_tag_index[tag]=i
-            i+=1
+    for key in output_tags:
+        #for tag in output_tags[key]:
+        output_tag_index[key]=i
+        i+=1
 
     n_outputs=i
     return output_tag_index,n_outputs

@@ -51,7 +51,10 @@ def fetch_gjoa_data():
     X = addModify(Y, X, 'E1_PDC')
     X['time']=np.arange(0,len(X.index))
 
-    X=pwh_to_zero(X)
+
+    X=pwh_to_zero(X.copy())
+    #plot_scatter(X)
+    #plt.show()
 
 
 
@@ -214,19 +217,27 @@ def add_diff(X):
 
 
 def plot_scatter(X):
-    pressures = ['PDC', 'PWH','deltap']
+    pressures = ['PDC', 'PWH']
     for tag in tags:
         plt.figure()
         i=1
         for pres in pressures:
             tag_y = tag + '_' + pres
             tag_x=tag+'_'+'CHK'
-            plt.subplot(1,3,i)
+            plt.subplot(3,1,i)
             i+=1
             plt.scatter(X[tag_x],X[tag_y], label=tag_y)
             plt.xlabel(tag_x)
             plt.ylabel(tag_y)
             plt.title(tag_y)
+        tag_y = tag + '_' + 'PDC'
+        tag_x = tag + '_' + 'PWH'
+        plt.subplot(3, 1, i)
+        i += 1
+        plt.scatter(X[tag_x], X[tag_y], label=tag_y)
+        plt.xlabel(tag_x)
+        plt.ylabel(tag_y)
+        plt.title(tag_y)
         #plt.legend()
 
 def addModify(X,Y,type):
@@ -256,7 +267,7 @@ def addModify(X,Y,type):
     return Y
 def pwh_to_zero(X):
     for tag in tags:
-        ind=X[tag+'_CHK']<5
+        ind=X[tag+'_CHK']==0
         X[tag+'_PWH'][ind]=0
         #plt.subplot(2,1,1)
         #plt.plot(X[tag+'_PDC'])

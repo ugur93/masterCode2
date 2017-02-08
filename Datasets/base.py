@@ -25,6 +25,22 @@ def get_cols_that_ends_with(df,tag):
         if col.split('_')[-1]==tag:
             cols.append(col)
     return cols
+
+class Transformer:
+    def __init__(self):
+        self.scale=[]
+        self.data=np.array()
+    def transform(self,X):
+        for col in X:
+            mea=np.mean(X[col])
+            if mea<1000:
+                scale=100
+            else:
+                scale=100000
+            self.scale.append(scale)
+        self.data.append()
+
+
 class DataContainer:
     def __init__(self,X,Y,Y_Q,params=None,name='unnamed',Y_SCALE=100000):
         #print(params)

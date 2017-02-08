@@ -30,8 +30,8 @@ def getTrainTestSplit(input,output,train_index,test_index):
 
 def validate_train_test_split(Data):
     Data.transform_Y_with_new_scale(100)
-    X=Data.X_transformed#[300:-1]
-    Y=Data.Y_transformed#[300:-1]
+    X=Data.X_transformed#[500:-1]
+    Y=Data.Y_transformed#[500:-1]
     Y_Q=Data.Y_Q_transformed
     #X, Y = remove_chk_zeros(X, Y, 'B2')
     X, X_test, Y, Y_test, _, _ = train_test_split(X, Y, Y, test_size=0.1)
@@ -50,14 +50,14 @@ def validate_train_test_split(Data):
     #plotPressure(model, X_train, X_test, Y_train, Y_test)
     #exit()
 
-    model=NCNET_CHKPRES.SSNET3_PRESSURE()
+    #model=NCNET_CHKPRES.SSNET3_PRESSURE()
 
     #model = NET2_PRESSURE.SSNET2()
 
     #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
     MODEL_SAVEFILE_NAME='NCNET1_2_WITHOUT_ONOFF'
     #model = NN1.SSNET1()
-    #model=NCNET1_GJOA2.NCNET1_GJOA2()
+    model=NCNET1_GJOA2.NCNET1_GJOA2()
     #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
     #model=NET_MISC.NETTEST()
 

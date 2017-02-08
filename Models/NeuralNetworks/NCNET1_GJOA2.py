@@ -16,7 +16,7 @@ class NCNET1_GJOA2(NN_BASE):
 
     def __init__(self):
 
-        name='NCNET1_2'
+        model_name='NCNET1_2'
 
 
         self.n_inputs=3
@@ -30,49 +30,59 @@ class NCNET1_GJOA2(NN_BASE):
         self.l2weight = 0.0001
         self.add_thresholded_output=True
 
+        self.input_tags = {}
+        well_name = ['C1', 'C2', 'C3', 'C4', 'D1', 'B3', 'B1']
+        tags = ['CHK', 'PDC', 'PBH', 'PWH']
+        for name in well_name:
+            self.input_tags[name] = []
+            for tag in tags:
+                self.input_tags[name].append(name + '_' + tag)
+        self.n_inputs = len(tags)
+
+        self.loss_weights = {'B1_out': 0.0, 'B3_out': 0.0, 'C2_out': 0.0, 'C3_out': 0.0,
+                             'D1_out': 0.0, 'C4_out': 0.0, 'GJOA_TOTAL': 1., 'C1_out': 0.0}
+
         self.output_tags = {
-            'C1_out': ['C1_QOIL'],
-            'C2_out': ['C2_QOIL'],
-            'C3_out': ['C3_QOIL'],
-            'C4_out': ['C4_QOIL'],
-            'D1_out': ['D1_QOIL'],
-            'B3_out': ['B3_QOIL'],
-            'B1_out': ['B1_QOIL'],
-            'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']
+            'C1_out':['C1_QOIL'],
+            'C2_out':['C2_QOIL'],
+            'C3_out':['C3_QOIL'],
+            'C4_out':['C4_QOIL'],
+            'D1_out':['D1_QOIL'],
+            'B3_out':['B3_QOIL'],
+            'B1_out':['B1_QOIL'],
+            'GJOA_TOTAL':['GJOA_TOTAL_QOIL_SUM'],
 
         }
 
 
-        self.input_tags={
-            'C1':['C1_CHK','C1_PDC','C1_PWH'],
-            'C2':['C2_CHK','C2_PDC','C2_PWH'],
-            'C3':['C3_CHK','C3_PDC','C3_PWH'],
-            'C4':['C4_CHK','C4_PDC','C4_PWH'],
-            'D1':['D1_CHK','D1_PDC','D1_PWH'],
-            'B3':['B3_CHK','B3_PDC','B3_PWH'],
-            'B1':['B1_CHK','B1_PDC','B1_PWH']
-        }
+        self.output_tags_list=['C1_QOIL','C2_QOIL','C3_QOIL','C4_QOIL','D1_QOIL','B3_QOIL','B1_QOIL','GJOA_TOTAL_QOIL_SUM']
+        self.input_tags_list=well_name
+        print(self.input_tags)
+        print(self.output_tags)
 
-        #self.input_tags=['C1','C2','C3','C4','D1','B3','B1']
+        for key in self.output_tags.keys():
+            print(key)
 
-        self.loss_weights=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0]
+
+
+
 
         #Training config
         optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
         loss = 'mse'
         nb_epoch = 5000
-        batch_size = 1000
+        batch_size = 64
         verbose = 0
 
         train_params={'optimizer':optimizer,'loss':loss,'nb_epoch':nb_epoch,'batch_size':batch_size,'verbose':verbose}
 
-        super().__init__(name,train_params)
+        super().__init__(model_name,train_params)
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
 
 
-        for key in self.input_tags.keys():
+        for key in self.input_tags_list:
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=self.n_depth, n_width=self.n_width,
                                                                     n_input=self.n_inputs, n_inception=self.n_inception,
                                                                     l2_weight=self.l2weight, name=key,thresholded_output=self.add_thresholded_output)

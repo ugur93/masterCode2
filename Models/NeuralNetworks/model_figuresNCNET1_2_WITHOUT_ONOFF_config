@@ -1,0 +1,35 @@
+CHK thresholds: 
+{'C1': 0.050000000000000003, 'C4': 0.050000000000000003, 'B1': 0.050000000000000003, 'D1': 0.050000000000000003, 'C3': 0.050000000000000003, 'C2': 0.050000000000000003, 'B3': 0.050000000000000003}
+----------------------------------- 
+OUTPUT INDEX 
+{'C1_QOIL': 0, 'B1_QOIL': 6, 'B3_QOIL': 5, 'C3_QOIL': 2, 'C2_QOIL': 1, 'GJOA_TOTAL_QOIL_SUM': 7, 'D1_QOIL': 4, 'C4_QOIL': 3}
+-------------------------------------------------
+Input module Config: 
+ n_depth: 2 
+ n_width: 20 
+ n_inception: 0 
+ l2_weight: 0.0001 
+ Threshold: True 
+-------------------------------------------------
+Fit config: 
+ epoch: 5000 
+ batch size: 64 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x000000000D058438>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000000D096E80>, <keras.callbacks.EarlyStopping object at 0x000000000D0584E0>] 
+ optimizer: adam 
+-------------------------------------------------
+Input tags: 
+ {'C1': ['C1_CHK', 'C1_PDC', 'C1_PBH', 'C1_PWH'], 'C4': ['C4_CHK', 'C4_PDC', 'C4_PBH', 'C4_PWH'], 'B1': ['B1_CHK', 'B1_PDC', 'B1_PBH', 'B1_PWH'], 'D1': ['D1_CHK', 'D1_PDC', 'D1_PBH', 'D1_PWH'], 'C3': ['C3_CHK', 'C3_PDC', 'C3_PBH', 'C3_PWH'], 'C2': ['C2_CHK', 'C2_PDC', 'C2_PBH', 'C2_PWH'], 'B3': ['B3_CHK', 'B3_PDC', 'B3_PBH', 'B3_PWH']} 
+Output tags: 
+ {'D1_out': ['D1_QOIL'], 'C1_out': ['C1_QOIL'], 'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM'], 'B1_out': ['B1_QOIL'], 'B3_out': ['B3_QOIL'], 'C2_out': ['C2_QOIL'], 'C3_out': ['C3_QOIL'], 'C4_out': ['C4_QOIL']} 
+
+#### Scores #### 
+ RMSE train [ 3.89544608  1.73249225  3.1541267   2.40342205  4.87897905  2.7226946
+  5.24889015  2.95693244] 
+ RMSE test: [ 3.82132566  1.61023825  8.04051045  2.5749791   3.78328437  2.43559963
+  4.85086322  8.82043822] 
+ R2 train: [ 0.49162727  0.86995899  0.62420317  0.77103098 -0.02947476  0.41323105
+  0.60810388  0.99109446] 
+ R2 test: [-0.22035988  0.40801781 -4.99789958  0.14788474  0.12815204  0.22726841
+ -0.04529519  0.79127465] 
+#### ------ ####
