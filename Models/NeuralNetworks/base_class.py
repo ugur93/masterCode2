@@ -183,7 +183,7 @@ class NN_BASE:
             output_cols=tags_to_list(self.output_tags)
 
         sp_y=2
-        sp_x=4
+        sp_x=1
         i=1
         plt.figure()
         for output_tag in output_cols:

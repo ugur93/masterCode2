@@ -18,14 +18,14 @@ class SSNET3_PRESSURE(NN_BASE):
         name='SSNET3'
 
 
-        self.n_inputs=4
-        self.n_outputs=8
+        self.n_inputs=8
+        self.n_outputs=1
         self.SCALE=100000
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 3
+        self.n_depth = 1
         self.n_width = 25
-        self.l2weight = 0.00001
+        self.l2weight = 0.002
         self.add_thresholded_output=True
 
         #self.output_tags = {
@@ -37,8 +37,8 @@ class SSNET3_PRESSURE(NN_BASE):
             #'MAIN_OUTPUT':['GJOA_QGAS'],
             #'MAIN_OUTPUT': ['F1_deltap', 'B2_deltap', 'D3_deltap', 'E1_deltap']
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC']
-            #'MAIN_OUTPUT':['F1_PDC','B2_PDC']
-            'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
+            'MAIN_OUTPUT':['E1_PDC']
+            #'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
          }
 
 
@@ -51,7 +51,7 @@ class SSNET3_PRESSURE(NN_BASE):
         }
         self.input_name='E1'
         well_names=['F1','B2','D3','E1']
-        tags=['CHK']
+        tags=['CHK','PWH']
 
         self.input_tags={'CHK':[]}
         for key in well_names:
@@ -80,12 +80,12 @@ class SSNET3_PRESSURE(NN_BASE):
         print('Initializing %s' % (self.model_name))
 
         outs=[]
-        for name in self.input_tags.keys():
-            input=Input(shape=(self.n_inputs,), dtype='float32', name=name)
-            out=add_layers(input, n_depth=self.n_depth, n_width=self.n_width, l2_weight=self.l2weight)
+        #for name in self.input_tags.keys():
+        #    input=Input(shape=(self.n_inputs,), dtype='float32', name=name)
+        #    out=add_layers(input, n_depth=self.n_depth, n_width=self.n_width, l2_weight=self.l2weight)
 
-            self.inputs.append(input)
-            outs.append(out)
+        #    self.inputs.append(input)
+        #    outs.append(out)
 
 
         #main_input = merge(outs, mode='concat')

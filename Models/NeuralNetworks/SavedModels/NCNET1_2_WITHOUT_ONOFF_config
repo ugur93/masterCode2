@@ -1,35 +1,31 @@
 CHK thresholds: 
-{'C1': 0.050000000000000003, 'C2': 0.050000000000000003, 'C3': 0.050000000000000003, 'C4': 0.050000000000000003, 'D1': 0.050000000000000003, 'B3': 0.050000000000000003, 'B1': 0.050000000000000003}
+{'CHK': 0.050000000000000003}
 ----------------------------------- 
 OUTPUT INDEX 
-{'C1_QOIL': 0, 'C2_QOIL': 1, 'C3_QOIL': 2, 'C4_QOIL': 3, 'D1_QOIL': 4, 'B3_QOIL': 5, 'B1_QOIL': 6, 'GJOA_TOTAL_QOIL_SUM': 7}
+{'E1_PDC': 0}
 -------------------------------------------------
 Input module Config: 
- n_depth: 2 
- n_width: 20 
+ n_depth: 1 
+ n_width: 25 
  n_inception: 0 
- l2_weight: 0.0001 
+ l2_weight: 0.002 
  Threshold: True 
 -------------------------------------------------
 Fit config: 
  epoch: 5000 
- batch size: 1000 
+ batch size: 64 
  verbose: 0 
- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x1035a2470>, <Models.NeuralNetworks.base.EpochVerbose object at 0x1035a26a0>, <keras.callbacks.EarlyStopping object at 0x1035a2128>] 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x10e5e1080>, <Models.NeuralNetworks.base.EpochVerbose object at 0x1035d0d68>, <keras.callbacks.EarlyStopping object at 0x1035d0b00>] 
  optimizer: adam 
 -------------------------------------------------
 Input tags: 
- {'C1': ['C1_CHK', 'C1_PDC'], 'C2': ['C2_CHK', 'C2_PDC'], 'C3': ['C3_CHK', 'C3_PDC'], 'C4': ['C4_CHK', 'C4_PDC'], 'D1': ['D1_CHK', 'D1_PDC'], 'B3': ['B3_CHK', 'B3_PDC'], 'B1': ['B1_CHK', 'B1_PDC']} 
+ {'CHK': ['F1_CHK', 'F1_PWH', 'B2_CHK', 'B2_PWH', 'D3_CHK', 'D3_PWH', 'E1_CHK', 'E1_PWH']} 
 Output tags: 
- {'C1_out': ['C1_QOIL'], 'C2_out': ['C2_QOIL'], 'C3_out': ['C3_QOIL'], 'C4_out': ['C4_QOIL'], 'D1_out': ['D1_QOIL'], 'B3_out': ['B3_QOIL'], 'B1_out': ['B1_QOIL'], 'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']} 
+ {'MAIN_OUTPUT': ['E1_PDC']} 
 
 #### Scores #### 
- RMSE train [  1.10663859   5.69972284   7.0115315    3.51356631   3.54201964
-  10.85526684  11.44597316   5.85644   ] 
- RMSE test: [  1.98946929   3.45539324   6.05027819   2.39741971   3.73460872
-  22.88356891  14.5430476    7.69345138] 
- R2 train: [ 0.95897208 -0.4074896  -0.85703724  0.51065749  0.45742507 -8.32717793
- -0.86355166  0.96506629] 
- R2 test: [  0.66922377  -1.72598407  -2.39611695   0.26134938   0.15044206
- -67.21256713  -8.39532349   0.84120484] 
+ RMSE train [ 1.67231192] 
+ RMSE test: [ 5.89316149] 
+ R2 train: [ 0.8969005] 
+ R2 test: [ 0.26063437] 
 #### ------ ####
