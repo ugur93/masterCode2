@@ -53,8 +53,8 @@ def fetch_gjoa_data():
 
 
     X=pwh_to_zero(X.copy())
-    #plot_scatter(X)
-    #plt.show()
+
+
 
 
 

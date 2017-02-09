@@ -20,7 +20,6 @@ import keras
 
 INIT='glorot_uniform'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
-
     inception_outputs=[]
     for i in range(n_inception):
         out_temp=Dense(n_width, init=INIT, activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
@@ -33,11 +32,10 @@ def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weig
 
 def add_layers(input_layer,n_depth,n_width,l2_weight):
     output_layer=Dense(n_width, activation='relu',init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
-    #output_layer=Activation('relu')(output_layer)
     for i in range(n_depth-1):
         output_layer = Dense(n_width, activation='relu', init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(output_layer)
-        #output_layer=Activation('relu')(output_layer)
     return output_layer
+
 
 def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
     output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),
@@ -48,6 +46,7 @@ def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
                              b_regularizer=l2(l2_weight), bias=True)(output_layer)
         # output_layer=Activation('relu')(output_layer)
     return output_layer
+
 
 def add_thresholded_output(output_layer,n_input,name):
     aux_input = Input(shape=(1,), dtype='float32', name='aux_' + name)
@@ -89,6 +88,9 @@ def plotModel(model,file_name):
         print('Model not plotted')
 
 
+#######################################INPUT#############################################################################
+
+
 def addToggledInput(X,thresholds):
     new_X=X.copy()
     for key in thresholds.keys():
@@ -101,17 +103,10 @@ def df2dict(df,input_tags,output_tags,data_type):
     data={}
     if data_type=='X':
         for key in input_tags:
-            input_data=()
-            for tag in input_tags[key]:
-                input_data+=(df[tag],)
-            data[key]=np.vstack(input_data).T
+            data[key]=df[input_tags[key]].as_matrix()
     else:
         for key in output_tags:
-            output_data=()
-            for tag in output_tags[key]:
-                output_data+=(df[tag],)
-            data[key]=np.vstack(output_data).T
-
+            data[key] = df[output_tags[key]].as_matrix()
     return data
 
 
@@ -130,16 +125,18 @@ def find_tag_that_ends_with(lst,end):
     return False
 
 
-def output_tags_to_index(output_tags):
+def output_tags_to_index(output_tags,output_layers):
     output_tag_index={}
+    output_tag_ordered_list=[]
     i=0
-    for key in output_tags:
-        #for tag in output_tags[key]:
-        output_tag_index[key]=i
+    for layer_name,_,_ in output_layers:
+        for tag_name in output_tags[layer_name]:
+            output_tag_index[tag_name]=i
+            output_tag_ordered_list.append(tag_name)
         i+=1
 
     n_outputs=i
-    return output_tag_index,n_outputs
+    return output_tag_index,output_tag_ordered_list,n_outputs
 
 def tags_to_list(tags):
 
@@ -161,3 +158,16 @@ def ends_with(tag,endings):
 
     return tag.split('_')[-1] in endings
 
+def count_n_well_inputs(input_tags):
+
+    prev_tag='1_1'
+    n_list=[]
+    i=0
+    for tag in input_tags:
+        if tag.split('_')[0]==prev_tag.split('_')[0]:
+            i+=1
+        else:
+            n_list.append(i)
+            i=1
+            prev_tag=tag
+    return np.max(n_list)

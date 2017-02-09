@@ -15,8 +15,13 @@ class SSNET3_PRESSURE(NN_BASE):
 
     def __init__(self):
 
-        name='SSNET3'
-
+        self.model_name='SSNET3'
+        # Training config
+        self.optimizer = 'adam'  # SGD(momentum=0.9,nesterov=True)
+        self.loss = 'mse'
+        self.nb_epoch = 1
+        self.batch_size = 64
+        self.verbose = 0
 
         self.n_inputs=5
         self.n_outputs=1
@@ -27,10 +32,6 @@ class SSNET3_PRESSURE(NN_BASE):
         self.n_width = 5
         self.l2weight = 0.001
         self.add_thresholded_output=True
-
-        #self.output_tags = {
-        #    'MAIN_OUTPUT': ['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']
-        #}
 
         self.output_tags = {
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC'],
@@ -60,24 +61,8 @@ class SSNET3_PRESSURE(NN_BASE):
 
         self.input_tags['CHK'].append('time')
         self.n_inputs = len(self.input_tags['CHK'])
-        print(self.input_tags)
-       # self.input_tags = {
-       #     'MAIN_IN': ['F1_CHK','B2_CHK','D3_CHK','E1_CHK'],
-            #'MAIN_IN': ['F1_PWH','B2_PWH','D3_PWH','E1_PWH']
-       # }
 
-        self.loss_weights=[0.0,0.0,0.0,0.0,1.0]
-
-        #Training config
-        optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
-        loss = 'mse'
-        nb_epoch = 5000
-        batch_size = 64
-        verbose = 0
-
-        train_params={'optimizer':optimizer,'loss':loss,'nb_epoch':nb_epoch,'batch_size':batch_size,'verbose':verbose}
-
-        super().__init__(name,train_params)
+        super().__init__()
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))

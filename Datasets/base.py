@@ -56,7 +56,7 @@ class DataContainer:
         self.Y_SCALE=Y_SCALE#458376.372582837
         #self.Y_SCALE=100
 
-        self.X_SCALER=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':100},inv_kw_args={'scaler':100})
+        self.X_SCALER=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':1},inv_kw_args={'scaler':1})
         self.Y_scaler=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':self.Y_SCALE},inv_kw_args={'scaler':self.Y_SCALE})
 
 

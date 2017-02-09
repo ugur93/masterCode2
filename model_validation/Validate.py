@@ -29,7 +29,7 @@ def getTrainTestSplit(input,output,train_index,test_index):
     return input_train,output_train,input_test,output_test
 
 def validate_train_test_split(Data):
-    Data.transform_Y_with_new_scale(100)
+    Data.transform_Y_with_new_scale(1)
     X=Data.X_transformed#[500:-1]
     Y=Data.Y_transformed#[500:-1]
     Y_Q=Data.Y_Q_transformed
@@ -73,13 +73,12 @@ def validate_train_test_split(Data):
 
     scores = print_scores(model, X_train, X_val, Y_train, Y_val)
     #exit()
+
+
     model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
-    input_cols_scatter =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
-    output_cols_scatter =[]# ['GJOA_QGAS']
-    output_cols_plot=[]
-    model.visualize_scatter(X_train, X_val, Y_train, Y_val, input_cols=input_cols_scatter,output_cols=output_cols_scatter)
-    model.visualize_plot(X_train, X_val, Y_train, Y_val, output_cols=output_cols_plot)
-    plt.show()
+    input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
+    output_cols =[]# ['GJOA_QGAS']
+    model.visualize(X_train, X_val, Y_train, Y_val, input_cols=input_cols,output_cols=output_cols)
 
 
 def validateRepeat(Data):
