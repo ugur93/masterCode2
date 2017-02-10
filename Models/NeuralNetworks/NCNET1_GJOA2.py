@@ -21,8 +21,8 @@ class NCNET1_GJOA2(NN_BASE):
         # Training config
         self.optimizer = 'adam'  # SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 2000
-        self.batch_size = 1000
+        self.nb_epoch = 10000
+        self.batch_size = 64
         self.verbose = 0
 
         #Model config
@@ -32,20 +32,24 @@ class NCNET1_GJOA2(NN_BASE):
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight = 0.001
+        self.l2weight = 0.00007
         self.add_thresholded_output=True
 
         self.input_tags = {}
-        well_name = ['C1', 'C3', 'C4', 'B3', 'B1']
-        tags = ['CHK', 'PDC', 'PWH']
+        well_name = ['C1', 'C3', 'C4', 'B3', 'B1','D1','C2']
+        tags = ['CHK','PDC','PWH']
         for name in well_name:
             self.input_tags[name] = []
             for tag in tags:
-                self.input_tags[name].append(name + '_' + tag)
+                if name=='C2' and tag=='PBH':
+                    pass
+                else:
+                    self.input_tags[name].append(name + '_' + tag)
+        print(self.input_tags)
             #self.input_tags[name].append('GJOA_RISER_OIL_B_CHK')
             #self.input_tags[name].append('time')
-        self.input_tags['D1']=['D1_CHK','D1_PDC','D1_PWH']
-        self.input_tags['C2'] = ['C2_CHK', 'C2_PDC', 'C2_PWH']
+        #self.input_tags['D1']=['D1_CHK','D1_PDC','D1_PWH']
+       # self.input_tags['C2'] = ['C2_CHK', 'C2_PDC', 'C2_PWH']
         #self.input_tags['Riser']=['GJOA_RISER_OIL_B_CHK','GJOA_RISER_OIL_B_PDC']
 
 

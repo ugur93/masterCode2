@@ -6,12 +6,12 @@ class NN_BASE:
     def __init__(self):
 
         #Config
-        self.chk_threshold_value=2
+        self.chk_threshold_value=5
         self.history = LossHistory()
 
         self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00001, patience=500, verbose=1, mode='min')
         #self.TB=keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=1, write_graph=True, write_images=True)
-        self.callbacks=[self.history,EpochVerbose()]#,self.Earlystopping]
+        self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
         self.model = None
@@ -27,6 +27,7 @@ class NN_BASE:
 
         self.output_index,self.output_tag_ordered_list,self.n_outputs = output_tags_to_index(self.output_tags,self.model.get_config()['output_layers'])
         print(self.output_tag_ordered_list)
+        print(self.model.get_config()['output_layers'])
 
         plotModel(self.model,self.model_name)
 
@@ -65,8 +66,11 @@ class NN_BASE:
         predicted_data=self.model.predict(X_dict)
 
         predicted_data_reshaped=np.asarray(predicted_data)
-        if self.n_outputs>1:
-            predicted_data_reshaped=predicted_data_reshaped.T[0,:,:]
+        if len(self.output_tags.keys())>1:
+            temp_data=predicted_data_reshaped[0,:,:]
+            for i in range(1,predicted_data_reshaped.shape[0]):#HARDCODED!!!
+                temp_data=np.hstack((temp_data,predicted_data_reshaped[i,:,:]))
+            predicted_data_reshaped=temp_data
 
         if tag==False:
             return predicted_data_reshaped
@@ -169,38 +173,54 @@ class NN_BASE:
         score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
 
         return score_train_MSE,score_test_MSE,score_train_r2,score_test_r2
-
-
-
-
+    def evaluate_zeros(self,X_train,X_test,Y_train,Y_test):
+        cols = self.output_tag_ordered_list
+        score_test_MSE=[]
+        score_train_MSE=[]
+        score_test_r2=[]
+        score_train_r2=[]
+        for col in cols:
+            well=col.split('_')[0]
+            ind_train = X_train[well + '_CHK'] > 0.05
+            ind_test = X_test[well + '_CHK'] > 0.05
+            score_test_MSE.append(metrics.mean_squared_error(self.SCALE * Y_test[col][ind_test], self.SCALE * self.predict(X_test[ind_test],col),
+                                                        multioutput='raw_values'))
+            score_train_MSE.append(metrics.mean_squared_error(self.SCALE * Y_train[col][ind_train], self.SCALE * self.predict(X_train[ind_train],col),
+                                                         multioutput='raw_values'))
+            score_test_r2.append(metrics.r2_score(Y_test[col][ind_test], self.predict(X_test[ind_test],col), multioutput='raw_values'))
+            score_train_r2.append(metrics.r2_score(Y_train[col][ind_train], self.predict(X_train[ind_train],col), multioutput='raw_values'))
+        return score_train_MSE, score_test_MSE, score_train_r2, score_test_r2
     def visualize(self,X_train,X_test,Y_train,Y_test,output_cols=[],input_cols=[]):
 
 
         #self.plot_scatter_input_output(X_train, X_test, Y_train, Y_test, input_cols=input_cols,output_cols=output_cols)
-        #self.plot_residuals(X_train, X_test, Y_train, Y_test, output_cols)
-        self.plot_true_and_predicted(X_train, X_test, Y_train, Y_test, output_cols)
+        #self.plot_scatter_chk_well(X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
+        self.plot_residuals_zeros(X_train, X_test, Y_train, Y_test, output_cols)
+        self.plot_true_and_predicted_zeros(X_train, X_test, Y_train, Y_test, output_cols)
         #self.plot_true_and_predicted_with_input(X_train, X_test, Y_train, Y_test, output_cols=output_cols)
         plt.show()
 
-
-    def plot_residuals(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
+    def plot_residuals(self,X_train,X_test,Y_train,Y_test,output_cols=[],remove_zeros=False):
 
         if len(output_cols)==0:
             output_cols=self.output_tag_ordered_list
 
-        sp_y=int(len(output_cols)/2+0.5)
-        sp_x=int(len(output_cols)/sp_y+0.5)
+        sp_y=int((len(output_cols)-1)/2+0.5)
+        if sp_y==0:
+            sp_y=1
+        sp_x=int((len(output_cols)-1)/sp_y+0.5)
+        if sp_x==0:
+            sp_x=1
         print(sp_y,sp_x,len(output_cols))
 
         i = 1
         plt.figure()
         for output_tag in output_cols:
-            if output_tag == 'GJOA_QGAS':
+            if output_tag == 'GJOA_QGAS' or output_tag=='GJOA_TOTAL_QOIL_SUM' or output_tag=='GJOA_TOTAL_QOIL':
                 plt.figure()
             else:
                 plt.subplot(sp_y, sp_x, i)
                 i += 1
-
             plt.scatter(Y_train.index,
                         self.SCALE * Y_train[output_tag] - self.SCALE * self.predict(X_train, output_tag),
                         color='black',
@@ -211,22 +231,28 @@ class NN_BASE:
                         label=output_tag + '__test_(true-pred)')
             plt.title(output_tag + '-' + 'Residuals')
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-            # plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-            #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                      ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
     def plot_true_and_predicted(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
 
         if len(output_cols)==0:
             output_cols=self.output_tag_ordered_list
 
-        sp_y=int(len(output_cols)/2+0.5)
-        sp_x=int(len(output_cols)/sp_y+0.5)
+
+        N_PLOTS=len(output_cols)-1
+        sp_y=int(N_PLOTS/2+0.5)
+        if sp_y==0:
+            sp_y=1
+        sp_x=int(N_PLOTS/sp_y+0.5)
+        if sp_x==0:
+            sp_x=1
         print(sp_y,sp_x,len(output_cols))
 
         i=1
         plt.figure()
         for output_tag in output_cols:
-            if output_tag=='GJOA_QGAS':
+            if output_tag=='GJOA_QGAS' or output_tag=='GJOA_TOTAL_QOIL_SUM' or output_tag=='GJOA_TOTAL_QOIL':
                 plt.figure()
             else:
                 plt.subplot(sp_y,sp_x,i)
@@ -238,8 +264,8 @@ class NN_BASE:
             plt.scatter(Y_test.index, self.SCALE*self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
             plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-            #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-            #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
     def plot_scatter_input_output(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
         if len(input_cols)==0:
@@ -248,14 +274,19 @@ class NN_BASE:
             output_cols=self.output_tag_ordered_list
 
         i=1
-        sp_x=count_n_well_inputs(input_cols)
-        sp_y=1
+        N_plots=count_n_well_inputs(input_cols)
+        sp_y=int(N_plots/2+0.5)
+        if sp_y==0:
+            sp_y=1
+        sp_x=int(N_plots/sp_y+0.5)
+        if sp_x==0:
+            sp_x=1
         print(sp_y, sp_x)
         for output_tag in output_cols:
             plt.figure()
             i=1
             for input_tag in input_cols:
-                if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS':
+                if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS'  and output_tag!='GJOA_TOTAL_QOIL_SUM' and output_tag!='GJOA_TOTAL_QOIL':
                     plt.subplot(sp_y, sp_x, i)
                     i+=1
                     plt.scatter(X_train[input_tag], self.SCALE*Y_train[output_tag], color='blue', label=output_tag+'_true - train')
@@ -269,7 +300,41 @@ class NN_BASE:
                     plt.title(input_tag +' vs '+output_tag)
 
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                               ncol=2, mode="expand", borderaxespad=0., fontsize=15)
+                               ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+    def plot_scatter_chk_well(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
+        if len(input_cols)==0:
+            input_cols=tags_to_list(self.input_tags)
+        if len(output_cols)==0:
+            output_cols=self.output_tag_ordered_list
+
+        i=1
+        N_plots=len(output_cols)-1#count_n_well_inputs(input_cols)
+        sp_y=int(N_plots/2+0.5)
+        if sp_y==0:
+            sp_y=1
+        sp_x=int(N_plots/sp_y+0.5)
+        if sp_x==0:
+            sp_x=1
+        print(sp_y, sp_x,N_plots)
+        plt.figure()
+        i = 1
+        for output_tag in output_cols:
+            for input_tag in input_cols:
+                if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS' and input_tag.split('_')[1]=='CHK':
+                    plt.subplot(sp_y, sp_x, i)
+                    i+=1
+                    plt.scatter(X_train[input_tag], self.SCALE*Y_train[output_tag], color='blue', label=output_tag+'_true - train')
+                    plt.scatter(X_train[input_tag], self.SCALE*self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
+
+                    plt.scatter(X_test[input_tag], self.SCALE*Y_test[output_tag], color='red', label=output_tag+'_true - test')
+                    plt.scatter(X_test[input_tag], self.SCALE*self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
+
+                    plt.xlabel(input_tag)
+                    plt.ylabel(output_tag)
+                    plt.title(input_tag +' vs '+output_tag)
+
+                    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                               ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
 
     def plot_true_and_predicted_with_input(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
@@ -311,96 +376,117 @@ class NN_BASE:
                     #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
                     #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
-    def visualize_plot_zeros(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
+    def plot_true_and_predicted_zeros(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
 
         if len(output_cols)==0:
-            output_cols=tags_to_list(self.output_tags)
+            output_cols=self.output_tag_ordered_list
 
-        sp_y=2
-        sp_x=4
+
+        N_PLOTS=len(output_cols)
+        sp_y=int(N_PLOTS/2+0.5)
+        if sp_y==0:
+            sp_y=1
+        sp_x=int(N_PLOTS/sp_y+0.5)
+        if sp_x==0:
+            sp_x=1
+        print(sp_y,sp_x,len(output_cols))
+
         i=1
         plt.figure()
         for output_tag in output_cols:
-            if output_tag=='GJOA_QGAS':
+            if output_tag=='GJOA_QGAS' or output_tag=='GJOA_TOTAL_QOIL_SUM' or output_tag=='GJOA_TOTAL_QOIL':
                 plt.figure()
             else:
-                plt.subplot(sp_y,sp_x,i)
+                plt.subplot(sp_x,sp_y,i)
                 i+=1
-            well=output_tag.split('_')[0]
-            ind_train=X_train[well+'_CHK']>0.05
+            well = output_tag.split('_')[0]
+            ind_train = X_train[well + '_CHK'] > 0.05
             ind_test = X_test[well + '_CHK'] > 0.05
-            print(ind_train[ind_train].shape,Y_train.shape,Y_train[output_tag][ind_train].shape)
             plt.scatter(Y_train.index[ind_train], self.SCALE*Y_train[output_tag][ind_train], color='blue', label=output_tag+'_true - train')
-            plt.scatter(Y_train.index[ind_train], self.SCALE*self.predict(X_train, output_tag)[ind_train], color='black', label=output_tag+'_pred - train')
+            plt.scatter(Y_train.index[ind_train], self.SCALE*self.predict(X_train[ind_train], output_tag), color='black', label=output_tag+'_pred - train')
 
             plt.scatter(Y_test.index[ind_test], self.SCALE*Y_test[output_tag][ind_test], color='red', label=output_tag+'_true - test')
-            plt.scatter(Y_test.index[ind_test], self.SCALE*self.predict(X_test, output_tag)[ind_test], color='green', label=output_tag+'_pred - test')
+            plt.scatter(Y_test.index[ind_test], self.SCALE*self.predict(X_test[ind_test], output_tag), color='green', label=output_tag+'_pred - test')
             plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
             plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
                        ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+    def plot_residuals_zeros(self,X_train,X_test,Y_train,Y_test,output_cols=[],remove_zeros=False):
+
+        if len(output_cols)==0:
+            output_cols=self.output_tag_ordered_list
+
+        sp_y=int((len(output_cols)-1)/2+0.5)
+        if sp_y==0:
+            sp_y=1
+        sp_x=int((len(output_cols))/sp_y+0.5)
+        if sp_x==0:
+            sp_x=1
+        print(sp_y,sp_x,len(output_cols))
+
         i = 1
         plt.figure()
         for output_tag in output_cols:
-            if output_tag == 'GJOA_QGAS':
+            if output_tag == 'GJOA_QGAS' or output_tag=='GJOA_TOTAL_QOIL_SUM' or output_tag=='GJOA_TOTAL_QOIL':
                 plt.figure()
             else:
-                plt.subplot(sp_y, sp_x, i)
+                plt.subplot(sp_x, sp_y, i)
                 i += 1
             well = output_tag.split('_')[0]
             ind_train = X_train[well + '_CHK'] > 0.05
             ind_test = X_test[well + '_CHK'] > 0.05
-            plt.scatter(Y_train.index[ind_train], (self.SCALE*Y_train[output_tag]-self.SCALE*self.predict(X_train, output_tag))[ind_train], color='black',
+            plt.scatter(Y_train.index[ind_train],
+                        self.SCALE *( Y_train[output_tag] -self.predict(X_train, output_tag))[ind_train],
+                        color='black',
                         label=output_tag + '_train_(true-pred)')
 
-            plt.scatter(Y_test.index[ind_test], (self.SCALE*Y_test[output_tag]-self.SCALE*self.predict(X_test, output_tag))[ind_test], color='green',
+            plt.scatter(Y_test.index[ind_test], self.SCALE *( Y_test[output_tag] -  self.predict(X_test, output_tag))[ind_test],
+                        color='green',
                         label=output_tag + '__test_(true-pred)')
-            plt.title(output_tag)
+            plt.title(output_tag + '-' + 'Residuals')
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
             plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
+                      ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
-    def visualize_scatter_zeros(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
-        if len(input_cols)==0:
-            input_cols=tags_to_list(self.input_tags)
-        if len(output_cols)==0:
-            output_cols=tags_to_list(self.output_tags)
+    def plot_scatter_input_output_zeros(self, X_train, X_test, Y_train, Y_test, input_cols=[], output_cols=[]):
+        if len(input_cols) == 0:
+            input_cols = tags_to_list(self.input_tags)
+        if len(output_cols) == 0:
+            output_cols = self.output_tag_ordered_list
 
-        len_input_cols=len(input_cols)#self.n_inputs
-        #len_input_cols=len(input_cols)
-        #len_output_cols=len(output_cols)
-
-        if len_input_cols<=4:
-            sp_y=2
-            sp_x=int(len_input_cols/sp_y+0.5)
-        else:
-            sp_y = int(len_input_cols/2)
-            sp_x = int(len_input_cols/sp_y+0.5)
-
-        print(sp_y,sp_x,len_input_cols)
-        i=1
-        sp_x=2
-        sp_y=4
-
+        i = 1
+        N_plots = count_n_well_inputs(input_cols)
+        sp_y = int(N_plots / 2 + 0.5)
+        if sp_y == 0:
+            sp_y = 1
+        sp_x = int(N_plots / sp_y + 0.5)
+        if sp_x == 0:
+            sp_x = 1
+        print(sp_y, sp_x)
         for output_tag in output_cols:
-            #plt.figure()
-            #i=1
-            well = output_tag.split('_')[0]
-            ind_train = X_train[well + '_CHK'] > 0.05
-            ind_test = X_test[well + '_CHK'] > 0.05
+            plt.figure()
+            i = 1
             for input_tag in input_cols:
-                if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS':
+                if input_tag.split('_')[0] == output_tag.split('_')[
+                    0] and output_tag != 'GJOA_QGAS' and output_tag != 'GJOA_TOTAL_QOIL_SUM' and output_tag != 'GJOA_TOTAL_QOIL':
                     plt.subplot(sp_y, sp_x, i)
-                    i+=1
-                    plt.scatter(X_train[input_tag][ind_train], self.SCALE*Y_train[output_tag][ind_train], color='blue', label=output_tag+'_true - train')
-                    plt.scatter(X_train[input_tag][ind_train], self.SCALE*self.predict(X_train, output_tag)[ind_train], color='black', label=output_tag+'_pred - train')
+                    well = output_tag.split('_')[0]
+                    ind_train = X_train[well + '_CHK'] > 0.05
+                    ind_test = X_test[well + '_CHK'] > 0.05
+                    i += 1
+                    plt.scatter(X_train[input_tag][ind_train], self.SCALE * Y_train[output_tag][ind_train], color='blue',
+                                label=output_tag + '_true - train')
+                    plt.scatter(X_train[input_tag][ind_train], self.SCALE * self.predict(X_train, output_tag)[ind_train],
+                                color='black', label=output_tag + '_pred - train')
 
-                    plt.scatter(X_test[input_tag][ind_test], self.SCALE*Y_test[output_tag][ind_test], color='red', label=output_tag+'_true - test')
-                    plt.scatter(X_test[input_tag][ind_test], self.SCALE*self.predict(X_test, output_tag)[ind_test], color='green', label=output_tag+'_pred - test')
+                    plt.scatter(X_test[input_tag][ind_test], self.SCALE * Y_test[output_tag][ind_test], color='red',
+                                label=output_tag + '_true - test')
+                    plt.scatter(X_test[input_tag][ind_test], self.SCALE * self.predict(X_test, output_tag)[ind_test], color='green',
+                                label=output_tag + '_pred - test')
 
                     plt.xlabel(input_tag)
                     plt.ylabel(output_tag)
-                    plt.title(input_tag +' vs '+output_tag)
+                    plt.title(input_tag + ' vs ' + output_tag)
 
                     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-                               ncol=2, mode="expand", borderaxespad=0., fontsize=15)
+                               ncol=2, mode="expand", borderaxespad=0., fontsize=10)

@@ -7,11 +7,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import Ridge
 DATA_PATH='Datasets/Data/'
-FILENAME='STABLE_GJOA_OIL.csv'
+FILENAME='STABLE_GJOA_OIL_NEW.csv'
 
 X_tags=['CHK','PWH','PBH','PDC']
 X_GJOA_tags=['RISER_OIL_B_PDC','RISER_OIL_B_CHK','RISER_OIL_A_PDC']
-Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT']
+Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QGAS_DEPRECATED','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT']
 Y_tags=['QOIL','QWAT','QGAS']
 GJOA_QGAS_COL='GJOA_SEP_1_QGAS_'
 data_type = 'mea'
@@ -63,18 +63,7 @@ def fetch_gjoa_data():
 
     X['time'] = np.arange(0, len(X.index))
 
-    #_,(ax1,ax2,ax3,ax4,ax5)=plt.subplots(8,1,sharex=True)
-    _, axes = plt.subplots(8, 1, sharex=True)
-
-    #cols=['CHK']
-    for ax,tag in zip(axes,well_names):
-        name=tag+'_'+'CHK'
-        ax.plot(X[name])
-        ax.set_title(name)
-    axes[-1].plot(Y['GJOA_TOTAL_QOIL'])
-    axes[-1].set_title('GJOA_TOTAL_QOIL')
-    #plt.show()
-
+    #
 
     tags=['GJOA_TOTAL_QOIL','GJOA_TOTAL_QWAT']
 
@@ -112,6 +101,8 @@ def fetch_gjoa_data():
 
 
     GjoaData=DataContainer(X,Y,Y,name='GJOA2',Y_SCALE=100)
+
+    #plot_test(GjoaData.X_transformed, GjoaData.Y_transformed)
 
     print(X.columns)
     print(Y.columns)
@@ -165,4 +156,20 @@ def plot_together(X,Y,tags):
         plt.xlabel('Time')
         plt.ylabel(tag)
         plt.title(tag)
+    plt.show()
+def plot_test(X,Y):
+    # _,(ax1,ax2,ax3,ax4,ax5)=plt.subplots(8,1,sharex=True)
+    _, axes = plt.subplots(8, 1, sharex=True)
+
+    # cols=['CHK']
+    #plt.figure()
+    for ax, tag in zip(axes, well_names):
+        name = tag + '_' + 'PBH'
+        #plt.plot(X[name])
+        ax.plot(X[name])
+        ax.set_title(name)
+    axes[-1].plot(Y['GJOA_TOTAL_QOIL'])
+    axes[-1].set_title('GJOA_TOTAL_QOIL')
+    plt.figure()
+    plt.plot(Y['GJOA_TOTAL_QGAS_DEPRECATED'])
     plt.show()

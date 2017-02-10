@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 
 if __name__=='__main__':
 
-    GjoaData=GJOA2.fetch_gjoa_data()
+    GjoaData=Gjoa.fetch_gjoa_data()
 
 
     #SimData = SimulatedData.fetchSimulatedData()

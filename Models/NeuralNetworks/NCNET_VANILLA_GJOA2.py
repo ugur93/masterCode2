@@ -16,7 +16,7 @@ class NCNET_VANILLA(NN_BASE):
 
     def __init__(self):
 
-        name='NCNET1_VANILLA_GJOA2'
+        self.model_name='NCNET1_VANILLA_GJOA2'
 
 
         self.n_inputs=7
@@ -25,59 +25,59 @@ class NCNET_VANILLA(NN_BASE):
 
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 1
-        self.n_width = 5
-        self.l2weight = 0.0001
+        self.n_depth = 2
+        self.n_width = 20
+        self.l2weight = 0.00001
         self.add_thresholded_output=True
 
-        self.output_tags = {
-            'C1_out': ['C1_QOIL'],
-            'C2_out': ['C2_QOIL'],
-            'C3_out': ['C3_QOIL'],
-            'C4_out': ['C4_QOIL'],
-            'D1_out':['D1_QOIL'],
-            'B3_out':['B3_QOIL'],
-            'B1_out':['B1_QOIL'],
-            'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']
-
-        }
-
-
-        self.input_tags={
-            'C1':['C1_CHK'],
-            'C2':['C2_CHK'],
-            'C3':['C3_CHK'],
-            'C4':['C4_CHK'],
-            'D1':['D1_CHK'],
-            'B3':['B3_CHK'],
-            'B1':['B1_CHK']
-        }
-
-        self.output_tags={
-            'TOTAL_OUT':['GJOA_TOTAL_QOIL']
-        }
-
-        well_names=['C1','C2','C3','C4','D1','B3','B1']
-        tags=['CHK']
-        self.input_tags={'MAIN_INPUT':[]}
-
-        for key in well_names:
+        self.input_tags = {}
+        input_name='MAIN_INPUT'
+        well_name = ['C1', 'C3', 'C4', 'B3', 'B1', 'D1', 'C2']
+        tags = ['CHK','PWH', 'PBH']
+        self.input_tags[input_name] = []
+        for name in well_name:
             for tag in tags:
-                self.input_tags['MAIN_INPUT'].append(key+'_'+tag)
+                if name == 'C2' and tag == 'PBH':
+                    pass
+                else:
+                    self.input_tags[input_name].append(name + '_' + tag)
+        #self.input_tags[input_name].append('C1_PDC')
+        print(self.input_tags)
+        self.n_inputs=len(self.input_tags[input_name])
+
+
+        # self.input_tags[name].append('GJOA_RISER_OIL_B_CHK')
+        # self.input_tags[name].append('time')
+        # self.input_tags['D1']=['D1_CHK','D1_PDC','D1_PWH']
+        # self.input_tags['C2'] = ['C2_CHK', 'C2_PDC', 'C2_PWH']
+        # self.input_tags['Riser']=['GJOA_RISER_OIL_B_CHK','GJOA_RISER_OIL_B_PDC']
+
+
+        self.output_tags = {
+            #'C1_out': ['C1_QOIL'],
+            #'C2_out': ['C2_QOIL'],
+            #'C3_out': ['C3_QOIL'],
+            #'C4_out': ['C4_QOIL'],
+            #'D1_out': ['D1_QOIL'],
+            #'B3_out': ['B3_QOIL'],
+            #'B1_out': ['B1_QOIL'],
+            # 'Riser_out':['GJOA_TOTAL_QOIL_SUM'],
+            'TOTAL_OUT': ['GJOA_TOTAL_QOIL_SUM']
+        }
 
 
         self.loss_weights=[0.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0]
 
         #Training config
-        optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
-        loss = 'mse'
-        nb_epoch = 10000
-        batch_size = 64
-        verbose = 0
+        self.optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
+        self.loss = 'mse'
+        self.nb_epoch = 10000
+        self.batch_size = 64
+        self.verbose = 0
 
-        train_params={'optimizer':optimizer,'loss':loss,'nb_epoch':nb_epoch,'batch_size':batch_size,'verbose':verbose}
 
-        super().__init__(name,train_params)
+
+        super().__init__()
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))

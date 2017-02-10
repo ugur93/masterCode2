@@ -1,8 +1,8 @@
 CHK thresholds: 
-{'C2': 2.0, 'C4': 2.0, 'B1': 2.0, 'D1': 2.0, 'B3': 2.0, 'C3': 2.0, 'C1': 2.0}
+{'CHK': 0.050000000000000003}
 ----------------------------------- 
 OUTPUT INDEX 
-{'C4_QOIL': 1, 'C3_QOIL': 5, 'GJOA_TOTAL_QOIL_SUM': 7, 'C2_QOIL': 4, 'B3_QOIL': 0, 'D1_QOIL': 3, 'C1_QOIL': 6, 'B1_QOIL': 2}
+{'E1_PWH': 5, 'F1_PWH': 1, 'D3_PWH': 3, 'B2_PDC': 6, 'F1_PDC': 0, 'E1_PDC': 4, 'B2_PWH': 7, 'D3_PDC': 2}
 -------------------------------------------------
 Input module Config: 
  n_depth: 2 
@@ -13,23 +13,33 @@ Input module Config:
 -------------------------------------------------
 Fit config: 
  epoch: 10000 
- batch size: 1000 
+ batch size: 64 
  verbose: 0 
- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x000000000D5A4B00>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000000D5E07B8>] 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x000000000D058550>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000000D07E780>, <keras.callbacks.EarlyStopping object at 0x000000000D0589E8>] 
  optimizer: adam 
 -------------------------------------------------
 Input tags: 
- {'B3': ['B3_CHK', 'B3_PDC', 'B3_PWH'], 'C4': ['C4_CHK', 'C4_PDC', 'C4_PWH'], 'B1': ['B1_CHK', 'B1_PDC', 'B1_PWH'], 'D1': ['D1_CHK', 'D1_PDC', 'D1_PWH'], 'C2': ['C2_CHK', 'C2_PDC', 'C2_PWH'], 'C3': ['C3_CHK', 'C3_PDC', 'C3_PWH'], 'C1': ['C1_CHK', 'C1_PDC', 'C1_PWH']} 
+ {'CHK': ['F1_CHK', 'B2_CHK', 'D3_CHK', 'E1_CHK', 'time']} 
 Output tags: 
- {'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM'], 'D1_out': ['D1_QOIL'], 'C1_out': ['C1_QOIL'], 'C2_out': ['C2_QOIL'], 'B1_out': ['B1_QOIL'], 'B3_out': ['B3_QOIL'], 'C4_out': ['C4_QOIL'], 'C3_out': ['C3_QOIL']} 
+ {'F1_OUT': ['F1_PDC', 'F1_PWH'], 'D3_OUT': ['D3_PDC', 'D3_PWH'], 'E1_OUT': ['E1_PDC', 'E1_PWH'], 'B2_OUT': ['B2_PDC', 'B2_PWH']} 
 
 #### Scores #### 
- RMSE train [ 2.56660725  3.22030132  6.23144408  9.88043456  4.9436111   5.13986132
-  8.7797855   2.48602849] 
- RMSE test: [  2.56906015  13.76438067   4.38091423   8.13160904   8.16705512
-  11.20995787   6.87495333   9.8277524 ] 
- R2 train: [  4.78579516e-01   5.88935808e-01   4.47651223e-01  -3.22191891e+00
-  -5.88301954e-02   2.07561510e-03  -1.58247225e+00   9.93705090e-01] 
- R2 test: [  0.14026338 -23.34805465   0.14742933  -3.02768745 -14.22857729
- -10.65842577  -2.95002041   0.7408786 ] 
+ RMSE train [[ 1.48483783]
+ [ 2.17449825]
+ [ 2.21545718]
+ [ 4.60509142]
+ [ 1.62742704]
+ [ 2.43079271]
+ [ 1.8104812 ]
+ [ 7.14861137]] 
+ RMSE test: [[  2.15691808]
+ [  1.42000084]
+ [  4.78701853]
+ [ 10.00204016]
+ [  5.41633993]
+ [  7.37136272]
+ [  3.70526672]
+ [ 10.17321185]] 
+ R2 train: [array([ 0.71765283]), array([ 0.60244175]), array([-0.50425374]), array([ 0.38221021]), array([ 0.65880071]), array([ 0.90321843]), array([-0.20456143]), array([ 0.08133529])] 
+ R2 test: [array([ 0.57741425]), array([-1.64863601]), array([ 0.04011928]), array([-0.23173974]), array([ 0.05443766]), array([ 0.53517273]), array([ 0.24366849]), array([-0.32767115])] 
 #### ------ ####

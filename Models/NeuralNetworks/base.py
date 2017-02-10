@@ -18,7 +18,7 @@ from keras.optimizers import SGD
 from sklearn import metrics
 import keras
 
-INIT='glorot_uniform'
+INIT='glorot_normal'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
     inception_outputs=[]
     for i in range(n_inception):
@@ -129,11 +129,12 @@ def output_tags_to_index(output_tags,output_layers):
     output_tag_index={}
     output_tag_ordered_list=[]
     i=0
+    #print(output_layers)
     for layer_name,_,_ in output_layers:
         for tag_name in output_tags[layer_name]:
             output_tag_index[tag_name]=i
             output_tag_ordered_list.append(tag_name)
-        i+=1
+            i+=1
 
     n_outputs=i
     return output_tag_index,output_tag_ordered_list,n_outputs

@@ -2,6 +2,11 @@
 from .base import *
 from .base_class import NN_BASE
 
+
+#Bra:
+#self.n_depth = 2
+#self.n_width = 20
+#self.l2weight =0.0005
 class SSNET2(NN_BASE):
 
 
@@ -14,14 +19,14 @@ class SSNET2(NN_BASE):
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight =0.0001
+        self.l2weight =0.0005
         self.add_thresholded_output=True
 
         self.input_tags=['CHK','PDC']
         #Training config
         self.optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 1 #15000
+        self.nb_epoch = 5000 #15000
         self.batch_size = 64
         self.verbose = 0
 
@@ -32,13 +37,21 @@ class SSNET2(NN_BASE):
             'E1_out': ['E1_QGAS'],
             'GJOA_QGAS': ['GJOA_QGAS']
         }
-        self.input_tags = {
-            'F1': ['F1_CHK','F1_PDC','F1_PWH','F1_PBH'],
-            'B2': ['B2_CHK','B2_PDC','B2_PWH','B2_PBH'],
-            'D3': ['D3_CHK','D3_PDC','D3_PWH','D3_PBH'],
-            'E1': ['E1_CHK','E1_PDC','E1_PWH','E1_PBH']
-        }
+        #self.input_tags = {
+        #    'F1': ['F1_CHK','F1_PDC','F1_PWH'],#,'F1_PBH'],
+        #    'B2': ['B2_CHK','B2_PDC','B2_PWH'],#,'B2_PBH'],
+        #    'D3': ['D3_CHK','D3_PDC','D3_PWH'],#,'D3_PBH'],
+        #    'E1': ['E1_CHK','E1_PDC','E1_PWH']#,'E1_PBH']
+        #}
+        well_names=['F1','B2','D3','E1']
 
+        self.input_tags={}
+        tags=['CHK','PDC']#,'PDC','PWH','PBH']
+        for name in well_names:
+            self.input_tags[name]=[]
+            for tag in tags:
+                self.input_tags[name].append(name+'_'+tag)
+            #self.input_tags[name].append('time')
         self.loss_weights = {
             'F1_out': 0.0,
             'B2_out': 0.0,

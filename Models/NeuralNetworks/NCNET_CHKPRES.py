@@ -19,7 +19,7 @@ class SSNET3_PRESSURE(NN_BASE):
         # Training config
         self.optimizer = 'adam'  # SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 1
+        self.nb_epoch = 10000
         self.batch_size = 64
         self.verbose = 0
 
@@ -27,9 +27,9 @@ class SSNET3_PRESSURE(NN_BASE):
         self.n_outputs=1
         self.SCALE=100000
         # Input module config
-        self.n_inception = 3 #(n_inception, n_depth inception)
-        self.n_depth = 1
-        self.n_width = 5
+        self.n_inception = 0 #(n_inception, n_depth inception)
+        self.n_depth = 2
+        self.n_width = 20
         self.l2weight = 0.001
         self.add_thresholded_output=True
 
@@ -38,18 +38,15 @@ class SSNET3_PRESSURE(NN_BASE):
             #'MAIN_OUTPUT':['GJOA_QGAS'],
             #'MAIN_OUTPUT': ['F1_deltap', 'B2_deltap', 'D3_deltap', 'E1_deltap']
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC']
-            'MAIN_OUTPUT':['F1_PDC']
+            #'MAIN_OUTPUT':['F1_PDC']#,'B2_PWH','D3_PWH','E1_PWH']
+            'F1_OUT':['F1_PDC','F1_PWH'],
+            'E1_OUT': ['E1_PDC','E1_PWH'],
+            'B2_OUT': ['B2_PDC','B2_PWH'],
+            'D3_OUT': ['D3_PDC','D3_PWH'],
             #'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
          }
 
 
-        self.input_tags={
-            'CHK':['B2_CHK','F1_CHK','D3_CHK','E1_CHK'],
-            #'PDC':['B2_PDC']
-            #'B2':['B2_CHK','B2_PDC'],
-            #'D3':['D3_CHK'],
-            #'E1':['E1_CHK']
-        }
         self.input_name='E1'
         well_names=['F1','B2','D3','E1']
         tags=['CHK']
@@ -61,6 +58,7 @@ class SSNET3_PRESSURE(NN_BASE):
 
         self.input_tags['CHK'].append('time')
         self.n_inputs = len(self.input_tags['CHK'])
+        self.n_outputs=1#len(self.output_tags['MAIN_OUTPUT'])
 
         super().__init__()
 
@@ -80,6 +78,7 @@ class SSNET3_PRESSURE(NN_BASE):
 
 
         main_input=Input(shape=(self.n_inputs,), dtype='float32', name='CHK')
+        main_input_out=add_layers(main_input,n_depth=2,n_width=20, l2_weight=self.l2weight)
 
         #input_chk=Input(shape=(1,), dtype='float32', name='CHK')
         #model_chk=add_layers(input_chk,n_width=10,n_depth=2,l2_weight=self.l2weight)
@@ -96,9 +95,11 @@ class SSNET3_PRESSURE(NN_BASE):
 
 
         #main_model = generate_inception_module(main_input, 3, 1, 10, self.l2weight)
-        main_model = add_layers(main_input, n_depth=self.n_depth,n_width=self.n_width, l2_weight=self.l2weight)
-        #main_output=merge([PWH_out,PDC_out],mode='sum',name='MAIN_OUTPUT')
-        main_output = Dense(self.n_outputs,name='MAIN_OUTPUT')(main_model)
+        main_output=[]
+        for key in self.output_tags.keys():
+            main_model = add_layers(main_input_out, n_depth=self.n_depth,n_width=self.n_width, l2_weight=self.l2weight)
+            #main_output=merge([PWH_out,PDC_out],mode='sum',name='MAIN_OUTPUT')
+            main_output.append(Dense(len(self.output_tags[key]),name=key)(main_model))
 
         self.model = Model(input=main_input, output=main_output)
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
