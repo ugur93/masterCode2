@@ -52,10 +52,15 @@ def fetch_gjoa_data():
     X['time']=np.arange(0,len(X.index))
 
 
-    #Y=pwh_to_zero(X,Y.copy())
+    Y=pwh_to_zero(X,Y.copy())
 
 
+    for tag in tags:
+        plt.plot(Y[tag+'_'+'PWH'],label=tag)
+        plt.title(tag)
+    plt.legend()
 
+    #plt.show()
 
 
 

@@ -39,11 +39,14 @@ class SSNET3_PRESSURE(NN_BASE):
             #'MAIN_OUTPUT': ['F1_deltap', 'B2_deltap', 'D3_deltap', 'E1_deltap']
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC']
             #'MAIN_OUTPUT':['F1_PDC']#,'B2_PWH','D3_PWH','E1_PWH']
-            'F1_OUT':['F1_PDC','F1_PWH'],
-            'E1_OUT': ['E1_PDC','E1_PWH'],
-            'B2_OUT': ['B2_PDC','B2_PWH'],
-            'D3_OUT': ['D3_PDC','D3_PWH'],
-            #'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
+            #'F1_OUT':['F1_PWH'],
+            #'E1_OUT': ['E1_PWH'],
+            #'B2_OUT': ['B2_PWH'],
+            #'D3_OUT': ['D3_PWH'],
+            #'PWH_OUT':['F1_PWH','E1_PWH','B2_PWH','D3_PWH'],
+            #'PDC_OUT': ['F1_PDC','E1_PDC'],
+            #'PDC2_OUT':['B2_PDC','D3_PDC']
+            'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
          }
 
 
@@ -78,7 +81,7 @@ class SSNET3_PRESSURE(NN_BASE):
 
 
         main_input=Input(shape=(self.n_inputs,), dtype='float32', name='CHK')
-        main_input_out=add_layers(main_input,n_depth=2,n_width=20, l2_weight=self.l2weight)
+        #main_input_out=add_layers(main_input,n_depth=2,n_width=20, l2_weight=self.l2weight)
 
         #input_chk=Input(shape=(1,), dtype='float32', name='CHK')
         #model_chk=add_layers(input_chk,n_width=10,n_depth=2,l2_weight=self.l2weight)
@@ -97,7 +100,7 @@ class SSNET3_PRESSURE(NN_BASE):
         #main_model = generate_inception_module(main_input, 3, 1, 10, self.l2weight)
         main_output=[]
         for key in self.output_tags.keys():
-            main_model = add_layers(main_input_out, n_depth=self.n_depth,n_width=self.n_width, l2_weight=self.l2weight)
+            main_model = add_layers(main_input, n_depth=self.n_depth,n_width=self.n_width, l2_weight=self.l2weight)
             #main_output=merge([PWH_out,PDC_out],mode='sum',name='MAIN_OUTPUT')
             main_output.append(Dense(len(self.output_tags[key]),name=key)(main_model))
 

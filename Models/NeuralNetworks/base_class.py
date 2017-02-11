@@ -64,8 +64,24 @@ class NN_BASE:
     def predict(self, X,tag=False):
         X_dict,_=self.preprocess_data(X)
         predicted_data=self.model.predict(X_dict)
+        N_output_modules=len(self.output_tags.keys())
 
+        if N_output_modules>1:
+            predicted_data_reshaped=np.asarray(predicted_data[0])
+            for i in range(1,N_output_modules):
+                temp_data=np.asarray(predicted_data[i])
+                predicted_data_reshaped=np.hstack((predicted_data_reshaped,temp_data))
+        else:
+            predicted_data_reshaped=np.asarray(predicted_data)
+        #print(predicted_data_reshaped.shape)
+        if tag==False:
+            return predicted_data_reshaped
+        else:
+            return predicted_data_reshaped[:,self.output_index[tag]]
+        #print(len(predicted_data[-1]))
+        #predicted_data_reshaped=np.array(predicted_data)
         predicted_data_reshaped=np.asarray(predicted_data)
+        print(predicted_data_reshaped.shape)
         if len(self.output_tags.keys())>1:
             temp_data=predicted_data_reshaped[0,:,:]
             for i in range(1,predicted_data_reshaped.shape[0]):#HARDCODED!!!
@@ -84,8 +100,8 @@ class NN_BASE:
         return self.model.get_layer(layer_name).get_weights()
 
     def save_model_to_file(self,name,scores,save_weights=True):
-        #PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
-        PATH='C:/users/ugurac/Documents/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/model_figures'
+        PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
+        #PATH='C:/users/ugurac/Documents/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/model_figures'
         if save_weights:
             self.model.save(PATH+name+'.h5')
         else:

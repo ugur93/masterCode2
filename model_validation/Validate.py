@@ -77,7 +77,7 @@ def validate_train_test_split(Data):
 
     model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
-    output_cols =['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']#['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
+    output_cols =[]#['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']#['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
     model.visualize(X_train, X_val, Y_train, Y_val, input_cols=input_cols,output_cols=output_cols)
 
 

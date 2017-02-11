@@ -2,30 +2,44 @@ CHK thresholds:
 {'CHK': 0.050000000000000003}
 ----------------------------------- 
 OUTPUT INDEX 
-{'E1_PDC': 0}
+{'F1_PWH': 0, 'F1_PDC': 1, 'B2_PWH': 2, 'B2_PDC': 3, 'D3_PWH': 4, 'D3_PDC': 5, 'E1_PWH': 6, 'E1_PDC': 7}
 -------------------------------------------------
 Input module Config: 
- n_depth: 1 
- n_width: 25 
+ n_depth: 2 
+ n_width: 20 
  n_inception: 0 
- l2_weight: 0.002 
+ l2_weight: 0.001 
  Threshold: True 
 -------------------------------------------------
 Fit config: 
- epoch: 5000 
+ epoch: 10000 
  batch size: 64 
  verbose: 0 
- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x10e5e1080>, <Models.NeuralNetworks.base.EpochVerbose object at 0x1035d0d68>, <keras.callbacks.EarlyStopping object at 0x1035d0b00>] 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x295ceec>, <Models.NeuralNetworks.base.EpochVerbose object at 0xc99220c>, <keras.callbacks.EarlyStopping object at 0xc99224c>] 
  optimizer: adam 
 -------------------------------------------------
 Input tags: 
- {'CHK': ['F1_CHK', 'F1_PWH', 'B2_CHK', 'B2_PWH', 'D3_CHK', 'D3_PWH', 'E1_CHK', 'E1_PWH']} 
+ {'CHK': ['F1_CHK', 'B2_CHK', 'D3_CHK', 'E1_CHK', 'time']} 
 Output tags: 
- {'MAIN_OUTPUT': ['E1_PDC']} 
+ {'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']} 
 
 #### Scores #### 
- RMSE train [ 1.67231192] 
- RMSE test: [ 5.89316149] 
- R2 train: [ 0.8969005] 
- R2 test: [ 0.26063437] 
+ RMSE train [[ 3.42804236]
+ [ 0.99060543]
+ [ 6.92627345]
+ [ 1.58062228]
+ [ 8.86143433]
+ [ 1.77053224]
+ [ 4.61171322]
+ [ 1.336433  ]] 
+ RMSE test: [[  2.42119792]
+ [  1.55772603]
+ [  8.33644975]
+ [  3.76991904]
+ [ 10.50797558]
+ [  4.59569626]
+ [  5.05693759]
+ [  4.26321932]] 
+ R2 train: [array([ 0.01195887]), array([ 0.87433136]), array([ 0.13759176]), array([ 0.08188517]), array([-1.28755888]), array([ 0.03926837]), array([ 0.65164554]), array([ 0.76990907])] 
+ R2 test: [array([-6.70026432]), array([ 0.77959083]), array([ 0.10846873]), array([ 0.2170441]), array([-0.35950217]), array([ 0.11531288]), array([ 0.78123832]), array([ 0.41419418])] 
 #### ------ ####
