@@ -66,6 +66,13 @@ def fetch_gjoa_data():
     #
 
     tags=['GJOA_TOTAL_QOIL','GJOA_TOTAL_QWAT']
+    i=1
+    for tag in well_names:
+        plt.subplot(4,2,i)
+        i+=1
+        plt.scatter(X[tag+'_CHK'],Y['GJOA_TOTAL_QOIL_SUM'])
+        plt.title(tag)
+    #plt.show()
 
     #plt.plot(Y['GJOA_TOTAL_QOIL_SUM'],color='red')
     #plt.plot(Y['GJOA_TOTAL_QOIL'],color='blue')
@@ -104,8 +111,8 @@ def fetch_gjoa_data():
 
     #plot_test(GjoaData.X_transformed, GjoaData.Y_transformed)
 
-    print(X.columns)
-    print(Y.columns)
+    #print(X.columns)
+    #print(Y.columns)
     return GjoaData
 
 

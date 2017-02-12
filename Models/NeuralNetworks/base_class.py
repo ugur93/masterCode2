@@ -100,8 +100,9 @@ class NN_BASE:
         return self.model.get_layer(layer_name).get_weights()
 
     def save_model_to_file(self,name,scores,save_weights=True):
-        PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
+        #PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
         #PATH='C:/users/ugurac/Documents/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/model_figures'
+        PATH='./Models/NeuralNetworks/model_figures'
         if save_weights:
             self.model.save(PATH+name+'.h5')
         else:
@@ -210,9 +211,9 @@ class NN_BASE:
 
 
         #self.plot_scatter_input_output(X_train, X_test, Y_train, Y_test, input_cols=input_cols,output_cols=output_cols)
-        #self.plot_scatter_chk_well(X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
-        self.plot_residuals_zeros(X_train, X_test, Y_train, Y_test, output_cols)
-        self.plot_true_and_predicted_zeros(X_train, X_test, Y_train, Y_test, output_cols)
+        self.plot_scatter_chk_well(X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
+        self.plot_residuals(X_train, X_test, Y_train, Y_test, output_cols)
+        self.plot_true_and_predicted(X_train, X_test, Y_train, Y_test, output_cols)
         #self.plot_true_and_predicted_with_input(X_train, X_test, Y_train, Y_test, output_cols=output_cols)
         plt.show()
 
@@ -418,14 +419,14 @@ class NN_BASE:
             well = output_tag.split('_')[0]
             ind_train = X_train[well + '_CHK'] > 0.05
             ind_test = X_test[well + '_CHK'] > 0.05
-            plt.scatter(Y_train.index[ind_train], self.SCALE*Y_train[output_tag][ind_train], color='blue', label=output_tag+'_true - train')
-            plt.scatter(Y_train.index[ind_train], self.SCALE*self.predict(X_train[ind_train], output_tag), color='black', label=output_tag+'_pred - train')
+            plt.scatter(Y_train.index[ind_train], self.SCALE*Y_train[output_tag][ind_train], color='blue', label='true - train')
+            plt.scatter(Y_train.index[ind_train], self.SCALE*self.predict(X_train[ind_train], output_tag), color='black', label='pred - train')
 
-            plt.scatter(Y_test.index[ind_test], self.SCALE*Y_test[output_tag][ind_test], color='red', label=output_tag+'_true - test')
-            plt.scatter(Y_test.index[ind_test], self.SCALE*self.predict(X_test[ind_test], output_tag), color='green', label=output_tag+'_pred - test')
+            plt.scatter(Y_test.index[ind_test], self.SCALE*Y_test[output_tag][ind_test], color='red', label='true - val')
+            plt.scatter(Y_test.index[ind_test], self.SCALE*self.predict(X_test[ind_test], output_tag), color='green', label='pred - val')
             plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+            plt.legend(bbox_to_anchor=(0., 1.03, 1., .112), loc=3,
                        ncol=2, mode="expand", borderaxespad=0., fontsize=10)
     def plot_residuals_zeros(self,X_train,X_test,Y_train,Y_test,output_cols=[],remove_zeros=False):
 
@@ -454,14 +455,14 @@ class NN_BASE:
             plt.scatter(Y_train.index[ind_train],
                         self.SCALE *( Y_train[output_tag] -self.predict(X_train, output_tag))[ind_train],
                         color='black',
-                        label=output_tag + '_train_(true-pred)')
+                        label='train')
 
             plt.scatter(Y_test.index[ind_test], self.SCALE *( Y_test[output_tag] -  self.predict(X_test, output_tag))[ind_test],
                         color='green',
-                        label=output_tag + '__test_(true-pred)')
-            plt.title(output_tag + '-' + 'Residuals')
+                        label='val')
+            plt.title(output_tag + '-' + 'Residuals (true-pred)')
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
-            plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+            plt.legend(bbox_to_anchor=(0., 1.04, 1., .102), loc=9,
                       ncol=2, mode="expand", borderaxespad=0., fontsize=10)
 
     def plot_scatter_input_output_zeros(self, X_train, X_test, Y_train, Y_test, input_cols=[], output_cols=[]):

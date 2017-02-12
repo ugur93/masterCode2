@@ -31,13 +31,15 @@ class NCNET1_GJOA2(NN_BASE):
         #Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
+        self.n_depth_incept=1
+        self.n_width_incept=5
         self.n_width = 20
-        self.l2weight = 0.00007
+        self.l2weight = 0.0001
         self.add_thresholded_output=True
 
         self.input_tags = {}
         well_name = ['C1', 'C3', 'C4', 'B3', 'B1','D1','C2']
-        tags = ['CHK','PDC','PWH']
+        tags = ['CHK','PDC','PWH','PBH']
         for name in well_name:
             self.input_tags[name] = []
             for tag in tags:
@@ -114,8 +116,8 @@ class NCNET1_GJOA2(NN_BASE):
         else:
             if n_inception > 1:
                 #temp_output = add_layers(input_layer, 1, n_width, l2_weight)
-                temp_output = generate_inception_module(input_layer, n_inception, n_depth, n_width, l2_weight)
-                #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
+                temp_output = generate_inception_module(input_layer, n_inception, self.n_depth_incept, self.n_width_incept, l2_weight)
+                temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:

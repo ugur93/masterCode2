@@ -52,7 +52,7 @@ def fetch_gjoa_data():
     X['time']=np.arange(0,len(X.index))
 
 
-    Y=pwh_to_zero(X,Y.copy())
+    #Y=pwh_to_zero(X,Y.copy())
 
 
     for tag in tags:
@@ -272,7 +272,7 @@ def addModify(X,Y,type):
     return Y
 def pwh_to_zero(X,Y):
     for tag in tags:
-        ind=X[tag+'_CHK']==0
+        ind=X[tag+'_CHK']<5
         Y[tag+'_PWH'][ind]=0
         #plt.subplot(2,1,1)
         #plt.plot(X[tag+'_PDC'])

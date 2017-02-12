@@ -19,7 +19,7 @@ class SSNET2(NN_BASE):
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight =0.0005
+        self.l2weight =0.001
         self.add_thresholded_output=True
 
         self.input_tags=['CHK','PDC']

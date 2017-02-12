@@ -22,28 +22,26 @@ INIT='glorot_normal'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
     inception_outputs=[]
     for i in range(n_inception):
-        out_temp=Dense(n_width, init=INIT, activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
+        out_temp=Dense(n_width, init=INIT, activation='relu', W_regularizer=l2(l2_weight),bias=True)(input_layer)
         for j in range(n_depth-1):
-            out_temp = Dense(n_width, init=INIT,activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(out_temp)
+            out_temp = Dense(n_width, init=INIT,activation='relu', W_regularizer=l2(l2_weight),bias=True)(out_temp)
         inception_outputs.append(out_temp)
     output_merged = merge(inception_outputs, mode='concat')
     return output_merged
 
 
 def add_layers(input_layer,n_depth,n_width,l2_weight):
-    output_layer=Dense(n_width, activation='relu',init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
+    output_layer=Dense(n_width, activation='relu',init=INIT, W_regularizer=l2(l2_weight),bias=True)(input_layer)
     for i in range(n_depth-1):
-        output_layer = Dense(n_width, activation='relu', init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(output_layer)
+        output_layer = Dense(n_width, activation='relu', init=INIT, W_regularizer=l2(l2_weight),bias=True)(output_layer)
     return output_layer
 
 
 def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
-    output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),
-                         b_regularizer=l2(l2_weight), bias=True)(input_layer)
+    output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight), bias=True)(input_layer)
     # output_layer=Activation('relu')(output_layer)
     for i in range(n_depth - 1):
-        output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),
-                             b_regularizer=l2(l2_weight), bias=True)(output_layer)
+        output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight), bias=True)(output_layer)
         # output_layer=Activation('relu')(output_layer)
     return output_layer
 
