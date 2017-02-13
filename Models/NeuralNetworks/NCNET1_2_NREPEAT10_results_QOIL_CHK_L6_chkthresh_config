@@ -1,0 +1,30 @@
+CHK thresholds: 
+{'C3': 0.2, 'C4': 0.2, 'B1': 0.2, 'C1': 0.2, 'C2': 0.2, 'B3': 0.2, 'D1': 0.2}
+----------------------------------- 
+OUTPUT INDEX 
+{'GJOA_TOTAL_QOIL_SUM': 7, 'C4_QOIL': 1, 'B3_QOIL': 5, 'C3_QOIL': 0, 'C1_QOIL': 3, 'B1_QOIL': 6, 'C2_QOIL': 4, 'D1_QOIL': 2}
+-------------------------------------------------
+Input module Config: 
+ n_depth: 2 
+ n_width: 20 
+ n_inception: 0 
+ l2_weight: 1e-05 
+ Threshold: True 
+-------------------------------------------------
+Fit config: 
+ epoch: 10000 
+ batch size: 1000 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x0000000010CFD4A8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000001539A550>, <keras.callbacks.EarlyStopping object at 0x0000000010CFDE80>] 
+ optimizer: adam 
+-------------------------------------------------
+Input tags: 
+ {'C3': ['C3_CHK'], 'C4': ['C4_CHK'], 'D1': ['D1_CHK'], 'C1': ['C1_CHK'], 'C2': ['C2_CHK'], 'B3': ['B3_CHK'], 'B1': ['B1_CHK']} 
+Output tags: 
+ {'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM'], 'B3_out': ['B3_QOIL'], 'C3_out': ['C3_QOIL'], 'C4_out': ['C4_QOIL'], 'C1_out': ['C1_QOIL'], 'B1_out': ['B1_QOIL'], 'D1_out': ['D1_QOIL'], 'C2_out': ['C2_QOIL']} 
+Accuracy RMSE 
+ TRAIN: 5.47 (+/- 0.82) 
+ VAL: 9.01 (+/- 1.59)Accuracy R2 
+ TRAIN: 0.97 (+/- 0.01) 
+ VAL: 0.78 (+/- 0.07)
+ NREPEAT: 10

@@ -60,10 +60,9 @@ def fetch_gjoa_data():
         #sum_oil += Y[name]
     sum_oil=Y[tags].sum(axis=1)
     Y['GJOA_TOTAL_QOIL_SUM']=sum_oil
-
     X['time'] = np.arange(0, len(X.index))
 
-    #
+    print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_QOIL_SUM']), np.mean(Y['GJOA_TOTAL_QOIL_SUM'])))
 
     tags=['GJOA_TOTAL_QOIL','GJOA_TOTAL_QWAT']
     i=1
@@ -73,47 +72,11 @@ def fetch_gjoa_data():
         #plt.scatter(X[tag+'_CHK'],Y['GJOA_TOTAL_QOIL_SUM'])
         plt.plot(Y[tag+'_QOIL'])
         plt.title(tag)
-    #plt.show()
-
-    #plt.plot(Y['GJOA_TOTAL_QOIL_SUM'],color='red')
-    #plt.plot(Y['GJOA_TOTAL_QOIL'],color='blue')
-    #plt.show()
-    #plot_together(X,Y,tags)
-
-    #plot_values(X,Y)
-    '''''
-    print(X.columns)
-    sum_oil=np.zeros((len(Y),1))#Y['C1_QOIL']
-    #print(sum_oil.shape)
-    #print(Y['C1_QOIL'].shape)
-    i=1
-    for key in well_names:
-        name=key+'_'+'QOIL'
-        plt.subplot(2,4,i)
-        plt.plot(Y[name])
-        plt.title(name)
-        i+=1
-        #if key!='C1':
-        sum_oil+=Y[name].reshape((len(Y),1))
-    plt.subplot(2,4,i)
-    print(sum_oil.shape)
-    YDIFF=Y['GJOA_TOTAL_QOIL'].reshape((len(Y),1))-sum_oil
-    plt.plot(sum_oil,color='red')
-    plt.plot(Y['GJOA_TOTAL_QOIL'].reshape((len(Y),1))-YDIFF,color='blue')
-    #plt.plot(Y['GJOA_SEP_1_QOIL'],color='green')
-    plt.show()
-    '''''
-
-
-
-
 
     GjoaData=DataContainer(X,Y,Y,name='GJOA2',Y_SCALE=100)
-
-    #plot_test(GjoaData.X_transformed, GjoaData.Y_transformed)
-
-    #print(X.columns)
-    #print(Y.columns)
+   # plot_test(GjoaData.X,GjoaData.Y)
+    #plot_input_to_well(X,Y)
+    #plot_input_to_total(X,Y)
     return GjoaData
 
 
@@ -135,11 +98,12 @@ def data_to_X_Y(data,type):
 
     for name in well_names:
         for tag in X_tags:
-            col=name+'_'+tag
-            print(col)
-            X[col]=data[col+'_'+type]
+            tag_name=name+'_'+tag
+           # print(col)
+            X[tag_name]=data[tag_name+'_'+type]
             if tag=='CHK':
-                X[col][X[col]<0]=0
+                ind = X[tag_name] < 0
+                X[tag_name][ind] = 0
         for tag in Y_tags:
             col=name+'_'+tag
             Y[col]=data[col+'_'+type]
@@ -167,12 +131,13 @@ def plot_together(X,Y,tags):
     plt.show()
 def plot_test(X,Y):
     # _,(ax1,ax2,ax3,ax4,ax5)=plt.subplots(8,1,sharex=True)
-    _, axes = plt.subplots(8, 1, sharex=True)
+    _, axes = plt.subplots(4, 2, sharex=True)
 
     # cols=['CHK']
     #plt.figure()
+    axes=axes.flatten()
     for ax, tag in zip(axes, well_names):
-        name = tag + '_' + 'PBH'
+        name = tag + '_' + 'CHK'
         #plt.plot(X[name])
         ax.plot(X[name])
         ax.set_title(name)
@@ -180,4 +145,37 @@ def plot_test(X,Y):
     axes[-1].set_title('GJOA_TOTAL_QOIL')
     plt.figure()
     plt.plot(Y['GJOA_TOTAL_QGAS_DEPRECATED'])
+    plt.show()
+
+def plot_input_to_well(X,Y):
+    cols=['CHK','PDC','PWH','PBH']
+    out_ending='QOIL'
+    for tag in well_names:
+        i=1
+        plt.figure()
+        for col in cols:
+            name_input=tag+'_'+col
+            name_output=tag+'_'+out_ending
+            plt.subplot(2,2,i)
+            i+=1
+            plt.scatter(X[name_input],Y[name_output],color='black')
+            plt.title(name_input)
+            plt.xlabel(name_input)
+            plt.ylabel(name_output)
+    plt.show()
+def plot_input_to_total(X,Y):
+    cols=['CHK','PDC','PWH','PBH']
+    out_ending='TOTAL_QOIL_SUM'
+    for tag in well_names:
+        i=1
+        plt.figure()
+        for col in cols:
+            name_input=tag+'_'+col
+            name_output='GJOA'+'_'+out_ending
+            plt.subplot(2,2,i)
+            i+=1
+            plt.scatter(X[name_input],Y[name_output],color='black')
+            plt.title(name_input)
+            plt.xlabel(name_input)
+            plt.ylabel(name_output)
     plt.show()

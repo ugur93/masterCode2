@@ -30,8 +30,8 @@ class SSNET3_PRESSURE(NN_BASE):
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight = 0.0001
-        self.add_thresholded_output=True
+        self.l2weight = 0.001
+        self.add_thresholded_output=False
 
         self.output_tags = {
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC'],
@@ -59,7 +59,7 @@ class SSNET3_PRESSURE(NN_BASE):
             for tag in tags:
                 self.input_tags['CHK'].append(key+'_'+tag)
 
-        #self.input_tags['CHK'].append('time')
+        self.input_tags['CHK'].append('time')
         self.n_inputs = len(self.input_tags['CHK'])
         self.n_outputs=1#len(self.output_tags['MAIN_OUTPUT'])
 

@@ -29,7 +29,7 @@ def getTrainTestSplit(input,output,train_index,test_index):
     return input_train,output_train,input_test,output_test
 
 def validate_train_test_split(Data):
-    Data.transform_Y_with_new_scale(100)
+    #Data.transform_Y_with_new_scale(100)
     X=Data.X_transformed#[500:-1]
     Y=Data.Y_transformed#[500:-1]
     Y_Q=Data.Y_Q_transformed
@@ -66,7 +66,7 @@ def validate_train_test_split(Data):
     #model.update_model()
 
     model.initialize_chk_thresholds(Data, True)
-    #model.fit(X_train,Y_train,X_val,Y_val)
+    model.fit(X_train,Y_train,X_val,Y_val)
 
     #EVAL
 
@@ -77,7 +77,7 @@ def validate_train_test_split(Data):
 
     model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
-    output_cols =[]#['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']#['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
+    output_cols =['C1_QOIL', 'C2_QOIL','C3_QOIL', 'C4_QOIL', 'B1_QOIL','B3_QOIL', 'D1_QOIL',  'GJOA_TOTAL_QOIL_SUM']#['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']#['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
     model.visualize(X_train, X_val, Y_train, Y_val, input_cols=input_cols,output_cols=output_cols)
 
 
@@ -101,6 +101,7 @@ def validateRepeat(Data):
         #model = NCNET_CHKPRES.SSNET3_PRESSURE()
         #model = NN1.SSNET1()
         model = NCNET1_GJOA2.NCNET1_GJOA2()
+        #model = NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=NET2_PRESSURE.SSNET2()
         model.initialize_chk_thresholds(Data, True)
         conf=model.get_config()
@@ -127,7 +128,7 @@ def validateRepeat(Data):
 
     print(s_rmse)
     print(s_r2)
-    save_to_file(model_name + '_NREPEAT' + str(N_REPEAT)+'_results_PDC_PWH_PBH',conf+s_rmse+s_r2+'\n NREPEAT: '+str(N_REPEAT))
+    save_to_file(model_name + '_NREPEAT' + str(N_REPEAT)+'_results_QOIL_PDC_PWH_PBH_L6_chkthresh',conf+s_rmse+s_r2+'\n NREPEAT: '+str(N_REPEAT))
 
 
 

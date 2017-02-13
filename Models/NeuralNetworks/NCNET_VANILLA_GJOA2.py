@@ -27,13 +27,13 @@ class NCNET_VANILLA(NN_BASE):
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight = 0.00001
-        self.add_thresholded_output=True
+        self.l2weight = 0.001
+        self.add_thresholded_output=False
 
         self.input_tags = {}
         input_name='MAIN_INPUT'
         well_name = ['C1', 'C3', 'C4', 'B3', 'B1', 'D1', 'C2']
-        tags = ['CHK','PWH', 'PBH']
+        tags = ['CHK']#,'PWH', 'PBH']
         self.input_tags[input_name] = []
         for name in well_name:
             for tag in tags:

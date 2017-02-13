@@ -51,7 +51,10 @@ def fetch_gjoa_data():
     X = addModify(Y, X, 'E1_PDC')
     X['time']=np.arange(0,len(X.index))
 
+    print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_QGAS']),np.mean(Y['GJOA_QGAS'])))
 
+    #plt.plot(Y['GJOA_QGAS'])
+    #plt.show()
     #Y=pwh_to_zero(X,Y.copy())
 
 
@@ -77,6 +80,7 @@ def fetch_gjoa_data():
 
     #print_rank(X,'GJOA')
     GjoaData=DataContainer(X,Y,Y_Q,name='GJOA')
+    #plot_input_to_well(X,Y)
     #plt.plot(GjoaData.Y_transformed['GJOA_QGAS'])
     #plt.show()
 
@@ -184,9 +188,14 @@ def data_to_X_Y(data):
             sensor_splitted = sensor.split('_')
             for col in X_COLS:
                 if sensor_splitted[1]==col and sensor_splitted[0]!='GJOA':
-                    X[sensor_splitted[0]+'_'+sensor_splitted[1]]=data[key][sensor]
+                    tag_name=sensor_splitted[0]+'_'+sensor_splitted[1]
+                    X[tag_name]=data[key][sensor]
                     if col=='CHK':
-                        X[X<0]=0
+                        #print(X)
+                        ind=X[tag_name]<0
+                        X[tag_name][ind]=0
+                        #X[X<0]=0
+
             #for col in Y_Q_COLS:
             #    if sensor_splitted[1]==col and sensor_splitted[0]!='GJOA':
             #        Y_Q[sensor_splitted[0]+'_'+sensor_splitted[1]]=data[key][sensor]
@@ -281,3 +290,35 @@ def pwh_to_zero(X,Y):
         #plt.show()
     return Y
 
+def plot_input_to_well(X,Y):
+    cols=['CHK','PDC','PWH','PBH']
+    out_ending='QGAS'
+    for tag in tags:
+        i=1
+        plt.figure()
+        for col in cols:
+            name_input=tag+'_'+col
+            name_output=tag+'_'+out_ending
+            plt.subplot(2,2,i)
+            i+=1
+            plt.scatter(X[name_input],Y[name_output],color='black')
+            plt.title(name_input)
+            plt.xlabel(name_input)
+            plt.ylabel(name_output)
+    plt.show()
+def plot_input_to_total(X,Y):
+    cols=['CHK','PDC','PWH','PBH']
+    out_ending='QGAS'
+    for tag in tags:
+        i=1
+        plt.figure()
+        for col in cols:
+            name_input=tag+'_'+col
+            name_output='GJOA'+'_'+out_ending
+            plt.subplot(2,2,i)
+            i+=1
+            plt.scatter(X[name_input],Y[name_output],color='black')
+            plt.title(name_input)
+            plt.xlabel(name_input)
+            plt.ylabel(name_output)
+    plt.show()

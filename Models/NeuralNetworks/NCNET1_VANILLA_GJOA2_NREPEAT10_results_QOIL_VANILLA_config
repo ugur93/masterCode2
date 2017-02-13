@@ -1,0 +1,30 @@
+CHK thresholds: 
+{'MAIN_INPUT': 0.050000000000000003}
+----------------------------------- 
+OUTPUT INDEX 
+{'GJOA_TOTAL_QOIL_SUM': 0}
+-------------------------------------------------
+Input module Config: 
+ n_depth: 2 
+ n_width: 20 
+ n_inception: 0 
+ l2_weight: 0.001 
+ Threshold: False 
+-------------------------------------------------
+Fit config: 
+ epoch: 10000 
+ batch size: 64 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x00000000125C2A58>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000000DDB35F8>, <keras.callbacks.EarlyStopping object at 0x00000000125C2710>] 
+ optimizer: adam 
+-------------------------------------------------
+Input tags: 
+ {'MAIN_INPUT': ['C1_CHK', 'C3_CHK', 'C4_CHK', 'B3_CHK', 'B1_CHK', 'D1_CHK', 'C2_CHK']} 
+Output tags: 
+ {'TOTAL_OUT': ['GJOA_TOTAL_QOIL_SUM']} 
+Accuracy RMSE 
+ TRAIN: 4.66 (+/- 0.50) 
+ VAL: 8.66 (+/- 1.31)Accuracy R2 
+ TRAIN: 0.98 (+/- 0.00) 
+ VAL: 0.80 (+/- 0.07)
+ NREPEAT: 10

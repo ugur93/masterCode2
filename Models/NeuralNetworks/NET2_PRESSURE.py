@@ -13,7 +13,7 @@ class SSNET2(NN_BASE):
     def __init__(self):
 
         self.model_name='SSNET2'
-        self.SCALE=100000
+        self.SCALE=100
 
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
@@ -46,12 +46,12 @@ class SSNET2(NN_BASE):
         well_names=['F1','B2','D3','E1']
 
         self.input_tags={}
-        tags=['CHK','PDC']#,'PDC','PWH','PBH']
+        tags=['CHK','PDC','PWH','PBH']
         for name in well_names:
             self.input_tags[name]=[]
             for tag in tags:
                 self.input_tags[name].append(name+'_'+tag)
-            #self.input_tags[name].append('time')
+            self.input_tags[name].append('time')
         self.loss_weights = {
             'F1_out': 0.0,
             'B2_out': 0.0,

@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 if __name__=='__main__':
 
     GjoaData=GJOA2.fetch_gjoa_data()
-
+    #exit()
 
     #SimData = SimulatedData.fetchSimulatedData()
 
