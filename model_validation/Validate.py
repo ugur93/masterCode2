@@ -66,7 +66,7 @@ def validate_train_test_split(Data):
     #model.update_model()
 
     model.initialize_chk_thresholds(Data, True)
-    model.fit(X_train,Y_train,X_val,Y_val)
+    #model.fit(X_train,Y_train,X_val,Y_val)
 
     #EVAL
 

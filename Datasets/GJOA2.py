@@ -70,7 +70,8 @@ def fetch_gjoa_data():
     for tag in well_names:
         plt.subplot(4,2,i)
         i+=1
-        plt.scatter(X[tag+'_CHK'],Y['GJOA_TOTAL_QOIL_SUM'])
+        #plt.scatter(X[tag+'_CHK'],Y['GJOA_TOTAL_QOIL_SUM'])
+        plt.plot(Y[tag+'_QOIL'])
         plt.title(tag)
     #plt.show()
 

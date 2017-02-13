@@ -39,11 +39,11 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.input_tags = {}
         well_name = ['C1', 'C3', 'C4', 'B3', 'B1','D1','C2']
-        tags = ['CHK','PDC','PWH','PBH']
+        tags = ['CHK']#,'PDC','PWH','PBH']
         for name in well_name:
             self.input_tags[name] = []
             for tag in tags:
-                if name=='C2' and tag=='PBH':
+                if (name=='C2' and name=='D1') and tag=='PBH':
                     pass
                 else:
                     self.input_tags[name].append(name + '_' + tag)
@@ -124,11 +124,11 @@ class NCNET1_GJOA2(NN_BASE):
                 temp_output = add_layers(input_layer, n_depth, n_width, l2_weight)
 
         if thresholded_output:
-            output_layer = Dense(1, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(temp_output)
+            output_layer = Dense(1,W_regularizer=l2(l2_weight), bias=True)(temp_output)
             # output_layer = Dense(1,init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight),bias=True)(temp_output)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:
-            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True,
+            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), bias=True,
                                  name=name + '_out')(temp_output)
 
             merged_output = output_layer

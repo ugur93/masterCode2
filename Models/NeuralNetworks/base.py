@@ -89,10 +89,14 @@ def plotModel(model,file_name):
 #######################################INPUT#############################################################################
 
 
-def addToggledInput(X,thresholds):
-    new_X=X.copy()
+def addToggledInput(X,X_dict,thresholds):
+    new_X=X_dict.copy()
+    #print(thresholds.keys())
+    #print(X.columns)
     for key in thresholds.keys():
-        toggled_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key][:,0]])
+        #print(key)
+        #print(key+'_CHK')
+        toggled_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
         new_X.update({'aux_'+key:toggled_X})
     return new_X
 
