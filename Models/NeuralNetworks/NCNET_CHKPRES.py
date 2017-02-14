@@ -30,7 +30,7 @@ class SSNET3_PRESSURE(NN_BASE):
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight = 0.001
+        self.l2weight = 0.0001
         self.add_thresholded_output=False
 
         self.output_tags = {
@@ -39,27 +39,28 @@ class SSNET3_PRESSURE(NN_BASE):
             #'MAIN_OUTPUT': ['F1_deltap', 'B2_deltap', 'D3_deltap', 'E1_deltap']
             #'MAIN_OUTPUT':['F1_PDC','B2_PDC','D3_PDC','E1_PDC']
             #'MAIN_OUTPUT':['F1_PDC']#,'B2_PWH','D3_PWH','E1_PWH']
-            #'F1_OUT':['F1_PWH', 'F1_PDC'],
-            #'E1_OUT': ['E1_PWH', 'E1_PDC'],
-            #'B2_OUT': ['B2_PWH', 'B2_PDC'],
-            #'D3_OUT': ['D3_PWH', 'D3_PDC'],
+            'F1_OUT':['F1_QGAS'],#['F1_PWH', 'F1_PDC'],
+            'E1_OUT': ['E1_QGAS'],#['E1_PWH', 'E1_PDC'],
+            'B2_OUT': ['B2_QGAS'],#['B2_PWH', 'B2_PDC'],
+            'D3_OUT': ['D3_QGAS']#'D3_PWH', 'D3_PDC'],
             #'PWH_OUT':['F1_PWH','E1_PWH','B2_PWH','D3_PWH'],
             #'PDC_OUT': ['F1_PDC','E1_PDC'],
             #'PDC2_OUT':['B2_PDC','D3_PDC']
-            'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
+            #'MAIN_OUTPUT': ['F1_PWH', 'F1_PDC', 'B2_PWH', 'B2_PDC', 'D3_PWH', 'D3_PDC', 'E1_PWH', 'E1_PDC']
+            #'MAIN_OUTPUT':['B2_QGAS']
          }
 
 
         self.input_name='E1'
         well_names=['F1','B2','D3','E1']
-        tags=['CHK']
+        tags=['CHK','PDC','PBH','PWH']
 
         self.input_tags={'CHK':[]}
         for key in well_names:
             for tag in tags:
                 self.input_tags['CHK'].append(key+'_'+tag)
 
-        self.input_tags['CHK'].append('time')
+       # self.input_tags['CHK'].append('time')
         self.n_inputs = len(self.input_tags['CHK'])
         self.n_outputs=1#len(self.output_tags['MAIN_OUTPUT'])
 

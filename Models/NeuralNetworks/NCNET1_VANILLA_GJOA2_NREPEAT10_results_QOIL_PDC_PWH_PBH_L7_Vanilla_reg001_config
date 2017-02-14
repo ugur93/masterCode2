@@ -1,0 +1,30 @@
+CHK thresholds: 
+{'MAIN_INPUT': 0.05}
+----------------------------------- 
+OUTPUT INDEX 
+{'GJOA_TOTAL_QOIL_SUM': 0}
+-------------------------------------------------
+Input module Config: 
+ n_depth: 2 
+ n_width: 20 
+ n_inception: 0 
+ l2_weight: 0.001 
+ Threshold: False 
+-------------------------------------------------
+Fit config: 
+ epoch: 10000 
+ batch size: 1000 
+ verbose: 0 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x000000001520BF28>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000001520B550>, <keras.callbacks.EarlyStopping object at 0x000000001520BC50>] 
+ optimizer: adam 
+-------------------------------------------------
+Input tags: 
+ {'MAIN_INPUT': ['C1_CHK', 'C1_PDC', 'C1_PWH', 'C1_PBH', 'C2_CHK', 'C2_PDC', 'C2_PWH', 'C3_CHK', 'C3_PDC', 'C3_PWH', 'C3_PBH', 'C4_CHK', 'C4_PDC', 'C4_PWH', 'C4_PBH', 'B3_CHK', 'B3_PDC', 'B3_PWH', 'B3_PBH', 'B1_CHK', 'B1_PDC', 'B1_PWH', 'B1_PBH', 'D1_CHK', 'D1_PDC', 'D1_PWH', 'D1_PBH']} 
+Output tags: 
+ {'TOTAL_OUT': ['GJOA_TOTAL_QOIL_SUM']} 
+Accuracy RMSE 
+ TRAIN: 3.61 (+/- 1.24) 
+ VAL: 7.14 (+/- 3.41)Accuracy R2 
+ TRAIN: 0.99 (+/- 0.01) 
+ VAL: 0.86 (+/- 0.13)
+ NREPEAT: 10

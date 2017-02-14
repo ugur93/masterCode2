@@ -94,6 +94,7 @@ def addToggledInput(X,X_dict,thresholds):
     #print(thresholds.keys())
     #print(X.columns)
     #print(thresholds)
+    #print(thresholds)
     for key in thresholds.keys():
         #print(key)
         #print(key+'_CHK')
@@ -140,6 +141,7 @@ def output_tags_to_index(output_tags,output_layers):
             i+=1
 
     n_outputs=i
+
     return output_tag_index,output_tag_ordered_list,n_outputs
 
 def tags_to_list(tags):

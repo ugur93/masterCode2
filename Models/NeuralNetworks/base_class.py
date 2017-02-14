@@ -23,13 +23,20 @@ class NN_BASE:
 
         self.chk_thresholds={}
 
+
+
+        self.n_outputs=len(tags_to_list(self.output_tags))
         self.initialize_model()
 
-        self.output_index,self.output_tag_ordered_list,self.n_outputs = output_tags_to_index(self.output_tags,self.model.get_config()['output_layers'])
+
+        self.output_index,self.output_tag_ordered_list,_ = output_tags_to_index(self.output_tags,self.model.get_config()['output_layers'])
+
         print(self.output_tag_ordered_list)
         print(self.model.get_config()['output_layers'])
 
         plotModel(self.model,self.model_name)
+
+
 
     def initialize_model(self):
         pass
@@ -219,7 +226,7 @@ class NN_BASE:
 
         self.X_SCALE=100
         #self.plot_scatter_input_output(X_train, X_test, Y_train, Y_test, input_cols=input_cols,output_cols=output_cols)
-        self.plot_scatter_chk_well(X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
+        #self.plot_scatter_chk_well(X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
         self.plot_residuals(X_train, X_test, Y_train, Y_test, output_cols)
         self.plot_true_and_predicted(X_train, X_test, Y_train, Y_test, output_cols)
         #self.plot_true_and_predicted_with_input(X_train, X_test, Y_train, Y_test, output_cols=output_cols)
@@ -229,11 +236,11 @@ class NN_BASE:
 
         if len(output_cols)==0:
             output_cols=self.output_tag_ordered_list
-
-        sp_y=int((len(output_cols)-1)/2+0.5)
+        N_PLOTS = len(output_cols)
+        sp_y=int(N_PLOTS/2+0.5)
         if sp_y==0:
             sp_y=1
-        sp_x=int((len(output_cols)-1)/sp_y+0.5)
+        sp_x=int(N_PLOTS/sp_y+0.5)
         if sp_x==0:
             sp_x=1
         print(sp_y,sp_x,len(output_cols))
@@ -268,7 +275,7 @@ class NN_BASE:
             output_cols=self.output_tag_ordered_list
 
 
-        N_PLOTS=len(output_cols)-1
+        N_PLOTS=len(output_cols)
         sp_y=int(N_PLOTS/2+0.5)
         if sp_y==0:
             sp_y=1
@@ -342,7 +349,7 @@ class NN_BASE:
             output_cols=self.output_tag_ordered_list
 
         i=1
-        N_plots=len(output_cols)-1#count_n_well_inputs(input_cols)
+        N_plots=len(output_cols)#count_n_well_inputs(input_cols)
         sp_y=int(N_plots/2+0.5)
         if sp_y==0:
             sp_y=1
