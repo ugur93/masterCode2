@@ -11,7 +11,7 @@ FILENAME='STABLE_GJOA_OIL_NEW.csv'
 
 X_tags=['CHK','PWH','PBH','PDC']
 X_GJOA_tags=['RISER_OIL_B_PDC','RISER_OIL_B_CHK','RISER_OIL_A_PDC']
-Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QGAS_DEPRECATED','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT']
+Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QGAS_DEPRECATED','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT','SEP_1_WCT','SEP_1_QGAS','SEP_1_QLIQ','SEP_3_QWAT_1','SEP_2_QWAT']
 Y_tags=['QOIL','QWAT','QGAS','PDC','PWH','PBH']
 GJOA_QGAS_COL='GJOA_SEP_1_QGAS_'
 data_type = 'mea'
@@ -54,33 +54,20 @@ def fetch_gjoa_data():
 
     tags=[]
     for key in well_names:
-        name = key + '_' + 'QOIL'
+        name = key + '_' + 'QGAS'
         tags.append(name)
-        # if key!='C1':
-        #sum_oil += Y[name]
+
     sum_oil=Y[tags].sum(axis=1)
+
+    Y['GJOA_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']#+Y['GJOA_SEP_1_QLIQ']
     Y['GJOA_TOTAL_QOIL_SUM']=sum_oil
     X['time'] = np.arange(0, len(X.index))
-    #plt.plot(Y[tags])
-    #plt.plot(Y['GJOA_TOTAL_QOIL_SUM'],color='red')
-    #plt.plot(Y['GJOA_TOTAL_QOIL'], color='blue')
-    #plt.show()
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_QOIL_SUM']), np.mean(Y['GJOA_TOTAL_QOIL_SUM'])))
-    cols=[]
-    tags_to_add=['CHK']
-    for name in well_names:
-        for tag in tags_to_add:
-            col_name=name+'_'+tag
-            cols.append(col_name)
-    print('RANK: {}, DIM: {}'.format(np.linalg.matrix_rank(X[cols][0:32]),len(cols)))
-    #exit()
+    print('Data size: {}'.format(len(Y)))
 
     GjoaData=DataContainer(X,Y,name='GJOA2')
 
-   # plot_test(GjoaData.X,GjoaData.Y)
-    #plot_input_to_well(X,Y)
-    #plot_input_to_total(X,Y)
     return GjoaData
 
 

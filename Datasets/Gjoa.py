@@ -52,16 +52,12 @@ def fetch_gjoa_data():
     X['time']=np.arange(0,len(X.index))
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_QGAS']),np.mean(Y['GJOA_QGAS'])))
+    print('Data size: {}'.format(len(Y)))
 
     #plt.plot(Y['GJOA_QGAS'])
     #plt.show()
     #Y=pwh_to_zero(X,Y.copy())
 
-
-    for tag in tags:
-        plt.plot(Y[tag+'_'+'PWH'],label=tag)
-        plt.title(tag)
-    plt.legend()
 
     #plt.show()
 
@@ -79,7 +75,7 @@ def fetch_gjoa_data():
     #plt.show()
 
     #print_rank(X,'GJOA')
-    GjoaData=DataContainer(X,Y,Y_Q,name='GJOA')
+    GjoaData=DataContainer(X,Y,name='GJOA')
     #plot_input_to_well(X,Y)
     #plt.plot(GjoaData.Y_transformed['GJOA_QGAS'])
     #plt.show()

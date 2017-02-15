@@ -1,35 +1,35 @@
 CHK thresholds: 
-{'C1': 0.05, 'C3': 0.05, 'C4': 0.05, 'B3': 0.05, 'B1': 0.05, 'D1': 0.05, 'C2': 0.05}
+{'B1': 0.05, 'C4': 0.05, 'C1': 0.05, 'C3': 0.05, 'D1': 0.05, 'C2': 0.05, 'B3': 0.05}
 ----------------------------------- 
 OUTPUT INDEX 
-{'C1_QOIL': 0, 'C3_QOIL': 1, 'C4_QOIL': 2, 'B3_QOIL': 3, 'B1_QOIL': 4, 'D1_QOIL': 5, 'C2_QOIL': 6, 'GJOA_TOTAL_QOIL': 7}
+{'C2_QGAS': 5, 'B3_QGAS': 6, 'B1_QGAS': 1, 'GJOA_QGAS': 7, 'C4_QGAS': 2, 'C3_QGAS': 3, 'D1_QGAS': 0, 'C1_QGAS': 4}
 -------------------------------------------------
 Input module Config: 
  n_depth: 2 
  n_width: 20 
  n_inception: 0 
- l2_weight: 0.0001 
+ l2_weight: 1e-06 
  Threshold: True 
 -------------------------------------------------
 Fit config: 
  epoch: 10000 
  batch size: 1000 
  verbose: 0 
- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0xc3e764c>, <Models.NeuralNetworks.base.EpochVerbose object at 0xc3e760c>, <keras.callbacks.EarlyStopping object at 0xc3e79cc>] 
+ callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x000000000D0922B0>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000000D08B710>, <keras.callbacks.EarlyStopping object at 0x000000000D092A90>] 
  optimizer: adam 
 -------------------------------------------------
 Input tags: 
- {'C1': ['C1_CHK', 'C1_PWH', 'C1_PDC', 'C1_PBH'], 'C3': ['C3_CHK', 'C3_PWH', 'C3_PDC', 'C3_PBH'], 'C4': ['C4_CHK', 'C4_PWH', 'C4_PDC', 'C4_PBH'], 'B3': ['B3_CHK', 'B3_PWH', 'B3_PDC', 'B3_PBH'], 'B1': ['B1_CHK', 'B1_PWH', 'B1_PDC', 'B1_PBH'], 'D1': ['D1_CHK', 'D1_PWH', 'D1_PDC'], 'C2': ['C2_CHK', 'C2_PWH', 'C2_PDC']} 
+ {'D1': ['D1_CHK', 'D1_PWH', 'D1_PDC'], 'B1': ['B1_CHK', 'B1_PWH', 'B1_PDC'], 'C4': ['C4_CHK', 'C4_PWH', 'C4_PDC'], 'C3': ['C3_CHK', 'C3_PWH', 'C3_PDC'], 'C1': ['C1_CHK', 'C1_PWH', 'C1_PDC'], 'C2': ['C2_CHK', 'C2_PWH', 'C2_PDC'], 'B3': ['B3_CHK', 'B3_PWH', 'B3_PDC']} 
 Output tags: 
- {'C1_out': ['C1_QOIL'], 'C2_out': ['C2_QOIL'], 'C3_out': ['C3_QOIL'], 'C4_out': ['C4_QOIL'], 'D1_out': ['D1_QOIL'], 'B3_out': ['B3_QOIL'], 'B1_out': ['B1_QOIL'], 'GJOA_TOTAL': ['GJOA_TOTAL_QOIL']} 
+ {'GJOA_TOTAL': ['GJOA_QGAS'], 'B1_out': ['B1_QGAS'], 'C4_out': ['C4_QGAS'], 'C3_out': ['C3_QGAS'], 'D1_out': ['D1_QGAS'], 'B3_out': ['B3_QGAS'], 'C1_out': ['C1_QGAS'], 'C2_out': ['C2_QGAS']} 
 
 #### Scores #### 
- RMSE train [ 26.59688967  19.12536407  17.77224221   4.07928171  11.32930316
-  23.60116398   7.2574437   13.41767583] 
- RMSE test: [ 25.85022132  18.64355538  17.93870905   5.25281101  13.48558893
-  22.44480389  10.03241498  16.81425803] 
- R2 train: [-22.69897464 -12.81701582 -11.51990618  -0.31715429  -0.82575454
- -23.08932554  -1.28194449   0.86858102] 
- R2 test: [-54.84552357 -31.24700804 -40.35550128  -2.594185    -7.07868585
- -29.68558543 -21.97943438   0.62862387] 
+ RMSE train [  1.66163663   5.96032337   2.81840389   6.49326192   3.05781094
+   6.37888245   4.17654199  12.16158087] 
+ RMSE test: [  2.86943499   8.90572986   4.04565583   6.12939637   2.08912171
+  10.10455526   4.28835148  17.53501652] 
+ R2 train: [ 0.97836378  0.83987974  0.93251042  0.67873859  0.92399711  0.66584503
+  0.86958284  0.97398675] 
+ R2 test: [ 0.9249716   0.26483342  0.67903098  0.40861753  0.92098093 -0.79902258
+  0.87368741  0.91649972] 
 #### ------ ####

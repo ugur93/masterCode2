@@ -47,7 +47,7 @@ def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
 
 
 def add_thresholded_output(output_layer,n_input,name):
-    aux_input = Input(shape=(1,), dtype='float32', name='aux_' + name)
+    aux_input = Input(shape=(1,), dtype='float32', name='OnOff_' + name)
     return aux_input, merge([aux_input, output_layer], mode='mul', name=name + '_out')
 
 
@@ -89,17 +89,11 @@ def plotModel(model,file_name):
 #######################################INPUT#############################################################################
 
 
-def addToggledInput(X,X_dict,thresholds):
+def add_OnOff_state_input(X,X_dict,thresholds):
     new_X=X_dict.copy()
-    #print(thresholds.keys())
-    #print(X.columns)
-    #print(thresholds)
-    #print(thresholds)
     for key in thresholds.keys():
-        #print(key)
-        #print(key+'_CHK')
-        toggled_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
-        new_X.update({'aux_'+key:toggled_X})
+        OnOff_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
+        new_X.update({'OnOff_'+key:OnOff_X})
     return new_X
 
 
@@ -114,14 +108,6 @@ def df2dict(df,input_tags,output_tags,data_type):
     return data
 
 
-def addDummyOutput(X,Y):
-
-    new_Y=Y.copy()
-    for key in X.keys():
-        new_Y.update({key+'_out':Y['GJOA_QGAS']})
-    return new_Y
-
-
 def find_tag_that_ends_with(lst,end):
     for tag in lst:
         if tag.split('_')[-1]==end:
@@ -133,7 +119,6 @@ def output_tags_to_index(output_tags,output_layers):
     output_tag_index={}
     output_tag_ordered_list=[]
     i=0
-    #print(output_layers)
     for layer_name,_,_ in output_layers:
         for tag_name in output_tags[layer_name]:
             output_tag_index[tag_name]=i
@@ -144,6 +129,7 @@ def output_tags_to_index(output_tags,output_layers):
 
     return output_tag_index,output_tag_ordered_list,n_outputs
 
+
 def tags_to_list(tags):
 
     tags_list=[]
@@ -151,29 +137,8 @@ def tags_to_list(tags):
         for tag in tags[key]:
             tags_list.append(tag)
     return tags_list
-def tags_to_list_restricted(tags,selected_tags):
 
-    tags_list=[]
-    for key in tags:
-        for tag in tags[key]:
-            if ends_with(tag,selected_tags):
-                tags_list.append(tag)
-    return tags_list
 
 def ends_with(tag,endings):
 
     return tag.split('_')[-1] in endings
-
-def count_n_well_inputs(input_tags):
-
-    prev_tag='1_1'
-    n_list=[]
-    i=0
-    for tag in input_tags:
-        if tag.split('_')[0]==prev_tag.split('_')[0]:
-            i+=1
-        else:
-            n_list.append(i)
-            i=1
-            prev_tag=tag
-    return np.max(n_list)

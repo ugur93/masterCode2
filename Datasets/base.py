@@ -12,10 +12,14 @@ def print_rank(X,name):
     else:
         print('Rank of ' + str(rank) + ' is not full rank')
 
+
 def func_transform(x,scaler):
     return x/scaler
+
+
 def inverse_func_transform(x,scaler):
     return x*scaler
+
 
 def get_cols_that_ends_with(df,tag):
 
@@ -25,6 +29,7 @@ def get_cols_that_ends_with(df,tag):
         if col.split('_')[-1]==tag:
             cols.append(col)
     return cols
+
 
 class Transformer:
     def __init__(self):
@@ -49,7 +54,9 @@ class Transformer:
 
         # Pressures
         cols = self.get_cols_that_ends_with(data, self.CHK)
-        data_transformed[cols]= data_transformed[cols] / self.SCALES['CHK']
+        print(data_transformed.columns)
+        print(cols)
+        data_transformed[cols]= data_transformed[cols]/self.SCALES['CHK']
         #print(cols)
         # Pressures
         cols = self.get_cols_that_ends_with(data, self.QOIL)
@@ -61,6 +68,8 @@ class Transformer:
         data_transformed[cols]= data_transformed[cols] / self.SCALES['QWAT']
 
         return data_transformed
+
+
     def inverse_transform(self,data,tag='ALL'):
         data_transformed = data.copy()
         # Pressures
@@ -85,8 +94,10 @@ class Transformer:
         data_transformed[cols] = data_transformed[cols] * self.SCALES['QWAT']
 
         return data_transformed
+
     def fit_transform(self,data):
         return self.transform(data)
+
     def get_scale(self,type):
         if type in self.PRESSURES:
             return self.SCALES['PRESSURES']
@@ -98,7 +109,6 @@ class Transformer:
             return self.SCALES['QOIL']
         elif type in self.QWAT:
             return self.SCALES['QWAT']
-
 
     def get_cols_that_ends_with(self,data,endings):
         data_cols=data.columns
@@ -134,11 +144,10 @@ class DataContainer:
     def transform(self,data):
         return self.SCALER.transform(data)
 
-    def merge(self,data,type):
-        if type=='X':
-            self.X=pd.concat([self.X,data],axis=1)
-        else:
-            self.Y=pd.concat([self.Y,data],axis=1)
+    def merge(self,data_X,data_Y):
+        self.X=pd.concat([self.X,data_X.drop('time',1)],axis=1)
+        #(self.X)
+        self.Y=pd.concat([self.Y,data_Y],axis=1)
         self.init_transform()
     def __str__(self):
 
