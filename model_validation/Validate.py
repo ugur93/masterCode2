@@ -13,12 +13,11 @@ import seaborn
 from sklearn import ensemble
 
 MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
-def train_test_split(X,Y,Y_Q,test_size):
+def train_test_split(X,Y,test_size):
     split_length=int(len(X)*(1-test_size))
     X_train,X_test=X[0:split_length],X[split_length-1:-1]
     Y_train,Y_test=Y[0:split_length],Y[split_length-1:-1]
-    Y_Q_train, Y_Q_test = Y_Q[0:split_length], Y_Q[split_length - 1:-1]
-    return X_train,X_test,Y_train,Y_test,Y_Q_train, Y_Q_test
+    return X_train,X_test,Y_train,Y_test
 
 def getTrainTestSplit(input,output,train_index,test_index):
     input_train, output_train = {'input1': input['input1'][train_index], 'input2': input['input2'][train_index]}, {
@@ -32,10 +31,10 @@ def validate_train_test_split(Data):
     #Data.transform_Y_with_new_scale(100)
     X=Data.X_transformed#[500:-1]
     Y=Data.Y_transformed#[500:-1]
-    Y_Q=Data.Y_Q_transformed
+
     #X, Y = remove_chk_zeros(X, Y, 'B2')
-    X, X_test, Y, Y_test, _, _ = train_test_split(X, Y, Y, test_size=0.1)
-    X_train, X_val, Y_train, Y_val, _, _ = train_test_split(X, Y, Y, test_size=0.2)
+    X, X_test, Y, Y_test= train_test_split(X, Y, test_size=0.1)
+    X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=0.2)
 
 
 
@@ -78,7 +77,7 @@ def validate_train_test_split(Data):
     model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
     output_cols =['C1_QOIL', 'C2_QOIL','C3_QOIL', 'C4_QOIL', 'B1_QOIL','B3_QOIL', 'D1_QOIL',  'GJOA_TOTAL_QOIL']#['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']#['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
-    model.visualize(X_train, X_val, Y_train, Y_val, input_cols=input_cols,output_cols=output_cols)
+    model.visualize(Data,X_train, X_val, Y_train, Y_val, input_cols=input_cols,output_cols=output_cols)
 
 
 def validateRepeat(Data):

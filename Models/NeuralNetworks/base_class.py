@@ -85,25 +85,13 @@ class NN_BASE:
                 predicted_data_reshaped=np.hstack((predicted_data_reshaped,temp_data))
         else:
             predicted_data_reshaped=np.asarray(predicted_data)
-        #print(predicted_data_reshaped.shape)
-        if tag==False:
-            return predicted_data_reshaped
-        else:
-            return predicted_data_reshaped[:,self.output_index[tag]]
-        #print(len(predicted_data[-1]))
-        #predicted_data_reshaped=np.array(predicted_data)
-        predicted_data_reshaped=np.asarray(predicted_data)
-        print(predicted_data_reshaped.shape)
-        if len(self.output_tags.keys())>1:
-            temp_data=predicted_data_reshaped[0,:,:]
-            for i in range(1,predicted_data_reshaped.shape[0]):#HARDCODED!!!
-                temp_data=np.hstack((temp_data,predicted_data_reshaped[i,:,:]))
-            predicted_data_reshaped=temp_data
 
+        predicted_data_reshaped=pd.DataFrame(data=predicted_data_reshaped,columns=self.output_tag_ordered_list)
         if tag==False:
             return predicted_data_reshaped
         else:
-            return predicted_data_reshaped[:,self.output_index[tag]]
+            return predicted_data_reshaped[tag]#[:,self.output_index[tag]]
+
 
     def get_history(self):
         return self.history.losses
@@ -153,7 +141,7 @@ class NN_BASE:
         col_length=len(data.X_transformed.columns)
         #self.SCALE=data.Y_SCALE
         if scaled:
-            thresh_transformed=[self.chk_threshold_value/data.get_scale(type='CHK',scaler='X') for i in range(col_length)]#data.transform([[self.chk_threshold_value for i in range(col_length)]],'X')
+            thresh_transformed=[self.chk_threshold_value/data.get_scale(type='CHK') for i in range(col_length)]#data.transform([[self.chk_threshold_value for i in range(col_length)]],'X')
         else:
             thresh_transformed=[[self.chk_threshold_value for i in range(col_length)]]
         for key,tag_list in self.input_tags.items():
@@ -222,17 +210,17 @@ class NN_BASE:
             score_test_r2.append(metrics.r2_score(Y_test[col][ind_test], self.predict(X_test[ind_test],col), multioutput='raw_values'))
             score_train_r2.append(metrics.r2_score(Y_train[col][ind_train], self.predict(X_train[ind_train],col), multioutput='raw_values'))
         return score_train_MSE, score_test_MSE, score_train_r2, score_test_r2
-    def visualize(self,X_train,X_test,Y_train,Y_test,output_cols=[],input_cols=[]):
+    def visualize(self,data,X_train,X_test,Y_train,Y_test,output_cols=[],input_cols=[]):
 
         self.X_SCALE=100
-        #self.plot_scatter_input_output(X_train, X_test, Y_train, Y_test, input_cols=input_cols,output_cols=output_cols)
-        #self.plot_scatter_chk_well(X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
-        self.plot_residuals(X_train, X_test, Y_train, Y_test, output_cols)
-        self.plot_true_and_predicted(X_train, X_test, Y_train, Y_test, output_cols)
-        #self.plot_true_and_predicted_with_input(X_train, X_test, Y_train, Y_test, output_cols=output_cols)
+        #self.plot_scatter_input_output(data,X_train, X_test, Y_train, Y_test, input_cols=input_cols,output_cols=output_cols)
+        #self.plot_scatter_chk_well(data,X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols)
+        self.plot_residuals(data,X_train, X_test, Y_train, Y_test, output_cols)
+        self.plot_true_and_predicted(data,X_train, X_test, Y_train, Y_test, output_cols)
+        #self.plot_true_and_predicted_with_input(data,X_train, X_test, Y_train, Y_test, output_cols=output_cols)
         plt.show()
 
-    def plot_residuals(self,X_train,X_test,Y_train,Y_test,output_cols=[],remove_zeros=False):
+    def plot_residuals(self,data,X_train,X_test,Y_train,Y_test,output_cols=[],remove_zeros=False):
 
         if len(output_cols)==0:
             output_cols=self.output_tag_ordered_list
@@ -253,12 +241,13 @@ class NN_BASE:
             else:
                 plt.subplot(sp_x, sp_y, i)
                 i += 1
+            #print(self.predict(X_test, output_tag))
             plt.scatter(Y_train.index,
-                        self.SCALE * Y_train[output_tag] - self.SCALE * self.predict(X_train, output_tag),
+                        data.inverse_transform(Y_train)[output_tag] -data.inverse_transform(self.predict(X_train))[output_tag].values,
                         color='black',
                         label='train')
 
-            plt.scatter(Y_test.index, self.SCALE * Y_test[output_tag] - self.SCALE * self.predict(X_test, output_tag),
+            plt.scatter(Y_test.index, data.inverse_transform(Y_test)[output_tag] - data.inverse_transform(self.predict(X_test))[output_tag].values,
                         color='green',
                         label='test')
             plt.title(output_tag + '-' + 'Residuals (true-pred)')
@@ -269,7 +258,7 @@ class NN_BASE:
             plt.subplots_adjust(wspace=0.08, hspace=.45, top=0.95, bottom=0.06, left=0.04, right=0.99)
             #plt.tight_layout()
 
-    def plot_true_and_predicted(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
+    def plot_true_and_predicted(self,data,X_train,X_test,Y_train,Y_test,output_cols=[]):
 
         if len(output_cols)==0:
             output_cols=self.output_tag_ordered_list
@@ -292,11 +281,11 @@ class NN_BASE:
             else:
                 plt.subplot(sp_x,sp_y,i)
                 i+=1
-            plt.scatter(Y_train.index, self.SCALE*Y_train[output_tag], color='blue', label='true - train')
-            plt.scatter(Y_train.index, self.SCALE*self.predict(X_train, output_tag), color='black', label='pred - train')
+            plt.scatter(Y_train.index, data.inverse_transform(Y_train)[output_tag], color='blue', label='true - train')
+            plt.scatter(Y_train.index, data.inverse_transform(self.predict(X_train))[output_tag], color='black', label='pred - train')
 
-            plt.scatter(Y_test.index, self.SCALE*Y_test[output_tag], color='red', label='true - test')
-            plt.scatter(Y_test.index, self.SCALE*self.predict(X_test, output_tag), color='green', label='pred - test')
+            plt.scatter(Y_test.index, data.inverse_transform(Y_test)[output_tag], color='red', label='true - test')
+            plt.scatter(Y_test.index, data.inverse_transform(self.predict(X_test))[output_tag], color='green', label='pred - test')
             plt.title(output_tag)
             # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
             plt.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
@@ -305,7 +294,7 @@ class NN_BASE:
             plt.subplots_adjust(wspace=0.08, hspace=.2, top=0.94, bottom=0.06, left=0.04, right=0.99)
             #plt.tight_layout()
 
-    def plot_scatter_input_output(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
+    def plot_scatter_input_output(self,data,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
         if len(input_cols)==0:
             input_cols=tags_to_list(self.input_tags)
         if len(output_cols)==0:
@@ -327,11 +316,15 @@ class NN_BASE:
                 if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS'  and output_tag!='GJOA_TOTAL_QOIL_SUM' and output_tag!='GJOA_TOTAL_QOIL':
                     plt.subplot(sp_y, sp_x, i)
                     i+=1
-                    plt.scatter(self.X_SCALE*X_train[input_tag], self.SCALE*Y_train[output_tag], color='blue', label=output_tag+'_true - train')
-                    plt.scatter(self.X_SCALE*X_train[input_tag], self.SCALE*self.predict(X_train, output_tag), color='black', label=output_tag+'_pred - train')
+                    plt.scatter(data.inverse_transform(X_train)[input_tag],
+                                data.inverse_transform(Y_train)[output_tag], color='blue', label=output_tag+'_true - train')
+                    plt.scatter(data.inverse_transform(X_train)[input_tag],
+                                data.inverse_transform(self.predict(X_train))[output_tag], color='black', label=output_tag+'_pred - train')
 
-                    plt.scatter(self.X_SCALE*X_test[input_tag], self.SCALE*Y_test[output_tag], color='red', label=output_tag+'_true - test')
-                    plt.scatter(self.X_SCALE*X_test[input_tag], self.SCALE*self.predict(X_test, output_tag), color='green', label=output_tag+'_pred - test')
+                    plt.scatter(data.inverse_transform(X_test)[input_tag],
+                                data.inverse_transform(Y_test)[output_tag], color='red', label=output_tag+'_true - test')
+                    plt.scatter(data.inverse_transform(X_test)[input_tag],
+                                data.inverse_transform(self.predict(X_test))[output_tag], color='green', label=output_tag+'_pred - test')
 
                     plt.xlabel(input_tag)
                     plt.ylabel(output_tag)
@@ -342,7 +335,7 @@ class NN_BASE:
                     # plt.legend()
                     plt.subplots_adjust(wspace=0.08, hspace=.45, top=0.95, bottom=0.06, left=0.04, right=0.99)
                     #plt.tight_layout()
-    def plot_scatter_chk_well(self,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
+    def plot_scatter_chk_well(self,data,X_train,X_test,Y_train,Y_test,input_cols=[],output_cols=[]):
         if len(input_cols)==0:
             input_cols=tags_to_list(self.input_tags)
         if len(output_cols)==0:
@@ -364,11 +357,11 @@ class NN_BASE:
                 if input_tag.split('_')[0]==output_tag.split('_')[0] and output_tag!='GJOA_QGAS' and input_tag.split('_')[1]=='CHK':
                     plt.subplot(sp_x, sp_y, i)
                     i+=1
-                    plt.scatter(self.X_SCALE*X_train[input_tag], self.SCALE*Y_train[output_tag], color='blue', label='true - train')
-                    plt.scatter(self.X_SCALE*X_train[input_tag], self.SCALE*self.predict(X_train, output_tag), color='black', label='pred - train')
+                    plt.scatter(data.inverse_transform(X_train)[input_tag], data.inverse_transform(Y_train)[output_tag], color='blue', label='true - train')
+                    plt.scatter(data.inverse_transform(X_train)[input_tag], data.inverse_transform(self.predict(X_train))[output_tag], color='black', label='pred - train')
 
-                    plt.scatter(self.X_SCALE*X_test[input_tag], self.SCALE*Y_test[output_tag], color='red', label='true - test')
-                    plt.scatter(self.X_SCALE*X_test[input_tag], self.SCALE*self.predict(X_test, output_tag), color='green', label='pred - test')
+                    plt.scatter(data.inverse_transform(X_test)[input_tag], data.inverse_transform(Y_test)[output_tag], color='red', label='true - test')
+                    plt.scatter(data.inverse_transform(X_test)[input_tag], data.inverse_transform(self.predict(X_test))[output_tag], color='green', label='pred - test')
 
                     plt.xlabel(input_tag)
                     plt.ylabel(output_tag)
@@ -381,7 +374,7 @@ class NN_BASE:
                     #plt.tight_layout()
 
 
-    def plot_true_and_predicted_with_input(self,X_train,X_test,Y_train,Y_test,output_cols=[]):
+    def plot_true_and_predicted_with_input(self,data,X_train,X_test,Y_train,Y_test,output_cols=[]):
 
         if len(output_cols)==0:
             output_cols=tags_to_list(self.output_tags)

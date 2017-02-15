@@ -34,59 +34,70 @@ class Transformer:
         self.QOIL=['QOIL','SUM']
         self.QWAT=['QWAT']
 
-        self.SCALES={'PRESSURES':100,'GAS':100000,'CHK':100,'QOIL':100,'QWAT':100}
+        self.SCALES={'PRESSURES':100,'QGAS':100000,'CHK':100,'QOIL':100,'QWAT':100}
+
     def transform(self,data):
         data_transformed=data.copy()
         #Pressures
         cols=self.get_cols_that_ends_with(data,self.PRESSURES)
         data_transformed[cols]=data_transformed[cols]/self.SCALES['PRESSURES']
-        print(cols)
+        #print(cols)
         # GAS
         cols = self.get_cols_that_ends_with(data, self.QGAS)
-        data_transformed[cols]= data_transformed[cols] / self.SCALES['GAS']
-        print(cols)
+        data_transformed[cols]= data_transformed[cols] / self.SCALES['QGAS']
+        #print(cols)
 
         # Pressures
         cols = self.get_cols_that_ends_with(data, self.CHK)
         data_transformed[cols]= data_transformed[cols] / self.SCALES['CHK']
-        print(cols)
+        #print(cols)
         # Pressures
         cols = self.get_cols_that_ends_with(data, self.QOIL)
         data_transformed[cols]= data_transformed[cols] / self.SCALES['QOIL']
         #print(data_transformed[cols])
-        print(cols)
+        #print(cols)
         # Pressures
         cols = self.get_cols_that_ends_with(data, self.QWAT)
         data_transformed[cols]= data_transformed[cols] / self.SCALES['QWAT']
 
         return data_transformed
-    def inverse_transform(self,data):
+    def inverse_transform(self,data,tag='ALL'):
         data_transformed = data.copy()
         # Pressures
-        cols = get_cols_that_ends_with(data, self.PRESSURES)
-        data_transformed = data_transformed[cols] * self.SCALES['PRESSURES']
+        cols = self.get_cols_that_ends_with(data, self.PRESSURES)
+        data_transformed[cols]= data_transformed[cols] * self.SCALES['PRESSURES']
 
         # GAS
-        cols = get_cols_that_ends_with(data, self.QGAS)
-        data_transformed = data_transformed[cols] * self.SCALES['GAS']
+        cols = self.get_cols_that_ends_with(data, self.QGAS)
+
+        data_transformed[cols] = data_transformed[cols] * self.SCALES['QGAS']
 
         # Pressures
-        cols = get_cols_that_ends_with(data, self.CHK)
-        data_transformed = data_transformed[cols] * self.SCALES['CHK']
+        cols = self.get_cols_that_ends_with(data, self.CHK)
+        data_transformed[cols] = data_transformed[cols] * self.SCALES['CHK']
 
         # Pressures
-        cols = get_cols_that_ends_with(data, self.QOIL)
-        data_transformed = data_transformed[cols] * self.SCALES['QOIL']
+        cols = self.get_cols_that_ends_with(data, self.QOIL)
+        data_transformed[cols] = data_transformed[cols] * self.SCALES['QOIL']
 
         # Pressures
-        cols = get_cols_that_ends_with(data, self.QWAT)
-        data_transformed = data_transformed[cols] * self.SCALES['QWAT']
+        cols = self.get_cols_that_ends_with(data, self.QWAT)
+        data_transformed[cols] = data_transformed[cols] * self.SCALES['QWAT']
 
         return data_transformed
     def fit_transform(self,data):
         return self.transform(data)
     def get_scale(self,type):
-        return self.SCALES[type]
+        if type in self.PRESSURES:
+            return self.SCALES['PRESSURES']
+        elif type in self.CHK:
+            return self.SCALES['CHK']
+        elif type in self.QGAS:
+            return self.SCALES['QGAS']
+        elif type in self.QOIL:
+            return self.SCALES['QOIL']
+        elif type in self.QWAT:
+            return self.SCALES['QWAT']
 
 
     def get_cols_that_ends_with(self,data,endings):
@@ -99,76 +110,30 @@ class Transformer:
 
 
 class DataContainer:
-    def __init__(self,X,Y,Y_Q,params=None,name='unnamed',X_SCALE=100,Y_SCALE=100000):
-        #print(params)
+    def __init__(self,X,Y,name='unnamed'):
         self.name=name
         self.X=X
         self.Y=Y
-        self.Y_Q=Y_Q
-        self.params=params
         self.data_size=X.shape[0]
         self.n_cols=X.shape[1]
 
+        self.X_transformed=None
+        self.Y_transformed=None
 
-        self.Y_SCALE=Y_SCALE#458376.372582837
-        self.X_SCALE=X_SCALE
-        self.Y_SCALE=100
+        self.SCALER=Transformer()
 
-        self.X_SCALER=Transformer()#FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':self.X_SCALE},inv_kw_args={'scaler':self.X_SCALE})
-        self.Y_scaler=Transformer()#FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,kw_args={'scaler':self.Y_SCALE},inv_kw_args={'scaler':self.Y_SCALE})
-
-
-        #self.Y_scaler=MinMaxScaler()
-
-
-        self.X_transformed = None
-        self.Y_transformed = None
-        self.Y_Q_transformed=None
-
-        self.transformed=False
         self.init_transform()
 
-        #print(self.Y.columns)
-        #print(self.Y_scaler.scale_)
-        #print(1/2.18161332e-06)
-
-
-
     def init_transform(self):
-        X_cols = self.X.columns
-        X_scaled = self.X_SCALER.transform(self.X)
+        self.X_transformed =self.SCALER.transform(self.X)
+        self.Y_transformed =self.SCALER.transform(self.Y)
 
-        self.X_transformed =pd.DataFrame(data=X_scaled, columns=X_cols)
+    def inverse_transform(self,data):
+        return self.SCALER.inverse_transform(data)
 
-        Y_cols = self.Y.columns
+    def transform(self,data):
+        return self.SCALER.transform(data)
 
-        Y_scaled=self.Y_scaler.transform(self.Y)
-
-        self.Y_transformed = pd.DataFrame(data=Y_scaled, columns=Y_cols)
-
-    def transform_Y_with_new_scale(self,scale=100):
-        print('adadsdsadasd')
-        print(scale)
-        self.Y_scaler=FunctionTransformer(func=func_transform,inverse_func=inverse_func_transform,
-                                          kw_args={'scaler':scale},inv_kw_args={'scaler':scale})
-        self.Y_SCALE=scale
-        Y_cols = self.Y.columns
-
-        Y_scaled = self.Y_scaler.transform(self.Y)
-
-        self.Y_transformed = pd.DataFrame(data=Y_scaled, columns=Y_cols)
-
-    def inverse_transform(self,data,scaler_type):
-        if scaler_type=='X':
-            return self.X_SCALER.inverse_transform(data)
-        else:
-            return self.Y_SCALER.inverse_transform(data)
-
-    def transform(self,data,scaler_type):
-        if scaler_type=='X':
-            return self.X_SCALER.transform(data)
-        else:
-            return self.Y_SCALER.transform(data)
     def merge(self,data,type):
         if type=='X':
             self.X=pd.concat([self.X,data],axis=1)
@@ -192,11 +157,8 @@ class DataContainer:
         s+='N_variables: '+str(self.n_cols)+'\n'
         s+='-------------------------------------\n'
         return s
-
-    def get_scale(self,type,scaler):
-        if scaler=='Y':
-            return self.Y_scaler.get_scale(type)
-        return self.X_SCALER.get_scale(type)
+    def get_scale(self,type):
+        return self.SCALER.get_scale(type)
 
 
 

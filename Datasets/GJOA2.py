@@ -76,7 +76,8 @@ def fetch_gjoa_data():
     print('RANK: {}, DIM: {}'.format(np.linalg.matrix_rank(X[cols][0:32]),len(cols)))
     #exit()
 
-    GjoaData=DataContainer(X,Y,Y,name='GJOA2',Y_SCALE=100)
+    GjoaData=DataContainer(X,Y,name='GJOA2')
+
    # plot_test(GjoaData.X,GjoaData.Y)
     #plot_input_to_well(X,Y)
     #plot_input_to_total(X,Y)

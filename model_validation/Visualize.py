@@ -22,6 +22,14 @@ def count_n_well_inputs(input_tags):
             prev_tag=tag
     return np.max(n_list)
 
+def evaluate(model,data,X_train,X_test,Y_train,Y_test):
+
+    cols=self.output_tag_ordered_list
+    print(cols)
+    score_test_MSE = metrics.mean_squared_error(self.SCALE*Y_test[cols], self.SCALE*self.predict(X_test), multioutput='raw_values')
+    score_train_MSE = metrics.mean_squared_error(self.SCALE*Y_train[cols], self.SCALE*self.predict(X_train), multioutput='raw_values')
+    score_test_r2 = metrics.r2_score(Y_test[cols], self.predict(X_test), multioutput='raw_values')
+    score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
 
 def visualize(model,data, X_train, X_test, Y_train, Y_test, output_cols=[], input_cols=[]):
     self.X_SCALE = 100

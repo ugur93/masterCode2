@@ -67,7 +67,7 @@ class NCNET_VANILLA(NN_BASE):
             'B3_out': ['B3_QOIL'],
             'B1_out': ['B1_QOIL'],
             # 'Riser_out':['GJOA_TOTAL_QOIL_SUM'],
-            #'TOTAL_OUT': ['C1_QOIL','C2_QOIL','C3_QOIL','C4_QOIL','B1_QOIL','B3_QOIL','D1_QOIL']
+            #'TOTAL_OUT': ['C1_QOIL','C2_QOIL','C3_QOIL','C4_QOIL','B1_QOIL','B3_QOIL','D1_QOIL','GJOA_TOTAL_QOIL']
             #'TOTAL_OUT':['GJOA_TOTAL_QOIL_SUM']
             #'TOTAL_OUT':cols_out
         }
