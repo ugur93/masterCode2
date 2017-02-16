@@ -14,7 +14,7 @@ X_GJOA_tags=['RISER_OIL_B_PDC','RISER_OIL_B_CHK','RISER_OIL_A_PDC']
 Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QGAS_DEPRECATED','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT','SEP_1_WCT','SEP_1_QGAS','SEP_1_QLIQ','SEP_3_QWAT_1','SEP_2_QWAT']
 Y_tags=['QOIL','QWAT','QGAS','PDC','PWH','PBH']
 GJOA_QGAS_COL='GJOA_SEP_1_QGAS_'
-data_type = 'mea'
+data_type = 'med'
 
 X_COLS=['CHK','PWH','PBH','PDC','QGAS']
 #X_COLS=['CHK']
@@ -61,7 +61,22 @@ def fetch_gjoa_data():
 
     Y['GJOA_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']#+Y['GJOA_SEP_1_QLIQ']
     Y['GJOA_TOTAL_QOIL_SUM']=sum_oil
+
     X['time'] = np.arange(0, len(X.index))
+
+
+
+
+
+
+    Y['GJOA_QGAS'][Y['GJOA_QGAS']<0]=0
+    Y['GJOA_QGAS'] = Y['GJOA_QGAS'] #- np.mean(Y['GJOA_QGAS'] - sum_oil)
+
+    plt.plot(Y['GJOA_QGAS'])
+    plt.plot(sum_oil, color='red')
+    plt.show()
+
+
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_QOIL_SUM']), np.mean(Y['GJOA_TOTAL_QOIL_SUM'])))
     print('Data size: {}'.format(len(Y)))

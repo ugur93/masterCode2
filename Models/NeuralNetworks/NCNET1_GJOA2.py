@@ -2,7 +2,7 @@
 from .base import *
 from .base_class import NN_BASE
 
-
+import keras.backend as K
 
 #GOOD
 
@@ -11,6 +11,9 @@ from .base_class import NN_BASE
 # width 20
 #l2 0.0001
 #opt rmsprop
+
+def abs(x):
+    return K.abs(x)
 class NCNET1_GJOA2(NN_BASE):
 
 
@@ -39,7 +42,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.input_tags = {}
         well_name = ['C1', 'C3', 'C4', 'B3', 'B1','D1','C2']#,'F1','B2','D3','E1']
-        tags = ['CHK','PWH','PDC']
+        tags = ['CHK','PDC','PWH','PBH']
         for name in well_name:
             self.input_tags[name] = []
             for tag in tags:
@@ -134,7 +137,8 @@ class NCNET1_GJOA2(NN_BASE):
         if thresholded_output:
             #output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(
             #    temp_output)
-            output_layer = Dense(1,init=INIT,activation='linear',W_regularizer=l2(l2_weight), bias=True)(temp_output)
+            output_layer = Dense(1,init=INIT,W_regularizer=l2(l2_weight), bias=True)(temp_output)
+            #output_layer=Activation(abs)(output_layer)
             #
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:

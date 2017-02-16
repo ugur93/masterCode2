@@ -13,10 +13,11 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
 
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
+    plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
     plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
-    plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
-                           remove_zero_chk=remove_zero_chk)
+    #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
+    #                       remove_zero_chk=remove_zero_chk)
     plt.show()
 
 
@@ -54,6 +55,15 @@ def get_suplot_dim(N_PLOTS):
     print(sp_y, sp_x, N_PLOTS)
     return sp_x,sp_y
 
+
+def get_train_test_scatter_plot(ax,model,data,X,Y,x_tag,y_tag,color,type):
+    ax.scatter(data.inverse_transform(X)[x_tag],
+               data.inverse_transform(Y)[y_tag], color=color[0],
+               label='true - '+type)
+    ax.scatter(data.inverse_transform(X)[x_tag],
+               data.inverse_transform(model.predict(Y))[y_tag], color=color[1],
+               label='pred - '+type)
+    return ax
 
 def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,remove_zero_chk=(False,'name',0)):
     ax=fig_par[-1]
@@ -240,3 +250,46 @@ def plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_
                 ax.set_title(input_tag + ' vs ' + output_tag)
     if i==N_PLOTS:
         fig.delaxes(axes[-1])
+
+def plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]):
+    if len(output_cols) == 0:
+        output_cols = tags_to_list(model.output_tags)
+    input_cols = tags_to_list(model.input_tags)
+
+    sp_y = count_n_well_inputs(input_cols) + 1
+    sp_x = 1
+    print(sp_y, sp_x, len(input_cols))
+
+    zero_chk_param = (False, 'name', 0)
+
+    i = 1
+
+    for output_tag in output_cols:
+        # plt.figure()
+        i = 1
+        tag = output_tag
+        # ax.subplot(sp_y, sp_x, i)
+        fig, axes = plt.subplots(sp_y, 1, sharex=True)
+
+
+        ax = axes[0]
+        ax = get_scatter_plot((fig,ax), model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,
+                              remove_zero_chk=zero_chk_param)
+        ax.set_title(tag)
+        ax.set_ylabel(tag)
+        ax.set_xlabel('time')
+        i = 1
+        for input_tag in input_cols:
+            if input_tag.split('_')[0] == output_tag.split('_')[0]:
+                # plt.subplot(sp_y, sp_x, i)
+                ax = axes[i]
+                i += 1
+                #print(input_tag)
+                ax.scatter(Y_train.index, data.inverse_transform(X_train)[input_tag], color='black', label='true - train')
+                ax.scatter(Y_test.index, data.inverse_transform(X_test)[input_tag], color='blue', label='true - test')
+                ax.set_title(input_tag)
+                ax.set_ylabel(input_tag)
+                ax.set_xlabel('time')
+                # plt.legend(['Y_true - train','Y_pred - train','Y_true - test', 'Y_pred - test'],pos)
+                # plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+                #           ncol=2, mode="expand", borderaxespad=0., fontsize=10)
