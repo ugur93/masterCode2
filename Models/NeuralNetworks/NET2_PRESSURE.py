@@ -2,24 +2,26 @@
 from .base import *
 from .base_class import NN_BASE
 
-
+import keras.backend as K
 #Bra:
 #self.n_depth = 2
 #self.n_width = 20
 #self.l2weight =0.0005
+def abs(x):
+    return K.abs(x)
 class SSNET2(NN_BASE):
 
 
     def __init__(self):
 
-        self.model_name='SSNET2'
+        self.model_name='NCNET2-QGAS'
         self.SCALE=100
 
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
         self.n_width = 20
-        self.l2weight =0.001
+        self.l2weight =0.0001
         self.add_thresholded_output=True
 
         self.input_tags=['CHK','PDC']
@@ -43,15 +45,15 @@ class SSNET2(NN_BASE):
         #    'D3': ['D3_CHK','D3_PDC','D3_PWH'],#,'D3_PBH'],
         #    'E1': ['E1_CHK','E1_PDC','E1_PWH']#,'E1_PBH']
         #}
-        well_names=['F1','B2','D3','E1']
+        self.well_names=['F1','B2','D3','E1']
 
         self.input_tags={}
         tags=['CHK','PDC','PWH','PBH']
-        for name in well_names:
+        for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
                 self.input_tags[name].append(name+'_'+tag)
-            self.input_tags[name].append('time')
+            #self.input_tags[name].append('time')
         self.loss_weights = {
             'F1_out': 0.0,
             'B2_out': 0.0,
@@ -80,6 +82,7 @@ class SSNET2(NN_BASE):
 
         if thresholded_output:
             output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight))(temp_output)
+            output_layer = Activation(abs)(output_layer)
             # output_layer = Dense(1,init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight),bias=True)(temp_output)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:
@@ -94,7 +97,7 @@ class SSNET2(NN_BASE):
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
 
-        for key in self.input_tags:
+        for key in self.well_names:
             n_input = len(self.input_tags[key])
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=self.n_depth, n_width=self.n_width,
                                                                     n_input=n_input, n_inception=self.n_inception,

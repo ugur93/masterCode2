@@ -1,0 +1,87 @@
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+B1: 0.05
+C2: 0.05
+D1: 0.05
+C3: 0.05
+B3: 0.05
+C1: 0.05
+C4: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C4_QGAS: 3
+B1_QGAS: 4
+C3_QGAS: 2
+GJOA_OIL_QGAS: 7
+D1_QGAS: 6
+C2_QGAS: 1
+C1_QGAS: 0
+B3_QGAS: 5
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x0000000013D7B6D8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000001334B160>, <keras.callbacks.EarlyStopping object at 0x0000000011573828>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+B3: ['B3_CHK']
+C2: ['C2_CHK']
+D1: ['D1_CHK']
+C3: ['C3_CHK']
+B1: ['B1_CHK']
+C1: ['C1_CHK']
+C4: ['C4_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+B3_out: ['B3_QGAS']
+C3_out: ['C3_QGAS']
+GJOA_TOTAL: ['GJOA_OIL_QGAS']
+B1_out: ['B1_QGAS']
+D1_out: ['D1_QGAS']
+C4_out: ['C4_QGAS']
+C1_out: ['C1_QGAS']
+C2_out: ['C2_QGAS']
+-------------------------------------------------
+-------------------------------------------------
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_QGAS: 5747.28              C1_QGAS: 5602.58              C1_QGAS: 13.90%                         C1_QGAS: 40318.39
+C2_QGAS: 4476.56              C2_QGAS: 5039.76              C2_QGAS: 12.75%                         C2_QGAS: 39534.13
+C3_QGAS: 5005.40              C3_QGAS: 6361.21              C3_QGAS: 15.56%                         C3_QGAS: 40881.54
+C4_QGAS: 7198.58              C4_QGAS: 5400.07              C4_QGAS: 13.36%                         C4_QGAS: 40408.76
+B1_QGAS: 7086.92              B1_QGAS: 9846.57              B1_QGAS: 25.27%                         B1_QGAS: 38966.82
+B3_QGAS: 2900.40              B3_QGAS: 4433.28              B3_QGAS: 11.21%                         B3_QGAS: 39551.98
+D1_QGAS: 1123.21              D1_QGAS: 2292.72              D1_QGAS: 5.54%                          D1_QGAS: 41386.50
+GJOA_OIL_QGAS: 8496.46        GJOA_OIL_QGAS: 12441.47       GJOA_OIL_QGAS: 4.59%                    GJOA_OIL_QGAS: 271029.92
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_QGAS: 0.73                 C1_QGAS: 0.43
+C2_QGAS: 0.84                 C2_QGAS: 0.55
+C3_QGAS: 0.81                 C3_QGAS: 0.36
+C4_QGAS: 0.56                 C4_QGAS: 0.43
+B1_QGAS: 0.77                 B1_QGAS: 0.10
+B3_QGAS: 0.94                 B3_QGAS: 0.87
+D1_QGAS: 0.99                 D1_QGAS: 0.95
+GJOA_OIL_QGAS: 0.99           GJOA_OIL_QGAS: 0.94
+-------------------------------------------------------
+#### ------ #### 
+
+ NREPEAT: 10

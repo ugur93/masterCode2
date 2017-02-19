@@ -7,10 +7,9 @@ class NN_BASE:
 
         #Config
         self.chk_threshold_value=5
-        self.history = LossHistory()
 
+        self.history = LossHistory()
         self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00001, patience=500, verbose=1, mode='min')
-        #self.TB=keras.callbacks.TensorBoard(log_dir='./logs', histogram_freq=1, write_graph=True, write_images=True)
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
@@ -19,29 +18,22 @@ class NN_BASE:
         self.merged_outputs=[]
         self.inputs=[]
         self.aux_inputs=[]
-
-
         self.chk_thresholds={}
-
-
 
         self.n_outputs=len(tags_to_list(self.output_tags))
         self.initialize_model()
 
-
         self.output_index,self.output_tag_ordered_list,_ = output_tags_to_index(self.output_tags,self.model.get_config()['output_layers'])
 
-        print(self.output_tag_ordered_list)
-        print(self.model.get_config()['output_layers'])
-
+        ordered_list, layer_names=layer_to_ordered_tag_list(self.input_tags,self.model.get_config()['input_layers'])
+        #print(ordered_list)
+        #print(layer_names)
         plotModel(self.model,self.model_name)
-
-
 
     def initialize_model(self):
         pass
 
-    def preprocess_data(self,X,Y=[],Y_Q=[]):
+    def preprocess_data(self,X,Y=[]):
         X_dict = df2dict(X,self.input_tags,self.output_tags,'X')
         if self.add_thresholded_output:
             X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
@@ -54,26 +46,20 @@ class NN_BASE:
     def fit(self, X, Y,X_val,Y_val):
 
         print(self.get_config())
-        #print(self.model.summary())
         print ('Training model %s, please wait' % (self.model_name))
         print('Training data sample-size: '+str(len(X)))
-
 
         X_dict,Y_dict=self.preprocess_data(X,Y)
         X_val_dict,Y_val_dict=self.preprocess_data(X_val,Y_val)
 
-        print(X_dict.keys())
-        print(Y_dict.keys())
-
-       # exit()
-
         #self.debug(X_dict,Y_dict,True)
-
 
         self.model.fit(X_dict, Y_dict, nb_epoch=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
                        callbacks=self.callbacks,shuffle=True,validation_data=(X_val_dict,Y_val_dict))
 
-    def predict(self, X,tag=False):
+        #print(self.model.get_weights())
+
+    def predict(self, X):
         X_dict,_=self.preprocess_data(X)
         predicted_data=self.model.predict(X_dict)
         N_output_modules=len(self.output_tags.keys())
@@ -86,12 +72,7 @@ class NN_BASE:
         else:
             predicted_data_reshaped=np.asarray(predicted_data)
 
-        predicted_data_reshaped=pd.DataFrame(data=predicted_data_reshaped,columns=self.output_tag_ordered_list)
-        if tag==False:
-            return predicted_data_reshaped
-        else:
-            return predicted_data_reshaped[tag]#[:,self.output_index[tag]]
-
+        return pd.DataFrame(data=predicted_data_reshaped,columns=self.output_tag_ordered_list)
 
     def get_history(self):
         return self.history.losses
@@ -100,8 +81,6 @@ class NN_BASE:
         return self.model.get_layer(layer_name).get_weights()
 
     def save_model_to_file(self,name,scores,save_weights=True):
-        #PATH='/Users/UAC/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/SavedModels/'
-        #PATH='C:/users/ugurac/Documents/GITFOLDERS/MasterThesisCode/Models/NeuralNetworks/model_figures'
         PATH='./Models/NeuralNetworks/model_figures'
         if save_weights:
             self.model.save(PATH+name+'.h5')
@@ -116,25 +95,43 @@ class NN_BASE:
         f.write(scores)
         f.close()
 
-        plotModel(self.model,name)
+        #plotModel(self.model,name)
 
     def get_config(self):
-        s='CHK thresholds: \n'
-        s+=str(self.chk_thresholds)+'\n'
-        s+='----------------------------------- \n'
-        s+='OUTPUT INDEX \n'
-        s+=str(self.output_index)+'\n'
+
+        def tags_to_bulleted_list(s,tags):
+            for key in tags:
+                s+=key+': '+str(tags[key])+'\n'
+            return s
+        s= '----------------------------------- \n'
+        s+= '##### CHK thresholds ##### \n'
+        s += '----------------------------------- \n'
+        s=tags_to_bulleted_list(s,self.chk_thresholds)
+        s+= '----------------------------------- \n'
+        s+= '##### OUTPUT INDEX ##### \n'
+        s += '----------------------------------- \n'
+        s=tags_to_bulleted_list(s,self.output_index)
         s+= '-------------------------------------------------\n'
-        s+='Input module Config: \n'
-        s+=' n_depth: {} \n n_width: {} \n n_inception: {} \n l2_weight: {} \n Threshold: {} \n'.format(self.n_depth,self.n_width,self.n_inception,self.l2weight,self.add_thresholded_output)
-        s+='-------------------------------------------------\n'
-        s+='Fit config: \n epoch: {} \n batch size: {} \n verbose: {} \n callbacks: {} \n optimizer: {} \n'.format(self.nb_epoch,
+        s+= '##### Input-module config ##### \n'
+        s+= '-------------------------------------------------\n'
+        s+= '- n_depth: {} \n- n_width: {} \n- n_inception: {} \n- l2_weight: {} \n- OnOff_state: {} \n- Initialization: {} \n'.format(self.n_depth,self.n_width,self.n_inception,self.l2weight,self.add_thresholded_output,INIT)
+        s+= '-------------------------------------------------\n'
+        s+= '##### Fit config ##### \n'
+        s+= '------------------------------------------------- \n'
+        s+= '- epoch: {} \n- batch size: {} \n- verbose: {} \n- callbacks: {} \n- optimizer: {} \n'.format(self.nb_epoch,
                                                                                                   self.batch_size,
                                                                                                   self.verbose,
                                                                                                      self.callbacks,self.optimizer)
         s += '-------------------------------------------------\n'
-        s+='Input tags: \n {} \n'.format(self.input_tags)
-        s+='Output tags: \n {} \n'.format(self.output_tags)
+        s+='##### Input tags ##### \n'
+        s += '-------------------------------------------------\n'
+        s=tags_to_bulleted_list(s,self.input_tags)
+        s += '-------------------------------------------------\n'
+        s+='##### Output tags ##### \n '
+        s += '-------------------------------------------------\n'
+        s=tags_to_bulleted_list(s,self.output_tags)
+        s += '-------------------------------------------------\n'
+        s += '-------------------------------------------------\n'
         return s
 
     def initialize_chk_thresholds(self,data,scaled=True):
@@ -177,24 +174,27 @@ class NN_BASE:
         if plot:
             for i,key in zip(range(1,8),self.chk_thresholds):
                 plt.subplot(3,3,i)
-                plt.plot(X_toggled['aux_'+key],color='red')
+                plt.plot(X_toggled['OnOff_'+key],color='red')
                 plt.plot(X_toggled[key],color='blue')
                 plt.title(key)
             #plt.figure()
             #plt.plot(Y['GJOA_TOTAL_QOIL'])
             plt.show()
+
     def get_chk_threshold(self):
         return self.chk_thresh_val
-    def evaluate(self,X_train,X_test,Y_train,Y_test):
+
+    def evaluate(self,data,X_train,X_test,Y_train,Y_test):
 
         cols=self.output_tag_ordered_list
         print(cols)
-        score_test_MSE = metrics.mean_squared_error(self.SCALE*Y_test[cols], self.SCALE*self.predict(X_test), multioutput='raw_values')
-        score_train_MSE = metrics.mean_squared_error(self.SCALE*Y_train[cols], self.SCALE*self.predict(X_train), multioutput='raw_values')
+        score_test_MSE = metrics.mean_squared_error(data.inverse_transform(Y_test)[cols], data.inverse_transform(self.predict(X_test)), multioutput='raw_values')
+        score_train_MSE = metrics.mean_squared_error(data.inverse_transform(Y_train)[cols], data.inverse_transform(self.predict(X_train)), multioutput='raw_values')
         score_test_r2 = metrics.r2_score(Y_test[cols], self.predict(X_test), multioutput='raw_values')
         score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
 
-        return score_train_MSE,score_test_MSE,score_train_r2,score_test_r2
+        return score_train_MSE,score_test_MSE,score_train_r2,score_test_r2,cols
+
     def evaluate_zeros(self,X_train,X_test,Y_train,Y_test):
         cols = self.output_tag_ordered_list
         score_test_MSE=[]

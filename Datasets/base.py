@@ -30,68 +30,82 @@ def get_cols_that_ends_with(df,tag):
             cols.append(col)
     return cols
 
+class SkTransformer:
 
-class Transformer:
     def __init__(self):
-        self.PRESSURES=['PDC','PBH','PWH']
+
+        self.XSCALER=MinMaxScaler()
+        self.YSCALER = CustomTransformer()
+
+    def transform(self,data):
+
+        cols=data.columns
+
+        if 'GJOA_SEP_1_QGAS' in cols:
+            data_transformed=self.YSCALER.fit_transform(data)
+        else:
+            print('X')
+            data_transformed=self.XSCALER.fit_transform(data)
+
+        return pd.DataFrame(data=data_transformed,columns=cols)
+    def inverse_transform(self,data):
+        return data
+
+        cols = data.columns
+        #print(data_transformed.shape)
+        print(cols)
+        if 'GJOA_SEP_1_QGAS' in cols:
+            print('here')
+            data_transformed = self.YSCALER.inverse_transform(data)
+        else:
+            data_transformed = self.XSCALER.inverse_transform(data)
+
+        return pd.DataFrame(data=data_transformed, columns=cols)
+
+    def get_scale(self,type):
+        return 100
+class CustomTransformer:
+    def __init__(self):
+        self.PRESSURES=['PDC','PWH']
+        self.PRESSURES2=['PBH']
         self.QGAS=['QGAS','DEPRECATED']
         self.CHK=['CHK','time']
         self.QOIL=['QOIL','SUM']
         self.QWAT=['QWAT']
 
-        self.SCALES={'PRESSURES':100,'QGAS':100000,'CHK':100,'QOIL':100,'QWAT':100}
+        self.SCALES={'PRESSURES2':100,
+                     'PRESSURES':100,
+                     'QGAS':100000,
+                     'CHK':100,
+                     'QOIL':100,
+                     'QWAT':100
+                     }
+
+        self.tags={'PRESSURES2':['PBH','PWH'],
+                   'PRESSURES':['PDC'],
+                   'QGAS':['QGAS','DEPRECATED'],
+                   'CHK':['CHK','time'],
+                   'QOIL':['QOIL','SUM'],
+                   'QWAT':['QWAT']
+                   }
 
     def transform(self,data):
         data_transformed=data.copy()
-        #Pressures
-        cols=self.get_cols_that_ends_with(data,self.PRESSURES)
-        data_transformed[cols]=data_transformed[cols]/self.SCALES['PRESSURES']
-        #print(cols)
-        # GAS
-        cols = self.get_cols_that_ends_with(data, self.QGAS)
-        data_transformed[cols]= data_transformed[cols] / self.SCALES['QGAS']
-        #print(cols)
 
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.CHK)
-        print(data_transformed.columns)
-        print(cols)
-        data_transformed[cols]= data_transformed[cols]/self.SCALES['CHK']
-        #print(cols)
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.QOIL)
-        data_transformed[cols]= data_transformed[cols] / self.SCALES['QOIL']
-        #print(data_transformed[cols])
-        #print(cols)
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.QWAT)
-        data_transformed[cols]= data_transformed[cols] / self.SCALES['QWAT']
-
+        for tag in self.tags:
+            cols = self.get_cols_that_ends_with(data, self.tags[tag])
+            data_transformed[cols] = data_transformed[cols] / self.SCALES[tag]
         return data_transformed
 
 
+
     def inverse_transform(self,data,tag='ALL'):
+
+        #return data
         data_transformed = data.copy()
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.PRESSURES)
-        data_transformed[cols]= data_transformed[cols] * self.SCALES['PRESSURES']
-
-        # GAS
-        cols = self.get_cols_that_ends_with(data, self.QGAS)
-
-        data_transformed[cols] = data_transformed[cols] * self.SCALES['QGAS']
-
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.CHK)
-        data_transformed[cols] = data_transformed[cols] * self.SCALES['CHK']
-
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.QOIL)
-        data_transformed[cols] = data_transformed[cols] * self.SCALES['QOIL']
-
-        # Pressures
-        cols = self.get_cols_that_ends_with(data, self.QWAT)
-        data_transformed[cols] = data_transformed[cols] * self.SCALES['QWAT']
+        for tag in self.tags:
+            cols = self.get_cols_that_ends_with(data, self.tags[tag])
+            data_transformed[cols] = data_transformed[cols] * self.SCALES[tag]
 
         return data_transformed
 
@@ -99,16 +113,9 @@ class Transformer:
         return self.transform(data)
 
     def get_scale(self,type):
-        if type in self.PRESSURES:
-            return self.SCALES['PRESSURES']
-        elif type in self.CHK:
-            return self.SCALES['CHK']
-        elif type in self.QGAS:
-            return self.SCALES['QGAS']
-        elif type in self.QOIL:
-            return self.SCALES['QOIL']
-        elif type in self.QWAT:
-            return self.SCALES['QWAT']
+        for tag in self.tags:
+            if type in self.tags[tag]:
+                return self.SCALES[tag]
 
     def get_cols_that_ends_with(self,data,endings):
         data_cols=data.columns
@@ -130,7 +137,7 @@ class DataContainer:
         self.X_transformed=None
         self.Y_transformed=None
 
-        self.SCALER=Transformer()
+        self.SCALER=CustomTransformer()
 
         self.init_transform()
 

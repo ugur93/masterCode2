@@ -24,12 +24,22 @@ X_COLS_MULTI=[('CHK','QGAS')]
 
 
 
+well_names=['F1','B2','D3','E1']
 MULTI_INPUT=True
 
 
+def test_bed(X,Y):
+    tags = []
+    for key in well_names:
+        name = key + '_' + 'QGAS'
+        tags.append(name)
+
+    sum_oil = Y[tags].sum(axis=1)
+    plt.plot(Y['GJOA_QGAS'], color='blue')
+    #plt.plot(sum_oil,color='red')
+    #plt.show()
 
 
-tags=['F1','B2','D3','E1']
 def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
 
@@ -54,45 +64,10 @@ def fetch_gjoa_data():
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_QGAS']),np.mean(Y['GJOA_QGAS'])))
     print('Data size: {}'.format(len(Y)))
 
-    #plt.plot(Y['GJOA_QGAS'])
-    #plt.show()
-    #Y=pwh_to_zero(X,Y.copy())
+    #test_bed(X, Y)
 
-
-    #plt.show()
-
-
-
-    ind=X['B2_CHK']<5
-
-    #X=X[~ind]
-    #Y=Y[~ind]
-
-    #a=X['F1_CHK']*np.sqrt(2000*Y['F1_deltap'])*10.1
-    #a=Y['F1_deltap']*100.5*2000
-    #plt.plot(a,color='red')
-    #plt.plot((Y['F1_QGAS']/X['F1_CHK'])**2,color='blue')
-    #plt.show()
-
-    #print_rank(X,'GJOA')
     GjoaData=DataContainer(X,Y,name='GJOA')
-    #plot_input_to_well(X,Y)
-    #plt.plot(GjoaData.Y_transformed['GJOA_QGAS'])
-    #plt.show()
 
-    #plot_scaled(GjoaData,'CHK')
-    #splot_scaled(GjoaData, 'PWH')
-    #plt.subplot(2,1,1)
-    #plt.plot(GjoaData.Y_transformed)
-    #plt.subplot(2,1,2)
-    #plt.plot(GjoaData.Y)
-    #plot_pressure(X)
-    #plt.show()
-
-    #exit()
-    #print(data['WELL_F1'])
-    #plot_scatter(data['WELL_E1'],'E1_CHK_mea','GJOA_QGAS',GJOA_SEP_1)
-    #visualizeData(GjoaData.X_transformed)
     return GjoaData
 def plot_pressure(X):
     pressures=['PDC','PWH']
@@ -100,7 +75,7 @@ def plot_pressure(X):
 
     for pres in pressures:
         plt.figure()
-        for tag in tags:
+        for tag in well_names:
             name=tag+'_'+pres
             plt.plot(X[name],label=name)
         plt.legend()
@@ -109,7 +84,7 @@ def plot_pressure(X):
     pres_x = 'CHK'
     plt.figure()
     i=1
-    for tag in tags:
+    for tag in well_names:
         namey=tag+'_'+pres_y
         namex=tag+'_'+pres_x
         plt.subplot(2,2,i)
@@ -121,7 +96,7 @@ def plot_pressure(X):
     pres_x = 'CHK'
     plt.figure()
     i = 1
-    for tag in tags:
+    for tag in well_names:
         namey = tag + '_' + pres_y
         namex = tag + '_' + pres_x
         plt.subplot(2, 2, i)
@@ -133,7 +108,7 @@ def plot_pressure(X):
     pres_x = 'PDC'
     plt.figure()
     i = 1
-    for tag in tags:
+    for tag in well_names:
         namey = tag + '_' + pres_y
         namex = tag + '_' + pres_x
         plt.subplot(2, 2, i)
@@ -188,8 +163,8 @@ def data_to_X_Y(data):
                     X[tag_name]=data[key][sensor]
                     if col=='CHK':
                         #print(X)
-                        ind=X[tag_name]<0
-                        X[tag_name][ind]=0
+                        ind = X[tag_name] < 0
+                        X.loc[ind, tag_name] = 0
                         #X[X<0]=0
 
             #for col in Y_Q_COLS:
@@ -209,7 +184,7 @@ def plot_scaled(data,ending):
     for i in range(4):
         plt.figure()
         plt.subplot(2,1,1)
-        name=tags[i]+'_'+ending
+        name=well_names[i]+'_'+ending
         plt.plot(X [name],color='blue',label='Original')
         plt.title(name+' - ORIGINAL')
         plt.subplot(2,1,2)
@@ -218,7 +193,7 @@ def plot_scaled(data,ending):
     plt.show()
 
 def add_diff(X):
-    for key in tags:
+    for key in well_names:
         PWH_tag=key+'_'+'PWH'
         PDC_tag=key+'_'+'PDC'
 
@@ -228,7 +203,7 @@ def add_diff(X):
 
 def plot_scatter(X):
     pressures = ['PDC', 'PWH']
-    for tag in tags:
+    for tag in well_names:
         plt.figure()
         i=1
         for pres in pressures:
@@ -276,7 +251,7 @@ def addModify(X,Y,type):
     #plt.show()
     return Y
 def pwh_to_zero(X,Y):
-    for tag in tags:
+    for tag in well_names:
         ind=X[tag+'_CHK']<5
         Y[tag+'_PWH'][ind]=0
         #plt.subplot(2,1,1)
@@ -305,7 +280,7 @@ def plot_input_to_well(X,Y):
 def plot_input_to_total(X,Y):
     cols=['CHK','PDC','PWH','PBH']
     out_ending='QGAS'
-    for tag in tags:
+    for tag in well_names:
         i=1
         plt.figure()
         for col in cols:

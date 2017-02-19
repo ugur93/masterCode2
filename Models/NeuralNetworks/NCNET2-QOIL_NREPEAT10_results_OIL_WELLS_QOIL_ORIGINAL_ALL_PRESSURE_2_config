@@ -1,0 +1,87 @@
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: 0.05
+C3: 0.05
+D1: 0.05
+B3: 0.05
+C4: 0.05
+C2: 0.05
+B1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C4_QOIL: 3
+GJOA_TOTAL_QOIL: 7
+C2_QOIL: 1
+D1_QOIL: 6
+B3_QOIL: 5
+B1_QOIL: 4
+C3_QOIL: 2
+C1_QOIL: 0
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x0000000011F47EB8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x0000000013A7DC88>, <keras.callbacks.EarlyStopping object at 0x0000000011F47B00>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+C1: ['C1_CHK', 'C1_PBH', 'C1_PDC', 'C1_PWH']
+C3: ['C3_CHK', 'C3_PBH', 'C3_PDC', 'C3_PWH']
+D1: ['D1_CHK', 'D1_PDC', 'D1_PWH']
+B3: ['B3_CHK', 'B3_PBH', 'B3_PDC', 'B3_PWH']
+C4: ['C4_CHK', 'C4_PBH', 'C4_PDC', 'C4_PWH']
+C2: ['C2_CHK', 'C2_PDC', 'C2_PWH']
+B1: ['B1_CHK', 'B1_PBH', 'B1_PDC', 'B1_PWH']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+GJOA_TOTAL: ['GJOA_TOTAL_QOIL']
+B1_out: ['B1_QOIL']
+C1_out: ['C1_QOIL']
+C3_out: ['C3_QOIL']
+B3_out: ['B3_QOIL']
+D1_out: ['D1_QOIL']
+C4_out: ['C4_QOIL']
+C2_out: ['C2_QOIL']
+-------------------------------------------------
+-------------------------------------------------
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_QOIL: 4.14                 C1_QOIL: 4.20                 C1_QOIL: 21.24%                         C1_QOIL: 19.75
+C2_QOIL: 5.52                 C2_QOIL: 7.16                 C2_QOIL: 44.38%                         C2_QOIL: 16.14
+C3_QOIL: 5.10                 C3_QOIL: 4.96                 C3_QOIL: 26.95%                         C3_QOIL: 18.42
+C4_QOIL: 13.47                C4_QOIL: 14.19                C4_QOIL: 81.44%                         C4_QOIL: 17.42
+B1_QOIL: 7.65                 B1_QOIL: 8.72                 B1_QOIL: 41.84%                         B1_QOIL: 20.83
+B3_QOIL: 2.10                 B3_QOIL: 2.34                 B3_QOIL: 21.32%                         B3_QOIL: 10.97
+D1_QOIL: 26.81                D1_QOIL: 24.23                D1_QOIL: 139.62%                        D1_QOIL: 17.35
+GJOA_TOTAL_QOIL: 12.12        GJOA_TOTAL_QOIL: 14.14        GJOA_TOTAL_QOIL: 9.21%                  GJOA_TOTAL_QOIL: 153.63
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_QOIL: 0.42                 C1_QOIL: -0.47
+C2_QOIL: -0.32                C2_QOIL: -10.72
+C3_QOIL: 0.02                 C3_QOIL: -1.29
+C4_QOIL: -6.20                C4_QOIL: -24.87
+B1_QOIL: 0.17                 B1_QOIL: -2.37
+B3_QOIL: 0.65                 B3_QOIL: 0.29
+D1_QOIL: -30.09               D1_QOIL: -34.75
+GJOA_TOTAL_QOIL: 0.89         GJOA_TOTAL_QOIL: 0.74
+-------------------------------------------------------
+#### ------ #### 
+
+ NREPEAT: 10

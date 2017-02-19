@@ -24,9 +24,9 @@ if __name__=='__main__':
 
     #print(chkInputs.columns)
 
-    Validate.validate_train_test_split(GjoaOIL)
+    #Validate.validate(GjoaOIL,GjoaGAS)
 
-    #Validate.validateRepeat(GjoaData)
+    Validate.validate(GjoaOIL,GjoaGAS)
     #Validate.validateCV(GjoaData)
     #NN1.SSNET1()
 

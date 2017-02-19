@@ -52,31 +52,40 @@ def fetch_gjoa_data():
     X,Y=data_to_X_Y(data,'mea')
     sum_oil = np.zeros((len(Y), 1))  # Y['C1_QOIL']
 
-    tags=[]
+    tags_OIL=[]
+    tags_GAS=[]
     for key in well_names:
-        name = key + '_' + 'QGAS'
-        tags.append(name)
+        name_oil = key + '_' + 'QOIL'
+        name_qgas=key + '_' + 'QGAS'
+        tags_OIL.append(name_oil)
+        tags_GAS.append(name_qgas)
 
-    sum_oil=Y[tags].sum(axis=1)
+    sum_oil=Y[tags_OIL].sum(axis=1)
+    sum_gas = Y[tags_GAS].sum(axis=1)
 
-    Y['GJOA_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']#+Y['GJOA_SEP_1_QLIQ']
+    Y['GJOA_OIL_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']#+Y['GJOA_SEP_1_QLIQ']
     Y['GJOA_TOTAL_QOIL_SUM']=sum_oil
+    Y['GJOA_SUM_QGAS'] = sum_gas
 
     X['time'] = np.arange(0, len(X.index))
+    #plt.scatter(X['time'],Y['GJOA_QGAS'],color='blue')
+    #plt.xlabel('time')
+    #plt.ylabel('GJOA_QGAS')
+    #plt.title('DIFF')
 
+    #plt.figure()
+    #plt.scatter(X['time'], Y['GJOA_TOTAL_QGAS_DEPRECATED'], color='blue',label='GJOA_TOTAL_QGAS_DEPRECATED')
+    #plt.scatter(X['time'], Y['GJOA_SEP_1_QGAS'], color='red',label='GJOA_SEP_1_QGAS')
+    #plt.legend()
+    #plt.plot(Y['GJOA_QGAS']-sum_oil,color='red')
+    #plt.plot(sum_oil,color='blue')
+    #plt.show()
 
-
-
-
-
-    Y['GJOA_QGAS'][Y['GJOA_QGAS']<0]=0
-    Y['GJOA_QGAS'] = Y['GJOA_QGAS'] #- np.mean(Y['GJOA_QGAS'] - sum_oil)
-
-    plt.plot(Y['GJOA_QGAS'])
-    plt.plot(sum_oil, color='red')
-    plt.show()
-
-
+    ind=Y['GJOA_OIL_QGAS']<0
+    Y.loc[ind,'GJOA_OIL_QGAS'] = 0
+    #Y=Y[~ind]
+    #X=X[~ind]
+    #Y['GJOA_QGAS'] = Y['GJOA_QGAS'] #- np.mean(Y['GJOA_QGAS'] - sum_oil)
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_QOIL_SUM']), np.mean(Y['GJOA_TOTAL_QOIL_SUM'])))
     print('Data size: {}'.format(len(Y)))
@@ -109,7 +118,7 @@ def data_to_X_Y(data,type):
             X[tag_name]=data[tag_name+'_'+type]
             if tag=='CHK':
                 ind = X[tag_name] < 0
-                X[tag_name][ind] = 0
+                X.loc[ind,tag_name] = 0
         for tag in Y_tags:
             col=name+'_'+tag
             Y[col]=data[col+'_'+type]

@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-OUTPUT_COLS_ON_SINGLE_PLOT=['GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM']
+OUTPUT_COLS_ON_SINGLE_PLOT=['GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM','GJOA_OIL_QGAS']
 
 N_PLOT_SUB=1
 
@@ -13,11 +13,11 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
 
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
-    plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
+    #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
     plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
-    #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
-    #                       remove_zero_chk=remove_zero_chk)
+    plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
+                           remove_zero_chk=remove_zero_chk)
     plt.show()
 
 
@@ -269,7 +269,7 @@ def plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_
         i = 1
         tag = output_tag
         # ax.subplot(sp_y, sp_x, i)
-        fig, axes = plt.subplots(sp_y, 1, sharex=True)
+        fig, axes = plt.subplots(1, sp_y, sharex=True)
 
 
         ax = axes[0]
@@ -285,8 +285,8 @@ def plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_
                 ax = axes[i]
                 i += 1
                 #print(input_tag)
-                ax.scatter(Y_train.index, data.inverse_transform(X_train)[input_tag], color='black', label='true - train')
-                ax.scatter(Y_test.index, data.inverse_transform(X_test)[input_tag], color='blue', label='true - test')
+                ax.scatter(data.inverse_transform(X_train)['time'], data.inverse_transform(X_train)[input_tag], color='black', label='true - train')
+                ax.scatter(data.inverse_transform(X_test)['time'], data.inverse_transform(X_test)[input_tag], color='blue', label='true - test')
                 ax.set_title(input_tag)
                 ax.set_ylabel(input_tag)
                 ax.set_xlabel('time')
