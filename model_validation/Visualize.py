@@ -16,9 +16,9 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
     plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
-    plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
-                           remove_zero_chk=remove_zero_chk)
-    plt.show()
+    #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
+    #                       remove_zero_chk=remove_zero_chk)
+    #plt.show()
 
 
 def tags_to_list(tags):
@@ -61,7 +61,7 @@ def get_train_test_scatter_plot(ax,model,data,X,Y,x_tag,y_tag,color,type):
                data.inverse_transform(Y)[y_tag], color=color[0],
                label='true - '+type)
     ax.scatter(data.inverse_transform(X)[x_tag],
-               data.inverse_transform(model.predict(Y))[y_tag], color=color[1],
+               data.inverse_transform(model.predict(X))[y_tag], color=color[1],
                label='pred - '+type)
     return ax
 
@@ -138,9 +138,10 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
     zero_chk_param = (False, 'name', 0)
     i = 0
     fig, axes = plt.subplots(sp_y, sp_x)
-    axes = axes.flatten()
-    if N_PLOTS!=sp_x*sp_y:
-        fig.delaxes(axes[-1])
+    if N_PLOTS > 1:
+        axes = axes.flatten()
+        if N_PLOTS!=sp_x*sp_y:
+            fig.delaxes(axes[-1])
     for output_tag in output_cols:
         if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
             fig, ax = plt.subplots(1, 1)
@@ -166,10 +167,10 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
 
     i = 0
     fig_sub, axes = plt.subplots(sp_y, sp_x)
-    axes = axes.flatten()
-
-    if N_PLOTS!=sp_y*sp_x:
-         fig_sub.delaxes(axes[-1])
+    if N_PLOTS>1:
+        axes = axes.flatten()
+        if N_PLOTS!=sp_y*sp_x:
+             fig_sub.delaxes(axes[-1])
     for output_tag in output_cols:
         if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
             fig_single,ax=plt.subplots(1,1)
@@ -248,7 +249,7 @@ def plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_
                 ax.set_xlabel(input_tag)
                 ax.set_ylabel(output_tag)
                 ax.set_title(input_tag + ' vs ' + output_tag)
-    if i==N_PLOTS:
+    if i==N_PLOTS and N_PLOTS>1:
         fig.delaxes(axes[-1])
 
 def plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]):

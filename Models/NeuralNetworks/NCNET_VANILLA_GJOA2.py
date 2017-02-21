@@ -32,12 +32,12 @@ class NCNET_VANILLA(NN_BASE):
 
         self.input_tags = {}
         input_name='MAIN_INPUT'
-        well_name = ['C1','C2', 'C3', 'C4', 'B3', 'B1', 'D1']
+        self.well_names = ['C1','C2', 'C3', 'C4', 'B3', 'B1', 'D1']
         tags = ['CHK','PDC','PWH', 'PBH']
         self.input_tags[input_name] = []
-        for name in well_name:
+        for name in self.well_names:
             for tag in tags:
-                if name == 'C2' and tag == 'PBH':
+                if (name == 'C2' or name=='D1') and tag == 'PBH':
                     pass
                 else:
                     self.input_tags[input_name].append(name + '_' + tag)
@@ -55,20 +55,20 @@ class NCNET_VANILLA(NN_BASE):
 
         cols_out=[]
         out_tags=['PWH']#,'PWH']
-        for name in well_name:
+        for name in self.well_names:
             for tag in out_tags:
                 cols_out.append(name+'_'+tag)
         self.output_tags = {
-            'C1_out': ['C1_QOIL'],
-            'C2_out': ['C2_QOIL'],
-            'C3_out': ['C3_QOIL'],
-            'C4_out': ['C4_QOIL'],
-            'D1_out': ['D1_QOIL'],
-            'B3_out': ['B3_QOIL'],
-            'B1_out': ['B1_QOIL'],
+            #'C1_out': ['C1_QOIL'],
+            #'C2_out': ['C2_QOIL'],
+            #'C3_out': ['C3_QOIL'],
+            #'C4_out': ['C4_QOIL'],
+            #'D1_out': ['D1_QOIL'],
+            #'B3_out': ['B3_QOIL'],
+            #'B1_out': ['B1_QOIL'],
             # 'Riser_out':['GJOA_TOTAL_QOIL_SUM'],
             #'TOTAL_OUT': ['C1_QOIL','C2_QOIL','C3_QOIL','C4_QOIL','B1_QOIL','B3_QOIL','D1_QOIL','GJOA_TOTAL_QOIL']
-            #'TOTAL_OUT':['GJOA_TOTAL_QOIL_SUM']
+            'TOTAL_OUT':['GJOA_OIL_QGAS']
             #'TOTAL_OUT':cols_out
         }
 
@@ -79,7 +79,7 @@ class NCNET_VANILLA(NN_BASE):
         self.optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
         self.nb_epoch = 10000
-        self.batch_size = 1000
+        self.batch_size = 64
         self.verbose = 0
 
 
@@ -99,7 +99,7 @@ class NCNET_VANILLA(NN_BASE):
         for key in self.output_tags.keys():
             main_model = add_layers(main_input, n_depth=self.n_depth, n_width=self.n_width, l2_weight=self.l2weight)
             # main_output=merge([PWH_out,PDC_out],mode='sum',name='MAIN_OUTPUT')
-            main_output.append(Dense(len(self.output_tags[key]), name=key)(main_model))
+            main_output.append(Dense(len(self.output_tags[key]),  name=key)(main_model))
         #out=Dense(self.n_outputs,name='TOTAL_OUT')(main_model)
 
         self.model = Model(input=main_input, output=main_output)

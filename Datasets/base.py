@@ -2,7 +2,11 @@
 from sklearn.preprocessing import StandardScaler,MinMaxScaler,MaxAbsScaler,FunctionTransformer
 import pandas as pd
 import numpy as np
-
+import matplotlib.pyplot as plt
+def negative_values_to_zero(data,tag_name):
+    ind = data[tag_name] < 0
+    data.loc[ind, tag_name] = 0
+    return data
 
 def print_rank(X,name):
     print('Rank {}: '.format(name))
@@ -41,7 +45,8 @@ class SkTransformer:
 
         cols=data.columns
 
-        if 'GJOA_SEP_1_QGAS' in cols:
+        if 'GJOA_SUM_QGAS' in cols:
+            print(cols)
             data_transformed=self.YSCALER.fit_transform(data)
         else:
             print('X')
@@ -54,7 +59,7 @@ class SkTransformer:
         cols = data.columns
         #print(data_transformed.shape)
         print(cols)
-        if 'GJOA_SEP_1_QGAS' in cols:
+        if 'GJOA_SUM_QGAS' in cols:
             print('here')
             data_transformed = self.YSCALER.inverse_transform(data)
         else:
@@ -88,28 +93,45 @@ class CustomTransformer:
                    'QOIL':['QOIL','SUM'],
                    'QWAT':['QWAT']
                    }
-
+        self.mean_normalized={}
     def transform(self,data):
         data_transformed=data.copy()
-
+        print(data.columns[0])
         for tag in self.tags:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
-            data_transformed[cols] = data_transformed[cols] / self.SCALES[tag]
+            if len(cols)>0:
+                mean = self.mean_normalized[tag]
+                #data_transformed[cols]=data_transformed[cols]-mean[cols]
+                data_transformed[cols] = data_transformed[cols] / self.SCALES[tag]
+
         return data_transformed
 
 
 
-    def inverse_transform(self,data,tag='ALL'):
+    def inverse_transform(self,data):
 
         #return data
         data_transformed = data.copy()
         for tag in self.tags:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
-            data_transformed[cols] = data_transformed[cols] * self.SCALES[tag]
-
+            if len(cols) > 0:
+                data_transformed[cols] = data_transformed[cols] * self.SCALES[tag]
+                mean = self.mean_normalized[tag]
+                #data_transformed[cols] = data_transformed[cols] + mean[cols]
         return data_transformed
 
     def fit_transform(self,data):
+        data_transformed = data.copy()
+        for tag in self.tags:
+            cols = self.get_cols_that_ends_with(data, self.tags[tag])
+            if len(cols) > 0:
+                mean = np.mean(data_transformed[cols], axis=0)
+                if tag in self.mean_normalized.keys():
+                    self.mean_normalized[tag]=pd.concat([self.mean_normalized[tag],mean],axis=0)
+                    self.mean_normalized[tag]=self.mean_normalized[tag].drop_duplicates()
+                else:
+                    self.mean_normalized[tag] = mean
+
         return self.transform(data)
 
     def get_scale(self,type):
@@ -142,8 +164,8 @@ class DataContainer:
         self.init_transform()
 
     def init_transform(self):
-        self.X_transformed =self.SCALER.transform(self.X)
-        self.Y_transformed =self.SCALER.transform(self.Y)
+        self.X_transformed =self.SCALER.fit_transform(self.X)
+        self.Y_transformed =self.SCALER.fit_transform(self.Y)
 
     def inverse_transform(self,data):
         return self.SCALER.inverse_transform(data)

@@ -27,8 +27,8 @@ class NCNET1_GJOA2(NN_BASE):
         # Training config
         self.optimizer = 'adam'#SGD(momentum=0.5,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 10000
-        self.batch_size = 64
+        self.nb_epoch = 200
+        self.batch_size = 1000
         self.verbose = 0
 
         #Model config
@@ -42,12 +42,12 @@ class NCNET1_GJOA2(NN_BASE):
         self.n_width = 20
         self.l2weight = 0.0001
 
-        self.make_same_model_for_all=False
+        self.make_same_model_for_all=True
         self.add_thresholded_output=True
 
         self.input_tags = {}
         self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']#
-        tags = ['CHK','PBH','PDC','PWH']
+        tags = ['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name] = []
             for tag in tags:
@@ -68,7 +68,7 @@ class NCNET1_GJOA2(NN_BASE):
             #'D1_out':['D1_QOIL'],
             #'B3_out':['B3_QOIL'],
             #'B1_out':['B1_QOIL'],
-            #'GJOA_TOTAL': ['GJOA_TOTAL_QOIL']
+            #'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']
 
             'C1_out': ['C1_QGAS'],
             'C2_out': ['C2_QGAS'],
@@ -101,16 +101,27 @@ class NCNET1_GJOA2(NN_BASE):
             #'Riser_out': 0.0,
             'C1_out':  0.0
         }
+        if len(tags)>1:
+            self.model_config={
+                'B1': (2, 20, 0.0001),
+                'B3': (1, 10, 0.0001),
+                'C1': (2, 10, 0.0001),
+                'C2': (3, 20, 0.0001),
+                'C3': (3, 20, 0.00015),
+                'C4': (2, 20, 0.0001),
+                'D1': (2, 20, 0.0001)
+            }
+        else:
+            self.model_config = {
+                'B1': (2, 20, 0.0001),
+                'B3': (1, 20, 0.001),
+                'C1': (2, 10, 0.0001),
+                'C2': (3, 20, 0.0001),
+                'C3': (2, 20, 0.0001),
+                'C4': (2, 20, 0.0001),
+                'D1': (2, 20, 0.0001)
+            }
 
-        self.model_config={
-            'B1': (2,20,0.0001),
-            'B3': (1, 20, 0.001),
-            'C1': (2, 10, 0.0001),
-            'C2': (3, 20, 0.0001),
-            'C3': (5, 20, 0.0001),
-            'C4': (2, 20, 0.0001),
-            'D1': (2, 20, 0.0001)
-        }
 
         super().__init__()
 
@@ -144,11 +155,14 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.model = Model(input=inputs, output=self.merged_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
-
+        #weights=self.model.get_weights()
+        #weights=np.normalize(weights)
+        #self.model.set_weights(weights)
 
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
 
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
+        temp_output=GaussianNoise(0.01)(input_layer)
         # temp_output=Dropout(0.1)(input_layer)
 
         if n_depth == 0 and n_inception==0:
@@ -161,17 +175,17 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
-                temp_output = add_layers(input_layer, n_depth, n_width, l2_weight)
+                temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
 
         if thresholded_output:
             #output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(
             #    temp_output)
-            output_layer = Dense(1,init=INIT,activation=self.output_layer_activation,W_regularizer=l2(l2_weight), bias=True)(temp_output)
-            #output_layer = MaxoutDense(1, init=INIT, W_regularizer=l2(l2_weight), bias=True)(temp_output)
-            #output_layer=Activation(abs)(output_layer)
+            output_layer = Dense(1,init=INIT,activation=self.output_layer_activation,W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(temp_output)
+            #output_layer = MaxoutDense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True)(temp_output)
+            #output_layer=Activation('relu')(output_layer)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:
-            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), bias=True,
+            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True,
                                  name=name + '_out')(temp_output)
 
             merged_output = output_layer
@@ -180,7 +194,37 @@ class NCNET1_GJOA2(NN_BASE):
         return aux_input, input_layer, merged_output, output_layer
 
     def update_model(self):
+        self.nb_epoch=10000
         self.output_layer_activation='relu'
+        self.aux_inputs=[]
+        self.inputs=[]
+        self.merged_outputs=[]
+        self.outputs=[]
+
+        old_model=self.model
+        self.initialize_model()
+        weights=old_model.get_weights()
+        self.model.set_weights(weights)
+    def update_model_2(self):
+        self.nb_epoch=20
+        self.output_layer_activation='relu'
+
+        self.loss_weights = {
+            'B1_out': 0.5,
+            'B3_out': 0.5,
+            'C2_out': 0.5,
+            'C3_out': 0.5,
+            'D1_out': 0.5,
+            'C4_out': 0.5,
+            # 'F1_out': 0.0,
+            # 'B2_out': 0.0,
+            # 'D3_out': 0.0,
+            # 'E1_out': 0.0,
+            # 'A1_out':0.0,
+            'GJOA_TOTAL': 1.0,
+            # 'Riser_out': 0.0,
+            'C1_out': 0.5
+        }
         self.aux_inputs=[]
         self.inputs=[]
         self.merged_outputs=[]

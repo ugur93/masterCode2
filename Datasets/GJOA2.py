@@ -3,6 +3,7 @@
 
 import pandas as pd
 from .base import *
+from .visualize import *
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import Ridge
@@ -11,188 +12,127 @@ FILENAME='STABLE_GJOA_OIL_NEW.csv'
 
 X_tags=['CHK','PWH','PBH','PDC']
 X_GJOA_tags=['RISER_OIL_B_PDC','RISER_OIL_B_CHK','RISER_OIL_A_PDC']
+
 Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QGAS_DEPRECATED','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT','SEP_1_WCT','SEP_1_QGAS','SEP_1_QLIQ','SEP_3_QWAT_1','SEP_2_QWAT']
 Y_tags=['QOIL','QWAT','QGAS','PDC','PWH','PBH']
-GJOA_QGAS_COL='GJOA_SEP_1_QGAS_'
-data_type = 'med'
 
-X_COLS=['CHK','PWH','PBH','PDC','QGAS']
-#X_COLS=['CHK']
-#Y_Q_COLS=['QGAS']
-#Y_COLS=['QGAS']
-Y_COLS=['PBH','PWH','PDC','QGAS']
-#Y_COLS=['PWH']
-
-X_COLS_MULTI=[('CHK','QGAS')]
+DATA_TYPE = 'mea'
 
 
-
-MULTI_INPUT=True
-
-
-def plot_values(X,Y):
-    sp_y = 2
-    sp_x = 4
-    i = 1
-    for well in well_names:
-        name = well + '_CHK'
-        plt.subplot(sp_y, sp_x, i)
-        i += 1
-        plt.plot(X[name])  # ,Y['GJOA_TOTAL_QOIL'])
-        plt.title(name)
-    # plt.scatter(X['GJOA_RISER_OIL_A_CHK'], Y['GJOA_TOTAL_QOIL'])
-    plt.figure()
-    plt.plot(Y['GJOA_SEP_1_QWAT'])
-    plt.show()
 
 well_names=['C1','C2','C3','C4','D1','B3','B1']
+
+
+
 def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
 
-    X,Y=data_to_X_Y(data,'mea')
-    sum_oil = np.zeros((len(Y), 1))  # Y['C1_QOIL']
+    X,Y=data_to_X_Y(data)
+    X.drop(X.index[[808, 173]], inplace=True)
+    Y.drop(Y.index[[808, 173]], inplace=True)
 
-    tags_OIL=[]
-    tags_GAS=[]
-    for key in well_names:
-        name_oil = key + '_' + 'QOIL'
-        name_qgas=key + '_' + 'QGAS'
-        tags_OIL.append(name_oil)
-        tags_GAS.append(name_qgas)
+    sum_oil,sum_gas=calculate_sum_multiphase(Y)
 
-    sum_oil=Y[tags_OIL].sum(axis=1)
-    sum_gas = Y[tags_GAS].sum(axis=1)
+    Y['GJOA_OIL_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']+np.ones((len(Y),))*5000
+    Y['GJOA_TOTAL_SUM_QOIL']=sum_oil
+    Y['GJOA_OIL_SUM_QGAS'] = sum_gas
 
-    Y['GJOA_OIL_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']#+Y['GJOA_SEP_1_QLIQ']
-    Y['GJOA_TOTAL_QOIL_SUM']=sum_oil
-    Y['GJOA_SUM_QGAS'] = sum_gas
+    for col in Y.columns:
+        print(col)
 
-    X['time'] = np.arange(0, len(X.index))
-    #plt.scatter(X['time'],Y['GJOA_QGAS'],color='blue')
-    #plt.xlabel('time')
-    #plt.ylabel('GJOA_QGAS')
-    #plt.title('DIFF')
+    X['time'] = np.arange(0, len(X))
 
-    #plt.figure()
-    #plt.scatter(X['time'], Y['GJOA_TOTAL_QGAS_DEPRECATED'], color='blue',label='GJOA_TOTAL_QGAS_DEPRECATED')
-    #plt.scatter(X['time'], Y['GJOA_SEP_1_QGAS'], color='red',label='GJOA_SEP_1_QGAS')
-    #plt.legend()
-    #plt.plot(Y['GJOA_QGAS']-sum_oil,color='red')
-    #plt.plot(sum_oil,color='blue')
-    #plt.show()
+    Y=negative_values_to_zero(Y,'GJOA_OIL_QGAS')
 
-    ind=Y['GJOA_OIL_QGAS']<0
-    Y.loc[ind,'GJOA_OIL_QGAS'] = 0
-    #Y=Y[~ind]
-    #X=X[~ind]
-    #Y['GJOA_QGAS'] = Y['GJOA_QGAS'] #- np.mean(Y['GJOA_QGAS'] - sum_oil)
+    #test_bed(X,Y,sum_gas,sum_oil)
 
-    print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_QOIL_SUM']), np.mean(Y['GJOA_TOTAL_QOIL_SUM'])))
+    print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
     print('Data size: {}'.format(len(Y)))
 
     GjoaData=DataContainer(X,Y,name='GJOA2')
 
     return GjoaData
 
-
-def visualizeData(X):
-    COL='CHK'
-    i=1
-
-    for col in X.columns:
-        if col.split('_')[1]==COL:
-            plt.subplot(2,3,i)
-            i+=1
-            plt.plot(X[col])
-            plt.title(col)
-    plt.show()
-
-def data_to_X_Y(data,type):
+def data_to_X_Y(data):
     X=pd.DataFrame()
     Y=pd.DataFrame()
+    X['X']=np.zeros((len(data),))
+    Y['Y'] = np.zeros((len(data),))
 
     for name in well_names:
         for tag in X_tags:
             tag_name=name+'_'+tag
-           # print(col)
-            X[tag_name]=data[tag_name+'_'+type]
+            X[tag_name]=data[tag_name+'_'+DATA_TYPE]
             if tag=='CHK':
-                ind = X[tag_name] < 0
-                X.loc[ind,tag_name] = 0
+                X=negative_values_to_zero(X, tag_name)
         for tag in Y_tags:
             col=name+'_'+tag
-            Y[col]=data[col+'_'+type]
+            Y[col]=data[col+'_'+DATA_TYPE]
     for tag in X_GJOA_tags:
         col = 'GJOA' + '_' + tag
-        X[col] = data[col + '_' + type]
+        X[col] = data[col + '_' + DATA_TYPE]
     for tag in Y_GJOA_tags:
         col = 'GJOA' + '_' + tag
-        Y[col] = data[col + '_' + type]
-    #Y['GJOA_SEP_1_QOIL'][Y['GJOA_SEP_1_QOIL']>0]=0
+        Y[col] = data[col + '_' + DATA_TYPE]
 
 
     return X,Y
 
 
-def plot_together(X,Y,tags):
-    i=1
-    for tag in tags:
-        plt.subplot(2, 1, i)
-        i+=1
-        plt.scatter(np.arange(0, len(Y)), Y[tag],color='black')
-        plt.xlabel('Time')
-        plt.ylabel(tag)
-        plt.title(tag)
-    plt.show()
-def plot_test(X,Y):
-    # _,(ax1,ax2,ax3,ax4,ax5)=plt.subplots(8,1,sharex=True)
-    _, axes = plt.subplots(4, 2, sharex=True)
+def calculate_sum_multiphase(Y):
+    tags_OIL = []
+    tags_GAS = []
+    for key in well_names:
+        name_oil = key + '_' + 'QOIL'
+        name_qgas = key + '_' + 'QGAS'
+        tags_OIL.append(name_oil)
+        tags_GAS.append(name_qgas)
 
-    # cols=['CHK']
-    #plt.figure()
-    axes=axes.flatten()
-    for ax, tag in zip(axes, well_names):
-        name = tag + '_' + 'PBH'
-        #plt.plot(X[name])
-        plt.plot(X[name],label=name)
-        #ax.set_title(name)
+    sum_oil = Y[tags_OIL].sum(axis=1)
+    sum_gas = Y[tags_GAS].sum(axis=1)
 
-    #axes[-1].plot(Y['GJOA_TOTAL_QOIL'])
-    #axes[-1].set_title('GJOA_TOTAL_QOIL')
+    return sum_oil,sum_gas
+
+
+
+
+
+def test_bed(X,Y,sum_gas,sum_oil):
+    #pass
+    # plt.figure()
+    # plt.scatter(X['time'], Y['GJOA_TOTAL_QGAS_DEPRECATED'], color='blue',label='GJOA_TOTAL_QGAS_DEPRECATED')
+    # plt.scatter(X['time'], Y['GJOA_SEP_1_QGAS'], color='red',label='GJOA_SEP_1_QGAS')
+    # plt.legend()
+    # plt.plot(Y['GJOA_QGAS']-sum_oil,color='red')
+    # plt.plot(sum_oil,color='blue')
+    # plt.show()
+
+    #plt.scatter(X['time'], sum_gas-Y['GJOA_OIL_QGAS'], color='blue', label='sum_gas - GJOA_OIL_QGAS')
+    plt.scatter(X['time'], Y['GJOA_OIL_QGAS'], color='blue', label='GJOA_OIL_QGAS')
+    plt.scatter(X['time'], sum_gas, color='black', label='Sum oil wells QGAS ')
+    plt.xlabel('time')
+    plt.ylabel('QGAS sm3/h')
     plt.legend()
-    plt.figure()
-    plt.plot(Y['GJOA_TOTAL_QGAS_DEPRECATED'])
+    plt.show()
+    # Y=Y[~ind]
+    # X=X[~ind]
+    # Y['GJOA_QGAS'] = Y['GJOA_QGAS'] #- np.mean(Y['GJOA_QGAS'] - sum_oil)
+    i=1
+    for tag in well_names:
+        #plt.figure()
+        name=tag+'_'+'PDC'
+        fig,axes=plt.subplots(2,1,sharex=True)
+        #plt.subplot(2,1,1)
+        i+=1
+        axes[0].plot(X[name])
+        axes[0].set_title(name)
+        name = tag + '_' + 'CHK'
+        #plt.subplot(2, 1, 2)
+        i += 1
+        axes[1].plot(X[name])
+        axes[1].set_title(name)
+    plt.show()
+    plot_input_to_total(X, Y, 'TOTAL_SUM_QOIL', well_names)
+    plot_input_to_well(X, Y, 'QOIL', well_names)
     plt.show()
 
-def plot_input_to_well(X,Y):
-    cols=['CHK','PDC','PWH','PBH']
-    out_ending='QOIL'
-    for tag in well_names:
-        i=1
-        plt.figure()
-        for col in cols:
-            name_input=tag+'_'+col
-            name_output=tag+'_'+out_ending
-            plt.subplot(2,2,i)
-            i+=1
-            plt.scatter(X[name_input],Y[name_output],color='black')
-            plt.title(name_input)
-            plt.xlabel(name_input)
-            plt.ylabel(name_output)
-    plt.show()
-def plot_input_to_total(X,Y):
-    cols=['CHK','PDC','PWH','PBH']
-    out_ending='TOTAL_QOIL_SUM'
-    for tag in well_names:
-        i=1
-        plt.figure()
-        for col in cols:
-            name_input=tag+'_'+col
-            name_output='GJOA'+'_'+out_ending
-            plt.subplot(2,2,i)
-            i+=1
-            plt.scatter(X[name_input],Y[name_output],color='black')
-            plt.title(name_input)
-            plt.xlabel(name_input)
-            plt.ylabel(name_output)
-    plt.show()

@@ -55,7 +55,7 @@ class NN_BASE:
         #self.debug(X_dict,Y_dict,True)
 
         self.model.fit(X_dict, Y_dict, nb_epoch=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
-                       callbacks=self.callbacks,shuffle=True,validation_data=(X_val_dict,Y_val_dict))
+                       callbacks=self.callbacks,shuffle=False,validation_data=(X_val_dict,Y_val_dict))
 
         #print(self.model.get_weights())
 
@@ -135,20 +135,21 @@ class NN_BASE:
         return s
 
     def initialize_chk_thresholds(self,data,scaled=True):
-        col_length=len(data.X_transformed.columns)
-        #self.SCALE=data.Y_SCALE
-        if scaled:
-            thresh_transformed=[self.chk_threshold_value/data.get_scale(type='CHK') for i in range(col_length)]#data.transform([[self.chk_threshold_value for i in range(col_length)]],'X')
-        else:
-            thresh_transformed=[[self.chk_threshold_value for i in range(col_length)]]
-        self.chk_thresh_val=thresh_transformed[0]
-        for key,tag_list in self.input_tags.items():
-            #print(thresh_transformed)
-            tag=find_tag_that_ends_with(tag_list,'CHK')
-            #tag=key+'_CHK'
-            if tag:
-                chk_index=data.X_transformed.columns.get_loc(tag)
-                self.chk_thresholds[key]=thresh_transformed[chk_index]
+
+        chk_cols=[]
+        for tag in self.well_names:
+            chk_cols.append(tag+'_'+'CHK')
+
+        print(self.chk_threshold_value * np.ones((len(chk_cols),)))
+        print(chk_cols)
+        chk_threshold_data=pd.DataFrame(data=self.chk_threshold_value*np.ones((1,len(chk_cols))),columns=chk_cols)
+        print(chk_threshold_data.shape)
+        thresh_transformed=data.transform(chk_threshold_data)
+        print(thresh_transformed)
+        for col in thresh_transformed.columns:
+            key=col.split('_')[0]
+            self.chk_thresholds[key]=thresh_transformed[col][0]
+
 
 
 

@@ -17,6 +17,7 @@ class SSNET2(NN_BASE):
         self.model_name='NCNET2-QGAS'
         self.SCALE=100
 
+        self.output_layer_activation = 'linear'
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 2
@@ -28,7 +29,7 @@ class SSNET2(NN_BASE):
         #Training config
         self.optimizer = 'adam' #SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 5000 #15000
+        self.nb_epoch = 2000 #15000
         self.batch_size = 64
         self.verbose = 0
 
@@ -39,12 +40,6 @@ class SSNET2(NN_BASE):
             'E1_out': ['E1_QGAS'],
             'GJOA_QGAS': ['GJOA_QGAS']
         }
-        #self.input_tags = {
-        #    'F1': ['F1_CHK','F1_PDC','F1_PWH'],#,'F1_PBH'],
-        #    'B2': ['B2_CHK','B2_PDC','B2_PWH'],#,'B2_PBH'],
-        #    'D3': ['D3_CHK','D3_PDC','D3_PWH'],#,'D3_PBH'],
-        #    'E1': ['E1_CHK','E1_PDC','E1_PWH']#,'E1_PBH']
-        #}
         self.well_names=['F1','B2','D3','E1']
 
         self.input_tags={}
@@ -81,8 +76,8 @@ class SSNET2(NN_BASE):
                 temp_output = add_layers(input_layer, n_depth, n_width, l2_weight)
 
         if thresholded_output:
-            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight))(temp_output)
-            output_layer = Activation(abs)(output_layer)
+            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(temp_output)
+            output_layer = Activation(self.output_layer_activation)(output_layer)
             # output_layer = Dense(1,init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight),bias=True)(temp_output)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:
@@ -116,3 +111,15 @@ class SSNET2(NN_BASE):
             inputs+=self.aux_inputs
         self.model = Model(input=inputs, output=self.merged_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
+    def update_model(self):
+        self.nb_epoch=10000
+        self.output_layer_activation='relu'
+        self.aux_inputs=[]
+        self.inputs=[]
+        self.merged_outputs=[]
+        self.outputs=[]
+
+        old_model=self.model
+        self.initialize_model()
+        weights=old_model.get_weights()
+        self.model.set_weights(weights)

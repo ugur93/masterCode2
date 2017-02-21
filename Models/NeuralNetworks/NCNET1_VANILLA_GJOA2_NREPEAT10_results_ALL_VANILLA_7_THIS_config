@@ -1,0 +1,47 @@
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+MAIN_INPUT: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+GJOA_OIL_QGAS: 0
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: False 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x000000001530EA90>, <Models.NeuralNetworks.base.EpochVerbose object at 0x000000001542A2B0>, <keras.callbacks.EarlyStopping object at 0x00000000156FFBA8>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+MAIN_INPUT: ['C1_CHK', 'C1_PDC', 'C1_PWH', 'C1_PBH', 'C2_CHK', 'C2_PDC', 'C2_PWH', 'C3_CHK', 'C3_PDC', 'C3_PWH', 'C3_PBH', 'C4_CHK', 'C4_PDC', 'C4_PWH', 'C4_PBH', 'B3_CHK', 'B3_PDC', 'B3_PWH', 'B3_PBH', 'B1_CHK', 'B1_PDC', 'B1_PWH', 'B1_PBH', 'D1_CHK', 'D1_PDC', 'D1_PWH']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+TOTAL_OUT: ['GJOA_OIL_QGAS']
+-------------------------------------------------
+-------------------------------------------------
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+GJOA_OIL_QGAS: 8909.75        GJOA_OIL_QGAS: 10023.27       GJOA_OIL_QGAS: 3.70%                    GJOA_OIL_QGAS: 271029.92
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+GJOA_OIL_QGAS: 0.98           GJOA_OIL_QGAS: 0.96
+-------------------------------------------------------
+#### ------ #### 
+
+ NREPEAT: 10
