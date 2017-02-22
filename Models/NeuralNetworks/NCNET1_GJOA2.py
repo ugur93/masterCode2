@@ -3,7 +3,7 @@ from .base import *
 from .base_class import NN_BASE
 
 import keras.backend as K
-
+K.set_image_dim_ordering('th')
 #GOOD
 
 #incept 3
@@ -15,6 +15,7 @@ import keras.backend as K
 def abs(x):
     return K.abs(x)
 class NCNET1_GJOA2(NN_BASE):
+
 
 
     def __init__(self):
@@ -47,7 +48,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.input_tags = {}
         self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']#
-        tags = ['CHK']#,'PBH','PWH','PDC']
+        tags = ['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name] = []
             for tag in tags:
@@ -162,6 +163,7 @@ class NCNET1_GJOA2(NN_BASE):
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
 
         input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
+        #temp_output=BatchNormalization()(input_layer)
         temp_output=GaussianNoise(0.01)(input_layer)
         # temp_output=Dropout(0.1)(input_layer)
 
@@ -179,16 +181,16 @@ class NCNET1_GJOA2(NN_BASE):
                 temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
                 temp_output = Convolution1D(64, 2, border_mode='same', activation='relu')(temp_output)
                 temp_output = Convolution1D(64, 2, border_mode='same', activation='relu')(temp_output)
+                #temp_output = AveragePooling1D(pool_length=1)(temp_output)
                 temp_output = MaxPooling1D(pool_length=1)(temp_output)
-                #
-                #temp_output = MaxPooling1D(pool_length=1)(temp_output)
                 temp_output = Dropout(0.05)(temp_output)
                 temp_output = Flatten()(temp_output)
+
 
         if thresholded_output:
             #output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(
             #    temp_output)
-            output_layer = Dense(1,init=INIT,activation=self.output_layer_activation,W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(temp_output)
+            output_layer = Dense(1,init=INIT,activation=self.output_layer_activation,W_regularizer=l2(l2_weight),bias=True)(temp_output)
             #output_layer = MaxoutDense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True)(temp_output)
             #output_layer=Activation('relu')(output_layer)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)

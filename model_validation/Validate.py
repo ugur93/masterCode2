@@ -37,17 +37,17 @@ def validate_train_test_split(Data):
     #model = NN1.SSNET1()
 
     #GJOA_QOIL
-    model=NCNET1_GJOA2.NCNET1_GJOA2()
+    #model=NCNET1_GJOA2.NCNET1_GJOA2()
     #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
-    #model=CNN_test.CNN_GJOAOIL()
+    model=CNN_test.CNN_GJOAOIL()
 
 
 
     model.initialize_chk_thresholds(Data, True)
     #print(model.model.get_config())
     model.fit(X_train,Y_train,X_val,Y_val)
-    model.update_model()
-    model.fit(X_train, Y_train, X_val, Y_val)
+    #model.update_model()
+    #model.fit(X_train, Y_train, X_val, Y_val)
     #X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
     #
     #model.fit(X_train, Y_train, X_val, Y_val)

@@ -20,7 +20,7 @@ class CNN_GJOAOIL(NN_BASE):
         self.optimizer = 'adam'#SGD(momentum=0.5,nesterov=True)
         self.loss = 'mse'
         self.nb_epoch = 10000
-        self.batch_size = 1000
+        self.batch_size = 64
         self.verbose = 0
 
         #Model config
@@ -39,7 +39,7 @@ class CNN_GJOAOIL(NN_BASE):
 
         self.input_tags = {}
         self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']#
-        tags = ['CHK','PDC']#,'PBH','PWH','PDC']
+        tags = ['CHK']#,'PBH','PWH','PDC']
         self.input_tags['Main_input'] = []
         for name in self.well_names:
             for tag in tags:
@@ -52,7 +52,7 @@ class CNN_GJOAOIL(NN_BASE):
 
 
 
-        pressure_tags=['PWH']
+        pressure_tags=['PDC']
         pressure_outputs=[]
         for name in self.well_names:
             for tag in pressure_tags:
@@ -110,19 +110,24 @@ class CNN_GJOAOIL(NN_BASE):
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
 
-        input=Input(shape=(len(self.input_tags['Main_input']),),dtype='float32',name='Main_input')
+        input=Input(shape=(1,len(self.input_tags['Main_input'])),dtype='float32',name='Main_input')
         #main_model=GaussianNoise(0.001)(input)
-        main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(input)
+        #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(input)
         #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-
-        main_model=Convolution1D(64,2,border_mode='same',activation='relu')(main_model)
-        main_model = MaxPooling1D(pool_length=1)(main_model)
+        main_model=Convolution1D(124,2,border_mode='same',activation='relu')(input)
+        #main_model = Dropout(0.01)(main_model)
+        main_model = Convolution1D(124, 2, border_mode='same', activation='relu')(main_model)
+        #main_model = Dropout(0.01)(main_model)
+        main_model = Convolution1D(124, 2, border_mode='same', activation='relu')(main_model)
+        #main_model = MaxPooling1D(pool_length=1)(main_model)
         #main_model = Dropout(0.1)(main_model)
         #main_model = Convolution1D(64, 2, border_mode='same', activation='relu')(main_model)
         #main_model = MaxPooling1D(pool_length=1)(main_model)
         #main_model = Convolution1D(64, 2, border_mode='same', activation='relu')(main_model)
         #main_model = MaxPooling1D(pool_length=1)(main_model)
         main_model = Dropout(0.01)(main_model)
+
+        main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
         #main_model = Convolution1D(32, 3, border_mode='same', activation='relu')(main_model)
         #main_model=MaxPooling1D(pool_length=1)(main_model)
         #main_model=Dropout(0.1)(main_model)
