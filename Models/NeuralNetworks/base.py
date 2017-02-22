@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Merge, Input, merge,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise
+from keras.layers import Dense, Activation, Merge, Input, merge,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten
 from keras.models import Model
 try:
     from keras.utils.visualize_util import plot
@@ -98,6 +98,7 @@ def add_OnOff_state_input(X,X_dict,thresholds):
     new_X=X_dict.copy()
     for key in thresholds:
         OnOff_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
+        OnOff_X=OnOff_X.reshape((len(OnOff_X),1))
         new_X.update({'OnOff_'+key:OnOff_X})
     return new_X
 

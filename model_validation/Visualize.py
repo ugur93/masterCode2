@@ -4,7 +4,7 @@ import numpy as np
 
 OUTPUT_COLS_ON_SINGLE_PLOT=['GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM','GJOA_OIL_QGAS']
 
-N_PLOT_SUB=1
+N_PLOT_SUB=0
 
 
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
@@ -137,11 +137,12 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
 
     zero_chk_param = (False, 'name', 0)
     i = 0
+    print(N_PLOTS)
     fig, axes = plt.subplots(sp_y, sp_x)
     if N_PLOTS > 1:
         axes = axes.flatten()
-        if N_PLOTS!=sp_x*sp_y:
-            fig.delaxes(axes[-1])
+        #if N_PLOTS!=sp_x*sp_y:
+        #    fig.delaxes(axes[-1])
     for output_tag in output_cols:
         if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
             fig, ax = plt.subplots(1, 1)
@@ -167,6 +168,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
 
     i = 0
     fig_sub, axes = plt.subplots(sp_y, sp_x)
+    print(len(axes))
     if N_PLOTS>1:
         axes = axes.flatten()
         if N_PLOTS!=sp_y*sp_x:

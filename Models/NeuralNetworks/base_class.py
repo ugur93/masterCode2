@@ -39,8 +39,16 @@ class NN_BASE:
             X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
         if len(Y)>0:
             Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
+            #Y_dict['MAIN_OUT'] = Y_dict['MAIN_OUT'].reshape(Y_dict['MAIN_OUT'].shape[0],
+            #                                                    Y_dict['MAIN_OUT'].shape[1])
         else:
             Y_dict=[]
+        for key in X_dict.keys():
+            #print(X_dict[key].shape,key)
+            if key.split('_')[0]!='OnOff':
+                X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
+        #X_dict['Main_input']=X_dict['Main_input'].reshape(X_dict['Main_input'].shape[0],1,X_dict['Main_input'].shape[1])
+
         return X_dict,Y_dict
 
     def fit(self, X, Y,X_val,Y_val):

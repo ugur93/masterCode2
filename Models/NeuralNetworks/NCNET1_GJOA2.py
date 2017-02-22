@@ -36,7 +36,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         #Input module config
         self.n_inception =0
-        self.n_depth = 2
+        self.n_depth = 1
         self.n_depth_incept=1
         self.n_width_incept=20
         self.n_width = 20
@@ -47,7 +47,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.input_tags = {}
         self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']#
-        tags = ['CHK','PBH','PWH','PDC']
+        tags = ['CHK']#,'PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name] = []
             for tag in tags:
@@ -161,7 +161,7 @@ class NCNET1_GJOA2(NN_BASE):
 
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
 
-        input_layer = Input(shape=(n_input,), dtype='float32', name=name)
+        input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
         temp_output=GaussianNoise(0.01)(input_layer)
         # temp_output=Dropout(0.1)(input_layer)
 
@@ -172,10 +172,18 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = add_layers(input_layer, 1, n_width, l2_weight)
                 temp_output = generate_inception_module(input_layer, n_inception, self.n_depth_incept, self.n_width_incept, l2_weight)
                 temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
+
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
                 temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
+                temp_output = Convolution1D(64, 2, border_mode='same', activation='relu')(temp_output)
+                temp_output = Convolution1D(64, 2, border_mode='same', activation='relu')(temp_output)
+                temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                #
+                #temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                temp_output = Dropout(0.05)(temp_output)
+                temp_output = Flatten()(temp_output)
 
         if thresholded_output:
             #output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(

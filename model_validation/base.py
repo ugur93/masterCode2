@@ -19,6 +19,8 @@ def get_train_test_val_data(Data,test_size,val_size):
     X = Data.X_transformed
     Y = Data.Y_transformed
 
+    #X=X.reshape(1,X.shape[0],X.shape[1])
+    #Y = Y.reshape(1, Y.shape[0], Y.shape[1])
     # X, Y = remove_chk_zeros(X, Y, 'B2')
     X, X_test, Y, Y_test = train_test_split(X, Y, test_size=test_size)
     X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=val_size)
