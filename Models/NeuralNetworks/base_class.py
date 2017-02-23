@@ -89,29 +89,46 @@ class NN_BASE:
         return self.model.get_layer(layer_name).get_weights()
 
     def save_model_to_file(self,name,scores,save_weights=True):
-        PATH='./Models/NeuralNetworks/model_figures'
+        PATH='./Models/NeuralNetworks/SavedModels/'
         if save_weights:
             self.model.save(PATH+name+'.h5')
         else:
             json_model=self.model.to_json()
             print(json_model)
 
-        #Save config:
-        f=open(PATH+name+'_config','w')
+
+
+        #plotModel(self.model,name)
+    def save_model_config(self,scores):
+        PATH='./Models/NeuralNetworks/ConfigFiles2/'
+        # Save config:
+
+        f_file_number=open(PATH+'file_number.txt','r+')
+        file_data=f_file_number.read().splitlines()
+        print(file_data)
+        i,s=find_next_file_number(self.model_name,file_data)
+        f_file_number.seek(0)
+        f_file_number.write(s)
+        f_file_number.truncate()
+        f_file_number.close()
+
+        f = open(PATH + self.model_name + '_config_'+str(i), 'w')
         f.write(self.get_config())
         f.write('\n')
         f.write(scores)
         f.close()
-
-        #plotModel(self.model,name)
-
     def get_config(self):
 
         def tags_to_bulleted_list(s,tags):
             for key in tags:
                 s+=key+': '+str(tags[key])+'\n'
             return s
-        s= '----------------------------------- \n'
+
+        s='########### LAYER CONFIG ###########'
+        sub_network_names, sub_network_config = self.get_layer_config()
+        s+=layer_config_to_string(sub_network_names, sub_network_config)
+        s+='\n\n'
+        s+= '----------------------------------- \n'
         s+= '##### CHK thresholds ##### \n'
         s += '----------------------------------- \n'
         s=tags_to_bulleted_list(s,self.chk_thresholds)
@@ -221,3 +238,38 @@ class NN_BASE:
             score_test_r2.append(metrics.r2_score(Y_test[col][ind_test], self.predict(X_test[ind_test],col), multioutput='raw_values'))
             score_train_r2.append(metrics.r2_score(Y_train[col][ind_train], self.predict(X_train[ind_train],col), multioutput='raw_values'))
         return score_train_MSE, score_test_MSE, score_train_r2, score_test_r2
+
+    def get_layer_config(self):
+
+        def find_layer_name_index(lst,layer_name):
+            indexes=[]
+            for sub in lst:
+                for name in sub:
+                    if name==layer_name:
+                        indexes.append(lst.index(sub))
+            return indexes
+
+        layers=self.model.get_config()['layers']
+        n_layers=len(layers)
+        sub_network_config=[]
+        sub_network_names=[]
+
+        for input_layer in self.model.get_config()['input_layers']:
+            sub_network_names.append([input_layer[0]])
+            sub_network_config.append([input_layer[0]])
+
+        for i in range(1,n_layers):
+
+            for name_list in layers[i]['inbound_nodes']:
+                for inbounds in name_list:
+                    name_inbound=inbounds[0]
+                    name=layers[i]['name']
+                    #print(i,name,name_inbound)
+                    indexes=find_layer_name_index(sub_network_names,name_inbound)
+
+                    for k in indexes:
+                        sub_network_names[k].append(name)
+                        sub_network_config[k].append(layers[i]['config'])
+
+
+        return sub_network_names,sub_network_config

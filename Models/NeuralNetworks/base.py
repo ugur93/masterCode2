@@ -156,3 +156,42 @@ def tags_to_list(tags):
 def ends_with(tag,endings):
 
     return tag.split('_')[-1] in endings
+
+
+def layer_config_to_string(sub_network_names,sub_network_config):
+    s=' '
+    for i in range(len(sub_network_names)):
+        s+='\n\n'
+        s+=names_to_arrowed_string(sub_network_names[i])
+        s+='\n'
+        s+=str(sub_network_config[i])
+    return s
+
+def names_to_arrowed_string(network_names):
+    s=network_names[0]
+    for i in range(1,len(network_names)):
+        s+=' -> '+network_names[i]
+    return s
+
+def find_next_file_number(model_name,file_data):
+
+    next_index='-1'
+    print(file_data)
+    for line in file_data:
+        name,index=line.split(':')
+        print(name,model_name)
+        if name==model_name:
+            next_index=int(index)+1
+            new_line=model_name+': '+str(next_index)
+            old_line_index=file_data.index(line)
+            file_data[old_line_index]=new_line
+            break
+    if next_index=='-1':
+        new_line=model_name+': 1'
+        file_data.append(new_line)
+        next_index=1
+    s=''
+    for line in file_data:
+        s+=line+'\n'
+
+    return next_index,s

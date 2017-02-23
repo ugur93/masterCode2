@@ -35,6 +35,8 @@ def evaluate_model(model,data,X_train,X_test,Y_train,Y_test):
 
     return print_scores(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols)
 def print_scores(data,Y_train,Y_test,score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols):
+
+    #Treig og daarlig kode, fiks paa dette!!!!!!!!!
     n_empty_space=30
     def print_empty_space(s,n_empty_space):
         for k in range(n_empty_space):
@@ -77,7 +79,6 @@ def print_scores(data,Y_train,Y_test,score_train_MSE, score_test_MSE, score_trai
     s = scores_to_tabbed_string(s, score_train_r2,score_test_r2, cols)
     s += '-------------------------------------------------------\n'
     s+='#### ------ #### \n'
-    print(s)
     return s
 
 

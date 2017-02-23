@@ -58,6 +58,7 @@ def validate_train_test_split(Data):
     #EVAL
     scores = evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
     print(scores)
+    model.save_model_config(scores)
     #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
 
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
