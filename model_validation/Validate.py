@@ -37,17 +37,17 @@ def validate_train_test_split(Data):
     #model = NN1.SSNET1()
 
     #GJOA_QOIL
-    #model=NCNET1_GJOA2.NCNET1_GJOA2()
+    model=NCNET1_GJOA2.NCNET1_GJOA2()
     #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
-    model=CNN_test.CNN_GJOAOIL()
+    #model=CNN_test.CNN_GJOAOIL()
 
 
 
     model.initialize_chk_thresholds(Data, True)
     #print(model.model.get_config())
     model.fit(X_train,Y_train,X_val,Y_val)
-    #model.update_model()
-    #model.fit(X_train, Y_train, X_val, Y_val)
+    model.update_model()
+    model.fit(X_train, Y_train, X_val, Y_val)
     #X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
     #
     #model.fit(X_train, Y_train, X_val, Y_val)
@@ -62,11 +62,11 @@ def validate_train_test_split(Data):
     #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
 
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
-    #output_cols =['C1_QOIL', 'C2_QOIL','C3_QOIL', 'C4_QOIL', 'B1_QOIL','B3_QOIL', 'D1_QOIL', 'GJOA_TOTAL_QOIL_SUM']
-    output_cols=['C1_QGAS', 'C2_QGAS','C3_QGAS', 'C4_QGAS', 'B1_QGAS','B3_QGAS', 'D1_QGAS', 'GJOA_OIL_QGAS']
+    output_cols =['C1_QOIL', 'C2_QOIL','C3_QOIL', 'C4_QOIL', 'B1_QOIL','B3_QOIL', 'D1_QOIL', 'GJOA_TOTAL_SUM_QOIL']
+    #output_cols=['C1_QGAS', 'C2_QGAS','C3_QGAS', 'C4_QGAS', 'B1_QGAS','B3_QGAS', 'D1_QGAS', 'GJOA_OIL_QGAS']
     #output_cols=['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']
     #output_cols= ['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
-    output_cols=[]
+    #output_cols=[]
     visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=output_cols, input_cols=input_cols)
     #plt.pause(0.5)
     #model.update_model()

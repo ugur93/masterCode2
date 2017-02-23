@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Merge, Input, merge,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,AveragePooling1D
+from keras.layers import Dense, Activation, Merge, Input, merge,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
 try:
     from keras.utils.visualize_util import plot
@@ -36,6 +36,7 @@ def add_layers(input_layer,n_depth,n_width,l2_weight):
     output_layer=Dense(n_width, activation='relu',init=INIT, W_regularizer=l2(l2_weight),bias=True)(input_layer)
     for i in range(n_depth-1):
         #output_layer = BatchNormalization()(output_layer)
+        #output_layer = GaussianNoise(0.05)(output_layer)
         output_layer = Dense(n_width, activation='relu', init=INIT, W_regularizer=l2(l2_weight),bias=True)(output_layer)
     #output_layer = BatchNormalization()(output_layer)
     return output_layer

@@ -36,7 +36,11 @@ def fetch_gjoa_data():
     Y['GJOA_OIL_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']+np.ones((len(Y),))*5000
     Y['GJOA_TOTAL_SUM_QOIL']=sum_oil
     Y['GJOA_OIL_SUM_QGAS'] = sum_gas
+    Y = add_choke_delta(Y)
+    Y = add_well_delta(Y)
 
+    X = add_choke_delta(X)
+    X = add_well_delta(X)
     for col in Y.columns:
         print(col)
 
@@ -136,3 +140,11 @@ def test_bed(X,Y,sum_gas,sum_oil):
     plot_input_to_well(X, Y, 'QOIL', well_names)
     plt.show()
 
+def add_choke_delta(Y):
+    for name in well_names:
+        Y[name+'_c_delta']=Y[name+'_PWH']-Y[name+'_PDC']
+    return Y
+def add_well_delta(Y):
+    for name in well_names:
+        Y[name+'_w_delta']=Y[name+'_PBH']-Y[name+'_PWH']
+    return Y

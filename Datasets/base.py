@@ -86,7 +86,7 @@ class CustomTransformer:
                      'QWAT':100
                      }
 
-        self.tags={'PRESSURES2':['PBH','PWH'],
+        self.tags={'PRESSURES2':['PBH','PWH','delta'],
                    'PRESSURES':['PDC'],
                    'QGAS':['QGAS','DEPRECATED'],
                    'CHK':['CHK','time'],

@@ -1,0 +1,75 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> gaussiannoise_1 -> convolution1d_1 -> maxpooling1d_1 -> dense_1 -> flatten_1 -> MAIN_OUT
+['Main_input', {'name': 'gaussiannoise_1', 'sigma': 0.01, 'trainable': True}, {'activity_regularizer': None, 'bias': True, 'trainable': True, 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'border_mode': 'same', 'init': 'glorot_uniform', 'input_length': None, 'name': 'convolution1d_1', 'subsample_length': 1, 'activation': 'relu', 'b_constraint': None, 'filter_length': 2, 'b_regularizer': None, 'input_dim': None, 'nb_filter': 32, 'W_constraint': None}, {'stride': 1, 'pool_length': 1, 'name': 'maxpooling1d_1', 'border_mode': 'valid', 'trainable': True}, {'activity_regularizer': None, 'bias': True, 'trainable': True, 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'init': 'glorot_uniform', 'name': 'dense_1', 'input_dim': 32, 'activation': 'relu', 'output_dim': 20, 'b_constraint': None, 'b_regularizer': None, 'W_constraint': None}, {'name': 'flatten_1', 'trainable': True}, {'activity_regularizer': None, 'bias': True, 'trainable': True, 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'init': 'glorot_uniform', 'name': 'MAIN_OUT', 'input_dim': 20, 'activation': 'linear', 'output_dim': 7, 'b_constraint': None, 'b_regularizer': None, 'W_constraint': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C2: 0.05
+D1: 0.05
+B3: 0.05
+C3: 0.05
+C1: 0.05
+C4: 0.05
+B1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+B1_c_delta: 4
+C1_c_delta: 0
+D1_c_delta: 6
+B3_c_delta: 5
+C4_c_delta: 3
+C2_c_delta: 1
+C3_c_delta: 2
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x7efdce6603c8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x7efdce640160>, <keras.callbacks.EarlyStopping object at 0x7efdce660d68>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+Main_input: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+MAIN_OUT: ['C1_c_delta', 'C2_c_delta', 'C3_c_delta', 'C4_c_delta', 'B1_c_delta', 'B3_c_delta', 'D1_c_delta']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_c_delta: 10.44             C1_c_delta: 8.57              C1_c_delta: 15.19%                      C1_c_delta: 56.44
+C2_c_delta: 8.89              C2_c_delta: 9.14              C2_c_delta: 17.13%                      C2_c_delta: 53.39
+C3_c_delta: 9.18              C3_c_delta: 8.45              C3_c_delta: 15.40%                      C3_c_delta: 54.90
+C4_c_delta: 8.52              C4_c_delta: 8.24              C4_c_delta: 14.05%                      C4_c_delta: 58.67
+B1_c_delta: 8.56              B1_c_delta: 8.50              B1_c_delta: 26.65%                      B1_c_delta: 31.90
+B3_c_delta: 7.16              B3_c_delta: 8.22              B3_c_delta: 12.24%                      B3_c_delta: 67.14
+D1_c_delta: 8.38              D1_c_delta: 8.38              D1_c_delta: 14.28%                      D1_c_delta: 58.72
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_c_delta: 0.21              C1_c_delta: -0.14
+C2_c_delta: 0.28              C2_c_delta: -0.40
+C3_c_delta: 0.24              C3_c_delta: -0.23
+C4_c_delta: 0.29              C4_c_delta: -0.21
+B1_c_delta: 0.55              B1_c_delta: -0.03
+B3_c_delta: 0.26              B3_c_delta: -0.59
+D1_c_delta: 0.28              D1_c_delta: -0.24
+-------------------------------------------------------
+#### ------ #### 

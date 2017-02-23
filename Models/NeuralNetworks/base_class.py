@@ -47,6 +47,7 @@ class NN_BASE:
             #print(X_dict[key].shape,key)
             if key.split('_')[0]!='OnOff':
                 X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
+                #print(X_dict[key].shape)
         #X_dict['Main_input']=X_dict['Main_input'].reshape(X_dict['Main_input'].shape[0],1,X_dict['Main_input'].shape[1])
 
         return X_dict,Y_dict
