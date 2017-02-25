@@ -1,0 +1,123 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> dense_1 -> dense_2 -> convolution1d_1 -> dense_3 -> convolution1d_2 -> convolution1d_3 -> maxpooling1d_1 -> convolution1d_4 -> flatten_1 -> maxpooling1d_2 -> PDC_out -> flatten_2 -> PWH_out -> merge_1 -> c_delta_out -> c_delta_out
+['Main_input', {'activation': 'relu', 'output_dim': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'dense_1', 'W_constraint': None, 'bias': True, 'b_regularizer': None, 'input_dim': 7, 'b_constraint': None, 'activity_regularizer': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999974752427e-07, 'l1': 0.0}}, {'activation': 'relu', 'output_dim': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'dense_2', 'W_constraint': None, 'bias': True, 'b_regularizer': None, 'input_dim': 7, 'b_constraint': None, 'activity_regularizer': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999974752427e-07, 'l1': 0.0}}, {'activation': 'relu', 'subsample_length': 1, 'W_regularizer': None, 'nb_filter': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'convolution1d_1', 'b_constraint': None, 'input_length': None, 'b_regularizer': None, 'border_mode': 'same', 'filter_length': 4, 'input_dim': None, 'bias': True, 'W_constraint': None, 'activity_regularizer': None}, {'activation': 'relu', 'output_dim': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'dense_3', 'W_constraint': None, 'bias': True, 'b_regularizer': None, 'input_dim': 20, 'b_constraint': None, 'activity_regularizer': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999974752427e-07, 'l1': 0.0}}, {'activation': 'relu', 'subsample_length': 1, 'W_regularizer': None, 'nb_filter': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'convolution1d_2', 'b_constraint': None, 'input_length': None, 'b_regularizer': None, 'border_mode': 'same', 'filter_length': 4, 'input_dim': None, 'bias': True, 'W_constraint': None, 'activity_regularizer': None}, {'activation': 'relu', 'subsample_length': 1, 'W_regularizer': None, 'nb_filter': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'convolution1d_3', 'b_constraint': None, 'input_length': None, 'b_regularizer': None, 'border_mode': 'same', 'filter_length': 4, 'input_dim': None, 'bias': True, 'W_constraint': None, 'activity_regularizer': None}, {'trainable': True, 'name': 'maxpooling1d_1', 'border_mode': 'valid', 'pool_length': 1, 'stride': 1}, {'activation': 'relu', 'subsample_length': 1, 'W_regularizer': None, 'nb_filter': 20, 'init': 'glorot_uniform', 'trainable': True, 'name': 'convolution1d_4', 'b_constraint': None, 'input_length': None, 'b_regularizer': None, 'border_mode': 'same', 'filter_length': 4, 'input_dim': None, 'bias': True, 'W_constraint': None, 'activity_regularizer': None}, {'trainable': True, 'name': 'flatten_1'}, {'trainable': True, 'name': 'maxpooling1d_2', 'border_mode': 'valid', 'pool_length': 1, 'stride': 1}, {'activation': 'linear', 'output_dim': 7, 'init': 'glorot_uniform', 'trainable': True, 'name': 'PDC_out', 'W_constraint': None, 'bias': True, 'b_regularizer': None, 'input_dim': 20, 'b_constraint': None, 'activity_regularizer': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999974752427e-07, 'l1': 0.0}}, {'trainable': True, 'name': 'flatten_2'}, {'activation': 'linear', 'output_dim': 7, 'init': 'glorot_uniform', 'trainable': True, 'name': 'PWH_out', 'W_constraint': None, 'bias': True, 'b_regularizer': None, 'input_dim': 20, 'b_constraint': None, 'activity_regularizer': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999974752427e-07, 'l1': 0.0}}, {'mode_type': 'raw', 'output_shape_type': 'raw', 'output_shape': None, 'mode': 'mul', 'arguments': {}, 'name': 'merge_1', 'concat_axis': -1, 'output_mask_type': 'raw', 'dot_axes': -1, 'output_mask': None}, {'mode_type': 'raw', 'output_shape_type': 'raw', 'output_shape': None, 'mode': 'sum', 'arguments': {}, 'name': 'c_delta_out', 'concat_axis': -1, 'output_mask_type': 'raw', 'dot_axes': -1, 'output_mask': None}, {'mode_type': 'raw', 'output_shape_type': 'raw', 'output_shape': None, 'mode': 'sum', 'arguments': {}, 'name': 'c_delta_out', 'concat_axis': -1, 'output_mask_type': 'raw', 'dot_axes': -1, 'output_mask': None}]
+
+aux_input -> merge_1 -> c_delta_out
+['aux_input', {'mode_type': 'raw', 'output_shape_type': 'raw', 'output_shape': None, 'mode': 'mul', 'arguments': {}, 'name': 'merge_1', 'concat_axis': -1, 'output_mask_type': 'raw', 'dot_axes': -1, 'output_mask': None}, {'mode_type': 'raw', 'output_shape_type': 'raw', 'output_shape': None, 'mode': 'sum', 'arguments': {}, 'name': 'c_delta_out', 'concat_axis': -1, 'output_mask_type': 'raw', 'dot_axes': -1, 'output_mask': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+D1: 0.05
+C3: 0.05
+C1: 0.05
+B3: 0.05
+C2: 0.05
+C4: 0.05
+B1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C2_c_delta: 15
+B3_PWH: 12
+C3_PDC: 2
+D1_c_delta: 20
+C1_PDC: 0
+C4_PWH: 10
+B3_c_delta: 19
+C4_c_delta: 17
+D1_PWH: 13
+C1_PWH: 7
+C4_PDC: 3
+C3_c_delta: 16
+C3_PWH: 9
+B1_PDC: 4
+B1_PWH: 11
+C2_PWH: 8
+D1_PDC: 6
+C1_c_delta: 14
+B1_c_delta: 18
+C2_PDC: 1
+B3_PDC: 5
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 1e-06 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 1000 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x7f8c7fcf7eb8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x7f8c7fc969b0>, <keras.callbacks.EarlyStopping object at 0x7f8c7fc966a0>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+Main_input: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+aux_input: ['C1_minus', 'C2_minus', 'C3_minus', 'C4_minus', 'B1_minus', 'B3_minus', 'D1_minus']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+PWH_out: ['C1_PWH', 'C2_PWH', 'C3_PWH', 'C4_PWH', 'B1_PWH', 'B3_PWH', 'D1_PWH']
+PDC_out: ['C1_PDC', 'C2_PDC', 'C3_PDC', 'C4_PDC', 'B1_PDC', 'B3_PDC', 'D1_PDC']
+c_delta_out: ['C1_c_delta', 'C2_c_delta', 'C3_c_delta', 'C4_c_delta', 'B1_c_delta', 'B3_c_delta', 'D1_c_delta']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_PDC: 3.65                  C1_PDC: 13.34                 C1_PDC: 20.19%                          C1_PDC: 66.06
+C2_PDC: 3.71                  C2_PDC: 13.53                 C2_PDC: 20.48%                          C2_PDC: 66.04
+C3_PDC: 3.68                  C3_PDC: 13.20                 C3_PDC: 19.96%                          C3_PDC: 66.14
+C4_PDC: 3.70                  C4_PDC: 13.08                 C4_PDC: 19.73%                          C4_PDC: 66.27
+B1_PDC: 4.07                  B1_PDC: 13.49                 B1_PDC: 20.50%                          B1_PDC: 65.79
+B3_PDC: 3.71                  B3_PDC: 13.36                 B3_PDC: 20.36%                          B3_PDC: 65.60
+D1_PDC: 3.66                  D1_PDC: 13.37                 D1_PDC: 20.19%                          D1_PDC: 66.20
+C1_PWH: 8.53                  C1_PWH: 10.52                 C1_PWH: 8.62%                           C1_PWH: 122.05
+C2_PWH: 7.20                  C2_PWH: 9.94                  C2_PWH: 8.34%                           C2_PWH: 119.16
+C3_PWH: 7.46                  C3_PWH: 10.88                 C3_PWH: 9.03%                           C3_PWH: 120.58
+C4_PWH: 7.18                  C4_PWH: 10.77                 C4_PWH: 8.63%                           C4_PWH: 124.80
+B1_PWH: 7.77                  B1_PWH: 14.56                 B1_PWH: 14.93%                          B1_PWH: 97.50
+B3_PWH: 5.66                  B3_PWH: 8.93                  B3_PWH: 6.73%                           B3_PWH: 132.74
+D1_PWH: 6.75                  D1_PWH: 10.41                 D1_PWH: 8.34%                           D1_PWH: 124.84
+C1_c_delta: 9.64              C1_c_delta: 10.25             C1_c_delta: 18.16%                      C1_c_delta: 56.44
+C2_c_delta: 8.21              C2_c_delta: 10.78             C2_c_delta: 20.20%                      C2_c_delta: 53.39
+C3_c_delta: 8.38              C3_c_delta: 9.60              C3_c_delta: 17.50%                      C3_c_delta: 54.90
+C4_c_delta: 7.94              C4_c_delta: 9.65              C4_c_delta: 16.44%                      C4_c_delta: 58.67
+B1_c_delta: 7.66              B1_c_delta: 9.58              B1_c_delta: 30.04%                      B1_c_delta: 31.90
+B3_c_delta: 6.74              B3_c_delta: 9.33              B3_c_delta: 13.89%                      B3_c_delta: 67.14
+D1_c_delta: 7.88              D1_c_delta: 9.68              D1_c_delta: 16.48%                      D1_c_delta: 58.72
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_PDC: 0.53                  C1_PDC: -4.60
+C2_PDC: 0.51                  C2_PDC: -4.75
+C3_PDC: 0.52                  C3_PDC: -4.51
+C4_PDC: 0.52                  C4_PDC: -4.40
+B1_PDC: 0.47                  B1_PDC: -4.91
+B3_PDC: 0.51                  B3_PDC: -4.58
+D1_PDC: 0.53                  D1_PDC: -4.68
+C1_PWH: 0.30                  C1_PWH: -1.74
+C2_PWH: 0.34                  C2_PWH: -1.64
+C3_PWH: 0.34                  C3_PWH: -2.07
+C4_PWH: 0.33                  C4_PWH: -2.26
+B1_PWH: 0.57                  B1_PWH: -4.54
+B3_PWH: 0.34                  B3_PWH: -2.33
+D1_PWH: 0.32                  D1_PWH: -1.99
+C1_c_delta: 0.33              C1_c_delta: -0.63
+C2_c_delta: 0.39              C2_c_delta: -0.95
+C3_c_delta: 0.36              C3_c_delta: -0.59
+C4_c_delta: 0.38              C4_c_delta: -0.66
+B1_c_delta: 0.64              B1_c_delta: -0.30
+B3_c_delta: 0.35              B3_c_delta: -1.05
+D1_c_delta: 0.36              D1_c_delta: -0.65
+-------------------------------------------------------
+#### ------ #### 

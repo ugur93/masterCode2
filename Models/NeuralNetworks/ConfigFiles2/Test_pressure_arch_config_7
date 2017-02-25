@@ -1,0 +1,69 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> gaussiannoise_1 -> dense_1 -> dense_6 -> dense_2 -> dense_7 -> dense_3 -> dense_8 -> dense_4 -> dense_9 -> dense_5 -> dense_10 -> PBH_out -> PWH_out
+['Main_input', {'trainable': True, 'name': 'gaussiannoise_1', 'sigma': 0.01}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 7, 'b_regularizer': None, 'name': 'dense_1', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 7, 'b_regularizer': None, 'name': 'dense_6', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_2', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_7', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_3', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_8', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_4', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 100, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'relu', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_9', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 1, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'linear', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_5', 'init': 'glorot_uniform'}, {'trainable': True, 'output_dim': 1, 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'W_constraint': None, 'activation': 'linear', 'activity_regularizer': None, 'bias': True, 'b_constraint': None, 'input_dim': 100, 'b_regularizer': None, 'name': 'dense_10', 'init': 'glorot_uniform'}, {'arguments': {}, 'output_shape_type': 'raw', 'mode_type': 'raw', 'mode': 'mul', 'concat_axis': -1, 'dot_axes': -1, 'output_mask': None, 'name': 'PBH_out', 'output_shape': None, 'output_mask_type': 'raw'}, {'arguments': {}, 'output_shape_type': 'raw', 'mode_type': 'raw', 'mode': 'mul', 'concat_axis': -1, 'dot_axes': -1, 'output_mask': None, 'name': 'PWH_out', 'output_shape': None, 'output_mask_type': 'raw'}]
+
+aux_pbh -> PBH_out
+['aux_pbh', {'arguments': {}, 'output_shape_type': 'raw', 'mode_type': 'raw', 'mode': 'mul', 'concat_axis': -1, 'dot_axes': -1, 'output_mask': None, 'name': 'PBH_out', 'output_shape': None, 'output_mask_type': 'raw'}]
+
+aux_pwh -> PWH_out
+['aux_pwh', {'arguments': {}, 'output_shape_type': 'raw', 'mode_type': 'raw', 'mode': 'mul', 'concat_axis': -1, 'dot_axes': -1, 'output_mask': None, 'name': 'PWH_out', 'output_shape': None, 'output_mask_type': 'raw'}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+B3: 0.05
+C1: 0.05
+C4: 0.05
+C2: 0.05
+D1: 0.05
+C3: 0.05
+B1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C3_PWH: 1
+C3_PBH: 0
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 100 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x7f691d42c860>, <Models.NeuralNetworks.base.EpochVerbose object at 0x7f691d42cf60>, <keras.callbacks.EarlyStopping object at 0x7f691d42c320>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+aux_pwh: ['C3_CHK_zero']
+Main_input: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+aux_pbh: ['C3_CHK_zero']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+PBH_out: ['C3_PBH']
+PWH_out: ['C3_PWH']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C3_PBH: 1.95                  C3_PBH: 5.38                  C3_PBH: 3.21%                           C3_PBH: 167.60
+C3_PWH: 1.84                  C3_PWH: 5.04                  C3_PWH: 4.18%                           C3_PWH: 120.52
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C3_PBH: 1.00                  C3_PBH: 0.96
+C3_PWH: 1.00                  C3_PWH: 0.93
+-------------------------------------------------------
+#### ------ #### 

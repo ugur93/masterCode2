@@ -9,7 +9,7 @@ N_PLOT_SUB=0
 
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
 
-    remove_zero_chk=False
+    remove_zero_chk=True
 
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
@@ -72,6 +72,7 @@ def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_ta
     if remove_zero_chk[0] and remove_zero_chk[1]!='GJOA':
         ind_train = X_train[remove_zero_chk[1] + '_CHK'] > remove_zero_chk[-1]
         ind_test = X_test[remove_zero_chk[1]+ '_CHK'] > remove_zero_chk[-1]
+
         X_train=X_train[ind_train]
         X_test=X_test[ind_test]
         Y_train = Y_train[ind_train]
@@ -102,8 +103,10 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
     fig = fig_par[0]
 
     if remove_zero_chk[0] and remove_zero_chk[1]!='GJOA':
+
         ind_train = X_train[remove_zero_chk[1] + '_CHK'] > remove_zero_chk[-1]
         ind_test = X_test[remove_zero_chk[1]+ '_CHK'] > remove_zero_chk[-1]
+
         X_train=X_train[ind_train]
         X_test=X_test[ind_test]
         Y_train = Y_train[ind_train]
@@ -152,6 +155,7 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
 
         if remove_zero_chk:
             zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
+            print(model.get_chk_threshold())
 
         ax = get_residual_plot((fig, ax), model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
 
@@ -185,6 +189,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
         fig_par = (fig, ax)
         if remove_zero_chk:
             zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
+            print(zero_chk_param)
 
 
         ax=get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)

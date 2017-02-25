@@ -31,18 +31,33 @@ def fetch_gjoa_data():
     X.drop(X.index[[808, 173]], inplace=True)
     Y.drop(Y.index[[808, 173]], inplace=True)
 
-    sum_oil,sum_gas=calculate_sum_multiphase(Y)
 
-    Y['GJOA_OIL_QGAS']=Y['GJOA_TOTAL_QGAS_DEPRECATED']-Y['GJOA_SEP_1_QGAS']+np.ones((len(Y),))*5000
-    Y['GJOA_TOTAL_SUM_QOIL']=sum_oil
-    Y['GJOA_OIL_SUM_QGAS'] = sum_gas
     Y = add_choke_delta(Y)
     Y = add_well_delta(Y)
 
     X = add_choke_delta(X)
     X = add_well_delta(X)
-    for col in Y.columns:
-        print(col)
+    for key in well_names:
+        ind_zero = X[key + '_CHK'] < 5
+        print(key)
+        print(np.sum(ind_zero))
+        X[key + '_PWH'][ind_zero] = 0
+        X[key + '_PBH'][ind_zero] = 0
+        X[key + '_PDC'][ind_zero] = 0
+        Y[key + '_PWH'][ind_zero] = 0
+        Y[key + '_PBH'][ind_zero] = 0
+        Y[key + '_PDC'][ind_zero] = 0
+
+        Y[key + '_QOIL'][ind_zero]=0
+
+        X[key + '_CHK_zero'] = np.array([0 if x <= 5 else 1 for x in X[key + '_CHK']])
+    #plt.plot(Y['C4' + '_QOIL'])
+    #plt.show()
+    sum_oil, sum_gas = calculate_sum_multiphase(Y)
+
+    Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS'] + np.ones((len(Y),)) * 5000
+    Y['GJOA_TOTAL_SUM_QOIL'] = sum_oil
+    Y['GJOA_OIL_SUM_QGAS'] = sum_gas
 
     X['time'] = np.arange(0, len(X))
 

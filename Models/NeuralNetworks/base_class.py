@@ -45,8 +45,8 @@ class NN_BASE:
             Y_dict=[]
         for key in X_dict.keys():
             #print(X_dict[key].shape,key)
-            if key.split('_')[0]!='OnOff':
-                X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
+            if key.split('_')[0]!='OnOff' and key.split('_')[0]!='aux':
+                   X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
                 #print(X_dict[key].shape)
         #X_dict['Main_input']=X_dict['Main_input'].reshape(X_dict['Main_input'].shape[0],1,X_dict['Main_input'].shape[1])
 
@@ -172,6 +172,7 @@ class NN_BASE:
         print(chk_threshold_data.shape)
         thresh_transformed=data.transform(chk_threshold_data)
         print(thresh_transformed)
+        self.chk_thresh_val=np.min(thresh_transformed.values)
         for col in thresh_transformed.columns:
             key=col.split('_')[0]
             self.chk_thresholds[key]=thresh_transformed[col][0]

@@ -1,0 +1,130 @@
+########### LAYER CONFIG ########### 
+
+C1 -> gaussiannoise_2 -> flatten_5 -> dense_9 -> dense_10 -> dense_11 -> C1_out -> GJOA_TOTAL
+['C1', {'trainable': True, 'name': 'gaussiannoise_2', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_5'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_9', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 4, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_10', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_11', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C1_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+C2 -> gaussiannoise_3 -> flatten_6 -> dense_12 -> dense_13 -> dense_14 -> C2_out -> GJOA_TOTAL
+['C2', {'trainable': True, 'name': 'gaussiannoise_3', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_6'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_12', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 3, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_13', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_14', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C2_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+C3 -> gaussiannoise_4 -> flatten_7 -> dense_15 -> dense_16 -> dense_17 -> C3_out -> GJOA_TOTAL
+['C3', {'trainable': True, 'name': 'gaussiannoise_4', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_7'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_15', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 4, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_16', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_17', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C3_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+C4 -> gaussiannoise_5 -> flatten_8 -> dense_18 -> dense_19 -> dense_20 -> C4_out -> GJOA_TOTAL
+['C4', {'trainable': True, 'name': 'gaussiannoise_5', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_8'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_18', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 4, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_19', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_20', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C4_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+B1 -> gaussiannoise_6 -> flatten_9 -> dense_21 -> dense_22 -> dense_23 -> B1_out -> GJOA_TOTAL
+['B1', {'trainable': True, 'name': 'gaussiannoise_6', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_9'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_21', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 4, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_22', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_23', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'B1_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+B3 -> gaussiannoise_7 -> flatten_10 -> dense_24 -> dense_25 -> dense_26 -> B3_out -> GJOA_TOTAL
+['B3', {'trainable': True, 'name': 'gaussiannoise_7', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_10'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_24', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 4, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_25', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_26', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'B3_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+D1 -> gaussiannoise_8 -> flatten_11 -> dense_27 -> dense_28 -> dense_29 -> D1_out -> GJOA_TOTAL
+['D1', {'trainable': True, 'name': 'gaussiannoise_8', 'sigma': 0.01}, {'trainable': True, 'name': 'flatten_11'}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_27', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 3, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 20, 'b_regularizer': None, 'bias': True, 'name': 'dense_28', 'activity_regularizer': None, 'activation': 'relu', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'output_dim': 1, 'b_regularizer': None, 'bias': True, 'name': 'dense_29', 'activity_regularizer': None, 'activation': 'linear', 'W_constraint': None, 'trainable': True, 'input_dim': 20, 'init': 'glorot_uniform', 'W_regularizer': {'l1': 0.0, 'l2': 9.999999747378752e-05, 'name': 'L1L2Regularizer'}, 'b_constraint': None}, {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'D1_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_C1 -> C1_out -> GJOA_TOTAL
+['OnOff_C1', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C1_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_C2 -> C2_out -> GJOA_TOTAL
+['OnOff_C2', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C2_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_C3 -> C3_out -> GJOA_TOTAL
+['OnOff_C3', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C3_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_C4 -> C4_out -> GJOA_TOTAL
+['OnOff_C4', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'C4_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_B1 -> B1_out -> GJOA_TOTAL
+['OnOff_B1', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'B1_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_B3 -> B3_out -> GJOA_TOTAL
+['OnOff_B3', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'B3_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+OnOff_D1 -> D1_out -> GJOA_TOTAL
+['OnOff_D1', {'mode_type': 'raw', 'mode': 'mul', 'dot_axes': -1, 'name': 'D1_out', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}, {'mode_type': 'raw', 'mode': 'sum', 'dot_axes': -1, 'name': 'GJOA_TOTAL', 'output_mask': None, 'concat_axis': -1, 'arguments': {}, 'output_shape_type': 'raw', 'output_mask_type': 'raw', 'output_shape': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C3: 0.05
+B3: 0.05
+D1: 0.05
+C4: 0.05
+C1: 0.05
+C2: 0.05
+B1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+D1_QOIL: 6
+C2_QOIL: 1
+C4_QOIL: 3
+C3_QOIL: 2
+B3_QOIL: 5
+GJOA_TOTAL_SUM_QOIL: 7
+C1_QOIL: 0
+B1_QOIL: 4
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 1000 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x7fb0c4f1a588>, <Models.NeuralNetworks.base.EpochVerbose object at 0x7fb0c4f29940>, <keras.callbacks.EarlyStopping object at 0x7fb0c504a898>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+C3: ['C3_CHK', 'C3_PBH', 'C3_PDC', 'C3_PWH']
+B3: ['B3_CHK', 'B3_PBH', 'B3_PDC', 'B3_PWH']
+D1: ['D1_CHK', 'D1_PDC', 'D1_PWH']
+C4: ['C4_CHK', 'C4_PBH', 'C4_PDC', 'C4_PWH']
+C1: ['C1_CHK', 'C1_PBH', 'C1_PDC', 'C1_PWH']
+C2: ['C2_CHK', 'C2_PDC', 'C2_PWH']
+B1: ['B1_CHK', 'B1_PBH', 'B1_PDC', 'B1_PWH']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+C2_out: ['C2_QOIL']
+B1_out: ['B1_QOIL']
+C3_out: ['C3_QOIL']
+GJOA_TOTAL: ['GJOA_TOTAL_SUM_QOIL']
+C4_out: ['C4_QOIL']
+D1_out: ['D1_QOIL']
+B3_out: ['B3_QOIL']
+C1_out: ['C1_QOIL']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_QOIL: 3.92                 C1_QOIL: 3.23                 C1_QOIL: 16.21%                         C1_QOIL: 19.92
+C2_QOIL: 15.57                C2_QOIL: 18.97                C2_QOIL: 115.44%                        C2_QOIL: 16.43
+C3_QOIL: 17.91                C3_QOIL: 10.18                C3_QOIL: 54.80%                         C3_QOIL: 18.58
+C4_QOIL: 32.23                C4_QOIL: 27.74                C4_QOIL: 157.45%                        C4_QOIL: 17.62
+B1_QOIL: 6.29                 B1_QOIL: 5.92                 B1_QOIL: 27.88%                         B1_QOIL: 21.23
+B3_QOIL: 5.54                 B3_QOIL: 4.63                 B3_QOIL: 41.87%                         B3_QOIL: 11.07
+D1_QOIL: 4.74                 D1_QOIL: 7.04                 D1_QOIL: 40.47%                         D1_QOIL: 17.39
+GJOA_TOTAL_SUM_QOIL: 5.82     GJOA_TOTAL_SUM_QOIL: 7.65     GJOA_TOTAL_SUM_QOIL: 6.45%              GJOA_TOTAL_SUM_QOIL: 118.57
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_QOIL: 0.50                 C1_QOIL: 0.15
+C2_QOIL: -8.77                C2_QOIL: -50.44
+C3_QOIL: -10.68               C3_QOIL: -8.15
+C4_QOIL: -39.83               C4_QOIL: -94.79
+B1_QOIL: 0.44                 B1_QOIL: -0.43
+B3_QOIL: -1.39                B3_QOIL: -1.74
+D1_QOIL: 0.03                 D1_QOIL: -2.01
+GJOA_TOTAL_SUM_QOIL: 0.97     GJOA_TOTAL_SUM_QOIL: 0.86
+-------------------------------------------------------
+#### ------ #### 

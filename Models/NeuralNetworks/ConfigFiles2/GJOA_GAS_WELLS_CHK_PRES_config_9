@@ -1,0 +1,84 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> gaussiannoise_1 -> dense_1 -> dense_4 -> dense_7 -> dense_10 -> dense_2 -> dense_5 -> dense_8 -> dense_11 -> dense_3 -> dense_6 -> dense_9 -> dense_12 -> F1_out -> B2_out -> D3_out -> E1_out
+['Main_input', {'sigma': 0.01, 'trainable': True, 'name': 'gaussiannoise_1'}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_1', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 4}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_4', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 4}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_7', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 4}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_10', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 4}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_2', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_5', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_8', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'relu', 'name': 'dense_11', 'trainable': True, 'bias': True, 'output_dim': 20, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'linear', 'name': 'dense_3', 'trainable': True, 'bias': True, 'output_dim': 1, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'linear', 'name': 'dense_6', 'trainable': True, 'bias': True, 'output_dim': 1, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'linear', 'name': 'dense_9', 'trainable': True, 'bias': True, 'output_dim': 1, 'init': 'glorot_uniform', 'input_dim': 20}, {'b_constraint': None, 'W_regularizer': {'name': 'L1L2Regularizer', 'l2': 9.999999747378752e-05, 'l1': 0.0}, 'activity_regularizer': None, 'b_regularizer': None, 'W_constraint': None, 'activation': 'linear', 'name': 'dense_12', 'trainable': True, 'bias': True, 'output_dim': 1, 'init': 'glorot_uniform', 'input_dim': 20}, {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'F1_out', 'output_mask_type': 'raw'}, {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'B2_out', 'output_mask_type': 'raw'}, {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'D3_out', 'output_mask_type': 'raw'}, {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'E1_out', 'output_mask_type': 'raw'}]
+
+aux_F1_pbh -> F1_out
+['aux_F1_pbh', {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'F1_out', 'output_mask_type': 'raw'}]
+
+aux_B2_pbh -> B2_out
+['aux_B2_pbh', {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'B2_out', 'output_mask_type': 'raw'}]
+
+aux_D3_pbh -> D3_out
+['aux_D3_pbh', {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'D3_out', 'output_mask_type': 'raw'}]
+
+aux_E1_pbh -> E1_out
+['aux_E1_pbh', {'concat_axis': -1, 'output_shape_type': 'raw', 'output_mask': None, 'output_shape': None, 'arguments': {}, 'dot_axes': -1, 'mode_type': 'raw', 'mode': 'mul', 'name': 'E1_out', 'output_mask_type': 'raw'}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+F1: 0.05
+E1: 0.05
+D3: 0.05
+B2: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+F1_PDC: 0
+B2_PDC: 1
+E1_PDC: 3
+D3_PDC: 2
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: False 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0x7fe3598c1240>, <Models.NeuralNetworks.base.EpochVerbose object at 0x7fe3598d9470>, <keras.callbacks.EarlyStopping object at 0x7fe3598d9898>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+aux_F1_pbh: ['F1_CHK_zero']
+aux_D3_pbh: ['D3_CHK_zero']
+aux_pwh: []
+aux_E1_pbh: ['E1_CHK_zero']
+aux_pbh: []
+Main_input: ['F1_CHK', 'B2_CHK', 'D3_CHK', 'E1_CHK']
+aux_B2_pbh: ['B2_CHK_zero']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+E1_out: ['E1_PDC']
+D3_out: ['D3_PDC']
+B2_out: ['B2_PDC']
+F1_out: ['F1_PDC']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+F1_PDC: 1.21                  F1_PDC: 2.63                  F1_PDC: 3.22%                           F1_PDC: 81.79
+B2_PDC: 0.71                  B2_PDC: 2.96                  B2_PDC: 3.85%                           B2_PDC: 76.91
+D3_PDC: 0.75                  D3_PDC: 2.76                  D3_PDC: 3.57%                           D3_PDC: 77.30
+E1_PDC: 1.38                  E1_PDC: 4.52                  E1_PDC: 5.53%                           E1_PDC: 81.85
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+F1_PDC: 1.00                  F1_PDC: 0.99
+B2_PDC: 1.00                  B2_PDC: 0.99
+D3_PDC: 1.00                  D3_PDC: 0.99
+E1_PDC: 1.00                  E1_PDC: 0.95
+-------------------------------------------------------
+#### ------ #### 

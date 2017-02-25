@@ -1,7 +1,7 @@
 
 import Models.NeuralNetworks.NET1 as NN1
 import Models.NeuralNetworks.NN_external as NNE
-from Models.NeuralNetworks import NET2_PRESSURE,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2,CNN_test
+from Models.NeuralNetworks import NET2_PRESSURE,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2,CNN_test,test_model
 
 
 
@@ -31,7 +31,7 @@ def validate_train_test_split(Data):
 
 
     #GJOA QGAS
-    #model=NCNET_CHKPRES.SSNET3_PRESSURE()
+    model=NCNET_CHKPRES.SSNET3_PRESSURE()
     #model = NET2_PRESSURE.SSNET2()
     #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
     #model = NN1.SSNET1()
@@ -40,6 +40,7 @@ def validate_train_test_split(Data):
     model=NCNET1_GJOA2.NCNET1_GJOA2()
     #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
     #model=CNN_test.CNN_GJOAOIL()
+    #model = test_model.Test_model()
 
 
 
@@ -66,7 +67,7 @@ def validate_train_test_split(Data):
     #output_cols=['C1_QGAS', 'C2_QGAS','C3_QGAS', 'C4_QGAS', 'B1_QGAS','B3_QGAS', 'D1_QGAS', 'GJOA_OIL_QGAS']
     #output_cols=['F1_PWH','F1_PDC','B2_PWH','B2_PDC','D3_PWH','D3_PDC','E1_PWH','E1_PDC']
     #output_cols= ['F1_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','GJOA_QGAS']
-    #output_cols=[]
+    output_cols=[]
     visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=output_cols, input_cols=input_cols)
     #plt.pause(0.5)
     #model.update_model()

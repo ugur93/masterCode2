@@ -28,8 +28,8 @@ class NCNET1_GJOA2(NN_BASE):
         # Training config
         self.optimizer = 'adam'#SGD(momentum=0.5,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 1000
-        self.batch_size = 1000
+        self.nb_epoch = 200
+        self.batch_size = 64
         self.verbose = 0
 
         #Model config
@@ -179,13 +179,13 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
 
-                temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
-                temp_output = MaxPooling1D(pool_length=1)(temp_output)
-                temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
-                temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
+                #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
+                #temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
+                #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = AveragePooling1D(pool_length=1)(temp_output)
-                temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                #temp_output = MaxPooling1D(pool_length=1)(temp_output)
 
                 #temp_output = Dropout(0.01)(temp_output)
                 temp_output = Flatten()(temp_output)
