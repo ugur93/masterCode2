@@ -28,8 +28,8 @@ class NCNET1_GJOA2(NN_BASE):
         # Training config
         self.optimizer = 'adam'#SGD(momentum=0.5,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 200
-        self.batch_size = 64
+        self.nb_epoch = 1000
+        self.batch_size = 1000
         self.verbose = 0
 
         #Model config
@@ -48,7 +48,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.input_tags = {}
         self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']#
-        tags = ['CHK','PBH','PDC','PWH']
+        tags = ['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name] = []
             for tag in tags:
@@ -61,31 +61,44 @@ class NCNET1_GJOA2(NN_BASE):
         #self.input_tags['C1']=['C1_CHK']
         print(self.input_tags)
 
-        self.output_tags = {
-            'C1_out':['C1_QOIL'],
-            'C2_out':['C2_QOIL'],
-            'C3_out':['C3_QOIL'],
-            'C4_out':['C4_QOIL'],
-            'D1_out':['D1_QOIL'],
-            'B3_out':['B3_QOIL'],
-            'B1_out':['B1_QOIL'],
-            'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
+        OUT='GAsS'
+        if OUT=='GAS':
+            self.output_tags = {
+                #'C1_out':['C1_QOIL'],
+                #'C2_out':['C2_QOIL'],
+                #'C3_out':['C3_QOIL'],
+                #'C4_out':['C4_QOIL'],
+                #'D1_out':['D1_QOIL'],
+                #'B3_out':['B3_QOIL'],
+                #'B1_out':['B1_QOIL'],
+                #'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
 
-            #'C1_out': ['C1_QGAS'],
-            #'C2_out': ['C2_QGAS'],
-            #'C3_out': ['C3_QGAS'],
-            #'C4_out': ['C4_QGAS'],
-            #'D1_out': ['D1_QGAS'],
-            #'B3_out': ['B3_QGAS'],
-            #'B1_out': ['B1_QGAS'],
+                'C1_out': ['C1_QGAS'],
+                'C2_out': ['C2_QGAS'],
+                'C3_out': ['C3_QGAS'],
+                'C4_out': ['C4_QGAS'],
+                'D1_out': ['D1_QGAS'],
+                'B3_out': ['B3_QGAS'],
+                'B1_out': ['B1_QGAS'],
 
-            #'F1_out': ['F1_QGAS'],
-            #'B2_out': ['B2_QGAS'],
-            #'D3_out': ['D3_QGAS'],
-            #'E1_out': ['E1_QGAS'],
+                #'F1_out': ['F1_QGAS'],
+                #'B2_out': ['B2_QGAS'],
+                #'D3_out': ['D3_QGAS'],
+                #'E1_out': ['E1_QGAS'],
 
-            #'GJOA_TOTAL':['GJOA_OIL_QGAS']
-        }
+                'GJOA_TOTAL':['GJOA_OIL_QGAS']
+            }
+        else:
+            self.output_tags = {
+                 'C1_out':['C1_QOIL'],
+                 'C2_out':['C2_QOIL'],
+                 'C3_out':['C3_QOIL'],
+                 'C4_out':['C4_QOIL'],
+                 'D1_out':['D1_QOIL'],
+                 'B3_out':['B3_QOIL'],
+                 'B1_out':['B1_QOIL'],
+                 'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
+            }
         self.loss_weights = {
             'B1_out':  0.0,
             'B3_out':  0.0,
@@ -163,8 +176,8 @@ class NCNET1_GJOA2(NN_BASE):
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
-        #temp_output=BatchNormalization()(input_layer)
-        temp_output=GaussianNoise(0.01)(input_layer)
+        temp_output=BatchNormalization()(input_layer)
+        temp_output=GaussianNoise(0.01)(temp_output)
         # temp_output=Dropout(0.1)(input_layer)
 
         if n_depth == 0 and n_inception==0:
@@ -178,19 +191,23 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
-
-                #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
-                #temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
+                #temp_output = BatchNormalization()(temp_output)
+                #temp_output = UpSampling1D(2)(temp_output)
+                temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
+                #temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
+                #temp_output = UpSampling1D(10)(temp_output)
+                temp_output = MaxPooling1D(pool_length=1)(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = AveragePooling1D(pool_length=1)(temp_output)
                 #temp_output = MaxPooling1D(pool_length=1)(temp_output)
 
-                #temp_output = Dropout(0.01)(temp_output)
+                temp_output = Dropout(0.02)(temp_output)
                 temp_output = Flatten()(temp_output)
 
-                temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
+                  #
 
 
 

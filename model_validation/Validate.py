@@ -17,9 +17,13 @@ MODEL_SAVEFILE_NAME='NCNET1_2_WITHOUT_ONOFF'
 
 
 
-
+DATA_TYPE='OIL'
 def validate(DataOIL,DataGAS):
-    Data=DataOIL
+
+    if DATA_TYPE=='GAS':
+        Data=DataGAS
+    else:
+        Data=DataOIL
 
     validate_train_test_split(Data)
     #validateRepeat(Data)
@@ -27,20 +31,23 @@ def validate(DataOIL,DataGAS):
 
 def validate_train_test_split(Data):
 
+
+
     X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test=get_train_test_val_data(Data,test_size=0.1,val_size=0.2)
 
 
     #GJOA QGAS
-    model=NCNET_CHKPRES.SSNET3_PRESSURE()
-    #model = NET2_PRESSURE.SSNET2()
-    #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
-    #model = NN1.SSNET1()
-
-    #GJOA_QOIL
-    model=NCNET1_GJOA2.NCNET1_GJOA2()
-    #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
-    #model=CNN_test.CNN_GJOAOIL()
-    #model = test_model.Test_model()
+    if DATA_TYPE=='GAS':
+        model=NCNET_CHKPRES.SSNET3_PRESSURE()
+        #model = NET2_PRESSURE.SSNET2()
+        #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
+        #model = NN1.SSNET1()
+    else:
+        #GJOA_QOIL
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
+        #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
+        #model=CNN_test.CNN_GJOAOIL()
+        #model = test_model.Test_model()
 
 
 

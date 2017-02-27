@@ -1,0 +1,75 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> gaussiannoise_1 -> flatten_1 -> dense_1 -> dense_2 -> MAIN_OUT
+['Main_input', {'name': 'gaussiannoise_1', 'trainable': True, 'sigma': 0.01}, {'name': 'flatten_1', 'trainable': True}, {'name': 'dense_1', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 7}, {'name': 'dense_2', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'MAIN_OUT', 'trainable': True, 'output_dim': 7, 'init': 'glorot_uniform', 'activation': 'linear', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: 0.05
+C2: 0.05
+C3: 0.05
+C4: 0.05
+B1: 0.05
+B3: 0.05
+D1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_c_delta: 0
+C2_c_delta: 1
+C3_c_delta: 2
+C4_c_delta: 3
+B1_c_delta: 4
+B3_c_delta: 5
+D1_c_delta: 6
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0xc50e1cc>, <Models.NeuralNetworks.base.EpochVerbose object at 0x29648ec>, <keras.callbacks.EarlyStopping object at 0xc50ecac>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+Main_input: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+MAIN_OUT: ['C1_c_delta', 'C2_c_delta', 'C3_c_delta', 'C4_c_delta', 'B1_c_delta', 'B3_c_delta', 'D1_c_delta']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_c_delta: 0.52              C1_c_delta: 0.24              C1_c_delta: 3.13%                       C1_c_delta: 7.51
+C2_c_delta: 0.36              C2_c_delta: 0.22              C2_c_delta: 3.04%                       C2_c_delta: 7.32
+C3_c_delta: 0.33              C3_c_delta: 0.26              C3_c_delta: 3.52%                       C3_c_delta: 7.45
+C4_c_delta: 0.29              C4_c_delta: 0.26              C4_c_delta: 3.42%                       C4_c_delta: 7.72
+B1_c_delta: 0.69              B1_c_delta: 0.71              B1_c_delta: 12.02%                      B1_c_delta: 5.87
+B3_c_delta: 0.24              B3_c_delta: 0.15              B3_c_delta: 1.85%                       B3_c_delta: 8.19
+D1_c_delta: 0.26              D1_c_delta: 0.33              D1_c_delta: 4.35%                       D1_c_delta: 7.69
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_c_delta: 0.58              C1_c_delta: -1.74
+C2_c_delta: 0.66              C2_c_delta: -0.18
+C3_c_delta: 0.66              C3_c_delta: -0.45
+C4_c_delta: 0.71              C4_c_delta: -2.92
+B1_c_delta: 0.51              B1_c_delta: -1.94
+B3_c_delta: 0.70              B3_c_delta: -0.03
+D1_c_delta: 0.76              D1_c_delta: -0.09
+-------------------------------------------------------
+#### ------ #### 

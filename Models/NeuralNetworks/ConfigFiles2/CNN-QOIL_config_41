@@ -1,0 +1,75 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> gaussiannoise_1 -> dense_1 -> convolution1d_1 -> upsampling1d_1 -> maxpooling1d_1 -> flatten_1 -> MAIN_OUT
+['Main_input', {'name': 'gaussiannoise_1', 'trainable': True, 'sigma': 0.01}, {'name': 'dense_1', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 7}, {'name': 'convolution1d_1', 'trainable': True, 'nb_filter': 20, 'filter_length': 4, 'init': 'glorot_uniform', 'activation': 'relu', 'border_mode': 'same', 'subsample_length': 1, 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': None, 'input_length': None}, {'name': 'upsampling1d_1', 'trainable': True, 'length': 3}, {'name': 'maxpooling1d_1', 'trainable': True, 'stride': 3, 'pool_length': 3, 'border_mode': 'valid'}, {'name': 'flatten_1', 'trainable': True}, {'name': 'MAIN_OUT', 'trainable': True, 'output_dim': 7, 'init': 'glorot_uniform', 'activation': 'linear', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: 0.05
+C2: 0.05
+C3: 0.05
+C4: 0.05
+B1: 0.05
+B3: 0.05
+D1: 0.05
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_PDC: 0
+C2_PDC: 1
+C3_PDC: 2
+C4_PDC: 3
+B1_PDC: 4
+B3_PDC: 5
+D1_PDC: 6
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 1000 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0xc51ac2c>, <Models.NeuralNetworks.base.EpochVerbose object at 0xc51ad6c>, <keras.callbacks.EarlyStopping object at 0xc51a7ec>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+Main_input: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+MAIN_OUT: ['C1_PDC', 'C2_PDC', 'C3_PDC', 'C4_PDC', 'B1_PDC', 'B3_PDC', 'D1_PDC']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_PDC: 4.12                  C1_PDC: 15.19                 C1_PDC: 23.46%                          C1_PDC: 64.75
+C2_PDC: 4.11                  C2_PDC: 15.06                 C2_PDC: 23.27%                          C2_PDC: 64.74
+C3_PDC: 4.13                  C3_PDC: 15.26                 C3_PDC: 23.53%                          C3_PDC: 64.83
+C4_PDC: 4.11                  C4_PDC: 15.14                 C4_PDC: 23.30%                          C4_PDC: 64.98
+B1_PDC: 4.43                  B1_PDC: 15.28                 B1_PDC: 23.69%                          B1_PDC: 64.48
+B3_PDC: 4.16                  B3_PDC: 15.43                 B3_PDC: 24.02%                          B3_PDC: 64.27
+D1_PDC: 4.12                  D1_PDC: 15.25                 D1_PDC: 23.50%                          D1_PDC: 64.90
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_PDC: 0.45                  C1_PDC: -21.73
+C2_PDC: 0.46                  C2_PDC: -21.10
+C3_PDC: 0.45                  C3_PDC: -22.15
+C4_PDC: 0.46                  C4_PDC: -21.62
+B1_PDC: 0.41                  B1_PDC: -21.31
+B3_PDC: 0.44                  B3_PDC: -22.46
+D1_PDC: 0.46                  D1_PDC: -24.24
+-------------------------------------------------------
+#### ------ #### 

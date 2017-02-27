@@ -37,22 +37,19 @@ def fetch_gjoa_data():
 
     X = add_choke_delta(X)
     X = add_well_delta(X)
+
     for key in well_names:
         ind_zero = X[key + '_CHK'] < 5
-        print(key)
-        print(np.sum(ind_zero))
+
         X[key + '_PWH'][ind_zero] = 0
         X[key + '_PBH'][ind_zero] = 0
         X[key + '_PDC'][ind_zero] = 0
         Y[key + '_PWH'][ind_zero] = 0
         Y[key + '_PBH'][ind_zero] = 0
         Y[key + '_PDC'][ind_zero] = 0
-
         Y[key + '_QOIL'][ind_zero]=0
 
         X[key + '_CHK_zero'] = np.array([0 if x <= 5 else 1 for x in X[key + '_CHK']])
-    #plt.plot(Y['C4' + '_QOIL'])
-    #plt.show()
     sum_oil, sum_gas = calculate_sum_multiphase(Y)
 
     Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS'] + np.ones((len(Y),)) * 5000
@@ -69,6 +66,9 @@ def fetch_gjoa_data():
     print('Data size: {}'.format(len(Y)))
 
     GjoaData=DataContainer(X,Y,name='GJOA2')
+
+    #plt.plot(GjoaData.Y_transformed['GJOA_OIL_QGAS'])
+    #plt.show()
 
     return GjoaData
 

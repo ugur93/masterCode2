@@ -80,7 +80,7 @@ class CustomTransformer:
 
         self.SCALES={'PRESSURES2':100,
                      'PRESSURES':100,
-                     'QGAS':100000,
+                     'QGAS':200000,
                      'CHK':100,
                      'QOIL':100,
                      'QWAT':100
