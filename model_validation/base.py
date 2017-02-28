@@ -30,47 +30,45 @@ def get_train_test_val_data(Data,test_size,val_size):
 
 
 def evaluate_model(model,data,X_train,X_test,Y_train,Y_test):
-    score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(data, X_train, X_test,
-                                                                                          Y_train, Y_test)
+    score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(data, X_train, X_test,Y_train, Y_test)
 
-    return print_scores(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols)
+    return print_scores(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols),scores_to_latex(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols)
 def print_scores(data,Y_train,Y_test,score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols):
 
     #Treig og daarlig kode, fiks paa dette!!!!!!!!!
     n_empty_space=30
-    def print_empty_space(s,n_empty_space):
-        for k in range(n_empty_space):
-            s += ' '
+    def print_empty_space(s,n):
+        s+=' '*n
         return s
     def scores_to_tabbed_string(s,scores_train,score_test,cols,Y=[]):
         for i,col in zip(range(len(cols)),cols):
             s_temp='{0}: {1:0.2f}'.format(col,scores_train[i])
             s_len=len(s_temp)
             s_temp=print_empty_space(s_temp,n_empty_space-s_len)
-            s_temp +='{0}: {1:0.2f}'.format( col,score_test[i])
+            s_temp =''.join((s_temp,'{0}: {1:0.2f}'.format( col,score_test[i])))
             if len(Y)>0:
                 Y_MEAN=np.mean(Y[col][Y[col]>0])
                 s_temp = print_empty_space(s_temp, 2*n_empty_space - len(s_temp))
-                s_temp+='{0}: {1:0.2f}%'.format(col,score_test[i]/Y_MEAN*100)
+                s_temp=''.join((s_temp,'{0}: {1:0.2f}%'.format(col,score_test[i]/Y_MEAN*100)))
                 s_temp = print_empty_space(s_temp, 3 * n_empty_space - len(s_temp)+10)
-                s_temp += '{0}: {1:0.2f}'.format(col, Y_MEAN)
-            s_temp+='\n'
-            s+=s_temp
+                s_temp =''.join((s_temp, '{0}: {1:0.2f}'.format(col, Y_MEAN)))
+            s_temp=''.join((s_temp,'\n'))
+            s=''.join((s,s_temp))
         return s
 
 
 
     s='                 #### Scores #### \n'
-    s+='RMSE TRAIN:'
+    s=''.join((s,'RMSE TRAIN:'))
     s=print_empty_space(s,n_empty_space-len('RMSE TRAIN:'))
-    s+='RMSE VAL:'
+    s=''.join((s,'RMSE VAL:'))
     s = print_empty_space(s, n_empty_space - len('RMSE VAL:'))
-    s+='Percentage error (VAL/MEAN)*100'
+    s=''.join((s,'Percentage error (VAL/MEAN)*100'))
     s = print_empty_space(s, 10+n_empty_space - len('Percentage error (VAL/MEAN)*100'))
-    s += 'MEAN'
-    s+='\n'
+    s = ''.join((s,'MEAN'))
+    s+=''.join((s,'\n'))
     s+='------------------------------------------------------------------------------------------------------------------------\n'
-    s=scores_to_tabbed_string(s,np.sqrt(score_train_MSE),np.sqrt(score_test_MSE),cols,data.inverse_transform(pd.concat([Y_train,Y_test],axis=0)))
+    s=scores_to_tabbed_string(s,np.sqrt(score_train_MSE),np.sqrt(score_test_MSE),cols,data.inverse_transform(pd.concat([Y_train,Y_test],axis=0),'Y'))
     s += '-------------------------------------------------------\n'
     s += 'R2 TRAIN:'
     s = print_empty_space(s, n_empty_space-len('R2 TRAIN:'))
@@ -100,3 +98,59 @@ def save_to_file(filename,str):
     f = open(PATH + filename + '_config', 'w')
     f.write(str)
     f.close()
+
+def scores_to_latex(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols):
+
+        # Treig og daarlig kode, fiks paa dette!!!!!!!!!
+        n_empty_space = 30
+
+        def print_empty_space(s, n):
+            s += ' ' * (n-1)
+            s+='&'
+            return s
+
+        def scores_to_tabbed_string(s, scores_train, score_test, cols, Y=[]):
+            for i, col in zip(range(len(cols)), cols):
+                #col=col.replace('_','_')
+                s_temp = '{0}& {1:0.2f}'.format(col.replace('_','\_'), scores_train[i])
+                s_len = len(s_temp)
+                s_temp = print_empty_space(s_temp, n_empty_space - s_len)
+                s_temp = ''.join((s_temp, '{0:0.2f}'.format(score_test[i])))
+                if len(Y) > 0:
+                    Y_MEAN = np.mean(Y[col][Y[col] > 0])
+                    s_temp = print_empty_space(s_temp, 2 * n_empty_space - len(s_temp))
+                    s_temp = ''.join((s_temp, '{0:0.2f}\%'.format(score_test[i] / Y_MEAN * 100)))
+                    s_temp = print_empty_space(s_temp, 3 * n_empty_space - len(s_temp) + 10)
+                    s_temp = ''.join((s_temp, '{0:0.2f}'.format(Y_MEAN)))
+                s_temp = ''.join((s_temp, '\\\ \n'))
+                s = ''.join((s, s_temp))
+            return s
+
+        #s = '                 #### Scores #### \\\ \n'
+        s='\hline \n'
+        s = ''.join((s, 'Tag&RMSE TRAIN:'))
+
+        s = print_empty_space(s, n_empty_space - len('RMSE TRAIN:'))
+        s = ''.join((s, 'RMSE VAL:'))
+        s = print_empty_space(s, n_empty_space - len('RMSE VAL:'))
+        s = ''.join((s, 'Percentage error (VAL/MEAN)*100'))
+        s = print_empty_space(s, 10 + n_empty_space - len('Percentage error (VAL/MEAN)*100'))
+        s = ''.join((s, 'MEAN'))
+        s+='\\\\'
+        s += '\n \hline \n '
+        #s = ''.join((s, '\\\ \n'))
+        #s += '------------------------------------------------------------------------------------------------------------------------\\\ \n'
+        s = scores_to_tabbed_string(s, np.sqrt(score_train_MSE), np.sqrt(score_test_MSE), cols,
+                                    data.inverse_transform(pd.concat([Y_train, Y_test], axis=0),'Y'))
+        #s += '-------------------------------------------------------\\\ \n'
+        s += '\n \hline \n '
+        s += 'Tag&R2 TRAIN:'
+        s = print_empty_space(s, n_empty_space - len('R2 TRAIN:'))
+        s += 'R2 VAL:&\\\ '
+        s += '\n \hline \n '
+        #s += '-------------------------------------------------------\\\ \n'
+        s = scores_to_tabbed_string(s, score_train_r2, score_test_r2, cols)
+        s += '\n \hline \n '
+        #s += '-------------------------------------------------------\\\ \n'
+        #s += '#### ------ #### \\\ \n'
+        return s

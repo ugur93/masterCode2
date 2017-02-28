@@ -34,7 +34,7 @@ def test_bed(X,Y):
 
     sum_gas = Y[tags].sum(axis=1)
     plt.scatter(X['time'],sum_gas-Y['GJOA_QGAS'], color='blue')
-    #plt.plot(sum_oil,color='red')
+    #plt.plot(sum_gas,color='red')
     plt.show()
 
 

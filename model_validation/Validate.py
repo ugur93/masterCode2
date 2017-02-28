@@ -1,8 +1,8 @@
 
 import Models.NeuralNetworks.NET1 as NN1
 import Models.NeuralNetworks.NN_external as NNE
-from Models.NeuralNetworks import NET2_PRESSURE,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2,CNN_test,test_model
-
+from Models.NeuralNetworks import NET2_PRESSURE,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2,CNN_test,test_model,NCNET4_combined
+import time
 
 
 from .base import *
@@ -44,18 +44,27 @@ def validate_train_test_split(Data):
         #model = NN1.SSNET1()
     else:
         #GJOA_QOIL
-        model=NCNET1_GJOA2.NCNET1_GJOA2()
+        #pass
+        #model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
+        model = NCNET_CHKPRES.SSNET3_PRESSURE()
         #model = test_model.Test_model()
+        #model=NCNET4_combined.NET4_COMBINED()
 
 
 
     model.initialize_chk_thresholds(Data, True)
+    start=time.time()
     #print(model.model.get_config())
-    model.fit(X_train,Y_train,X_val,Y_val)
-    model.update_model()
+   # model.fit(X_train,Y_train,X_val,Y_val)
+   # model.update_model()
     model.fit(X_train, Y_train, X_val, Y_val)
+    #model.fit(X_train[], Y_train, X_val, Y_val)
+
+    end=time.time()
+
+    print('Fitted with time: {}'.format(end-start))
     #X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
     #
     #model.fit(X_train, Y_train, X_val, Y_val)
@@ -64,9 +73,10 @@ def validate_train_test_split(Data):
     #model.fit(X_train[0:155], Y_train[0:155], X_val, Y_val)
 
     #EVAL
-    scores = evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
+    scores,scores_latex = evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
     print(scores)
-    model.save_model_config(scores)
+
+    model.save_model_config(scores_latex)
     #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
 
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']
@@ -195,6 +205,16 @@ def plotTrainingHistory(model):
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     #plt.show()
+
+
+
+def grid_search(Data):
+    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
+
+
+
+
+
 
 
 

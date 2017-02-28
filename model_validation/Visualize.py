@@ -57,11 +57,11 @@ def get_suplot_dim(N_PLOTS):
 
 
 def get_train_test_scatter_plot(ax,model,data,X,Y,x_tag,y_tag,color,type):
-    ax.scatter(data.inverse_transform(X)[x_tag],
-               data.inverse_transform(Y)[y_tag], color=color[0],
+    ax.scatter(data.inverse_transform(X,'X')[x_tag],
+               data.inverse_transform(Y,'Y')[y_tag], color=color[0],
                label='true - '+type)
-    ax.scatter(data.inverse_transform(X)[x_tag],
-               data.inverse_transform(model.predict(X))[y_tag], color=color[1],
+    ax.scatter(data.inverse_transform(X,'X')[x_tag],
+               data.inverse_transform(model.predict(X),'Y')[y_tag], color=color[1],
                label='pred - '+type)
     return ax
 
@@ -78,23 +78,24 @@ def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_ta
         Y_train = Y_train[ind_train]
         Y_test = Y_test[ind_test]
 
-    ax.scatter(data.inverse_transform(X_train)[x_tag],
-                data.inverse_transform(Y_train)[y_tag], color='blue',
+    ax.scatter(data.inverse_transform(X_train,'X')[x_tag],
+                data.inverse_transform(Y_train,'Y')[y_tag], color='blue',
                 label='true - train')
-    ax.scatter(data.inverse_transform(X_train)[x_tag],
-                data.inverse_transform(model.predict(X_train))[y_tag], color='black',
+    ax.scatter(data.inverse_transform(X_train,'X')[x_tag],
+                data.inverse_transform(model.predict(X_train),'Y')[y_tag], color='black',
                 label='pred - train')
 
-    ax.scatter(data.inverse_transform(X_test)[x_tag],
-                data.inverse_transform(Y_test)[y_tag], color='red', label='true - test')
-    ax.scatter(data.inverse_transform(X_test)[x_tag],
-                data.inverse_transform(model.predict(X_test))[y_tag], color='green',
+    ax.scatter(data.inverse_transform(X_test,'X')[x_tag],
+                data.inverse_transform(Y_test,'Y')[y_tag], color='red', label='true - test')
+    ax.scatter(data.inverse_transform(X_test,'X')[x_tag],
+                data.inverse_transform(model.predict(X_test),'Y')[y_tag], color='green',
                 label= 'pred - test')
 
     ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
                ncol=2, mode="expand", borderaxespad=0.2)
     # plt.legend()
-    fig.subplots_adjust(wspace=0.08, hspace=.45, top=0.95, bottom=0.06, left=0.04, right=0.99)
+    fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
+    fig.canvas.set_window_title(model.model_name)
     return ax
 
 
@@ -113,13 +114,13 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
         Y_test = Y_test[ind_test]
 
     ax.scatter(Y_train.index,
-                data.inverse_transform(Y_train)[y_tag] - data.inverse_transform(model.predict(X_train))[
+                data.inverse_transform(Y_train,'Y')[y_tag] - data.inverse_transform(model.predict(X_train),'Y')[
                     y_tag].values,
                 color='black',
                 label='train')
 
     ax.scatter(Y_test.index,
-                data.inverse_transform(Y_test)[y_tag] - data.inverse_transform(model.predict(X_test))[
+                data.inverse_transform(Y_test,'Y')[y_tag] - data.inverse_transform(model.predict(X_test),'Y')[
                     y_tag].values,
                 color='green',
                 label='test')
@@ -127,7 +128,8 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
     ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
                ncol=2, mode="expand", borderaxespad=0.2)
 
-    fig.subplots_adjust(wspace=0.08, hspace=.45, top=0.95, bottom=0.06, left=0.04, right=0.99)
+    fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
+    fig.canvas.set_window_title(model.model_name)
     return ax
 
 
@@ -293,8 +295,8 @@ def plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_
                 ax = axes[i]
                 i += 1
                 #print(input_tag)
-                ax.scatter(data.inverse_transform(X_train)['time'], data.inverse_transform(X_train)[input_tag], color='black', label='true - train')
-                ax.scatter(data.inverse_transform(X_test)['time'], data.inverse_transform(X_test)[input_tag], color='blue', label='true - test')
+                ax.scatter(data.inverse_transform(X_train,'X')['time'], data.inverse_transform(X_train,'X')[input_tag], color='black', label='true - train')
+                ax.scatter(data.inverse_transform(X_test),'X'['time'], data.inverse_transform(X_test,'X')[input_tag], color='blue', label='true - test')
                 ax.set_title(input_tag)
                 ax.set_ylabel(input_tag)
                 ax.set_xlabel('time')

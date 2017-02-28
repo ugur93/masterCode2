@@ -70,7 +70,7 @@ class SkTransformer:
     def get_scale(self,type):
         return 100
 class CustomTransformer:
-    def __init__(self):
+    def __init__(self,remove_mean=False):
         self.PRESSURES=['PDC','PWH']
         self.PRESSURES2=['PBH']
         self.QGAS=['QGAS','DEPRECATED']
@@ -94,14 +94,16 @@ class CustomTransformer:
                    'QWAT':['QWAT']
                    }
         self.mean_normalized={}
+        self.remove_mean=remove_mean
     def transform(self,data):
         data_transformed=data.copy()
         print(data.columns[0])
         for tag in self.tags:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
             if len(cols)>0:
-                mean = self.mean_normalized[tag]
-                #data_transformed[cols]=data_transformed[cols]-mean[cols]
+                if self.remove_mean:
+                    mean = self.mean_normalized[tag]
+                    data_transformed[cols]=data_transformed[cols]-mean[cols]
                 data_transformed[cols] = data_transformed[cols] / self.SCALES[tag]
 
         return data_transformed
@@ -116,8 +118,9 @@ class CustomTransformer:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
             if len(cols) > 0:
                 data_transformed[cols] = data_transformed[cols] * self.SCALES[tag]
-                mean = self.mean_normalized[tag]
-                #data_transformed[cols] = data_transformed[cols] + mean[cols]
+                if self.remove_mean:
+                    mean = self.mean_normalized[tag]
+                    data_transformed[cols] = data_transformed[cols] + mean[cols]
         return data_transformed
 
     def fit_transform(self,data):
@@ -125,7 +128,8 @@ class CustomTransformer:
         for tag in self.tags:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
             if len(cols) > 0:
-                mean = np.mean(data_transformed[cols], axis=0)
+                mean =np.mean(data_transformed[cols][data_transformed[cols] > 5],axis=0)# np.mean(data_transformed[cols], axis=0)
+                print(mean)
                 if tag in self.mean_normalized.keys():
                     self.mean_normalized[tag]=pd.concat([self.mean_normalized[tag],mean],axis=0)
                     self.mean_normalized[tag]=self.mean_normalized[tag].drop_duplicates()
@@ -159,19 +163,26 @@ class DataContainer:
         self.X_transformed=None
         self.Y_transformed=None
 
-        self.SCALER=CustomTransformer()
+        self.SCALER_X=CustomTransformer(remove_mean=True)
+        self.SCALER_Y = CustomTransformer(remove_mean=False)
 
         self.init_transform()
 
     def init_transform(self):
-        self.X_transformed =self.SCALER.fit_transform(self.X)
-        self.Y_transformed =self.SCALER.fit_transform(self.Y)
+        self.X_transformed =self.SCALER_X.fit_transform(self.X)
+        self.Y_transformed =self.SCALER_Y.fit_transform(self.Y)
 
-    def inverse_transform(self,data):
-        return self.SCALER.inverse_transform(data)
+    def inverse_transform(self,data,scaler):
+        if scaler=='X':
+            return self.SCALER_X.inverse_transform(data)
+        else:
+            return self.SCALER_Y.inverse_transform(data)
 
-    def transform(self,data):
-        return self.SCALER.transform(data)
+    def transform(self,data,scaler):
+        if scaler=='X':
+            return self.SCALER_X.transform(data)
+        else:
+            return self.SCALER_Y.transform(data)
 
     def merge(self,data_X,data_Y):
         self.X=pd.concat([self.X,data_X.drop('time',1)],axis=1)
@@ -195,8 +206,10 @@ class DataContainer:
         s+='N_variables: '+str(self.n_cols)+'\n'
         s+='-------------------------------------\n'
         return s
-    def get_scale(self,type):
-        return self.SCALER.get_scale(type)
-
+    def get_scale(self,scaler,type):
+        if scaler=='X':
+            return self.SCALER_X.get_scale(type)
+        else:
+            return self.SCALER_Y.get_scale(type)
 
 

@@ -28,8 +28,8 @@ def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
 
     X,Y=data_to_X_Y(data)
-    X.drop(X.index[[808, 173]], inplace=True)
-    Y.drop(Y.index[[808, 173]], inplace=True)
+    X.drop(X.index[[808,807, 173]], inplace=True)
+    Y.drop(Y.index[[808, 807,173]], inplace=True)
 
 
     Y = add_choke_delta(Y)
@@ -37,7 +37,7 @@ def fetch_gjoa_data():
 
     X = add_choke_delta(X)
     X = add_well_delta(X)
-
+    X['time'] = np.arange(0, len(X))
     for key in well_names:
         ind_zero = X[key + '_CHK'] < 5
 
@@ -52,22 +52,49 @@ def fetch_gjoa_data():
         X[key + '_CHK_zero'] = np.array([0 if x <= 5 else 1 for x in X[key + '_CHK']])
     sum_oil, sum_gas = calculate_sum_multiphase(Y)
 
-    Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS'] + np.ones((len(Y),)) * 5000
+    Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS']# + np.ones((len(Y),)) * 5000
+    Y['GJOA_OIL_QGAS_OLD']=Y['GJOA_OIL_QGAS'].copy()
+
+
+    #ind_zero=Y['GJOA_OIL_QGAS']<0
+
+    #Remove bias
+    Y['GJOA_OIL_QGAS']+= np.ones((len(Y),)) * 5000
+
+    #Remove negative values
+    Y = negative_values_to_zero(Y, 'GJOA_OIL_QGAS')
+    #Y=Y[~ind_zero]
+    #X=X[~ind_zero]
+
     Y['GJOA_TOTAL_SUM_QOIL'] = sum_oil
     Y['GJOA_OIL_SUM_QGAS'] = sum_gas
 
-    X['time'] = np.arange(0, len(X))
 
-    Y=negative_values_to_zero(Y,'GJOA_OIL_QGAS')
+
+
+
+
+    if False:
+        fig,axes=plt.subplots(3,1,sharex=True)
+        axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS'], color='red')
+        axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS_OLD'], color='green')
+        axes[0].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS'], color='blue')
+        axes[1].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS_OLD'], color='blue')
+        axes[2].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS'], color='blue')
+        plt.show()
 
     #test_bed(X,Y,sum_gas,sum_oil)
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
     print('Data size: {}'.format(len(Y)))
 
-    GjoaData=DataContainer(X,Y,name='GJOA2')
 
-    #plt.plot(GjoaData.Y_transformed['GJOA_OIL_QGAS'])
+    col='B3_CHK_zero'
+    GjoaData=DataContainer(X,Y,name='GJOA2')
+    #plt.plot(GjoaData.X[col])
+    #plt.figure()
+    ind_zero=GjoaData.X[col]<5
+    #plt.plot(GjoaData.X_transformed[col])#[~ind_zero])
     #plt.show()
 
     return GjoaData

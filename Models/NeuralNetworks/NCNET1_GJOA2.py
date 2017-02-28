@@ -20,7 +20,7 @@ class NCNET1_GJOA2(NN_BASE):
 
     def __init__(self):
 
-        self.model_name='NCNET2-QOIL'
+        self.model_name='NCNET2-QOIL_OIL_ALL_mean_removed_GAUS_CONV_POOL5'
 
 
         self.output_layer_activation='linear'
@@ -56,12 +56,13 @@ class NCNET1_GJOA2(NN_BASE):
                     pass
                 else:
                     self.input_tags[name].append(name + '_' + tag)
+            #self.input_tags[name].append('GJOA_RISER_OIL_B_CHK')
         #self.input_tags['A1']=['C1_CHK','C1_PWH','C1_PDC','C1_PBH']
         #self.input_tags['B1']=['B1_CHK']
         #self.input_tags['C1']=['C1_CHK']
         print(self.input_tags)
 
-        OUT='GAsS'
+        OUT='GASs'
         if OUT=='GAS':
             self.output_tags = {
                 #'C1_out':['C1_QOIL'],
@@ -176,8 +177,10 @@ class NCNET1_GJOA2(NN_BASE):
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
+        #temp_output = GaussianNoise(0.01)(input_layer)
+        #temp_output = Flatten()(temp_output)
         temp_output=BatchNormalization()(input_layer)
-        temp_output=GaussianNoise(0.01)(temp_output)
+
         # temp_output=Dropout(0.1)(input_layer)
 
         if n_depth == 0 and n_inception==0:
@@ -191,20 +194,32 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
-                temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)
+                #temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
+                #temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
+                #temp_output = MaxPooling1D(pool_length=2)(temp_output)
+                #temp_output = Dropout(0.01)(temp_output)
+                #temp_output = Flatten()(temp_output)
+
                 #temp_output = BatchNormalization()(temp_output)
                 #temp_output = UpSampling1D(2)(temp_output)
+                temp_output = add_layers(temp_output, 2, n_width, l2_weight)
                 temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
-                #temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
-                #temp_output = UpSampling1D(10)(temp_output)
-                temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                #temp_output = BatchNormalization()(temp_output)
+                #temp_output = Convolution1D(10, 2, border_mode='full', activation='relu')(temp_output)
+                temp_output = UpSampling1D(6)(temp_output)
+                temp_output = MaxPooling1D(pool_length=6)(temp_output)
+                #temp_output = Dropout(0.01)(temp_output)
+
+                #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
+                #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
+                self.model_name='NCNET_GJOA2_OIL_CONV_BEST'
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = AveragePooling1D(pool_length=1)(temp_output)
                 #temp_output = MaxPooling1D(pool_length=1)(temp_output)
 
-                temp_output = Dropout(0.02)(temp_output)
+
                 temp_output = Flatten()(temp_output)
 
                   #

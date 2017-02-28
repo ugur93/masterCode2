@@ -73,6 +73,8 @@ class NN_BASE:
         predicted_data=self.model.predict(X_dict)
         N_output_modules=len(self.output_tags.keys())
 
+
+
         if N_output_modules>1:
             predicted_data_reshaped=np.asarray(predicted_data[0])
             for i in range(1,N_output_modules):
@@ -166,12 +168,12 @@ class NN_BASE:
         for tag in self.well_names:
             chk_cols.append(tag+'_'+'CHK')
 
-        print(self.chk_threshold_value * np.ones((len(chk_cols),)))
-        print(chk_cols)
+        #print(self.chk_threshold_value * np.ones((len(chk_cols),)))
+        #print(chk_cols)
         chk_threshold_data=pd.DataFrame(data=self.chk_threshold_value*np.ones((1,len(chk_cols))),columns=chk_cols)
-        print(chk_threshold_data.shape)
-        thresh_transformed=data.transform(chk_threshold_data)
-        print(thresh_transformed)
+        #print(chk_threshold_data.shape)
+        thresh_transformed=data.transform(chk_threshold_data,'X')
+        #print(thresh_transformed)
         self.chk_thresh_val=np.min(thresh_transformed.values)
         for col in thresh_transformed.columns:
             key=col.split('_')[0]
@@ -215,9 +217,8 @@ class NN_BASE:
     def evaluate(self,data,X_train,X_test,Y_train,Y_test):
 
         cols=self.output_tag_ordered_list
-        print(cols)
-        score_test_MSE = metrics.mean_squared_error(data.inverse_transform(Y_test)[cols], data.inverse_transform(self.predict(X_test)), multioutput='raw_values')
-        score_train_MSE = metrics.mean_squared_error(data.inverse_transform(Y_train)[cols], data.inverse_transform(self.predict(X_train)), multioutput='raw_values')
+        score_test_MSE = metrics.mean_squared_error(data.inverse_transform(Y_test,'Y')[cols], data.inverse_transform(self.predict(X_test),'Y'), multioutput='raw_values')
+        score_train_MSE = metrics.mean_squared_error(data.inverse_transform(Y_train,'Y')[cols], data.inverse_transform(self.predict(X_train),'Y'), multioutput='raw_values')
         score_test_r2 = metrics.r2_score(Y_test[cols], self.predict(X_test), multioutput='raw_values')
         score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
 
