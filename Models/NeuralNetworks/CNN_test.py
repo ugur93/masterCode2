@@ -52,7 +52,7 @@ class CNN_GJOAOIL(NN_BASE):
 
 
 
-        pressure_tags=['c_delta']
+        pressure_tags=['PWH']
         pressure_outputs=[]
         for name in self.well_names:
             for tag in pressure_tags:
@@ -83,7 +83,8 @@ class CNN_GJOAOIL(NN_BASE):
             #'B2_out': ['B2_QGAS'],
             #'D3_out': ['D3_QGAS'],
             #'E1_out': ['E1_QGAS'],
-            'MAIN_OUT':pressure_outputs
+            'MAIN_OUT':pressure_outputs,
+            'conv':['non']
             #'GJOA_TOTAL':['GJOA_OIL_QGAS']
         }
         self.loss_weights = {
@@ -100,7 +101,7 @@ class CNN_GJOAOIL(NN_BASE):
             #'A1_out':0.0,
             'MAIN_OUT': 1.0,
             #'Riser_out': 0.0,
-            'C1_out':  0.0
+            'conv':  0.0
         }
 
 
@@ -111,17 +112,20 @@ class CNN_GJOAOIL(NN_BASE):
         print('Initializing %s' % (self.model_name))
 
         input=Input(shape=(1,len(self.input_tags['Main_input'])),dtype='float32',name='Main_input')
-        main_model=GaussianNoise(0.01)(input)
+        #main_model=GaussianNoise(0.01)(input)
         #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(input)
         #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-        main_model=Convolution1D(32,2,border_mode='same',activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-        main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(
-            main_model)
-        main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(
-            main_model)
-        main_model = MaxPooling1D(pool_length=1)(main_model)
+        main_model=Convolution1D(10,10,border_mode='same',activation='linear', W_regularizer=l2(self.l2weight))(input)
+        other=Flatten()(main_model)
+        other=Dense(1,name='conv')(other)
+        #main_model=MaxPooling1D(pool_length=1)(main_model)
+        #main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(
+        #    main_model)
+        #main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(
+        #    main_model)
+        #main_model = MaxPooling1D(pool_length=1)(main_model)
         #main_model = Dropout(0.01)(main_model)
-        main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
+        #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
         #main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(main_model)
         #main_model = MaxPooling1D(pool_length=1)(main_model)
         #main_model = Dropout(0.01)(main_model)
@@ -142,10 +146,11 @@ class CNN_GJOAOIL(NN_BASE):
         #main_model = Convolution1D(32, 3, border_mode='same', activation='relu')(main_model)
         #main_model=MaxPooling1D(pool_length=1)(main_model)
         #main_model=Dropout(0.1)(main_model)
+        #main_model = Convolution1D(len(self.output_tags['MAIN_OUT']), 2, border_mode='same', activation='relu',name='MAIN_OUT')(main_model)
         main_model=Flatten()(main_model)
         #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
         main_model=Dense(len(self.output_tags['MAIN_OUT']),activation='linear',name='MAIN_OUT',W_regularizer=l2(self.l2weight))(main_model)
-        self.model = Model(input=input, output=main_model)
+        self.model = Model(input=input, output=[main_model,other])
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
 
 

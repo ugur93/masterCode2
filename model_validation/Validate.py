@@ -45,10 +45,10 @@ def validate_train_test_split(Data):
     else:
         #GJOA_QOIL
         #pass
-        #model=NCNET1_GJOA2.NCNET1_GJOA2()
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_COMBINED()
 
@@ -57,8 +57,8 @@ def validate_train_test_split(Data):
     model.initialize_chk_thresholds(Data, True)
     start=time.time()
     #print(model.model.get_config())
-    #model.fit(X_train,Y_train,X_val,Y_val)
-    #model.update_model()
+    model.fit(X_train,Y_train,X_val,Y_val)
+    model.update_model()
     model.fit(X_train, Y_train, X_val, Y_val)
     #model.fit(X_train[], Y_train, X_val, Y_val)
 
@@ -76,7 +76,7 @@ def validate_train_test_split(Data):
     scores,scores_latex = evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
     print(scores)
 
-    model.save_model_config(scores_latex)
+    #model.save_model_config(scores_latex)
     #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
 
     input_cols =[]#['F1_CHK','B2_CHK','D3_CHK','E1_CHK']

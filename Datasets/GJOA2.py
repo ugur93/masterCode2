@@ -14,7 +14,7 @@ X_tags=['CHK','PWH','PBH','PDC']
 X_GJOA_tags=['RISER_OIL_B_PDC','RISER_OIL_B_CHK','RISER_OIL_A_PDC']
 
 Y_GJOA_tags=['TOTAL_QOIL','TOTAL_QGAS_DEPRECATED','TOTAL_QWAT','SEP_1_QOIL','SEP_1_QWAT','SEP_1_WCT','SEP_1_QGAS','SEP_1_QLIQ','SEP_3_QWAT_1','SEP_2_QWAT']
-Y_tags=['QOIL','QWAT','QGAS','PDC','PWH','PBH']
+Y_tags=['QOIL','QWAT','QGAS','PDC','PWH','PBH','CHK']
 
 DATA_TYPE = 'mea'
 
@@ -38,6 +38,7 @@ def fetch_gjoa_data():
     X = add_choke_delta(X)
     X = add_well_delta(X)
     X['time'] = np.arange(0, len(X))
+    Y['non']=np.zeros((len(X),))
     for key in well_names:
         ind_zero = X[key + '_CHK'] < 5
 
@@ -75,11 +76,17 @@ def fetch_gjoa_data():
 
 
     if False:
-        fig,axes=plt.subplots(2,1,sharex=True)
-        axes[0].scatter(X['time'], Y['B1_PWH'], color='blue')
-        axes[0].set_title('C1_PWH')
-        axes[1].scatter(X['time'], X['B1_CHK'], color='blue')
-        axes[1].set_title('C1_CHK')
+        #fig,axes=plt.subplots(2,1,sharex=True)
+        #axes[0].scatter(X['time'], Y['B1_PWH'], color='blue')
+        #axes[0].set_title('C1_PWH')
+        #axes[1].scatter(X['time'], X['B1_CHK'], color='blue')
+        #axes[1].set_title('C1_CHK')
+
+        for i in range(len(well_names)):
+            plt.subplot(4,2,i+1)
+            plt.scatter(X['time'], X[well_names[i]+'_CHK'], color='black')
+            plt.title(well_names[i])
+        plt.show()
 
         #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS'], color='red')
         #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS_OLD'], color='green')

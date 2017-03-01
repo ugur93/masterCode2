@@ -9,7 +9,7 @@ def sub(inputs):
     for i in range(1, len(inputs)):
         s -= inputs[i]
     return s
-PRES='PWH'
+PRES='PBH'
 class SSNET3_PRESSURE(NN_BASE):
 
 
@@ -20,7 +20,7 @@ class SSNET3_PRESSURE(NN_BASE):
         self.optimizer = 'adam'  # SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
         self.nb_epoch = 30000
-        self.batch_size = 64
+        self.batch_size = 1000
         self.verbose = 0
 
         self.n_inputs=5
@@ -29,7 +29,7 @@ class SSNET3_PRESSURE(NN_BASE):
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = 1
-        self.n_width = 5
+        self.n_width = 20
         self.l2weight = 0.0001
         self.add_thresholded_output=False
 
@@ -41,7 +41,7 @@ class SSNET3_PRESSURE(NN_BASE):
             self.well_names=['C1','C3', 'C4','B1','B3']
         else:
             self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
-        tags=['CHK']#,'PDC','PBH','PWH']
+        tags=['CHK']#,'PBH','PWH']
 
         self.input_tags={'Main_input':[]}
         for key in self.well_names:
@@ -52,10 +52,17 @@ class SSNET3_PRESSURE(NN_BASE):
         self.n_outputs=1
 
         self.output_tags = {}
+        self.output_tags['MAIN_out']=[]
         #self.input_tags['aux_pbh'] = []
         #self.input_tags['aux_pwh'] = []
         for name in self.well_names:
-            self.output_tags[name + '_out'] = [name + '_'+PRES]
+            self.output_tags['MAIN_out'].append(name + '_'+PRES)
+
+            #self.output_tags['MAIN_out'].append(name + '_PBH')
+            #self.output_tags['MAIN_out'].append(name + '_PDC')
+            #self.output_tags['MAIN_out'].append(name + '_PWH')
+
+            #self.output_tags[name + '_out'] = [name + '_'+PRES]
             self.input_tags['aux_' + name] = [name + '_CHK_zero']
 
         super().__init__()
@@ -63,8 +70,9 @@ class SSNET3_PRESSURE(NN_BASE):
         print('Initializing %s' % (self.model_name))
 
         chk_input = Input(shape=(1,len(self.input_tags['Main_input'])), dtype='float32', name='Main_input')
-        chk_in = GaussianNoise(0.01)(chk_input)
-        #chk_in = BatchNormalization()(chk_in)
+        chk_in = BatchNormalization()(chk_input)
+        chk_in = GaussianNoise(0.01)(chk_in)
+
         #chk_input_noise=Dense(self.n_width,activation='relu',W_regularizer=l2(self.l2weight))(chk_input_noise)
         #chk_in = Flatten()(chk_input)
         # chk_input_noise=Convolution1D(20,2,activation='relu',border_mode='same')(chk_input_noise)
@@ -75,42 +83,76 @@ class SSNET3_PRESSURE(NN_BASE):
         inputs = [chk_input]
         outputs = []
 
-        for key in self.well_names:
-
+        for key in range(1):#self.well_names:
+                #sub_model = Convolution1D(20, 2, activation='relu', border_mode='same', W_regularizer=l2(0.00001))(
+                #    chk_in)
+                #sub_model = Convolution1D(5, 2, activation='relu', border_mode='same')(chk_in)
+                #sub_model = Flatten()(sub_model)
                 #sub_model = GaussianNoise(0.01)(chk_input)
-                sub_model = Convolution1D(5, 2, activation='relu', border_mode='same',W_regularizer=l2(0.00001))(chk_in)
-
-                sub_model = MaxPooling1D(pool_length=1)(sub_model)
+                #sub_model = Convolution1D(5, 2, activation='relu', border_mode='same', W_regularizer=l2(0.00001))(
+                #    chk_in)
+                #sub_model=UpSampling1D(2)(sub_model)
+                #sub_model = MaxPooling1D(pool_length=1)(sub_model)
                 #sub_model = Dropout(0.01)(sub_model)
                 #sub_model=BatchNormalization()(sub_model)
-                sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
+                #sub_model=BatchNormalization()(chk_in)
+                #sub_model = BatchNormalization()(chk_in)
+                sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(chk_in)
+
+                #sub_model = BatchNormalization()(sub_model)
                 #sub_model = Flatten()(sub_model)
-                # pdc_model = GaussianNoise(0.01)(pdc_model)
+                #sub_model = GaussianNoise(0.01)(sub_model)
                 #sub_model = BatchNormalization()(sub_model)
                 #sub_model = BatchNormalization()(sub_model)
-                #sub_model = Convolution1D(20, 2, activation='relu', border_mode='same')(sub_model)
+                #sub_model = Convolution1D(50, 2, activation='relu', border_mode='same')(sub_model)
                 #sub_model = BatchNormalization()(sub_model)
                 for i in range(1,self.n_depth):
+                    #sub_model = BatchNormalization()(sub_model)
                     sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
+                #sub_model = BatchNormalization()(sub_model)
+                #sub_model = Dense(30, activation='relu', W_regularizer=l2(self.l2weight))(chk_in)
+                #sub_model=UpSampling1D(2)(sub_model)
+               # if key in ['B3','D1']:
+                #    sub_model = Convolution1D(5, 2, activation='relu', border_mode='same',W_regularizer=l2(0.00001))(
+                #        sub_model)
+                #else:
+                #sub_model = UpSampling1D(4)(sub_model)
+                #sub_model = BatchNormalization()(sub_model)
+                sub_model = Convolution1D(20, 2 ,activation='relu', border_mode='same',W_regularizer=l2(0.00001))(
+                        sub_model)
+
+                #sub_model = Convolution1D(20, 2, activation='relu', border_mode='same', W_regularizer=l2(0.00001))(
+                #    sub_model)
+                sub_model = UpSampling1D(5)(sub_model)
+                sub_model=MaxPooling1D(pool_length=5)(sub_model)
+                #sub_model=Dropout(0.01)(sub_model)
+                #
+                #
+
                     # pdc_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(pdc_model)
-                #sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
+                #ub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 #sub_model = UpSampling1D(2)(sub_model)
                 #sub_model = BatchNormalization()(sub_model)
 
-                #sub_model = Convolution1D(20, 2, activation='relu', border_mode='same')(sub_model)
+
                 #sub_model=UpSampling1D(4)(sub_model)
+                #sub_model=MaxPooling1D(4)(sub_model)
 
                 #
                 #sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 #sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 sub_model=Flatten()(sub_model)
-                sub_model = Dense(len(self.output_tags[key + '_out']), W_regularizer=l2(self.l2weight),activation='linear')(sub_model)
-                aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',
-                                  name='aux_' + key)
-                sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
+                #sub_model = MaxoutDense(2)(sub_model)
+                #sub_model = Convolution1D(5, 2, activation='relu', border_mode='same', W_regularizer=l2(0.00001))(
+                #        sub_model)
 
-                outputs.append(sub_model_out)
-                inputs.append(aux_input)
+                #sub_model = Dense(len(self.output_tags[key + '_out']), W_regularizer=l2(self.l2weight),activation='linear')(sub_model)
+                sub_model = Dense(5, W_regularizer=l2(self.l2weight),activation='linear', name='MAIN' + '_out')(sub_model)
+                #aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
+                #sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
+
+                outputs.append(sub_model)
+                #inputs.append(aux_input)
 
         # pwh_model=Dense(self.n_width,activation='relu',W_regularizer=l2(self.l2weight))(chk_input_noise)
         # pwh_model = GaussianNoise(0.01)(pwh_model)

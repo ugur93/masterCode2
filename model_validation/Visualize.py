@@ -152,8 +152,11 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
         if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
             fig, ax = plt.subplots(1, 1)
         else:
-            ax = axes[i]
-            i += 1
+            if N_PLOTS>1:
+                ax = axes[i]
+                i += 1
+            else:
+                ax=axes
 
         if remove_zero_chk:
             zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
@@ -174,7 +177,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
 
     i = 0
     fig_sub, axes = plt.subplots(sp_y, sp_x)
-    print(len(axes))
+    #print(len(axes))
     if N_PLOTS>1:
         axes = axes.flatten()
         if N_PLOTS!=sp_y*sp_x:
@@ -184,10 +187,14 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
             fig_single,ax=plt.subplots(1,1)
             fig=fig_single
         else:
-            ax=axes[i]
-            fig=fig_sub
-            #plt.subplot(sp_x, sp_y, i)
-            i += 1
+            if N_PLOTS>1:
+                ax=axes[i]
+                fig=fig_sub
+                #plt.subplot(sp_x, sp_y, i)
+                i += 1
+            else:
+                fig=fig_sub
+                ax=axes
         fig_par = (fig, ax)
         if remove_zero_chk:
             zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
