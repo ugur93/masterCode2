@@ -177,9 +177,9 @@ class NCNET1_GJOA2(NN_BASE):
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
-        #temp_output = GaussianNoise(0.01)(input_layer)
+        temp_output = GaussianNoise(0.01)(input_layer)
         #temp_output = Flatten()(temp_output)
-        temp_output=BatchNormalization()(input_layer)
+        temp_output=BatchNormalization()(temp_output)
 
         # temp_output=Dropout(0.1)(input_layer)
 
@@ -200,15 +200,16 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = Dropout(0.01)(temp_output)
                 #temp_output = Flatten()(temp_output)
 
-                #temp_output = BatchNormalization()(temp_output)
+                #
                 #temp_output = UpSampling1D(2)(temp_output)
                 temp_output = add_layers(temp_output, 2, n_width, l2_weight)
-                temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
+                temp_output = BatchNormalization()(temp_output)
+                temp_output = Convolution1D(20, 2, border_mode='same', activation='relu')(temp_output)
                 #temp_output = BatchNormalization()(temp_output)
                 #temp_output = Convolution1D(10, 2, border_mode='full', activation='relu')(temp_output)
-                temp_output = UpSampling1D(6)(temp_output)
-                temp_output = MaxPooling1D(pool_length=6)(temp_output)
-                #temp_output = Dropout(0.01)(temp_output)
+                #temp_output = UpSampling1D(4)(temp_output)
+                temp_output = MaxPooling1D(pool_length=1)(temp_output)
+                temp_output = Dropout(0.01)(temp_output)
 
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)

@@ -9,7 +9,7 @@ def sub(inputs):
     for i in range(1, len(inputs)):
         s -= inputs[i]
     return s
-PRES='PBH'
+PRES='PWH'
 class SSNET3_PRESSURE(NN_BASE):
 
 
@@ -20,7 +20,7 @@ class SSNET3_PRESSURE(NN_BASE):
         self.optimizer = 'adam'  # SGD(momentum=0.9,nesterov=True)
         self.loss = 'mse'
         self.nb_epoch = 30000
-        self.batch_size = 1000
+        self.batch_size = 64
         self.verbose = 0
 
         self.n_inputs=5
@@ -28,8 +28,8 @@ class SSNET3_PRESSURE(NN_BASE):
         self.SCALE=100000
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 2
-        self.n_width = 20
+        self.n_depth = 1
+        self.n_width = 5
         self.l2weight = 0.0001
         self.add_thresholded_output=False
 
@@ -47,7 +47,7 @@ class SSNET3_PRESSURE(NN_BASE):
         for key in self.well_names:
             for tag in tags:
                 self.input_tags['Main_input'].append(key+'_'+tag)
-
+        #self.input_tags['Main_input'].append('GJOA_RISER_OIL_B_CHK')
         self.n_inputs = len(self.input_tags['Main_input'])
         self.n_outputs=1
 
@@ -63,9 +63,10 @@ class SSNET3_PRESSURE(NN_BASE):
         print('Initializing %s' % (self.model_name))
 
         chk_input = Input(shape=(1,len(self.input_tags['Main_input'])), dtype='float32', name='Main_input')
-
+        chk_in = GaussianNoise(0.01)(chk_input)
+        #chk_in = BatchNormalization()(chk_in)
         #chk_input_noise=Dense(self.n_width,activation='relu',W_regularizer=l2(self.l2weight))(chk_input_noise)
-
+        #chk_in = Flatten()(chk_input)
         # chk_input_noise=Convolution1D(20,2,activation='relu',border_mode='same')(chk_input_noise)
         # chk_input_noise=UpSampling1D(2)(chk_input_noise)
         # chk_input_noise=MaxPooling1D(pool_length=2)(chk_input_noise)
@@ -75,12 +76,19 @@ class SSNET3_PRESSURE(NN_BASE):
         outputs = []
 
         for key in self.well_names:
+
                 #sub_model = GaussianNoise(0.01)(chk_input)
+                sub_model = Convolution1D(5, 2, activation='relu', border_mode='same',W_regularizer=l2(0.00001))(chk_in)
+
+                sub_model = MaxPooling1D(pool_length=1)(sub_model)
+                #sub_model = Dropout(0.01)(sub_model)
                 #sub_model=BatchNormalization()(sub_model)
-                sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(chk_input)
+                sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 #sub_model = Flatten()(sub_model)
                 # pdc_model = GaussianNoise(0.01)(pdc_model)
                 #sub_model = BatchNormalization()(sub_model)
+                #sub_model = BatchNormalization()(sub_model)
+                #sub_model = Convolution1D(20, 2, activation='relu', border_mode='same')(sub_model)
                 #sub_model = BatchNormalization()(sub_model)
                 for i in range(1,self.n_depth):
                     sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
@@ -88,15 +96,15 @@ class SSNET3_PRESSURE(NN_BASE):
                 #sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 #sub_model = UpSampling1D(2)(sub_model)
                 #sub_model = BatchNormalization()(sub_model)
-                sub_model=Convolution1D(20,2,activation='relu',border_mode='full',W_regularizer=l2(self.l2weight))(sub_model)
 
-                sub_model=UpSampling1D(5)(sub_model)
-                sub_model=MaxPooling1D(pool_length=5)(sub_model)
-                #sub_model = Dropout(0.01)(sub_model)
-                sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
+                #sub_model = Convolution1D(20, 2, activation='relu', border_mode='same')(sub_model)
+                #sub_model=UpSampling1D(4)(sub_model)
+
+                #
+                #sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 #sub_model = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight))(sub_model)
                 sub_model=Flatten()(sub_model)
-                sub_model = Dense(len(self.output_tags[key + '_out']), W_regularizer=l2(self.l2weight),activation='relu')(sub_model)
+                sub_model = Dense(len(self.output_tags[key + '_out']), W_regularizer=l2(self.l2weight),activation='linear')(sub_model)
                 aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',
                                   name='aux_' + key)
                 sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')

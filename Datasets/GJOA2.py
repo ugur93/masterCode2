@@ -75,12 +75,17 @@ def fetch_gjoa_data():
 
 
     if False:
-        fig,axes=plt.subplots(3,1,sharex=True)
-        axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS'], color='red')
-        axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS_OLD'], color='green')
-        axes[0].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS'], color='blue')
-        axes[1].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS_OLD'], color='blue')
-        axes[2].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS'], color='blue')
+        fig,axes=plt.subplots(2,1,sharex=True)
+        axes[0].scatter(X['time'], Y['B1_PWH'], color='blue')
+        axes[0].set_title('C1_PWH')
+        axes[1].scatter(X['time'], X['B1_CHK'], color='blue')
+        axes[1].set_title('C1_CHK')
+
+        #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS'], color='red')
+        #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS_OLD'], color='green')
+        #axes[0].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS'], color='blue')
+        #axes[1].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS_OLD'], color='blue')
+        #axes[2].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS'], color='blue')
         plt.show()
 
     #test_bed(X,Y,sum_gas,sum_oil)

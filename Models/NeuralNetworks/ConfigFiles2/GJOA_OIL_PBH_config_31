@@ -1,0 +1,93 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> dense_1 -> dense_5 -> dense_9 -> dense_13 -> dense_17 -> dense_2 -> dense_6 -> dense_10 -> dense_14 -> dense_18 -> convolution1d_1 -> convolution1d_2 -> convolution1d_3 -> convolution1d_4 -> convolution1d_5 -> upsampling1d_1 -> upsampling1d_2 -> upsampling1d_3 -> upsampling1d_4 -> upsampling1d_5 -> maxpooling1d_1 -> maxpooling1d_2 -> maxpooling1d_3 -> maxpooling1d_4 -> maxpooling1d_5 -> dropout_1 -> dropout_2 -> dropout_3 -> dropout_4 -> dropout_5 -> dense_3 -> dense_7 -> dense_11 -> dense_15 -> dense_19 -> flatten_1 -> flatten_2 -> flatten_3 -> flatten_4 -> flatten_5 -> dense_4 -> dense_8 -> dense_12 -> dense_16 -> dense_20 -> C1_out -> C3_out -> C4_out -> B1_out -> B3_out
+['Main_input', {'name': 'dense_1', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 5}, {'name': 'dense_5', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 5}, {'name': 'dense_9', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 5}, {'name': 'dense_13', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 5}, {'name': 'dense_17', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 5}, {'name': 'dense_2', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_6', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_10', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_14', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_18', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'convolution1d_1', 'trainable': True, 'nb_filter': 20, 'filter_length': 2, 'init': 'glorot_uniform', 'activation': 'relu', 'border_mode': 'full', 'subsample_length': 1, 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': None, 'input_length': None}, {'name': 'convolution1d_2', 'trainable': True, 'nb_filter': 20, 'filter_length': 2, 'init': 'glorot_uniform', 'activation': 'relu', 'border_mode': 'full', 'subsample_length': 1, 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': None, 'input_length': None}, {'name': 'convolution1d_3', 'trainable': True, 'nb_filter': 20, 'filter_length': 2, 'init': 'glorot_uniform', 'activation': 'relu', 'border_mode': 'full', 'subsample_length': 1, 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': None, 'input_length': None}, {'name': 'convolution1d_4', 'trainable': True, 'nb_filter': 20, 'filter_length': 2, 'init': 'glorot_uniform', 'activation': 'relu', 'border_mode': 'full', 'subsample_length': 1, 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': None, 'input_length': None}, {'name': 'convolution1d_5', 'trainable': True, 'nb_filter': 20, 'filter_length': 2, 'init': 'glorot_uniform', 'activation': 'relu', 'border_mode': 'full', 'subsample_length': 1, 'W_regularizer': None, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': None, 'input_length': None}, {'name': 'upsampling1d_1', 'trainable': True, 'length': 6}, {'name': 'upsampling1d_2', 'trainable': True, 'length': 6}, {'name': 'upsampling1d_3', 'trainable': True, 'length': 6}, {'name': 'upsampling1d_4', 'trainable': True, 'length': 6}, {'name': 'upsampling1d_5', 'trainable': True, 'length': 6}, {'name': 'maxpooling1d_1', 'trainable': True, 'stride': 2, 'pool_length': 2, 'border_mode': 'valid'}, {'name': 'maxpooling1d_2', 'trainable': True, 'stride': 2, 'pool_length': 2, 'border_mode': 'valid'}, {'name': 'maxpooling1d_3', 'trainable': True, 'stride': 2, 'pool_length': 2, 'border_mode': 'valid'}, {'name': 'maxpooling1d_4', 'trainable': True, 'stride': 2, 'pool_length': 2, 'border_mode': 'valid'}, {'name': 'maxpooling1d_5', 'trainable': True, 'stride': 2, 'pool_length': 2, 'border_mode': 'valid'}, {'name': 'dropout_1', 'trainable': True, 'p': 0.01}, {'name': 'dropout_2', 'trainable': True, 'p': 0.01}, {'name': 'dropout_3', 'trainable': True, 'p': 0.01}, {'name': 'dropout_4', 'trainable': True, 'p': 0.01}, {'name': 'dropout_5', 'trainable': True, 'p': 0.01}, {'name': 'dense_3', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_7', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_11', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_15', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'dense_19', 'trainable': True, 'output_dim': 20, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 20}, {'name': 'flatten_1', 'trainable': True}, {'name': 'flatten_2', 'trainable': True}, {'name': 'flatten_3', 'trainable': True}, {'name': 'flatten_4', 'trainable': True}, {'name': 'flatten_5', 'trainable': True}, {'name': 'dense_4', 'trainable': True, 'output_dim': 1, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 120}, {'name': 'dense_8', 'trainable': True, 'output_dim': 1, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 120}, {'name': 'dense_12', 'trainable': True, 'output_dim': 1, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 120}, {'name': 'dense_16', 'trainable': True, 'output_dim': 1, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 120}, {'name': 'dense_20', 'trainable': True, 'output_dim': 1, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-05}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 120}, {'name': 'C1_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}, {'name': 'C3_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}, {'name': 'C4_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}, {'name': 'B1_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}, {'name': 'B3_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+aux_C1 -> C1_out
+['aux_C1', {'name': 'C1_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+aux_C3 -> C3_out
+['aux_C3', {'name': 'C3_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+aux_C4 -> C4_out
+['aux_C4', {'name': 'C4_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+aux_B1 -> B1_out
+['aux_B1', {'name': 'B1_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+aux_B3 -> B3_out
+['aux_B3', {'name': 'B3_out', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: -0.363311900807
+C3: -0.366364136138
+C4: -0.329134222684
+B1: -0.443672691382
+B3: -0.281474254393
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_PBH: 0
+C3_PBH: 1
+C4_PBH: 2
+B1_PBH: 3
+B3_PBH: 4
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 0.0001 
+- OnOff_state: False 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 30000 
+- batch size: 1000 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0xc54fcac>, <Models.NeuralNetworks.base.EpochVerbose object at 0xc53150c>, <keras.callbacks.EarlyStopping object at 0xc5315ec>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+Main_input: ['C1_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK']
+aux_C1: ['C1_CHK_zero']
+aux_C3: ['C3_CHK_zero']
+aux_C4: ['C4_CHK_zero']
+aux_B1: ['B1_CHK_zero']
+aux_B3: ['B3_CHK_zero']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+C1_out: ['C1_PBH']
+C3_out: ['C3_PBH']
+C4_out: ['C4_PBH']
+B1_out: ['B1_PBH']
+B3_out: ['B3_PBH']
+-------------------------------------------------
+-------------------------------------------------
+
+\hline 
+Tag&RMSE TRAIN:                  &RMSE VAL:                    &Percentage error (VAL/MEAN)*100        &MEAN\\
+ \hline 
+ C1\_PBH& 1.64                &6.12                         &3.65\%                                 &167.44\\ 
+C3\_PBH& 2.12                &6.60                         &3.94\%                                 &167.60\\ 
+C4\_PBH& 1.56                &6.15                         &3.69\%                                 &166.56\\ 
+B1\_PBH& 2.13                &11.35                        &8.62\%                                 &131.54\\ 
+B3\_PBH& 1.44                &2.74                         &1.70\%                                 &161.29\\ 
+
+ \hline 
+ Tag&R2 TRAIN:                    &R2 VAL:&\\ 
+ \hline 
+ C1\_PBH& 1.00                &0.95\\ 
+C3\_PBH& 1.00                &0.94\\ 
+C4\_PBH& 1.00                &0.94\\ 
+B1\_PBH& 1.00                &0.82\\ 
+B3\_PBH& 1.00                &1.00\\ 
+
+ \hline 
+ 
