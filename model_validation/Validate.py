@@ -25,7 +25,8 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
 
-    validate_train_test_split(Data)
+    #validate_train_test_split(Data)
+    grid_search(Data)
     #validateRepeat(Data)
     #validateCV(Data)
 
@@ -45,10 +46,10 @@ def validate_train_test_split(Data):
     else:
         #GJOA_QOIL
         #pass
-        model=NCNET1_GJOA2.NCNET1_GJOA2()
+        #model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
+        model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_COMBINED()
 
@@ -57,9 +58,10 @@ def validate_train_test_split(Data):
     model.initialize_chk_thresholds(Data, True)
     start=time.time()
     #print(model.model.get_config())
-    model.fit(X_train,Y_train,X_val,Y_val)
-    model.update_model()
+    #model.fit(X_train,Y_train,X_val,Y_val)
+    #model.update_model()
     model.fit(X_train, Y_train, X_val, Y_val)
+    print(model.model.get_weights())
     #model.fit(X_train[], Y_train, X_val, Y_val)
 
     end=time.time()
@@ -212,6 +214,45 @@ def grid_search(Data):
     X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
 
 
+    depth=[1,2]
+    width=[20,50,100,150,200]
+    mn_hidden=[1,2,3,4,5]
+    mn_out=[1,2,3,4,5,6,7]
+
+    search_params={'depth':[1,2],'width':[20,50,100,150,200],'mn_hidden':[1,2,3,4],'mn_out':[1,2,3,4]}
+
+    prev_sum=10000000000
+    best_mnh=0
+    best_mno=0
+    best_test_mse=None
+    best_test_r2=None
+    for mnh in mn_hidden:
+        for mno in mn_out:
+            model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,mno,mnh)
+            print('Training with: MNH: {}, MNO: {}'.format(mnh,mno))
+            model.fit(X_train, Y_train, X_val, Y_val)
+            score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
+
+            point=np.sum(np.sqrt(score_test_MSE))
+
+            print(np.sqrt(score_test_MSE))
+            print(point)
+
+
+            if point<prev_sum:
+                prev_sum=point
+                best_mnh=mnh
+                best_mno=mno
+                best_test_mse=np.sqrt(score_test_MSE)
+                best_test_r2=score_test_r2
+            del model
+            print('Current best: \n MNH: {}, \n MNO: {}'.format(best_mnh, best_mno))
+
+    print('Best results:')
+    print('MNH: {}, MNO: {}'.format(best_mnh,best_mno))
+    print(cols)
+    print(best_test_mse)
+    print(best_test_r2)
 
 
 

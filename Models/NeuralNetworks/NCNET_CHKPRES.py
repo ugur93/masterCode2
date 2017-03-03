@@ -16,7 +16,7 @@ def neg(x):
 class SSNET3_PRESSURE(NN_BASE):
 
 
-    def __init__(self,Data):
+    def __init__(self,Data,mno,mnh,depth):
 
 
 
@@ -28,13 +28,15 @@ class SSNET3_PRESSURE(NN_BASE):
         self.nb_epoch = 10000
         self.batch_size = 64
         self.verbose = 0
+        self.mno=mno
+        self.mnh=mnh
 
         self.n_inputs=5
         self.n_outputs=1
         self.SCALE=100000
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
-        self.n_depth = 2
+        self.n_depth = depth
         self.n_width = 20
         self.l2weight = 0.0000
         self.add_thresholded_output=False
@@ -71,17 +73,22 @@ class SSNET3_PRESSURE(NN_BASE):
         #
         inputs = [chk_input]
         outputs = []
-        MN=1
+        MN=2
         for key in self.well_names:
-                #sub_model=Dropout(0.5)(chk_input)
+                #sub_model=Dropout(0.2)(chk_input)
                 #sub_model=UpSampling1D(2)(chk_input)
-                #sub_model=LocallyConnected1D(20,1,activation='relu',W_constraint=maxnorm(MN))(chk_input)
+                #sub_model=LocallyConnected1D(100,1,activation='relu',W_constraint=maxnorm(MN),border_mode='valid')(chk_input)
+
                 #sub_model=MaxPooling1D(1)(sub_model)
                 #sub_model = Dense(20, activation='relu',W_constraint=maxnorm(1))(sub_model)
 
                 #sub_model = Dropout(0.01)(chk_input)
                 #sub_model = GaussianNoise(0.01)(sub_model)
-                sub_model = Dense(100,W_constraint=maxnorm(MN), activation='relu')(sub_model)
+                sub_model = Dense(50, W_constraint=maxnorm(self.mnh), activation='relu')(chk_input)
+                for i in range(1,self.depth):
+                    sub_model = Dense(50, W_constraint=maxnorm(self.mnh), activation='relu')(sub_model)
+                #sub_model = Dense(20, W_constraint=maxnorm(MN), activation='relu')(sub_model)
+                #sub_model = Dense(50, W_constraint=maxnorm(MN), activation='relu')(sub_model)
                 #sub_model2 = Dense(20, W_constraint=maxnorm(MN), activation='relu')(chk_input)
                 #sub_model3 = Dense(20, W_constraint=maxnorm(MN), activation='relu')(chk_input)
                 #sub_model=merge([sub_model1,sub_model2,sub_model3],mode='sum')
@@ -89,7 +96,7 @@ class SSNET3_PRESSURE(NN_BASE):
                 #sub_model = Dropout(0.01)(sub_model)
 
                 sub_model = Flatten()(sub_model)
-                sub_model = Dense(1,activation='relu')(sub_model)
+                sub_model = Dense(1,W_constraint=maxnorm(self.mno),activation='relu')(sub_model)
                 aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
                 sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
 
