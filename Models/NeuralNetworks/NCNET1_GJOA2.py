@@ -28,7 +28,7 @@ class NCNET1_GJOA2(NN_BASE):
         # Training config
         self.optimizer = 'adam'#SGD(momentum=0.5,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 1000
+        self.nb_epoch = 300
         self.batch_size = 64
         self.verbose = 0
 
@@ -177,6 +177,8 @@ class NCNET1_GJOA2(NN_BASE):
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
+
+        #temp_output=Dropout(0.1)(input_layer)
         #temp_output = BatchNormalization()(input_layer)
         #temp_output = GaussianNoise(0.01)(temp_output)
         #temp_output = Flatten()(temp_output)
@@ -206,18 +208,27 @@ class NCNET1_GJOA2(NN_BASE):
 
                 #temp_output = BatchNormalization()(temp_output)
 
-
-                temp_output = add_layers(input_layer, 2, n_width, l2_weight)
-                #temp_output = BatchNormalization()(temp_output)
                 #temp_output = Convolution1D(20, 2, border_mode='same', activation='relu')(temp_output)
+                #temp_output = Dropout(0.3)(temp_output)
+                #temp_output = Convolution1D(20, 2, border_mode='same', activation='relu')(temp_output)
+                #temp_output = add_layers(temp_output, 1, n_width20, l2_weight)
+                #temp_output = Dropout(0.2)(input_layer)
+                temp_output = Dense(n_width, activation='relu', init=INIT, W_constraint=maxnorm(4),b_constraint=maxnorm(4), bias=True)(input_layer)
+                #temp_output = Dropout(0.2)(temp_output)
+                temp_output = Dense(n_width, activation='relu', init=INIT, W_constraint=maxnorm(4),b_constraint=maxnorm(4), bias=True)(temp_output)
+
+                #temp_output = Dropout(0.3)(temp_output)
+                #temp_output = Dropout(0.2)(temp_output)
+                #temp_output = BatchNormalization()(temp_output)
+                #temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
                 #
                 # temp_output = Convolution1D(10, 2, border_mode='full', activation='relu')(temp_output)
-                #temp_output = UpSampling1D(6)(temp_output)
-                #temp_output = MaxPooling1D(pool_length=6)(temp_output)
-                #temp_output = Dropout(0.01)(temp_output)Co
+                #temp_output = UpSampling1D(4)(temp_output)
+                #temp_output = MaxPooling1D(pool_length=4)(temp_output)
+                #temp_output = Dropout(0.01)(temp_output)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
-                self.model_name='NCNET_GJOA2_OIL_BATCH_GAUS_NO_CONV'
+                self.model_name='NCNET_GJOA2_OIL_BATCH_GAUS_CONV_OIL_4'
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #

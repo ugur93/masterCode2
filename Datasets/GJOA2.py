@@ -26,21 +26,22 @@ well_names=['C1','C2','C3','C4','D1','B3','B1']
 
 def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
-
+    DROP=[808,807, 173,416,447,487]
     X,Y=data_to_X_Y(data)
-    X.drop(X.index[[808,807, 173]], inplace=True)
-    Y.drop(Y.index[[808, 807,173]], inplace=True)
+    print(len(X))
+    X.drop(DROP, inplace=True)
+    Y.drop(DROP, inplace=True)
+    print(len(X))
+    #exit()
+    #Y = add_choke_delta(Y)
+    #Y = add_well_delta(Y)
 
-
-    Y = add_choke_delta(Y)
-    Y = add_well_delta(Y)
-
-    X = add_choke_delta(X)
-    X = add_well_delta(X)
+    #X = add_choke_delta(X)
+    #X = add_well_delta(X)
     X['time'] = np.arange(0, len(X))
     Y['non']=np.zeros((len(X),))
     for key in well_names:
-        ind_zero = X[key + '_CHK'] < 5
+        ind_zero = X[key + '_CHK'] <=5
 
         X[key + '_PWH'][ind_zero] = 0
         X[key + '_PBH'][ind_zero] = 0
@@ -51,6 +52,7 @@ def fetch_gjoa_data():
         Y[key + '_QOIL'][ind_zero]=0
 
         X[key + '_CHK_zero'] = np.array([0 if x <= 5 else 1 for x in X[key + '_CHK']])
+        X[key + '_neg'] = -1*np.ones((len(X),))#np.array([0 if x <= 5 else 1 for x in X[key + '_CHK']])
     sum_oil, sum_gas = calculate_sum_multiphase(Y)
 
     Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS']# + np.ones((len(Y),)) * 5000
@@ -76,16 +78,16 @@ def fetch_gjoa_data():
 
 
     if False:
-        #fig,axes=plt.subplots(2,1,sharex=True)
-        #axes[0].scatter(X['time'], Y['B1_PWH'], color='blue')
-        #axes[0].set_title('C1_PWH')
-        #axes[1].scatter(X['time'], X['B1_CHK'], color='blue')
-        #axes[1].set_title('C1_CHK')
+        fig,axes=plt.subplots(2,1,sharex=True)
+        axes[0].scatter(X['time'], Y['C1_QOIL'], color='blue')
+        axes[0].set_title('C1_PWH')
+        axes[1].scatter(X['time'], X['C1_CHK'], color='blue')
+        axes[1].set_title('C1_CHK')
 
-        for i in range(len(well_names)):
-            plt.subplot(4,2,i+1)
-            plt.scatter(X['time'], X[well_names[i]+'_CHK'], color='black')
-            plt.title(well_names[i])
+        #for i in range(len(well_names)):
+        #    plt.subplot(4,2,i+1)
+        #    plt.scatter(X['time'], X[well_names[i]+'_CHK'], color='black')
+        #    plt.title(well_names[i]+'_CHK')
         plt.show()
 
         #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS'], color='red')
@@ -101,12 +103,9 @@ def fetch_gjoa_data():
     print('Data size: {}'.format(len(Y)))
 
 
-    col='B3_CHK_zero'
+    col='C1_PWH'
     GjoaData=DataContainer(X,Y,name='GJOA2')
-    #plt.plot(GjoaData.X[col])
-    #plt.figure()
-    ind_zero=GjoaData.X[col]<5
-    #plt.plot(GjoaData.X_transformed[col])#[~ind_zero])
+    #plt.plot(GjoaData.X_transformed[col])
     #plt.show()
 
     return GjoaData

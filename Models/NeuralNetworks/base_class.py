@@ -20,6 +20,7 @@ class NN_BASE:
         self.aux_inputs=[]
         self.chk_thresholds={}
 
+
         self.n_outputs=len(tags_to_list(self.output_tags))
         self.initialize_model()
 
@@ -165,11 +166,11 @@ class NN_BASE:
     def initialize_chk_thresholds(self,data,scaled=True):
 
         chk_cols=[]
+        output_cols=tags_to_list(self.output_tags)
         for tag in self.well_names:
             chk_cols.append(tag+'_'+'CHK')
 
-        #print(self.chk_threshold_value * np.ones((len(chk_cols),)))
-        #print(chk_cols)
+        #output_threshold=pd.DataFrame(data=np.zeros((1,len(output_cols))))
         chk_threshold_data=pd.DataFrame(data=self.chk_threshold_value*np.ones((1,len(chk_cols))),columns=chk_cols)
         #print(chk_threshold_data.shape)
         thresh_transformed=data.transform(chk_threshold_data,'X')
@@ -178,7 +179,12 @@ class NN_BASE:
         for col in thresh_transformed.columns:
             key=col.split('_')[0]
             self.chk_thresholds[key]=thresh_transformed[col][0]
+    def initialize_zero_thresholds(self,data):
 
+        cols=tags_to_list(self.output_tags)
+        thresh_data=pd.DataFrame(data=np.zeros((1,len(cols))),columns=cols)
+        self.output_zero_thresholds=data.transform(thresh_data,'Y')
+        print(self.output_zero_thresholds)
 
 
 

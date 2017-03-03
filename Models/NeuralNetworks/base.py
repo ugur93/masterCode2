@@ -1,6 +1,7 @@
 from keras.models import Sequential
-from keras.layers import Dense, Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
+from keras.layers import Dense, ThresholdedReLU, Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
+from keras.optimizers import Adam
 try:
     from keras.utils.visualize_util import plot
 except(AttributeError):
@@ -33,11 +34,11 @@ def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weig
 def add_layers(input_layer,n_depth,n_width,l2_weight):
     if n_depth==0:
         return input_layer
-    output_layer=Dense(n_width, activation='relu',init=INIT, W_regularizer=l2(l2_weight),bias=True)(input_layer)
+    output_layer=Dense(n_width, activation='relu',init=INIT,bias=True,W_constraint=maxnorm(1))(input_layer)
     for i in range(n_depth-1):
         #output_layer = BatchNormalization()(output_layer)
         #output_layer = GaussianNoise(0.05)(output_layer)
-        output_layer = Dense(n_width, activation='relu', init=INIT, W_regularizer=l2(l2_weight),bias=True)(output_layer)
+        output_layer = Dense(n_width, activation='relu', init=INIT, W_constraint=maxnorm(1),bias=True)(output_layer)
     #output_layer = BatchNormalization()(output_layer)
     return output_layer
 
