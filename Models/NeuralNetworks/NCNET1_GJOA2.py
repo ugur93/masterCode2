@@ -62,7 +62,7 @@ class NCNET1_GJOA2(NN_BASE):
         #self.input_tags['C1']=['C1_CHK']
         print(self.input_tags)
 
-        OUT='GAsS'
+        OUT='GsAS'
         if OUT=='GAS':
             self.output_tags = {
                 #'C1_out':['C1_QOIL'],
@@ -212,15 +212,22 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = Dropout(0.3)(temp_output)
                 #temp_output = Convolution1D(20, 2, border_mode='same', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, 1, n_width20, l2_weight)
-                #temp_output = Dropout(0.2)(input_layer)
-                temp_output = Dense(n_width, activation='relu', init=INIT, W_constraint=maxnorm(4),b_constraint=maxnorm(4), bias=True)(input_layer)
-                #temp_output = Dropout(0.2)(temp_output)
-                temp_output = Dense(n_width, activation='relu', init=INIT, W_constraint=maxnorm(4),b_constraint=maxnorm(4), bias=True)(temp_output)
+                #temp_output = Dropout(0.1)(input_layer)
 
+                #temp_output = Dense(100, activation='relu', init=INIT, W_constraint=maxnorm(2), bias=True)(input_layer)
+                #temp_output = Dropout(0.2)(temp_output)
+                temp_output = Dense(50, activation='relu', init=INIT, W_constraint=maxnorm(1), bias=True)(input_layer)
+                temp_output = Dense(50, activation='relu', init=INIT, W_constraint=maxnorm(1), bias=True)(temp_output)
+
+                #temp_output = Convolution1D(100, 2, border_mode='same', activation='relu', W_constraint=maxnorm(4))(
+                #    temp_output)
+
+                #temp_output = UpSampling1D(5)(temp_output)
+                #temp_output = MaxPooling1D(pool_length=5)(temp_output)
                 #temp_output = Dropout(0.3)(temp_output)
                 #temp_output = Dropout(0.2)(temp_output)
                 #temp_output = BatchNormalization()(temp_output)
-                #temp_output = Convolution1D(20, 2, border_mode='full', activation='relu')(temp_output)
+
                 #
                 # temp_output = Convolution1D(10, 2, border_mode='full', activation='relu')(temp_output)
                 #temp_output = UpSampling1D(4)(temp_output)
@@ -228,7 +235,7 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = Dropout(0.01)(temp_output)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
-                self.model_name='NCNET_GJOA2_OIL_BATCH_GAUS_CONV_OIL_4'
+                self.model_name='NCNET_GJOA2_OIL_BATCH_GAUS_CONV_OIL_4aaaaaaa23_lit1'
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
@@ -246,7 +253,7 @@ class NCNET1_GJOA2(NN_BASE):
         if thresholded_output:
             #output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(
             #    temp_output)
-            output_layer = Dense(1,init=INIT,activation=self.output_layer_activation,W_regularizer=l2(l2_weight),bias=True)(temp_output)
+            output_layer = Dense(1,init=INIT,activation=self.output_layer_activation,bias=True)(temp_output)
             #output_layer = MaxoutDense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True)(temp_output)
             #output_layer=Activation('relu')(output_layer)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)

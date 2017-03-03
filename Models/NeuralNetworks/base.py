@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Dense, ThresholdedReLU, Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
+from keras.layers import Dense, ThresholdedReLU, GaussianDropout,Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
 from keras.optimizers import Adam
 try:
