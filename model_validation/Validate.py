@@ -25,8 +25,8 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
 
-    #validate_train_test_split(Data)
-    grid_search(Data)
+    validate_train_test_split(Data)
+    #grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
 
@@ -46,10 +46,10 @@ def validate_train_test_split(Data):
     else:
         #GJOA_QOIL
         #pass
-        #model=NCNET1_GJOA2.NCNET1_GJOA2()
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,2,2,2)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_COMBINED()
 
@@ -58,10 +58,10 @@ def validate_train_test_split(Data):
     model.initialize_chk_thresholds(Data, True)
     start=time.time()
     #print(model.model.get_config())
-    #model.fit(X_train,Y_train,X_val,Y_val)
-    #model.update_model()
+    model.fit(X_train,Y_train,X_val,Y_val)
+    model.update_model()
     model.fit(X_train, Y_train, X_val, Y_val)
-    print(model.model.get_weights())
+    #print(model.model.get_weights())
     #model.fit(X_train[], Y_train, X_val, Y_val)
 
     end=time.time()
@@ -210,6 +210,71 @@ def plotTrainingHistory(model):
 
 
 
+def generate_grid(search_params):
+    from itertools import product
+    items=sorted(search_params.items())
+    keys, values=zip(*items)
+    params=[]
+    for v in  product(*values):
+        params.append( dict(zip(keys,v))  )
+    return params
+
+def grid_search2(Data):
+    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
+
+
+    search_params={'n_depth':[2,3],'n_width':[20,50,100],'maxnorm_hidden':[1,2,3,4],'maxnorm_out':[1,2,3,4]}
+
+    grid_params=generate_grid(search_params)
+
+    len_grid=len(grid_params)
+
+    print('Size of search space: {}'.format(len_grid))
+    best_max=1e100
+    best_sum=1e100
+    best_params_max={}
+    best_params_sum={}
+    best_mse_max=None
+    best_r2_max=None
+    best_mse_sum=None
+    best_r2_sum=None
+    for params in grid_params:
+        #print(params)
+        model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+        print('Training with params: {}'.format(params))
+        model.initialize_chk_thresholds(Data, True)
+        model.fit(X_train,Y_train,X_val,Y_val)
+        model.update_model()
+        model.fit(X_train, Y_train, X_val, Y_val)
+        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
+
+        curr_max=np.max(np.sqrt(score_test_MSE))
+        curr_sum=np.sum(np.sqrt(score_test_MSE))
+        print('THIS MAX: {}, SUM: {}'.format(curr_max,curr_sum))
+
+        if curr_max<best_max:
+            best_max=curr_max
+            best_params_max=params
+            best_mse_max=np.sqrt(score_test_MSE)
+            best_r2_max=score_test_r2
+        if curr_sum<best_sum:
+            best_sum=curr_sum
+            best_params_sum=params
+            best_mse_sum=np.sqrt(score_test_MSE)
+            best_r2_sum=score_test_r2
+        del model
+        print('Cols: {}'.format(cols))
+        print('Current best max: {} \n Current best sum: {} \n'.format(best_params_max,best_params_sum))
+        print('Current best max results: {} \n Current best sum results: {} \n'.format(best_max,best_sum))
+        print('Current best rmse max results:\n {} \n Current best rmse sum results:\n {}'.format(best_mse_max,best_mse_sum))
+        print('Current best r2 max results:\n {} \n Current best r2 sum results:\n {}'.format(best_r2_max,best_r2_sum))
+    print('Best results: ')
+    print('Cols: {}'.format(cols))
+    print('Current best max: {} \n Current best sum: {}'.format(best_params_max,best_params_sum))
+    print('Current best max results: {} \n Current best sum results: {}'.format(best_max,best_sum))
+    print('Current best rmse max results:\n {} \n Current best rmse sum results:\n {}'.format(best_mse_max,best_mse_sum))
+    print('Current best r2 max results:\n {} \n Current best r2 sum results:\n {}'.format(best_r2_max,best_r2_sum))
+
 def grid_search(Data):
     X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
 
@@ -217,42 +282,79 @@ def grid_search(Data):
     depth=[1,2]
     width=[20,50,100,150,200]
     mn_hidden=[1,2,3,4,5]
-    mn_out=[1,2,3,4,5,6,7]
+    mn_out=[1,2,3,4,5]
+    n_depth=[2,3]
+    n_width=[20,50,100]
 
     search_params={'depth':[1,2],'width':[20,50,100,150,200],'mn_hidden':[1,2,3,4],'mn_out':[1,2,3,4]}
 
     prev_sum=10000000000
+    prev_max = 10000000000
     best_mnh=0
     best_mno=0
+    best_depth=0
+    best_width=0
     best_test_mse=None
     best_test_r2=None
+
+    best_mnh_sum = 0
+    best_mno_sum = 0
+    best_depth_sum = 0
+    best_width_sum=0
+    best_test_mse_sum = None
+    best_test_r2_sum = None
     for mnh in mn_hidden:
         for mno in mn_out:
-            model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,mno,mnh)
-            print('Training with: MNH: {}, MNO: {}'.format(mnh,mno))
-            model.fit(X_train, Y_train, X_val, Y_val)
-            score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
+            for depth in n_depth:
+                for width in n_width:
+                    #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,mno,mnh,depth)
+                    model = NCNET1_GJOA2.NCNET1_GJOA2(mnh,mno,depth,width)
+                    model.initialize_chk_thresholds(Data, True)
+                    print('Training with: MNH: {}, MNO: {}, Depth {}, Width: {}'.format(mnh,mno,depth,width))
+                    model.fit(X_train,Y_train,X_val,Y_val)
+                    model.update_model()
+                    model.fit(X_train, Y_train, X_val, Y_val)
+                    score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
 
-            point=np.sum(np.sqrt(score_test_MSE))
+                    curr_max=np.max(np.sqrt(score_test_MSE))
+                    curr_sum=np.sum(np.sqrt(score_test_MSE))
 
-            print(np.sqrt(score_test_MSE))
-            print(point)
+                    print(np.sqrt(score_test_MSE))
+                    print('THIS MAX: {}, SUM: {}'.format(curr_max,curr_sum))
 
 
-            if point<prev_sum:
-                prev_sum=point
-                best_mnh=mnh
-                best_mno=mno
-                best_test_mse=np.sqrt(score_test_MSE)
-                best_test_r2=score_test_r2
-            del model
-            print('Current best: \n MNH: {}, \n MNO: {}'.format(best_mnh, best_mno))
-
+                    if curr_max<prev_max:
+                        prev_max=curr_max
+                        best_mnh=mnh
+                        best_mno=mno
+                        best_width=width
+                        best_depth=depth
+                        best_test_mse=np.sqrt(score_test_MSE)
+                        best_test_r2=score_test_r2
+                    if curr_sum<prev_sum:
+                        prev_sum=curr_sum
+                        best_mnh_sum=mnh
+                        best_mno_sum=mno
+                        best_width_sum=width
+                        best_depth_sum=depth
+                        best_test_mse_sum=np.sqrt(score_test_MSE)
+                        best_test_r2_sum=score_test_r2
+                    del model
+                    print('Current best: \n MNH: {}, \n MNO: {} \n Depth: {} \n Width: {}'.format(best_mnh, best_mno,best_depth,best_width))
+                    print('Current best sum: \n MNH: {}, \n MNO: {}\n Depth: {} \n Width: {}'.format(best_mnh_sum, best_mno_sum,best_depth_sum,best_width_sum))
     print('Best results:')
-    print('MNH: {}, MNO: {}'.format(best_mnh,best_mno))
     print(cols)
+    print('Best max: \n MNH: {}, \n MNO: {} \n Depth: {} \n Width: {}'.format(best_mnh, best_mno,best_depth,best_width))
     print(best_test_mse)
     print(best_test_r2)
+
+    print('Best sum: \n MNH: {}, \n MNO: {}\n Depth: {}\n Width: {}'.format(best_mnh_sum, best_mno_sum,best_depth_sum,best_width_sum))
+    print(best_test_mse_sum)
+    print(best_test_r2_sum)
+
+
+
+
 
 
 

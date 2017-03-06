@@ -9,7 +9,7 @@ class NN_BASE:
         self.chk_threshold_value=5
 
         self.history = LossHistory()
-        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00000001, patience=500, verbose=1, mode='min')
+        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.00000001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:

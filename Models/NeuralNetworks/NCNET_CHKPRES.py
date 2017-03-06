@@ -30,6 +30,7 @@ class SSNET3_PRESSURE(NN_BASE):
         self.verbose = 0
         self.mno=mno
         self.mnh=mnh
+        self.p_dropout=1
 
         self.n_inputs=5
         self.n_outputs=1
@@ -37,7 +38,7 @@ class SSNET3_PRESSURE(NN_BASE):
         # Input module config
         self.n_inception = 0 #(n_inception, n_depth inception)
         self.n_depth = depth
-        self.n_width = 20
+        self.n_width = 1
         self.l2weight = 0.0000
         self.add_thresholded_output=False
 
@@ -82,11 +83,12 @@ class SSNET3_PRESSURE(NN_BASE):
                 #sub_model=MaxPooling1D(1)(sub_model)
                 #sub_model = Dense(20, activation='relu',W_constraint=maxnorm(1))(sub_model)
 
-                #sub_model = Dropout(0.01)(chk_input)
+                #sub_model = Dropout(0.1)(chk_input)
                 #sub_model = GaussianNoise(0.01)(sub_model)
-                sub_model = Dense(50, W_constraint=maxnorm(self.mnh), activation='relu')(chk_input)
-                for i in range(1,self.depth):
-                    sub_model = Dense(50, W_constraint=maxnorm(self.mnh), activation='relu')(sub_model)
+                #sub_model = LocallyConnected1D(100, 1, activation='relu',W_constraint=maxnorm(1),
+                #                               border_mode='valid')(chk_input)
+                sub_model = Dense(100, W_constraint=maxnorm(1), activation='relu')(chk_input)
+
                 #sub_model = Dense(20, W_constraint=maxnorm(MN), activation='relu')(sub_model)
                 #sub_model = Dense(50, W_constraint=maxnorm(MN), activation='relu')(sub_model)
                 #sub_model2 = Dense(20, W_constraint=maxnorm(MN), activation='relu')(chk_input)
@@ -96,7 +98,7 @@ class SSNET3_PRESSURE(NN_BASE):
                 #sub_model = Dropout(0.01)(sub_model)
 
                 sub_model = Flatten()(sub_model)
-                sub_model = Dense(1,W_constraint=maxnorm(self.mno),activation='relu')(sub_model)
+                sub_model = Dense(1,activation='relu')(sub_model)
                 aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
                 sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
 
