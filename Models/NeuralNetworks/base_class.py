@@ -9,7 +9,7 @@ class NN_BASE:
         self.chk_threshold_value=5
 
         self.history = LossHistory()
-        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.00000001, patience=500, verbose=1, mode='min')
+        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00000001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
@@ -55,7 +55,7 @@ class NN_BASE:
 
     def fit(self, X, Y,X_val,Y_val):
 
-        #print(self.get_config())
+
         print ('Training model %s, please wait' % (self.model_name))
         print('Training data sample-size: '+str(len(X)))
 
@@ -65,7 +65,7 @@ class NN_BASE:
         #self.debug(X_dict,Y_dict,True)
 
         self.model.fit(X_dict, Y_dict, nb_epoch=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
-                       callbacks=self.callbacks,shuffle=False,validation_data=(X_val_dict,Y_val_dict))
+                       callbacks=self.callbacks,shuffle=True,validation_data=(X_val_dict,Y_val_dict))
 
         #print(self.model.get_weights())
 

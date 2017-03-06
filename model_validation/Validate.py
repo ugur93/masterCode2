@@ -57,6 +57,7 @@ def validate_train_test_split(Data):
     #model.initialize_zero_thresholds(Data)
     model.initialize_chk_thresholds(Data, True)
     start=time.time()
+    print(model.get_config())
     #print(model.model.get_config())
     model.fit(X_train,Y_train,X_val,Y_val)
     model.update_model()

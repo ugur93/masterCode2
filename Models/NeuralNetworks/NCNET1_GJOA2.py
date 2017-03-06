@@ -18,7 +18,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,maxnorm_hidden=1,maxnorm_out=4,n_depth=2,n_width=20):
+    def __init__(self,maxnorm_hidden=4,maxnorm_out=4,n_depth=2,n_width=100):
 
         self.model_name='NCNET2-QOIL_OIL_ALL_mean_removed_GAUS_CONV_POOL5'
 
@@ -221,25 +221,59 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = Convolution1D(self.n_width, 2, border_mode='same', activation='relu',
                 #                            W_constraint=maxnorm(3), bias=True)(temp_output)
                 #temp_output = Dense(100, activation='relu', init=INIT, W_constraint=maxnorm(2), bias=True)(input_layer)
-                #temp_output = Dropout(0.01)(input_layer)
+                #temp_output = Dropout(0.1)(input_layer)
+                #temp_output = Convolution1D(64, 2, border_mode='same', activation='relu', W_constraint=maxnorm(self.maxnorm_hidden))(
+                #    input_layer)
+                #temp_output=MaxPooling1D(1)(temp_output)
+                #temp_output = Dropout(0.1)(input_layer)
+                #temp_output = Flatten()(input_layer)
 
 
-                temp_output = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden),init=INIT,bias=True)(input_layer)
+                #temp_output = Dropout(0.01)(temp_output)
+                #temp_output = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden),init=INIT,bias=True)(input_layer)
+                temp_output = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden),init=INIT, bias=True)(input_layer)
+                #temp_output = MaxoutDense(self.n_width, W_constraint=maxnorm(self.maxnorm_hidden),
+                #                    init=INIT, bias=True)(temp_output)
                 for i in range(1,self.n_depth):
+                    #temp_output = Dropout(0.1)(temp_output)
                     temp_output = Dense(self.n_width, activation='relu', init=INIT,W_constraint=maxnorm(self.maxnorm_hidden),bias=True)(temp_output)
+                    #temp_output = MaxoutDense(self.n_width, W_constraint=maxnorm(self.maxnorm_hidden),
+                    #                      init=INIT, bias=True)(temp_output)
+
+                #temp_output = Dropout(0.2)(temp_output)
+
 
                 #temp_output = Dropout(0.1)(temp_output)
+                #temp_output=Convolution1D(20, 1, border_mode='same', activation='relu',
+                #                       W_constraint=maxnorm(self.maxnorm_hidden))(temp_output)
+                #temp_output = Dropout(0.1)(temp_output)
+                temp_output = Flatten()(temp_output)
+                #conv33 = Convolution1D(3, 3, border_mode='same', activation='relu',
+                #                       W_constraint=maxnorm(self.maxnorm_hidden))(temp_output)
+                #conv55 = Convolution1D(5, 5, border_mode='same', activation='relu',
+                #                       W_constraint=maxnorm(self.maxnorm_hidden))(temp_output)
+                #ap = AveragePooling1D(1)(input_layer)
+                #conv11 = Convolution1D(1, 1, border_mode='same', activation='relu',
+                #                       W_constraint=maxnorm(self.maxnorm_hidden))(ap)
+
+                #temp_output = merge([conv11, conv33, conv55], mode='concat')
+
+
+
                 #temp_output = Dropout(0.2)(temp_output)
+
                 #temp_output = BatchNormalization()(temp_output)
 
                 #
-                temp_output = Convolution1D(20, 2, border_mode='same', activation='relu')(temp_output)
+
+
+                #temp_output = Dropout(0.2)(temp_output)
                 #temp_output = UpSampling1D(4)(temp_output)
                 #temp_output = MaxPooling1D(pool_length=4)(temp_output)
-                temp_output = Dropout(0.01)(temp_output)
+                #temp_output = Dropout(0.2)(temp_output)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
-                self.model_name='NCNET_GJOA2_OIL_BATCH_GAUS_CONV_OIL_4aaaaaaa23_lit1'
+                self.model_name='NCNET_GJOA2_OIL_BATCH_GAUS_CONV_OIL_4aaaaaaa23_lit1_nodropinput'
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
                 #temp_output = Convolution1D(20, 10, border_mode='full', activation='relu')(temp_output)
                 #temp_output = add_layers(temp_output, n_depth, n_width, l2_weight)  #
@@ -247,7 +281,7 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = MaxPooling1D(pool_length=1)(temp_output)
 
 
-                temp_output = Flatten()(temp_output)
+                #temp_output = Flatten()(temp_output)
 
                   #
 
