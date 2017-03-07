@@ -9,7 +9,7 @@ class NN_BASE:
         self.chk_threshold_value=5
 
         self.history = LossHistory()
-        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00000001, patience=500, verbose=1, mode='min')
+        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.000001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
@@ -47,7 +47,7 @@ class NN_BASE:
         for key in X_dict.keys():
             #print(X_dict[key].shape,key)
             if key.split('_')[0]!='OnOff' and key.split('_')[0]!='aux':
-                   X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
+                   X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],X_dict[key].shape[1],1)
                 #print(X_dict[key].shape)
         #X_dict['Main_input']=X_dict['Main_input'].reshape(X_dict['Main_input'].shape[0],1,X_dict['Main_input'].shape[1])
 
@@ -65,7 +65,7 @@ class NN_BASE:
         #self.debug(X_dict,Y_dict,True)
 
         self.model.fit(X_dict, Y_dict, nb_epoch=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
-                       callbacks=self.callbacks,shuffle=True,validation_data=(X_val_dict,Y_val_dict))
+                       callbacks=self.callbacks,shuffle=False,validation_data=(X_val_dict,Y_val_dict))
 
         #print(self.model.get_weights())
 
