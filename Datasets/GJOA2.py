@@ -79,7 +79,7 @@ def fetch_gjoa_data():
 
     if False:
         fig,axes=plt.subplots(2,1,sharex=True)
-        axes[0].scatter(X['time'], Y['C1_QOIL'], color='blue')
+        axes[0].scatter(X['C1_CHK'], Y['C1_PWH'], color='blue')
         axes[0].set_title('C1_PWH')
         axes[1].scatter(X['time'], X['C1_CHK'], color='blue')
         axes[1].set_title('C1_CHK')

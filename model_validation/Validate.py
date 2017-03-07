@@ -13,7 +13,7 @@ from .Visualize import *
     #model=ensemble.GradientBoostingRegressor(**params)
     #model = SVR(C=1000, gamma=0.001,epsilon=0.0001)
 MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
-MODEL_SAVEFILE_NAME='NCNET1_2_WITHOUT_ONOFF'
+
 
 
 
@@ -46,10 +46,10 @@ def validate_train_test_split(Data):
     else:
         #GJOA_QOIL
         #pass
-        #model=NCNET1_GJOA2.NCNET1_GJOA2()
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,2,2,2)
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,2,2,2)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_COMBINED()
 
@@ -59,9 +59,11 @@ def validate_train_test_split(Data):
     start=time.time()
     print(model.get_config())
     #print(model.model.get_config())
-    #model.fit(X_train,Y_train,X_val,Y_val)
-    #model.update_model()
+    model.fit(X_train,Y_train,X_val,Y_val)
+    model.update_model()
     model.fit(X_train, Y_train, X_val, Y_val)
+
+
     #print(model.model.get_weights())
     #model.fit(X_train[], Y_train, X_val, Y_val)
 
@@ -74,13 +76,16 @@ def validate_train_test_split(Data):
     scores,scores_latex = evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
     print(scores)
 
-    #model.save_model_config(scores_latex)
-    #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
+    model.save_model_config(scores_latex)
+    MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
+    model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
 
     input_cols =[]
 
 
     output_cols=[]
+    plt.plot(model.get_history())
+    plt.title('History')
     visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=output_cols, input_cols=input_cols)
 
     plt.show()

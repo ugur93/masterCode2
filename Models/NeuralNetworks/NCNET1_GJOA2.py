@@ -18,9 +18,9 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,maxnorm_hidden=4,maxnorm_out=4,n_depth=2,n_width=150):
+    def __init__(self,maxnorm_hidden=1,maxnorm_out=1,n_depth=3,n_width=100,p_dropout1=0.1,p_dropout2=0.1):
 
-        self.model_name='NCNET2-QOIL_OIL_ALL_mean_removed_GAUS_CONV_POOL5'
+        self.model_name='NCNET2-QOIL_GAS_depth2_w100_mnconv'
 
 
         self.output_layer_activation='linear'
@@ -28,7 +28,7 @@ class NCNET1_GJOA2(NN_BASE):
         # Training config
         self.optimizer = 'adam'#SGD(momentum=0.5,nesterov=True)
         self.loss = 'mse'
-        self.nb_epoch = 300
+        self.nb_epoch = 100
         self.batch_size = 64
         self.verbose = 0
 
@@ -44,6 +44,8 @@ class NCNET1_GJOA2(NN_BASE):
         self.maxnorm_hidden=maxnorm_hidden
         self.maxnorm_out=maxnorm_out
         self.l2weight = 0.00001
+        self.p_dropout1=p_dropout1
+        self.p_dropout2=p_dropout2
 
         self.make_same_model_for_all=True
         self.add_thresholded_output=True
@@ -64,7 +66,7 @@ class NCNET1_GJOA2(NN_BASE):
         #self.input_tags['C1']=['C1_CHK']
         print(self.input_tags)
 
-        OUT='GAS'
+        OUT='GASs'
         if OUT=='GAS':
             self.output_tags = {
                 #'C1_out':['C1_QOIL'],
@@ -178,7 +180,7 @@ class NCNET1_GJOA2(NN_BASE):
 
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
         K.set_image_dim_ordering('th')
-        input_layer = Input(shape=(n_input,1), dtype='float32', name=name)
+        input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
 
 
         if n_depth == 0 and n_inception==0:
@@ -192,21 +194,25 @@ class NCNET1_GJOA2(NN_BASE):
                 #temp_output = generate_inception_module(temp_output, n_inception, n_depth, n_width, l2_weight)
                 #temp_output = add_layers(temp_output, 1, n_width, l2_weight)
             else:
-                temp_output = Flatten()(input_layer)
-                #temp_output=ZeroPadding1D(1)(input_layer)
-                #temp_output = Convolution1D(20, 2, activation='relu', border_mode='same')(input_layer)
-                #temp_output=MaxPooling1D(2)(temp_output)
-                temp_output = Dropout(0.1)(temp_output)
-                temp_output = Dense(self.n_width, activation='relu',W_constraint=maxnorm(4),init=INIT, bias=True)(temp_output)
-                #temp_output = MaxoutDense(self.n_width, W_constraint=maxnorm(self.maxnorm_hidden),
-                #                    init=INIT, bias=True)(temp_output)
-                for i in range(1,self.n_depth):
-                    temp_output = Dropout(0.2)(temp_output)
-                    temp_output = Dense(self.n_width, activation='relu',W_constraint=maxnorm(4), init=INIT,bias=True)(temp_output)
-                    #temp_output = MaxoutDense(self.n_width, W_constraint=maxnorm(self.maxnorm_hidden),
-                    #                      init=INIT, bias=True)(temp_output)
 
-                temp_output = Dropout(0.2)(temp_output)
+                #temp_output=ZeroPadding1D(1)(input_layer)
+
+                temp_output = Flatten()(input_layer)
+                #temp_output=MaxPooling1D(2)(temp_output)
+                #temp_output = Dropout(0.1)(temp_output)
+                #temp_output = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight),init=INIT, bias=True)(temp_output)
+                #temp_output = MaxoutDense(self.n_width, W_constraint=maxnorm(self.maxnorm_hidden),init=INIT, bias=True)(temp_output)
+                #temp_output = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden),init=INIT, bias=True)(input_layer)
+                #temp_output = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,bias=True)(input_layer)
+                for i in range(0,self.n_depth):
+
+                    temp_output = Dense(self.n_width, activation='relu', W_constraint=maxnorm(1) ,init=INIT,bias=True)(temp_output)
+                    #temp_output = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden), init=INIT,bias=True)(temp_output)
+                    #temp_output = Dropout(0.1)(temp_output)
+                #temp_output = Convolution1D(20, 2, activation='relu', border_mode='same')(temp_output)
+                #temp_output = MaxPooling1D(2)(temp_output)
+                #temp_output = Flatten()(temp_output)
+                #temp_output = Dropout(0.1)(temp_output)
 
                 #conv33 = Convolution1D(3, 3, border_mode='same', activation='relu',
                 #                       W_constraint=maxnorm(self.maxnorm_hidden))(temp_output)
@@ -224,7 +230,8 @@ class NCNET1_GJOA2(NN_BASE):
         if thresholded_output:
             #output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight), b_regularizer=l2(l2_weight), bias=True)(
             #    temp_output)
-            output_layer = Dense(1,init=INIT,W_constraint=maxnorm(4),activation=self.output_layer_activation,bias=True)(temp_output)
+            #output_layer = Dense(1,init=INIT, W_constraint=maxnorm(self.maxnorm_hidden),activation=self.output_layer_activation,bias=True)(temp_output)
+            output_layer = Dense(1, init=INIT, W_constraint=maxnorm(1) ,activation=self.output_layer_activation, bias=True)(temp_output)
             #output_layer = MaxoutDense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True)(temp_output)
             #output_layer=Activation('relu')(output_layer)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
@@ -234,6 +241,42 @@ class NCNET1_GJOA2(NN_BASE):
 
             merged_output = output_layer
             aux_input = input_layer
+
+        return aux_input, input_layer, merged_output, output_layer
+
+    def generate_input_module2(self, n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
+        K.set_image_dim_ordering('th')
+        input_layer = Input(shape=(1,n_input), dtype='float32', name=name)
+
+
+
+        mod_dense = Flatten()(input_layer)
+
+        for i in range(0, self.n_depth):
+            mod_dense = Dense(self.n_width, activation='relu',W_constraint=maxnorm(self.maxnorm_hidden), init=INIT,
+                                bias=True)(mod_dense)
+
+        mod_conv = Dense(20, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden), init=INIT,
+                         bias=True)(input_layer)
+        mod_conv = Dense(20, activation='relu', W_constraint=maxnorm(self.maxnorm_hidden), init=INIT,
+                         bias=True)(mod_conv)
+        #mod_conv = Convolution1D(100, 2, border_mode='full', activation='relu', W_constraint=maxnorm(self.maxnorm_hidden))(input_layer)
+        #mod_conv = Convolution1D(100, 2, border_mode='full', activation='relu',
+        #                         W_constraint=maxnorm(self.maxnorm_hidden))(mod_conv)
+        #mod_conv = Convolution1D(50, 1, border_mode='valid', activation='relu',W_constraint=maxnorm(self.maxnorm_hidden))(mod_conv)
+        #mod_conv = LocallyConnected1D(50, 2, border_mode='valid', activation='relu', W_constraint=maxnorm(self.maxnorm_hidden))(mod_conv)
+        #mod_conv=MaxPooling1D(2)(mod_conv)
+        #mod_conv=Dropout(0.1)(mod_conv)
+
+        mod_conv = Flatten()(mod_conv)
+        main_model = merge([mod_conv, mod_dense], mode='concat')
+
+
+        output_layer = Dense(1, init=INIT, W_constraint=maxnorm(self.maxnorm_hidden), activation=self.output_layer_activation,
+                             bias=True)(mod_dense)
+
+        aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
+
 
         return aux_input, input_layer, merged_output, output_layer
 

@@ -95,14 +95,14 @@ class SSNET3_PRESSURE(NN_BASE):
 
 
                 sub_model = Flatten()(chk_input)
-                sub_model = Dropout(0.1)(sub_model)
-                sub_model = Dense(100, W_constraint=maxnorm(4), activation='relu')(sub_model)
                 #sub_model = Dropout(0.1)(sub_model)
-                #sub_model = Dense(20, W_constraint=maxnorm(3), activation='relu')(sub_model)
+                #sub_model = Dense(100, W_regularizer=l2(0.000001), activation='relu')(sub_model)
+                #sub_model = Dropout(0.1)(sub_model)
+                sub_model = Dense(60, W_constraint=maxnorm(4), activation='relu')(sub_model)
 
                 #sub_model = Convolution1D(100, 2, border_mode='same', activation='relu',W_constraint=maxnorm(4))(sub_model)
                 #sub_model = MaxPooling1D(2)(sub_model)
-                sub_model = Dropout(0.2)(sub_model)
+               ##sub_model = Dropout(0.2)(sub_model)
 
 
                 #sub_model = Dense(50, W_constraint=maxnorm(5), activation='relu')(sub_model)
@@ -113,7 +113,7 @@ class SSNET3_PRESSURE(NN_BASE):
                 #sub_model = Dropout(0.01)(sub_model)
 
 
-                sub_model = Dense(1,W_constraint=maxnorm(4),activation=self.out_act)(sub_model)
+                sub_model = Dense(1, W_constraint=maxnorm(4),activation=self.out_act)(sub_model)
                 aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
                 sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
 

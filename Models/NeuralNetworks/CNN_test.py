@@ -32,14 +32,14 @@ class CNN_GJOAOIL(NN_BASE):
         self.n_depth_incept=1
         self.n_width_incept=20
         self.n_width = 20
-        self.l2weight = 0.0001
+        self.l2weight = 0.00001
 
         self.make_same_model_for_all=True
         self.add_thresholded_output=True
 
         self.input_tags = {}
-        self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']#
-        tags = ['CHK']#,'PBH','PWH','PDC']
+        self.well_names = ['C1']#,'C2', 'C3', 'C4','B1','B3','D1']#
+        tags = ['CHK','PBH','PWH','PDC']
         self.input_tags['Main_input'] = []
         for name in self.well_names:
             for tag in tags:
@@ -61,6 +61,7 @@ class CNN_GJOAOIL(NN_BASE):
                 #else:
                 col=name+'_'+tag
                 pressure_outputs.append(col)
+        name = self.well_names[0]
         self.output_tags = {
             #'C1_out':['C1_QOIL'],
             #'C2_out':['C2_QOIL'],
@@ -82,9 +83,9 @@ class CNN_GJOAOIL(NN_BASE):
             #'F1_out': ['F1_QGAS'],
             #'B2_out': ['B2_QGAS'],
             #'D3_out': ['D3_QGAS'],
-            #'E1_out': ['E1_QGAS'],
-            'MAIN_OUT':pressure_outputs,
-            'conv':['non']
+            'MAIN_OUT': [name+'_QGAS'],
+            #'MAIN_OUT':pressure_outputs,
+            #'conv':['non']
             #'GJOA_TOTAL':['GJOA_OIL_QGAS']
         }
         self.loss_weights = {
@@ -110,47 +111,30 @@ class CNN_GJOAOIL(NN_BASE):
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
-
-        input=Input(shape=(1,len(self.input_tags['Main_input'])),dtype='float32',name='Main_input')
+        name=self.well_names[0]
+        main_input=Input(shape=(len(self.input_tags['Main_input']),1),dtype='float32',name='Main_input')
         #main_model=GaussianNoise(0.01)(input)
-        #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(input)
-        #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-        main_model=Convolution1D(10,10,border_mode='same',activation='linear', W_regularizer=l2(self.l2weight))(input)
-        other=Flatten()(main_model)
-        other=Dense(1,name='conv')(other)
-        #main_model=MaxPooling1D(pool_length=1)(main_model)
-        #main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(
-        #    main_model)
-        #main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(
-        #    main_model)
-        #main_model = MaxPooling1D(pool_length=1)(main_model)
-        #main_model = Dropout(0.01)(main_model)
-        #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-        #main_model = Convolution1D(32, 2, border_mode='same', activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-        #main_model = MaxPooling1D(pool_length=1)(main_model)
-        #main_model = Dropout(0.01)(main_model)
 
-        #main_model = Dropout(0.01)(main_model)
-        #main_model = Convolution1D(124, 2, border_mode='same', activation='relu')(main_model)
-        #main_model = Dropout(0.01)(main_model)
-        #main_model = Convolution1D(124, 2, border_mode='same', activation='relu')(main_model)
-        #
-        #main_model = Dropout(0.1)(main_model)
-        #main_model = Convolution1D(64, 2, border_mode='same', activation='relu')(main_model)
-        #main_model = MaxPooling1D(pool_length=1)(main_model)
-        #main_model = Convolution1D(64, 2, border_mode='same', activation='relu')(main_model)
-        #main_model = MaxPooling1D(pool_length=1)(main_model)
+        mod_dense = Flatten()(main_input)
+        mod_dense=Dense(50, activation='relu', W_regularizer=l2(self.l2weight))(mod_dense)
+        mod_dense = Dense(50, activation='relu', W_regularizer=l2(self.l2weight))(mod_dense)
+
+        mod_conv=LocallyConnected1D(100,2,border_mode='valid',activation='relu', W_regularizer=l2(self.l2weight))(main_input)
+        mod_conv = LocallyConnected1D(100, 2, border_mode='valid', activation='relu', W_regularizer=l2(self.l2weight))(
+            mod_conv)
+        #mod_conv=MaxPooling1D(2)(mod_conv)
+        mod_conv=Flatten()(mod_conv)
+
+        main_model=merge([mod_conv,mod_dense],mode='concat')
+        aux_input = Input(shape=(1,), dtype='float32', name='OnOff_' + name)
 
 
+        main_model = Dense(len(self.output_tags['MAIN_OUT']), activation='linear',
+                           W_regularizer=l2(self.l2weight))(main_model)
+        merged_out=merge([aux_input, main_model], mode='mul', name='MAIN_OUT')
 
-        #main_model = Convolution1D(32, 3, border_mode='same', activation='relu')(main_model)
-        #main_model=MaxPooling1D(pool_length=1)(main_model)
-        #main_model=Dropout(0.1)(main_model)
-        #main_model = Convolution1D(len(self.output_tags['MAIN_OUT']), 2, border_mode='same', activation='relu',name='MAIN_OUT')(main_model)
-        main_model=Flatten()(main_model)
-        #main_model = Dense(20, activation='relu', W_regularizer=l2(self.l2weight))(main_model)
-        main_model=Dense(len(self.output_tags['MAIN_OUT']),activation='linear',name='MAIN_OUT',W_regularizer=l2(self.l2weight))(main_model)
-        self.model = Model(input=input, output=[main_model,other])
+
+        self.model = Model(input=[main_input,aux_input], output=[merged_out])
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
 
 
