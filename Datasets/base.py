@@ -125,8 +125,8 @@ class CustomTransformer:
     def fit_transform(self,data):
         data_transformed = data.copy()
 
-        self.mean=data_transformed.mean()
-        self.var=data_transformed.std()
+        self.mean=data_transformed[data_transformed>0].mean()
+        self.var=data_transformed[data_transformed>0].std()
         print(self.mean)
         return self.transform(data)
 

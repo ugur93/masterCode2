@@ -38,7 +38,7 @@ class CNN_GJOAOIL(NN_BASE):
         self.add_thresholded_output=True
 
         self.input_tags = {}
-        self.well_names = ['C1']#,'C2', 'C3', 'C4','B1','B3','D1']#
+        self.well_names = ['C2']#,'C2', 'C3', 'C4','B1','B3','D1']#
         tags = ['CHK','PBH','PWH','PDC']
         self.input_tags['Main_input'] = []
         for name in self.well_names:
@@ -52,57 +52,22 @@ class CNN_GJOAOIL(NN_BASE):
 
 
 
-        pressure_tags=['PWH']
+        pressure_tags=['QGAS']
         pressure_outputs=[]
         for name in self.well_names:
             for tag in pressure_tags:
-                #if name=='C2' or name=='D1':
-                #    pass
-                #else:
+
                 col=name+'_'+tag
                 pressure_outputs.append(col)
         name = self.well_names[0]
         self.output_tags = {
-            #'C1_out':['C1_QOIL'],
-            #'C2_out':['C2_QOIL'],
-            #'C3_out':['C3_QOIL'],
-            #'C4_out':['C4_QOIL'],
-            #'D1_out':['D1_QOIL'],
-            #'B3_out':['B3_QOIL'],
-            #'B1_out':['B1_QOIL'],
-            #'GJOA_TOTAL': ['GJOA_TOTAL_QOIL_SUM']
 
-            #'C1_out': ['C1_QGAS'],
-            #'C2_out': ['C2_QGAS'],
-            #'C3_out': ['C3_QGAS'],
-            #'C4_out': ['C4_QGAS'],
-            #'D1_out': ['D1_QGAS'],
-            #'B3_out': ['B3_QGAS'],
-            #'B1_out': ['B1_QGAS'],
+            'MAIN_OUT': [name+'_QOIL'],
 
-            #'F1_out': ['F1_QGAS'],
-            #'B2_out': ['B2_QGAS'],
-            #'D3_out': ['D3_QGAS'],
-            'MAIN_OUT': [name+'_QGAS'],
-            #'MAIN_OUT':pressure_outputs,
-            #'conv':['non']
-            #'GJOA_TOTAL':['GJOA_OIL_QGAS']
         }
         self.loss_weights = {
-            #'B1_out':  0.0,
-            #'B3_out':  0.0,
-            #'C2_out':  0.0,
-            #'C3_out':  0.0,
-            #'D1_out':  0.0,
-            #'C4_out':  0.0,
-            #'F1_out': 0.0,
-            #'B2_out': 0.0,
-            #'D3_out': 0.0,
-            #'E1_out': 0.0,
-            #'A1_out':0.0,
+
             'MAIN_OUT': 1.0,
-            #'Riser_out': 0.0,
-            'conv':  0.0
         }
 
 
@@ -112,25 +77,26 @@ class CNN_GJOAOIL(NN_BASE):
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
         name=self.well_names[0]
-        main_input=Input(shape=(len(self.input_tags['Main_input']),1),dtype='float32',name='Main_input')
+        main_input=Input(shape=(1,len(self.input_tags['Main_input'])),dtype='float32',name='Main_input')
         #main_model=GaussianNoise(0.01)(input)
 
-        mod_dense = Flatten()(main_input)
-        mod_dense=Dense(50, activation='relu', W_regularizer=l2(self.l2weight))(mod_dense)
+
+        mod_dense=Dense(50, activation='relu', W_regularizer=l2(self.l2weight))(main_input)
         mod_dense = Dense(50, activation='relu', W_regularizer=l2(self.l2weight))(mod_dense)
-
-        mod_conv=LocallyConnected1D(100,2,border_mode='valid',activation='relu', W_regularizer=l2(self.l2weight))(main_input)
-        mod_conv = LocallyConnected1D(100, 2, border_mode='valid', activation='relu', W_regularizer=l2(self.l2weight))(
-            mod_conv)
+        mod_dense=Convolution1D(20,2,activation='relu',border_mode='same')(mod_dense)
+        mod_dense = Flatten()(mod_dense)
+        #mod_conv=LocallyConnected1D(100,2,border_mode='valid',activation='relu', W_regularizer=l2(self.l2weight))(main_input)
+        #mod_conv = LocallyConnected1D(100, 2, border_mode='valid', activation='relu', W_regularizer=l2(self.l2weight))(
+        #    mod_conv)
         #mod_conv=MaxPooling1D(2)(mod_conv)
-        mod_conv=Flatten()(mod_conv)
+        #mod_conv=Flatten()(mod_conv)
 
-        main_model=merge([mod_conv,mod_dense],mode='concat')
+        #main_model=merge([mod_conv,mod_dense],mode='concat')
         aux_input = Input(shape=(1,), dtype='float32', name='OnOff_' + name)
 
 
-        main_model = Dense(len(self.output_tags['MAIN_OUT']), activation='linear',
-                           W_regularizer=l2(self.l2weight))(main_model)
+        main_model = Dense(len(self.output_tags['MAIN_OUT']), activation='relu',
+                           W_regularizer=l2(self.l2weight))(mod_dense)
         merged_out=merge([aux_input, main_model], mode='mul', name='MAIN_OUT')
 
 

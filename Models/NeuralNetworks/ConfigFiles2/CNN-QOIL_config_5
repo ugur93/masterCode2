@@ -1,0 +1,56 @@
+########### LAYER CONFIG ########### 
+
+Main_input -> flatten_1 -> dense_1 -> dense_2 -> dense_3 -> MAIN_OUT
+['Main_input', {'name': 'flatten_1', 'trainable': True}, {'name': 'dense_1', 'trainable': True, 'output_dim': 200, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-06}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 4}, {'name': 'dense_2', 'trainable': True, 'output_dim': 200, 'init': 'glorot_uniform', 'activation': 'relu', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-06}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 200}, {'name': 'dense_3', 'trainable': True, 'output_dim': 1, 'init': 'glorot_uniform', 'activation': 'linear', 'W_regularizer': {'name': 'L1L2Regularizer', 'l1': 0.0, 'l2': 9.999999747378752e-06}, 'b_regularizer': None, 'activity_regularizer': None, 'W_constraint': None, 'b_constraint': None, 'bias': True, 'input_dim': 200}, {'name': 'MAIN_OUT', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+OnOff_B1 -> MAIN_OUT
+['OnOff_B1', {'name': 'MAIN_OUT', 'mode': 'mul', 'mode_type': 'raw', 'concat_axis': -1, 'dot_axes': -1, 'output_shape': None, 'output_shape_type': 'raw', 'output_mask': None, 'output_mask_type': 'raw', 'arguments': {}}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+B1: -0.386689413056
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+B1_QOIL: 0
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 2 
+- n_width: 20 
+- n_inception: 0 
+- l2_weight: 1e-05 
+- OnOff_state: True 
+- Initialization: glorot_uniform 
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<Models.NeuralNetworks.base.LossHistory object at 0xc0844cc>, <Models.NeuralNetworks.base.EpochVerbose object at 0xc54efcc>, <Models.NeuralNetworks.base.CustomEarlyStopping object at 0xc54e58c>] 
+- optimizer: adam 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+Main_input: ['B1_CHK', 'B1_PBH', 'B1_PWH', 'B1_PDC']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+MAIN_OUT: ['B1_QOIL']
+-------------------------------------------------
+-------------------------------------------------
+
+\hline 
+Tag&RMSE TRAIN:                  &RMSE VAL:                    &Percentage error (VAL/MEAN)*100        &MEAN\\
+ \hline 
+ B1\_QOIL& 0.74               &0.77                         &3.63\%                                 &21.24\\ 
+
+ \hline 
+ Tag&R2 TRAIN:                    &R2 VAL:&\\ 
+ \hline 
+ B1\_QOIL& 0.99               &0.98\\ 
+
+ \hline 
+ 

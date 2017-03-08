@@ -9,7 +9,7 @@ class NN_BASE:
         self.chk_threshold_value=5
 
         self.history = LossHistory()
-        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.000001, patience=500, verbose=1, mode='min')
+        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.000001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
@@ -36,8 +36,8 @@ class NN_BASE:
 
     def preprocess_data(self,X,Y=[]):
         X_dict = df2dict(X,self.input_tags,self.output_tags,'X')
-        if self.add_thresholded_output:
-            X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
+        #if self.add_thresholded_output:
+        #    X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
         if len(Y)>0:
             Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
             #Y_dict['MAIN_OUT'] = Y_dict['MAIN_OUT'].reshape(Y_dict['MAIN_OUT'].shape[0],

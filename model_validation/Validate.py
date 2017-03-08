@@ -76,9 +76,9 @@ def validate_train_test_split(Data):
     scores,scores_latex = evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
     print(scores)
 
-    model.save_model_config(scores_latex)
-    MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
-    model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
+    #model.save_model_config(scores_latex)
+    #MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
+    #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
 
     input_cols =[]
 
