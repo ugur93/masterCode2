@@ -21,101 +21,24 @@ DATA_TYPE = 'mea'
 
 
 well_names=['C1','C2','C3','C4','D1','B3','B1']
+CHK_THRESHOLD=5
 
 
 
 def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
-    DROP=[808,807, 173,416,447,487]
-    X,Y=data_to_X_Y(data)
-    print(len(X))
-    X.drop(DROP, inplace=True)
-    Y.drop(DROP, inplace=True)
-    print(len(X))
-    #exit()
-    #Y = add_choke_delta(Y)
-    #Y = add_well_delta(Y)
-
-    #X = add_choke_delta(X)
-    #X = add_well_delta(X)
-    X['time'] = np.arange(0, len(X))
 
 
-    if False:
-
-        cols=['C2_CHK','C2_QOIL','C2_QGAS']
-        fig,axes=plt.subplots(len(cols),1,sharex=True)
-
-        for i,key in zip(range(0,len(cols)),cols):
-            try:
-                axes[i].scatter(X['time'], X[key], color='blue')
-            except(KeyError):
-                axes[i].scatter(X['time'], Y[key], color='blue')
-            axes[i].set_title(key)
-
-
-        #for i in range(len(well_names)):
-        #    plt.subplot(4,2,i+1)
-        #    plt.scatter(X['time'], X[well_names[i]+'_CHK'], color='black')
-        #    plt.title(well_names[i]+'_CHK')
-        plt.show()
-
-    X['GJOA_RISER_OIL_B_CHK'][114:129]=0
-    for key in well_names:
-        ind_oil_zero = Y[key + '_QOIL'] == 0
-        #ind_gas_zero = Y[key + '_QGAS'] == 0
-        # print(len(ind_gas_zero))
-        X[key + '_CHK'][ind_oil_zero] = 0
-        #X[key + '_CHK'][ind_gas_zero] = 0
-
-        ind_zero = X[key + '_CHK'] <5
-
-
-
-        X[key + '_PWH'][ind_zero] = 0
-        X[key + '_PBH'][ind_zero] = 0
-        X[key + '_PDC'][ind_zero] = 0
-        Y[key + '_PWH'][ind_zero] = 0
-        Y[key + '_PBH'][ind_zero] = 0
-        Y[key + '_PDC'][ind_zero] = 0
-
-        Y[key + '_QOIL'][ind_zero]=0
-        Y[key + '_QGAS'][ind_zero] = 0
-
-        X[key + '_CHK_zero'] = np.array([0 if x < 5 else 1 for x in X[key + '_CHK']])
-
-    sum_oil, sum_gas = calculate_sum_multiphase(Y)
-
-    Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS']# + np.ones((len(Y),)) * 5000
-    Y['GJOA_OIL_QGAS_OLD']=Y['GJOA_OIL_QGAS'].copy()
-
-    #Remove bias
-    Y['GJOA_OIL_QGAS']+= np.ones((len(Y),)) * 5000
-
-    #Remove negative values
-    Y = negative_values_to_zero(Y, 'GJOA_OIL_QGAS')
-
-
-    Y['GJOA_TOTAL_SUM_QOIL'] = sum_oil
-    Y['GJOA_OIL_SUM_QGAS'] = sum_gas
-
-
-
-
-
-
-
+    X,Y=preprocesss(data)
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
     print('Data size: {}'.format(len(Y)))
 
-
-    col='C1_PWH'
     GjoaData=DataContainer(X,Y,name='GJOA2')
 
     if False:
 
-        cols=['C2_CHK','C2_QOIL']
+        cols=['C2_CHK','C2_PWH']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
 
         for i,key in zip(range(0,len(cols)),cols):
@@ -125,23 +48,7 @@ def fetch_gjoa_data():
                 axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
             axes[i].set_title(key)
 
-
-        #for i in range(len(well_names)):
-        #    plt.subplot(4,2,i+1)
-        #    plt.scatter(X['time'], X[well_names[i]+'_CHK'], color='black')
-        #    plt.title(well_names[i]+'_CHK')
         plt.show()
-
-        #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS'], color='red')
-        #axes[0].scatter(X['time'], Y['GJOA_OIL_QGAS_OLD'], color='green')
-        #axes[0].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS'], color='blue')
-        #axes[1].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS_OLD'], color='blue')
-        #axes[2].scatter(X['time'], Y['GJOA_OIL_SUM_QGAS']-Y['GJOA_OIL_QGAS'], color='blue')
-        plt.show()
-
-    #test_bed(X,Y,sum_gas,sum_oil)
-    #plt.plot(GjoaData.X_transformed[col])
-    #plt.show()
 
     return GjoaData
 
@@ -186,53 +93,82 @@ def calculate_sum_multiphase(Y):
     return sum_oil,sum_gas
 
 
+def set_index_values_to_zero(df,ind,col):
+
+    df.loc[ind,col]=0
+    return df
+def set_chk_zero_values_to_zero(X,Y):
+
+    for key in well_names:
+        ind_oil_zero = Y[key + '_QOIL'] == 0
+        ind_gas_zero = Y[key + '_QGAS'] == 0
+        # print(len(ind_gas_zero))
+        X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
+        X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
+        # X[key + '_CHK'][ind_gas_zero] = 0
+
+        ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
+
+        X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
+        X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
+        X = set_index_values_to_zero(X, ind_zero, key + '_PDC')
+
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_PWH')
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_PBH')
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
+
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_QOIL')
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_QGAS')
+
+        X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
+
+    return X,Y
+
+def preprocesss(data):
+    DROP = [808, 807, 173, 416, 447, 487]
+    X, Y = data_to_X_Y(data)
+    X['time'] = np.arange(0, len(X))
+    if False:
+
+        cols=['C2_CHK','C2_PWH']
+        fig,axes=plt.subplots(len(cols),1,sharex=True)
+
+        for i,key in zip(range(0,len(cols)),cols):
+            try:
+                axes[i].scatter(X['time'], X[key], color='blue')
+            except(KeyError):
+                axes[i].scatter(X['time'], Y[key], color='blue')
+            axes[i].set_title(key)
+
+        plt.show()
+    X.drop(DROP, inplace=True)
+    Y.drop(DROP, inplace=True)
+
+    X.loc[114:129, 'GJOA_RISER_OIL_B_CHK'] = 0
+    X,Y=set_chk_zero_values_to_zero(X,Y)
+
+    sum_oil, sum_gas = calculate_sum_multiphase(Y)
+
+    Y['GJOA_TOTAL_SUM_QOIL'] = sum_oil
+    Y['GJOA_OIL_SUM_QGAS'] = sum_gas
+
+    Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS']
+
+    # Remove bias
+    Y['GJOA_OIL_QGAS'] += np.ones((len(Y),)) * 5000
 
 
 
-def test_bed(X,Y,sum_gas,sum_oil):
-    #pass
-    # plt.figure()
-    # plt.scatter(X['time'], Y['GJOA_TOTAL_QGAS_DEPRECATED'], color='blue',label='GJOA_TOTAL_QGAS_DEPRECATED')
-    # plt.scatter(X['time'], Y['GJOA_SEP_1_QGAS'], color='red',label='GJOA_SEP_1_QGAS')
-    # plt.legend()
-    # plt.plot(Y['GJOA_QGAS']-sum_oil,color='red')
-    # plt.plot(sum_oil,color='blue')
-    # plt.show()
+    # Remove negative values
+    Y = negative_values_to_zero(Y, 'GJOA_OIL_QGAS')
 
-    #plt.scatter(X['time'], sum_gas-Y['GJOA_OIL_QGAS'], color='blue', label='sum_gas - GJOA_OIL_QGAS')
-    plt.scatter(X['time'], Y['GJOA_OIL_QGAS'], color='blue', label='GJOA_OIL_QGAS')
-    plt.scatter(X['time'], sum_gas, color='black', label='Sum oil wells QGAS ')
-    plt.xlabel('time')
-    plt.ylabel('QGAS sm3/h')
-    plt.legend()
-    plt.show()
-    # Y=Y[~ind]
-    # X=X[~ind]
-    # Y['GJOA_QGAS'] = Y['GJOA_QGAS'] #- np.mean(Y['GJOA_QGAS'] - sum_oil)
-    i=1
-    for tag in well_names:
-        #plt.figure()
-        name=tag+'_'+'PDC'
-        fig,axes=plt.subplots(2,1,sharex=True)
-        #plt.subplot(2,1,1)
-        i+=1
-        axes[0].plot(X[name])
-        axes[0].set_title(name)
-        name = tag + '_' + 'CHK'
-        #plt.subplot(2, 1, 2)
-        i += 1
-        axes[1].plot(X[name])
-        axes[1].set_title(name)
-    plt.show()
-    plot_input_to_total(X, Y, 'TOTAL_SUM_QOIL', well_names)
-    plot_input_to_well(X, Y, 'QOIL', well_names)
-    plt.show()
+    return X,Y
 
-def add_choke_delta(Y):
-    for name in well_names:
-        Y[name+'_c_delta']=Y[name+'_PWH']-Y[name+'_PDC']
-    return Y
-def add_well_delta(Y):
-    for name in well_names:
-        Y[name+'_w_delta']=Y[name+'_PBH']-Y[name+'_PWH']
-    return Y
+
+
+
+
+
+
+
+

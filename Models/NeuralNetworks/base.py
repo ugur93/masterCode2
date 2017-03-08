@@ -136,7 +136,7 @@ class CustomEarlyStopping(Callback):
 
     def on_train_end(self, logs=None):
         if self.stopped_epoch > 0 and self.verbose > 0:
-            print('Epoch %05d: early stopping with best loss: %05d' % (self.stopped_epoch,self.best))
+            print('Epoch %05d: early stopping with best loss: %f' % (self.stopped_epoch,self.best))
 
 class EpochVerbose(Callback):
 
@@ -178,7 +178,7 @@ def plotModel(model,file_name):
 def add_OnOff_state_input(X,X_dict,thresholds):
     new_X=X_dict.copy()
     for key in thresholds:
-        OnOff_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
+        OnOff_X=np.array([0 if x<thresholds[key] else 1 for x in X[key+'_CHK']])
         OnOff_X=OnOff_X.reshape((len(OnOff_X),1))
         new_X.update({'OnOff_'+key:OnOff_X})
     return new_X

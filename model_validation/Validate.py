@@ -84,8 +84,8 @@ def validate_train_test_split(Data):
 
 
     output_cols=[]
-    plt.plot(model.get_history())
-    plt.title('History')
+    #plt.plot(model.get_history())
+    #plt.title('History')
     visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=output_cols, input_cols=input_cols)
 
     plt.show()
@@ -217,7 +217,7 @@ def grid_search2(Data):
     X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
 
 
-    search_params={'n_depth':[2,3],'n_width':[20,50,100],'maxnorm_hidden':[1,2,3,4],'maxnorm_out':[1,2,3,4]}
+    search_params={'n_depth':[2],'n_width':[20,50,100],'maxnorm1':[1,2,3,4,5],'maxnorm2':[1,2,3,4,5],'maxnorm3':[1,2,3,4,5]}
 
     grid_params=generate_grid(search_params)
 
@@ -244,7 +244,7 @@ def grid_search2(Data):
 
         curr_max=np.max(np.sqrt(score_test_MSE))
         curr_sum=np.sum(np.sqrt(score_test_MSE))
-        print('THIS MAX: {}, SUM: {}'.format(curr_max,curr_sum))
+
 
         if curr_max<best_max:
             best_max=curr_max
@@ -257,11 +257,16 @@ def grid_search2(Data):
             best_mse_sum=np.sqrt(score_test_MSE)
             best_r2_sum=score_test_r2
         del model
+
+
         print('Cols: {}'.format(cols))
+        print('THIS MAX: {}, SUM: {}'.format(curr_max, curr_sum))
         print('Current best max: {} \n Current best sum: {} \n'.format(best_params_max,best_params_sum))
         print('Current best max results: {} \n Current best sum results: {} \n'.format(best_max,best_sum))
         print('Current best rmse max results:\n {} \n Current best rmse sum results:\n {}'.format(best_mse_max,best_mse_sum))
         print('Current best r2 max results:\n {} \n Current best r2 sum results:\n {}'.format(best_r2_max,best_r2_sum))
+
+
     print('Best results: ')
     print('Cols: {}'.format(cols))
     print('Current best max: {} \n Current best sum: {}'.format(best_params_max,best_params_sum))

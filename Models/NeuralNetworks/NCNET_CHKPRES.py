@@ -10,9 +10,19 @@ def sub(inputs):
         s -= inputs[i]
     return s
 PRES='PWH'
+from theano.ifelse import ifelse
+from theano import tensor as T
+import theano
+def zero_layer(x):
+    a,b=T.scalars('a','b')
+    c, y = T.matrices('v', 'y')
 
-def neg(x):
-    return -1*x
+    z_lazy=ifelse(T.lt(a,b),c,y)
+
+    f_lazyifelse= theano.function([a,b,c,y], z_lazy,
+                               mode=theano.Mode(linker='vm'),allow_input_downcast=True)
+    return f_lazyifelse(5,x,0,x)
+    #+return x
 class SSNET3_PRESSURE(NN_BASE):
 
 
@@ -64,7 +74,8 @@ class SSNET3_PRESSURE(NN_BASE):
         self.output_tags = {}
         for name in self.well_names:
             self.output_tags[name + '_out'] = [name + '_'+PRES]
-            self.input_tags['aux_' + name] = [name + '_CHK_zero']
+            #self.input_tags['aux_' + name] = [name + '_CHK_zero']
+            self.input_tags['aux_' + name] = [name + '_CHK']
         self.initialize_zero_thresholds(Data)
         super().__init__()
     def initialize_model(self):
@@ -74,50 +85,21 @@ class SSNET3_PRESSURE(NN_BASE):
         #
         inputs = [chk_input]
         outputs = []
-        MN=2
+
         for key in self.well_names:
-                #sub_model=Dropout(0.2)(chk_input)
-                #sub_model=UpSampling1D(2)(chk_input)
-                #sub_model=LocallyConnected1D(100,1,activation='relu',W_constraint=maxnorm(MN),border_mode='valid')(chk_input)
-
-                #sub_model=MaxPooling1D(1)(sub_model)
-                #sub_model = Dense(20, activation='relu',W_constraint=maxnorm(1))(sub_model)
-
-                #
-                #sub_model = GaussianNoise(0.01)(sub_model)
-                #sub_model = LocallyConnected1D(100, 1, activation='relu',W_constraint=maxnorm(1),
-                #                               border_mode='valid')(chk_input)
-                #sub_model = Dense(100, W_constraint=maxnorm(1), activation='relu')(chk_input)
-                #sub_model=Dropout(0.1)(sub_model)
-                #sub_model = Convolution1D(50, 2, border_mode='same', activation='relu',W_constraint=maxnorm(4))(chk_input)
-                #sub_model=MaxPooling1D(8)(sub_model)
-                #sub_model = Dropout(0.1)(sub_model)
 
 
                 sub_model = Flatten()(chk_input)
-                #sub_model = Dropout(0.1)(sub_model)
-                #sub_model = Dense(100, W_regularizer=l2(0.000001), activation='relu')(sub_model)
-                #sub_model = Dropout(0.1)(sub_model)
+
                 sub_model = Dense(100, W_constraint=maxnorm(1), activation='relu')(sub_model)
-                #sub_model = Dense(20, W_constraint=maxnorm(4), activation='relu')(sub_model)
-
-                #sub_model = Convolution1D(100, 2, border_mode='same', activation='relu',W_constraint=maxnorm(4))(sub_model)
-                #sub_model = MaxPooling1D(2)(sub_model)
-               ##sub_model = Dropout(0.2)(sub_model)
-
-
-                #sub_model = Dense(50, W_constraint=maxnorm(5), activation='relu')(sub_model)
-                #sub_model2 = Dense(20, W_constraint=maxnorm(MN), activation='relu')(chk_input)
-                #sub_model3 = Dense(20, W_constraint=maxnorm(MN), activation='relu')(chk_input)
-                #sub_model=merge([sub_model1,sub_model2,sub_model3],mode='sum')
-                #sub_model = Dense(100, W_constraint=maxnorm(4), activation='relu')(sub_model)
-                #sub_model = Dropout(0.01)(sub_model)
 
 
                 sub_model = Dense(1, W_constraint=maxnorm(1),activation=self.out_act)(sub_model)
-                aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
-                sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
 
+                aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
+                #aux_input_act = ThresholdedReLU(theta=self.chk_thresholds)(aux_input)
+                sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
+                #sub_model=Activation(zero_layer, name=key + '_out')(sub_model)
                 outputs.append(sub_model_out)
                 inputs.append(aux_input)
 

@@ -9,7 +9,7 @@ class NN_BASE:
         self.chk_threshold_value=5
 
         self.history = LossHistory()
-        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.000001, patience=500, verbose=1, mode='min')
+        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
@@ -29,6 +29,7 @@ class NN_BASE:
         ordered_list, layer_names=layer_to_ordered_tag_list(self.input_tags,self.model.get_config()['input_layers'])
         #print(ordered_list)
         #print(layer_names)
+
         plotModel(self.model,self.model_name)
 
     def initialize_model(self):
@@ -36,8 +37,8 @@ class NN_BASE:
 
     def preprocess_data(self,X,Y=[]):
         X_dict = df2dict(X,self.input_tags,self.output_tags,'X')
-        #if self.add_thresholded_output:
-        #    X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
+        if self.add_thresholded_output:
+            X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
         if len(Y)>0:
             Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
             #Y_dict['MAIN_OUT'] = Y_dict['MAIN_OUT'].reshape(Y_dict['MAIN_OUT'].shape[0],
@@ -179,6 +180,9 @@ class NN_BASE:
         for col in thresh_transformed.columns:
             key=col.split('_')[0]
             self.chk_thresholds[key]=thresh_transformed[col][0]
+
+        #print(self.chk_thresholds)
+        #exit()
     def initialize_zero_thresholds(self,data):
 
         cols=tags_to_list(self.output_tags)
