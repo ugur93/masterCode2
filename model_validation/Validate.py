@@ -54,8 +54,9 @@ def validate_train_test_split(Data):
         #model=NCNET4_combined.NET4_COMBINED()
 
 
-    #model.initialize_zero_thresholds(Data)
+    model.initialize_zero_thresholds(Data)
     model.initialize_chk_thresholds(Data, True)
+    #model.initialize_zero_thresholds(Data)
     start=time.time()
     print(model.get_config())
     #print(model.model.get_config())

@@ -9,13 +9,14 @@ from matplotlib import cm
 
 N_SAMPLES=1000
 CHOKE_FREQ=int(N_SAMPLES/50)
-N_WELLS=4
+N_WELLS=7
 N_SHUTDOWNS=3
 N_SHUTDOWN_STEPS=3
 N_SHUTDOWN_SCALE=5
 np.random.seed(151)
 
 WELL_NAMES=['F1','B2','D3','E1']
+WELL_NAMES=['C1','C2','C3','C4','D1','B3','B1']
 
 def generateChokeConfig():
     choke_mean = np.random.randint(20, 80, 1)
@@ -65,7 +66,7 @@ def getSimulatedChokeData():
 def fetchSimulatedData():
 
     X=getSimulatedChokeData()
-    X_Q=pd.DataFrame(index=range(0,N_SAMPLES),columns=[WELL_NAMES[i]+'_QGAS' for i in range(0,N_WELLS)])
+    X_Q=pd.DataFrame(index=range(0,N_SAMPLES),columns=[WELL_NAMES[i]+'_QOIL' for i in range(0,N_WELLS)])
 
     XT=pd.DataFrame()
     Y=np.zeros((N_SAMPLES,1))
@@ -74,10 +75,10 @@ def fetchSimulatedData():
         a=np.random.randint(1,10,1)
         b=np.random.randint(1, 100, 1)
         c=np.linspace(0,10,N_SAMPLES)*np.random.rand()
-        noise = np.random.rand(N_SAMPLES, 1)*25
+        noise = np.random.rand(N_SAMPLES, 1)*10
         data=f_linear(a,b,c,X[WELL_NAMES[i]+'_CHK'])+noise
         #print(data.shape)
-        X_Q[WELL_NAMES[i]+'_QGAS']=data
+        X_Q[WELL_NAMES[i]+'_QOIL']=data
         Y+=data
         WELL_PARAMS[WELL_NAMES[i]]={'a':a,'b':b}
         XT[WELL_NAMES[i]]=X[WELL_NAMES[i]+'_CHK']
@@ -88,16 +89,17 @@ def fetchSimulatedData():
     #print_rank(XT,'Simulated')
 
 
-    Y=pd.DataFrame(Y,columns=['GJOA_QGAS'])
+    Y=pd.DataFrame(Y,columns=['GJOA_TOTAL_SUM_QOIL'])
+    X['time'] = np.arange(0, len(X))
 
     Y=pd.concat([Y,X_Q],axis=1)
 
-    plotData(X, X_Q, Y)
+    #plotData(X, X_Q, Y)
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
 
     #plotChokeInputs(X)
-    SimData=DataContainer(X,Y,X_Q,params=WELL_PARAMS,name='Simulated',Y_SCALE=100)
+    SimData=DataContainer(X,Y)
     print(SimData.Y.columns)
     return SimData
 
@@ -126,7 +128,7 @@ def plotChokeInputs(X):
 def plotWellOutputs(X_Q):
    for i in range(1,N_WELLS+1):
        #plt.subplot(2, 2, i)
-       plt.plot(X_Q[WELL_NAMES[i-1]+'_QGAS'],label=WELL_NAMES[i-1]+'_QGAS')
+       plt.plot(X_Q[WELL_NAMES[i-1]+'_QOIL'],label=WELL_NAMES[i-1]+'_QGAS')
    plt.title('WELL OUTPUTS')
    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
               ncol=4, mode="expand", borderaxespad=0., fontsize=10)

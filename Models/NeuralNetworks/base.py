@@ -1,5 +1,5 @@
 from keras.models import Sequential
-from keras.layers import Dense, ThresholdedReLU, ZeroPadding1D,GaussianDropout,Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
+from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
 from keras.optimizers import Adam
 try:
@@ -176,13 +176,20 @@ def plotModel(model,file_name):
 #######################################INPUT#############################################################################
 
 def add_OnOff_state_input(X,X_dict,thresholds):
+    #print(thresholds)
     new_X=X_dict.copy()
     for key in thresholds:
         OnOff_X=np.array([0 if x<thresholds[key] else 1 for x in X[key+'_CHK']])
         OnOff_X=OnOff_X.reshape((len(OnOff_X),1))
         new_X.update({'OnOff_'+key:OnOff_X})
     return new_X
-
+def add_output_threshold_input(X,X_dict,thresholds):
+    new_X=X_dict.copy()
+    N=len(X)
+    for key in thresholds:
+        OnOff_X_out_thresh=np.ones((N,1))*thresholds[key]
+        new_X.update({'OnOff_ZERO_THRES_'+key:OnOff_X_out_thresh})
+    return new_X
 
 def df2dict(df,input_tags,output_tags,data_type):
     data={}

@@ -100,14 +100,26 @@ def set_index_values_to_zero(df,ind,col):
 def set_chk_zero_values_to_zero(X,Y):
 
     for key in well_names:
-        ind_oil_zero = Y[key + '_QOIL'] == 0
         ind_gas_zero = Y[key + '_QGAS'] == 0
-        # print(len(ind_gas_zero))
+        ind_oil_zero = Y[key + '_QOIL'] == 0
+
+
         X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
         X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
         # X[key + '_CHK'][ind_gas_zero] = 0
 
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
+
+        #ind_gas_zero = Y[key + '_QGAS'] == 0
+        #ind_oil_zero = Y[key + '_QOIL'] == 0
+        ##ind_gas_zero=ind_gas_zero!=ind_zero
+        #ind_oil_zero = ind_oil_zero != ind_zero
+
+        #X = X[~ind_oil_zero]
+        #Y = Y[~ind_oil_zero]
+
+        #X = X[~ind_gas_zero]
+        #Y = Y[~ind_gas_zero]
 
         X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
         X = set_index_values_to_zero(X, ind_zero, key + '_PBH')

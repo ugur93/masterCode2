@@ -50,7 +50,7 @@ class SSNET3_PRESSURE(NN_BASE):
         self.n_depth = depth
         self.n_width = 1
         self.l2weight = 0.0000
-        self.add_thresholded_output=False
+        self.add_thresholded_output=True
 
 
 
@@ -76,7 +76,12 @@ class SSNET3_PRESSURE(NN_BASE):
             self.output_tags[name + '_out'] = [name + '_'+PRES]
             #self.input_tags['aux_' + name] = [name + '_CHK_zero']
             self.input_tags['aux_' + name] = [name + '_CHK']
+
+        self.output_zero_thresholds = {}
+        #self.chk_threshold_value=5
         self.initialize_zero_thresholds(Data)
+        #self.initialize_chk_thresholds(Data, True)
+        print(self.output_zero_thresholds)
         super().__init__()
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
@@ -91,17 +96,26 @@ class SSNET3_PRESSURE(NN_BASE):
 
                 sub_model = Flatten()(chk_input)
 
-                sub_model = Dense(100, W_constraint=maxnorm(1), activation='relu')(sub_model)
+                sub_model = Dense(100, W_constraint=maxnorm(3.5), activation='relu')(sub_model)
+                #sub_model = Dense(50, W_constraint=maxnorm(1), activation='relu')(sub_model)
 
 
-                sub_model = Dense(1, W_constraint=maxnorm(1),activation=self.out_act)(sub_model)
+                sub_model = Dense(1, W_constraint=maxnorm(3.5),activation=self.out_act)(sub_model)
 
-                aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='aux_' + key)
-                #aux_input_act = ThresholdedReLU(theta=self.chk_thresholds)(aux_input)
+
+                aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='OnOff_' + key)
+                #aux_thresh_input=Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='OnOff_ZERO_THRES_' + key)
+                #aux_thresh_sum=merge([sub_model,aux_thresh_input],mode='sum')
+                #aux_thres_mul=merge([aux_thresh_sum,aux_input],mode='mul')
+
+
+                #
                 sub_model_out = merge([sub_model, aux_input], mode='mul', name=key + '_out')
+                #sub_model_out = ThresholdedReLU(theta=self.output_zero_thresholds[key.split('_')[0]](sub_model_out)
                 #sub_model=Activation(zero_layer, name=key + '_out')(sub_model)
                 outputs.append(sub_model_out)
                 inputs.append(aux_input)
+                #inputs.append(aux_thresh_input)
 
         self.model = Model(input=inputs, output=outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss)

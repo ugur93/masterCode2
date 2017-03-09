@@ -5,20 +5,24 @@ class NN_BASE:
 
     def __init__(self):
 
+
+        #Variables:
+        self.output_zero_thresholds={}
+        self.chk_thresh_val=None
+        self.chk_thresholds = {}
+
+
+
         #Config
         self.chk_threshold_value=5
 
         self.history = LossHistory()
-        self.Earlystopping=EarlyStopping(monitor='val_loss', min_delta=0.00001, patience=500, verbose=1, mode='min')
+        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.0000001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
         self.model = None
-        self.outputs = []
-        self.merged_outputs=[]
-        self.inputs=[]
-        self.aux_inputs=[]
-        self.chk_thresholds={}
+
 
 
         self.n_outputs=len(tags_to_list(self.output_tags))
@@ -26,9 +30,8 @@ class NN_BASE:
 
         self.output_index,self.output_tag_ordered_list,_ = output_tags_to_index(self.output_tags,self.model.get_config()['output_layers'])
 
-        ordered_list, layer_names=layer_to_ordered_tag_list(self.input_tags,self.model.get_config()['input_layers'])
-        #print(ordered_list)
-        #print(layer_names)
+        #ordered_list, layer_names=layer_to_ordered_tag_list(self.input_tags,self.model.get_config()['input_layers'])
+
 
         plotModel(self.model,self.model_name)
 
@@ -39,18 +42,16 @@ class NN_BASE:
         X_dict = df2dict(X,self.input_tags,self.output_tags,'X')
         if self.add_thresholded_output:
             X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
+            X_dict=add_output_threshold_input(X,X_dict,self.output_zero_thresholds)
+       # print(X_dict.keys())
         if len(Y)>0:
             Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
-            #Y_dict['MAIN_OUT'] = Y_dict['MAIN_OUT'].reshape(Y_dict['MAIN_OUT'].shape[0],
-            #                                                    Y_dict['MAIN_OUT'].shape[1])
         else:
             Y_dict=[]
         for key in X_dict.keys():
-            #print(X_dict[key].shape,key)
             if key.split('_')[0]!='OnOff' and key.split('_')[0]!='aux':
                    X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
-                #print(X_dict[key].shape)
-        #X_dict['Main_input']=X_dict['Main_input'].reshape(X_dict['Main_input'].shape[0],1,X_dict['Main_input'].shape[1])
+
 
         return X_dict,Y_dict
 
@@ -187,7 +188,11 @@ class NN_BASE:
 
         cols=tags_to_list(self.output_tags)
         thresh_data=pd.DataFrame(data=np.zeros((1,len(cols))),columns=cols)
-        self.output_zero_thresholds=data.transform(thresh_data,'Y')
+        temp_output_zero_thresholds=data.transform(thresh_data,'Y')
+
+        for col in thresh_data.columns:
+            key = col.split('_')[0]
+            self.output_zero_thresholds[key]=temp_output_zero_thresholds[col][0]
         print(self.output_zero_thresholds)
 
 
