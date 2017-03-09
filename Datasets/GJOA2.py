@@ -21,32 +21,36 @@ DATA_TYPE = 'mea'
 
 
 well_names=['C1','C2','C3','C4','D1','B3','B1']
-CHK_THRESHOLD=5
-
 
 
 def fetch_gjoa_data():
     data=pd.read_csv(DATA_PATH+FILENAME)
 
+    X, Y = data_to_X_Y(data)
+    X['time'] = np.arange(0, len(X))
 
-    X,Y=preprocesss(data)
+    X,Y=preprocesss(X, Y)
 
-    print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
-    print('Data size: {}'.format(len(Y)))
+    #print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
+    #print('Data size: {}'.format(len(Y)))
 
     GjoaData=DataContainer(X,Y,name='GJOA2')
 
     if False:
 
-        cols=['C2_CHK','C2_PWH']
+        cols=['B3_PBH']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
+        axes=[axes]
 
         for i,key in zip(range(0,len(cols)),cols):
             try:
                 axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
             except(KeyError):
                 axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
-            axes[i].set_title(key)
+            axes[i].set_title('O5_PBH')
+            axes[i].set_xlabel('Time')
+            axes[i].set_ylabel('O5_PBH [Bar]')
+            fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
 
@@ -93,10 +97,7 @@ def calculate_sum_multiphase(Y):
     return sum_oil,sum_gas
 
 
-def set_index_values_to_zero(df,ind,col):
 
-    df.loc[ind,col]=0
-    return df
 def set_chk_zero_values_to_zero(X,Y):
 
     for key in well_names:
@@ -136,9 +137,9 @@ def set_chk_zero_values_to_zero(X,Y):
 
     return X,Y
 
-def preprocesss(data):
+def preprocesss(X,Y):
     DROP = [808, 807, 173, 416, 447, 487]
-    X, Y = data_to_X_Y(data)
+
     X['time'] = np.arange(0, len(X))
     if False:
 

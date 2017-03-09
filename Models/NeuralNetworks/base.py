@@ -150,7 +150,7 @@ class EpochVerbose(Callback):
 
     def print_status(self,logs):
         s='On epoch: {0:1d}/{1:1d} -- {2:0.2f}%'.format(self.current_epoch,self.nb_epoch,self.current_epoch/self.nb_epoch*100)
-        s+=' -- Loss: {0:0.5f}'.format(logs.get('loss'))
+        s+=' -- Loss: {0:0.5f} -- Val_loss: {1:0.5f}'.format(logs.get('loss'),logs.get('val_loss'))
         print('\r', end='', flush=True)
         print(s,end='',flush=True)
 

@@ -3,10 +3,19 @@ from sklearn.preprocessing import StandardScaler,MinMaxScaler,MaxAbsScaler,Funct
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+
+
+
+CHK_THRESHOLD=5
 def negative_values_to_zero(data,tag_name):
     ind = data[tag_name] < 0
     data.loc[ind, tag_name] = 0
     return data
+
+def set_index_values_to_zero(df,ind,col):
+
+    df.loc[ind,col]=0
+    return df
 
 def print_rank(X,name):
     print('Rank {}: '.format(name))
@@ -15,14 +24,6 @@ def print_rank(X,name):
         print('Input has full rank of ' + str(rank))
     else:
         print('Rank of ' + str(rank) + ' is not full rank')
-
-
-def func_transform(x,scaler):
-    return x/scaler
-
-
-def inverse_func_transform(x,scaler):
-    return x*scaler
 
 
 def get_cols_that_ends_with(df,tag):
@@ -34,49 +35,9 @@ def get_cols_that_ends_with(df,tag):
             cols.append(col)
     return cols
 
-class SkTransformer:
 
-    def __init__(self):
-
-        self.XSCALER=MinMaxScaler()
-        self.YSCALER = CustomTransformer()
-
-    def transform(self,data):
-
-        cols=data.columns
-
-        if 'GJOA_SUM_QGAS' in cols:
-            print(cols)
-            data_transformed=self.YSCALER.fit_transform(data)
-        else:
-            print('X')
-            data_transformed=self.XSCALER.fit_transform(data)
-
-        return pd.DataFrame(data=data_transformed,columns=cols)
-    def inverse_transform(self,data):
-        return data
-
-        cols = data.columns
-        #print(data_transformed.shape)
-        print(cols)
-        if 'GJOA_SUM_QGAS' in cols:
-            print('here')
-            data_transformed = self.YSCALER.inverse_transform(data)
-        else:
-            data_transformed = self.XSCALER.inverse_transform(data)
-
-        return pd.DataFrame(data=data_transformed, columns=cols)
-
-    def get_scale(self,type):
-        return 100
 class CustomTransformer:
     def __init__(self,remove_mean=False):
-        self.PRESSURES=['PDC','PWH']
-        self.PRESSURES2=['PBH']
-        self.QGAS=['QGAS','DEPRECATED']
-        self.CHK=['CHK','time']
-        self.QOIL=['QOIL','SUM']
-        self.QWAT=['QWAT']
 
         self.SCALES={'PRESSURES2':100,
                      'PRESSURES':100,
@@ -98,13 +59,12 @@ class CustomTransformer:
         self.remove_mean=remove_mean
     def transform(self,data):
         data_transformed=data.copy()
-        print(data.columns[0])
         for tag in self.tags:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
             if len(cols)>0:
                 if self.remove_mean:
                     data_transformed[cols]=data_transformed[cols]-self.mean[cols]
-                data_transformed[cols] = data_transformed[cols] /self.SCALES[tag]
+                data_transformed[cols]  /= self.SCALES[tag]
 
         return data_transformed
 
@@ -117,7 +77,9 @@ class CustomTransformer:
         for tag in self.tags:
             cols = self.get_cols_that_ends_with(data, self.tags[tag])
             if len(cols) > 0:
-                data_transformed[cols] = data_transformed[cols] * self.SCALES[tag]
+
+                data_transformed[cols] *= self.SCALES[tag]
+
                 if self.remove_mean:
                     data_transformed[cols] = data_transformed[cols] + self.mean[cols]
         return data_transformed
@@ -127,7 +89,7 @@ class CustomTransformer:
 
         self.mean=data_transformed[data_transformed>0].mean()
         self.var=data_transformed[data_transformed>0].std()
-        print(self.mean)
+
         return self.transform(data)
 
     def get_scale(self,type):
@@ -200,12 +162,16 @@ class DataContainer:
         s+='N_variables: '+str(self.n_cols)+'\n'
         s+='-------------------------------------\n'
         return s
+
     def get_scale(self,scaler,type):
+
         if scaler=='X':
             return self.SCALER_X.get_scale(type)
         else:
             return self.SCALER_Y.get_scale(type)
+
     def get_mean(self,scaler,cols):
+
         if scaler=='X':
             return self.SCALER_X.mean[cols]
         else:

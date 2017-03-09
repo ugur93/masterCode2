@@ -55,15 +55,17 @@ def fetch_gjoa_data():
 
     #test_bed(X, Y)
     for key in well_names:
-        ind_zero = X[key + '_CHK'] < 5
+        ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
 
-        X[key + '_PWH'][ind_zero] = 0
-        X[key + '_PBH'][ind_zero] = 0
-        X[key + '_PDC'][ind_zero] = 0
-        Y[key + '_PWH'][ind_zero] = 0
-        Y[key + '_PBH'][ind_zero] = 0
-        Y[key + '_PDC'][ind_zero] = 0
-        X[key + '_CHK_zero'] = np.array([0 if x <= 5 else 1 for x in X[key + '_CHK']])
+        X = set_index_values_to_zero(X, ind_zero, key + '_PWH')
+        X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
+        X = set_index_values_to_zero(X, ind_zero, key + '_PDC')
+
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_PWH')
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_PBH')
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
+
+        X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
 
     GjoaData=DataContainer(X,Y,name='GJOA')
 

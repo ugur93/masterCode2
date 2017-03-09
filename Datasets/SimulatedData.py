@@ -9,14 +9,14 @@ from matplotlib import cm
 
 N_SAMPLES=1000
 CHOKE_FREQ=int(N_SAMPLES/50)
-N_WELLS=7
+N_WELLS=4
 N_SHUTDOWNS=3
 N_SHUTDOWN_STEPS=3
 N_SHUTDOWN_SCALE=5
 np.random.seed(151)
 
 WELL_NAMES=['F1','B2','D3','E1']
-WELL_NAMES=['C1','C2','C3','C4','D1','B3','B1']
+#WELL_NAMES=['C1','C2','C3','C4','D1','B3','B1']
 
 def generateChokeConfig():
     choke_mean = np.random.randint(20, 80, 1)
@@ -74,6 +74,7 @@ def fetchSimulatedData():
     for i in range(N_WELLS):
         a=np.random.randint(1,10,1)
         b=np.random.randint(1, 100, 1)
+        print(WELL_NAMES[i],a,b)
         c=np.linspace(0,10,N_SAMPLES)*np.random.rand()
         noise = np.random.rand(N_SAMPLES, 1)*10
         data=f_linear(a,b,c,X[WELL_NAMES[i]+'_CHK'])+noise
