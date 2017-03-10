@@ -25,7 +25,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,maxnorm1=4,maxnorm2=1,maxnorm3=1,n_depth=2,n_width=20):
+    def __init__(self,maxnorm1=4,maxnorm2=1,maxnorm3=1,n_depth=2,n_width=30):
 
         self.model_name='NCNET2-QOIL_GAS_depth2_w100_mnconv_32'
 
@@ -223,16 +223,17 @@ class NCNET1_GJOA2(NN_BASE):
 
         # temp_output = Convolution1D(20, 2, activation='relu', border_mode='same',
         #                            W_constraint=maxnorm(self.maxnorm[1]))(temp_output)
-        mod_conv=Dropout(0.1)(input_layer)
+        #mod_conv=Dropout(0.8)(input_layer)
         #mod_conv = Convolution1D(20, 2, activation='relu', border_mode='same', W_constraint=maxnorm(self.maxnorm[0]))(
         #    mod_conv)
-        #mod_conv = Dropout(0.5)(mod_conv)
+        mod_conv = Dropout(0.1)(input_layer)
 
-        mod_conv = Dense(20, activation='relu', W_constraint=maxnorm(self.maxnorm[0]), init=INIT,
-                         bias=True)(mod_conv)
-        mod_conv = Dropout(0.3)(mod_conv)
-        mod_conv = Dense(20, activation='relu', W_constraint=maxnorm(self.maxnorm[0]), init=INIT,
-                      bias=True)(mod_conv)
+        mod_conv = Dense(30, activation='relu', init=INIT,
+                         bias=True,W_constraint=maxnorm(1))(mod_conv)
+        mod_conv = Dropout(0.8)(mod_conv)
+        #mod_conv = Dense(30, activation='relu', init=INIT,
+        #              bias=True)(mod_conv)
+        #mod_conv = Dropout(0.2)(mod_conv)
         #mod_conv = Dropout(0.5)(mod_conv)
         #mod_conv = Convolution1D(30, 2, activation='relu', border_mode='same', W_constraint=maxnorm(self.maxnorm[0]))(mod_conv)
         #mod_conv = Convolution1D(20, 2, activation='relu', border_mode='same')(mod_conv)
@@ -244,7 +245,7 @@ class NCNET1_GJOA2(NN_BASE):
        # mod_conv = Convolution1D(20, 2, activation='relu', border_mode='same')(mod_conv)
         #mod_conv = UpSampling1D(6)(mod_conv)
         #mod_conv = MaxPooling1D(6)(mod_conv)
-        mod_conv = Dropout(0.3)(mod_conv)
+
  #       mod_conv = Dropout(0.2)(mod_conv)
 #
         #mod_conv = Dropout(0.2)(input_layer)
