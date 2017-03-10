@@ -94,13 +94,26 @@ class SSNET3_PRESSURE(NN_BASE):
         for key in self.well_names:
 
 
-                sub_model = Flatten()(chk_input)
-
-                sub_model = Dense(100, W_constraint=maxnorm(3.5), activation='relu')(sub_model)
-                #sub_model = Dense(50, W_constraint=maxnorm(1), activation='relu')(sub_model)
 
 
-                sub_model = Dense(1, W_constraint=maxnorm(3.5),activation=self.out_act)(sub_model)
+                sub_model_dense = Dense(50, W_constraint=maxnorm(1), activation='relu')(chk_input)
+                sub_model_dense = Dense(50, W_constraint=maxnorm(1), activation='relu')(sub_model_dense)
+
+                #sub_model_dense=Convolution1D(20,2,activation='relu',border_mode='same')(sub_model_dense)
+                #sub_model_dense=UpSampling1D(5)(sub_model_dense)
+                #sub_model_dense=MaxPooling1D(5)(sub_model_dense)
+
+                sub_model_dense = Flatten()(sub_model_dense)
+                sub_model_second = Flatten()(chk_input)
+                sub_model_second=Dropout(0.1)(sub_model_second)
+
+                sub_model_second = Dense(50, W_constraint=maxnorm(2), activation='relu')(sub_model_second)
+
+                sub_model_second = Dropout(0.5)(sub_model_second)
+
+                sub_model=merge([sub_model_dense,sub_model_second],mode='concat')
+
+                sub_model = Dense(1, W_constraint=maxnorm(2),activation=self.out_act)(sub_model_dense)
 
 
                 aux_input = Input(shape=(len(self.input_tags['aux_' + key]),), dtype='float32',name='OnOff_' + key)

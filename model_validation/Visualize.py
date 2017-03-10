@@ -9,7 +9,7 @@ N_PLOT_SUB=0
 
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
 
-    remove_zero_chk=False
+    remove_zero_chk=True
 
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)

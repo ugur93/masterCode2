@@ -38,15 +38,15 @@ def fetch_gjoa_data():
 
     if False:
 
-        cols=['B3_PBH']
+        cols=['C1_CHK','C2_CHK','C3_CHK','C4_CHK','D1_CHK','B3_CHK','B1_CHK']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
-        axes=[axes]
+        #axes=[axes]
 
         for i,key in zip(range(0,len(cols)),cols):
             try:
-                axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
+                axes[i].scatter(X['time'][0:int(len(X)*0.9)], GjoaData.X[key][0:int(len(X)*0.9)], color='blue')
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
+                axes[i].scatter(X['time'][0:int(len(X)*0.9)], GjoaData.Y[key][0:int(len(X)*0.9)], color='blue')
             axes[i].set_title('O5_PBH')
             axes[i].set_xlabel('Time')
             axes[i].set_ylabel('O5_PBH [Bar]')
