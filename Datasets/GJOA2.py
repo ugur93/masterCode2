@@ -30,6 +30,7 @@ def fetch_gjoa_data():
     X['time'] = np.arange(0, len(X))
 
     X,Y=preprocesss(X, Y)
+    X,Y=generate_total_export_variables(X,Y)
 
     #print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
     #print('Data size: {}'.format(len(Y)))
@@ -38,18 +39,18 @@ def fetch_gjoa_data():
 
     if False:
 
-        cols=['C1_CHK','C2_CHK','C3_CHK','C4_CHK','D1_CHK','B3_CHK','B1_CHK']
+        cols=['GJOA_TOTAL_SUM_QOIL','C3_QOIL']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
 
         for i,key in zip(range(0,len(cols)),cols):
             try:
-                axes[i].scatter(X['time'][0:int(len(X)*0.9)], GjoaData.X[key][0:int(len(X)*0.9)], color='blue')
+                axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
             except(KeyError):
-                axes[i].scatter(X['time'][0:int(len(X)*0.9)], GjoaData.Y[key][0:int(len(X)*0.9)], color='blue')
-            axes[i].set_title('O5_PBH')
+                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
+            axes[i].set_title(key)
             axes[i].set_xlabel('Time')
-            axes[i].set_ylabel('O5_PBH [Bar]')
+            axes[i].set_ylabel(key)
             fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
@@ -105,8 +106,8 @@ def set_chk_zero_values_to_zero(X,Y):
         ind_oil_zero = Y[key + '_QOIL'] == 0
 
 
-        X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
-        X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
+        #X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
+        #X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
         # X[key + '_CHK'][ind_gas_zero] = 0
 
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
@@ -121,6 +122,8 @@ def set_chk_zero_values_to_zero(X,Y):
 
         #X = X[~ind_gas_zero]
         #Y = Y[~ind_gas_zero]
+
+        X[key+'_1_PBH']=X[key+'_PBH'].copy()
 
         X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
         X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
@@ -141,10 +144,15 @@ def preprocesss(X,Y):
     DROP = [808, 807, 173, 416, 447, 487]
 
     X['time'] = np.arange(0, len(X))
+
     if False:
 
-        cols=['C2_CHK','C2_PWH']
+        cols=[]
+        TAG='PWH'
+        for key in well_names:
+            cols.append(key+'_'+TAG)
         fig,axes=plt.subplots(len(cols),1,sharex=True)
+        #axes=[axes]
 
         for i,key in zip(range(0,len(cols)),cols):
             try:
@@ -152,14 +160,26 @@ def preprocesss(X,Y):
             except(KeyError):
                 axes[i].scatter(X['time'], Y[key], color='blue')
             axes[i].set_title(key)
+            axes[i].set_xlabel('Time')
+            axes[i].set_ylabel(key)
+            fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
+
+
     X.drop(DROP, inplace=True)
     Y.drop(DROP, inplace=True)
 
-    X.loc[114:129, 'GJOA_RISER_OIL_B_CHK'] = 0
+    #X.loc[114:129, 'GJOA_RISER_OIL_B_CHK'] = 0
+
     X,Y=set_chk_zero_values_to_zero(X,Y)
 
+
+
+    return X,Y
+
+
+def generate_total_export_variables(X,Y):
     sum_oil, sum_gas = calculate_sum_multiphase(Y)
 
     Y['GJOA_TOTAL_SUM_QOIL'] = sum_oil
@@ -167,19 +187,16 @@ def preprocesss(X,Y):
 
     Y['GJOA_OIL_QGAS'] = Y['GJOA_TOTAL_QGAS_DEPRECATED'] - Y['GJOA_SEP_1_QGAS']
 
+
+
+
     # Remove bias
     Y['GJOA_OIL_QGAS'] += np.ones((len(Y),)) * 5000
-
-
 
     # Remove negative values
     Y = negative_values_to_zero(Y, 'GJOA_OIL_QGAS')
 
     return X,Y
-
-
-
-
 
 
 

@@ -36,65 +36,111 @@ def get_cols_that_ends_with(df,tag):
     return cols
 
 
-class CustomTransformer:
-    def __init__(self,remove_mean=False):
+class CustomScaler:
+    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path=''):
 
-        self.SCALES={'PRESSURES2':100,
+        self.SCALES={
                      'PRESSURES':100,
-                     'QGAS':200000,
-                     'CHK':100,
+                     'QGAS':300000,
+                     'CHK':50,
                      'QOIL':100,
                      'QWAT':100
                      }
 
-        self.tags={'PRESSURES2':['PBH','PWH','delta'],
-                   'PRESSURES':['PDC'],
+        self.TAGS={'PRESSURES':['PBH','PWH','delta','PDC'],
                    'QGAS':['QGAS','DEPRECATED'],
                    'CHK':['CHK','time'],
                    'QOIL':['QOIL','SUM'],
                    'QWAT':['QWAT']
                    }
-        self.mean=pd.DataFrame()
-        self.var=pd.DataFrame()
-        self.remove_mean=remove_mean
+
+        self.with_mean_from_csv=False
+        if with_mean_from_csv and with_mean and len(csv_path)>0:
+            self.with_mean_from_csv=True
+            self.mean = pd.read_csv(csv_path,squeeze=True,header=None,index_col=0)
+        else:
+            self.mean=None
+        self.std=None
+
+        self.minmax_scale=None
+        self.minmax_min=None
+
+        if with_minmax:
+            self.with_mean=False
+            self.with_std=False
+        else:
+            self.with_mean=with_mean
+            self.with_std=with_std
+        self.with_minmax=with_minmax
+
     def transform(self,data):
         data_transformed=data.copy()
-        for tag in self.tags:
-            cols = self.get_cols_that_ends_with(data, self.tags[tag])
+        for tag in self.TAGS:
+            cols = self.get_cols_that_ends_with(data, self.TAGS[tag])
             if len(cols)>0:
-                if self.remove_mean:
-                    data_transformed[cols]=data_transformed[cols]-self.mean[cols]
-                data_transformed[cols]  /= self.SCALES[tag]
 
+
+                if self.with_mean:
+                    data_transformed[cols] -= self.mean[cols]
+                elif self.with_minmax:
+                    data_transformed[cols] -= self.minmax_min[cols]
+
+                #Scaling
+                if self.with_std:
+                    data_transformed[cols] /= self.std[cols]
+                elif self.with_minmax:
+                    data_transformed[cols] /= self.minmax_scale[cols]
+                else:
+                    #print('hereree')
+
+                    data_transformed[cols] /=self.SCALES[tag]
+
+
+        #print(data_transformed)
         return data_transformed
-
-
 
     def inverse_transform(self,data):
 
-        #return data
         data_transformed = data.copy()
-        for tag in self.tags:
-            cols = self.get_cols_that_ends_with(data, self.tags[tag])
+        for tag in self.TAGS:
+            cols = self.get_cols_that_ends_with(data, self.TAGS[tag])
             if len(cols) > 0:
 
-                data_transformed[cols] *= self.SCALES[tag]
+                #Scaling
+                if self.with_std:
+                    data_transformed[cols] *= self.std[cols]
+                elif self.with_minmax:
+                    data_transformed[cols] *= self.minmax_scale[cols]
+                else:
+                    #print('hereree')
+                    data_transformed[cols] *=self.SCALES[tag]
 
-                if self.remove_mean:
-                    data_transformed[cols] = data_transformed[cols] + self.mean[cols]
+
+                if self.with_mean:
+                    data_transformed[cols] += self.mean[cols]
+                elif self.with_minmax:
+                    data_transformed[cols] += self.minmax_min[cols]
+
         return data_transformed
 
     def fit_transform(self,data):
         data_transformed = data.copy()
+        if not self.with_mean_from_csv:
+            self.mean=data_transformed[data_transformed>0].mean()
+            #self.mean.to_csv('Models/NeuralNetworks/ConfigFilesUseful/GJOA_GAS_MEAN.csv')
+            #exit()
+        self.std = data_transformed.std()
+        self.minmax_scale=data_transformed.max()-data_transformed.min()
+        print(self.std)
+        self.minmax_min=data_transformed.min()
+        #print(self.std)
 
-        self.mean=data_transformed[data_transformed>0].mean()
-        self.var=data_transformed[data_transformed>0].std()
 
         return self.transform(data)
 
     def get_scale(self,type):
-        for tag in self.tags:
-            if type in self.tags[tag]:
+        for tag in self.TAGS:
+            if type in self.TAGS[tag]:
                 return self.SCALES[tag]
 
     def get_cols_that_ends_with(self,data,endings):
@@ -107,20 +153,26 @@ class CustomTransformer:
 
 
 class DataContainer:
-    def __init__(self,X,Y,name='unnamed'):
+    def __init__(self,X,Y,name='unnamed',csv_path=''):
         self.name=name
         self.X=X
         self.Y=Y
+
+        self.X.fillna(0,inplace=True)
+        self.Y.fillna(0,inplace=True)
         self.data_size=X.shape[0]
         self.n_cols=X.shape[1]
 
         self.X_transformed=None
         self.Y_transformed=None
 
-        self.SCALER_X=CustomTransformer(remove_mean=True)
-        self.SCALER_Y = CustomTransformer(remove_mean=False)
+        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False)
+        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=False,with_std=False)
 
         self.init_transform()
+
+        #self.X_transformed.fillna(0, inplace=True)
+        #self.Y_transformed.fillna(0, inplace=True)
 
     def init_transform(self):
         self.X_transformed =self.SCALER_X.fit_transform(self.X)

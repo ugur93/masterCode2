@@ -1,7 +1,7 @@
 
 import Models.NeuralNetworks.NET1 as NN1
 import Models.NeuralNetworks.NN_external as NNE
-from Models.NeuralNetworks import NET2_PRESSURE,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2,CNN_test,test_model,NCNET4_combined
+from Models.NeuralNetworks import NET2_PRESSURE,NN_from_file,NET3,NCNET_CHKPRES,NET_MISC,NCNET1_GJOA2,NCNET_VANILLA_GJOA2,CNN_test,test_model,NCNET4_combined
 import time
 
 
@@ -31,40 +31,82 @@ def validate(DataOIL,DataGAS):
     #validateCV(Data)
 
 def validate_train_test_split(Data):
+    X = Data.X_transformed
+    Y = Data.Y_transformed
+
+    #X_old,Y_old,X_new,Y_new=split_data(X,Y,split_size=0.3)
+
+    #print(X_old.index)
+    #print(X_new.index)
+    #X=X[200:-1]
+    #Y=Y[200:-1]
 
 
+    X_train, Y_train, X_val, Y_val, X_test, Y_test=get_train_test_val_data(X,Y,test_size=0.1,val_size=0.2)
 
-    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test=get_train_test_val_data(Data,test_size=0.1,val_size=0.2)
+    #print(len(X_train))
+    X_new=X_test
+    Y_new=Y_test
+    #X_val=X_train
+    #Y_val=Y_train
 
-
+    #print(X_train.index)
+    #print(X_new.index)
+    #X_train=X_old
+    #Y_train=Y_old
+    #X_val=X_train
+    #Y_val=Y_train
+    PATH='Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PBH_INPUT_PWH_PDC_MODEL_wONOFFn3.h5'
+    #PATH = 'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET_GAS_PRETRAINED_WITH_OLD_DATA'3
     #GJOA QGAS
+
+    #pressure_weights=
     if DATA_TYPE=='GAS':
-        model=NCNET_CHKPRES.SSNET3_PRESSURE()
-        #model = NET2_PRESSURE.SSNET2()
+        #model=NCNET_CHKPRES.SSNET3_PRESSURE(Data)
+        model = NET2_PRESSURE.SSNET2()
+        #model.load_weights_from_file(PATH)
         #model = NNE.SSNET_EXTERNAL(MODEL_SAVEFILE_NAME)
         #model = NN1.SSNET1()
+        #model=NN_from_file.NCNET_FILE(PATH)
     else:
         #GJOA_QOIL
         #pass
         model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data,2,2,2)
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
+        #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
-        #model=NCNET4_combined.NET4_COMBINED()
+        #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
 
 
-    model.initialize_zero_thresholds(Data)
+    #model.initialize_zero_thresholds(Data)
     model.initialize_chk_thresholds(Data, True)
     #model.initialize_zero_thresholds(Data)
     start=time.time()
     print(model.get_config())
     #print(model.model.get_config())
-
     model.fit(X_train,Y_train,X_val,Y_val)
+
+
+    #Fit with old data
     model.update_model()
     model.fit(X_train, Y_train, X_val, Y_val)
 
+    #X_train, Y_train, X_val, Y_val, X_test, Y_test=get_train_test_val_data(X,Y,test_size=0.0,val_size=0.3)
+
+
+    #Fit with new data
+    if False:
+        split_length = int(len(X_new) * (1 - 0.2))
+        X_train, X_val = X_new[0:split_length], X_new[split_length:-1]
+        Y_train, Y_val = Y_new[0:split_length], Y_new[split_length:-1]
+        #X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X_new, Y_new, test_size=0.0, val_size=0.4)
+
+        model.fit(X_train, Y_train, X_val, Y_val)
+
+
+    #X_train,Y_train,X_val,Y_val=X_train_new,Y_train_new,X_val_new,Y_val_new
 
     #print(model.model.get_weights())
     #model.fit(X_train[], Y_train, X_val, Y_val)
@@ -80,7 +122,7 @@ def validate_train_test_split(Data):
 
     #model.save_model_config(scores_latex)
     #MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
-    #model.save_model_to_file(MODEL_SAVEFILE_NAME, scores)
+    model.save_model_to_file(model.model_name, scores)
 
     input_cols =[]
 
@@ -95,7 +137,7 @@ def validate_train_test_split(Data):
 
 
 def validateRepeat(Data):
-    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
+    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.0, val_size=0.1)
 
     N_REPEAT=10
 

@@ -16,6 +16,7 @@ N_SHUTDOWN_SCALE=5
 np.random.seed(151)
 
 WELL_NAMES=['F1','B2','D3','E1']
+WELL_NAMES=['A','B','C','D']
 #WELL_NAMES=['C1','C2','C3','C4','D1','B3','B1']
 
 def generateChokeConfig():
@@ -90,12 +91,12 @@ def fetchSimulatedData():
     #print_rank(XT,'Simulated')
 
 
-    Y=pd.DataFrame(Y,columns=['GJOA_TOTAL_SUM_QOIL'])
+    Y=pd.DataFrame(Y,columns=['GJOA_QGAS'])
     X['time'] = np.arange(0, len(X))
 
     Y=pd.concat([Y,X_Q],axis=1)
 
-    #plotData(X, X_Q, Y)
+    plotData(X, X_Q, Y)
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
 
@@ -116,21 +117,30 @@ def plotData(X,X_Q,Y):
     plotWellOutputs(X_Q)
     plt.figure()
     plt.plot(Y['GJOA_QGAS'])
+    plt.title('Total production',fontsize=30)
+    plt.ylabel('Q', fontsize=30,rotation=0,labelpad=20)
+    plt.xlabel('Time', fontsize=30)
     plt.show()
 def plotChokeInputs(X):
     for i in range(1,N_WELLS+1):
         #plt.subplot(2,2,i)
-        plt.plot(X[WELL_NAMES[i-1]+'_CHK'],label=WELL_NAMES[i-1]+'_CHK')
-    plt.title('CHK INPUTS')
+        plt.plot(X[WELL_NAMES[i-1]+'_CHK'],label=WELL_NAMES[i-1])
+    plt.title('Choke opening',fontsize=30)
+    plt.ylabel('u',fontsize=30,rotation=0,labelpad=20)
+    plt.xlabel('Time',fontsize=30)
+    #plt.legend()
     plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-               ncol=4, mode="expand", borderaxespad=0., fontsize=10)
+               ncol=4, mode="expand", borderaxespad=0., fontsize=20)
 
 
 def plotWellOutputs(X_Q):
    for i in range(1,N_WELLS+1):
        #plt.subplot(2, 2, i)
-       plt.plot(X_Q[WELL_NAMES[i-1]+'_QOIL'],label=WELL_NAMES[i-1]+'_QGAS')
-   plt.title('WELL OUTPUTS')
+       plt.plot(X_Q[WELL_NAMES[i-1]+'_QOIL'],label=WELL_NAMES[i-1])
+   plt.title('Well outputs',fontsize=30)
+   plt.ylabel('q', fontsize=30,rotation=0,labelpad=20)
+   plt.xlabel('Time', fontsize=30)
+   plt.legend(fontsize=30)
    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-              ncol=4, mode="expand", borderaxespad=0., fontsize=10)
+              ncol=4, mode="expand", borderaxespad=0., fontsize=20)
    #plt.show()

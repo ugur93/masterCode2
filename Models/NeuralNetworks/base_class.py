@@ -48,9 +48,9 @@ class NN_BASE:
             Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
         else:
             Y_dict=[]
-        for key in X_dict.keys():
-            if key.split('_')[0]!='OnOff' and key.split('_')[0]!='aux':
-                   X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
+        #for key in X_dict.keys():
+        #    if key.split('_')[0]!='OnOff' and key.split('_')[0]!='aux':
+        #           X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
 
 
         return X_dict,Y_dict
@@ -74,18 +74,22 @@ class NN_BASE:
     def predict(self, X):
         X_dict,_=self.preprocess_data(X)
         predicted_data=self.model.predict(X_dict)
+        #print(predicted_data[0])
         N_output_modules=len(self.output_tags.keys())
+
+        #print(predicted_data.shape)
 
 
 
         if N_output_modules>1:
             predicted_data_reshaped=np.asarray(predicted_data[0])
+            #print(predicted_data_reshaped)
             for i in range(1,N_output_modules):
                 temp_data=np.asarray(predicted_data[i])
                 predicted_data_reshaped=np.hstack((predicted_data_reshaped,temp_data))
         else:
             predicted_data_reshaped=np.asarray(predicted_data)
-
+        #print(predicted_data_reshaped.shape)
         return pd.DataFrame(data=predicted_data_reshaped,columns=self.output_tag_ordered_list)
 
     def get_history(self):
@@ -95,23 +99,29 @@ class NN_BASE:
         return self.model.get_layer(layer_name).get_weights()
 
     def save_model_to_file(self,name,scores,save_weights=True):
-        PATH='./Models/NeuralNetworks/SavedModels/'
-        if save_weights:
-            self.model.save(PATH+name+'.h5')
-        else:
-            json_model=self.model.to_json()
-            print(json_model)
+        PATH='./Models/NeuralNetworks/SavedModels2/'
+
+        self.model.save(PATH+'hdf5_files/'+name+'.h5')
+
+        json_model=self.model.to_json()
+        f = open(PATH + 'Architecture/'+name, 'w')
+        f.write(json_model)
+        f.close()
+
+        self.model.save_weights(PATH+'Weights/'+name+'.h5')
+        print(json_model)
 
 
 
         #plotModel(self.model,name)
+
     def save_model_config(self,scores):
         PATH='./Models/NeuralNetworks/ConfigFiles2/'
         # Save config:
 
         f_file_number=open(PATH+'file_number.txt','r+')
         file_data=f_file_number.read().splitlines()
-        print(file_data)
+        #print(file_data)
         i,s=find_next_file_number(self.model_name,file_data)
         f_file_number.seek(0)
         f_file_number.write(s)
@@ -123,6 +133,7 @@ class NN_BASE:
         f.write('\n')
         f.write(scores)
         f.close()
+
     def get_config(self):
 
         def tags_to_bulleted_list(s,tags):
@@ -145,7 +156,7 @@ class NN_BASE:
         s+= '-------------------------------------------------\n'
         s+= '##### Input-module config ##### \n'
         s+= '-------------------------------------------------\n'
-        s+= '- n_depth: {} \n- n_width: {} \n- n_inception: {} \n- l2_weight: {} \n- OnOff_state: {} \n- Initialization: {} \n'.format(self.n_depth,self.n_width,self.n_inception,self.l2weight,self.add_thresholded_output,INIT)
+        s+= '- n_depth: {} \n- n_width: {} \n- n_inception: {} \n- l2_weight: {} \n- OnOff_state: {} \n- Initialization: {} \n'.format(self.n_depth,self.n_width,0,self.l2weight,self.add_thresholded_output,INIT)
         s+= '-------------------------------------------------\n'
         s+= '##### Fit config ##### \n'
         s+= '------------------------------------------------- \n'
@@ -187,6 +198,7 @@ class NN_BASE:
     def initialize_zero_thresholds(self,data):
 
         cols=tags_to_list(self.output_tags)
+        print(cols)
         thresh_data=pd.DataFrame(data=np.zeros((1,len(cols))),columns=cols)
         temp_output_zero_thresholds=data.transform(thresh_data,'Y')
 

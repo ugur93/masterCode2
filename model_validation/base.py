@@ -8,6 +8,13 @@ import pandas as pd
 import seaborn
 from sklearn import ensemble
 import DataManager as DM
+def percentage_error(measured,predicted):
+    diff=np.abs(measured-predicted)
+
+
+    return diff/measured*100
+
+
 
 def train_test_split(X,Y,test_size):
     split_length=int(len(X)*(1-test_size))
@@ -15,9 +22,9 @@ def train_test_split(X,Y,test_size):
     Y_train,Y_test=Y[0:split_length],Y[split_length-1:-1]
     return X_train,X_test,Y_train,Y_test
 
-def get_train_test_val_data(Data,test_size,val_size):
-    X = Data.X_transformed
-    Y = Data.Y_transformed
+def get_train_test_val_data(X,Y,test_size,val_size):
+    #X = Data.X_transformed
+    #Y = Data.Y_transformed
 
     #X=X.reshape(1,X.shape[0],X.shape[1])
     #Y = Y.reshape(1, Y.shape[0], Y.shape[1])
@@ -25,7 +32,14 @@ def get_train_test_val_data(Data,test_size,val_size):
     X, X_test, Y, Y_test = train_test_split(X, Y, test_size=test_size)
     X_train, X_val, Y_train, Y_val = train_test_split(X, Y, test_size=val_size)
 
-    return X,Y,X_train,Y_train,X_val,Y_val,X_test,Y_test
+    return X_train,Y_train,X_val,Y_val,X_test,Y_test
+def split_data(X,Y,split_size):
+
+    X_start, X_end, Y_start, Y_end = train_test_split(X, Y, test_size=split_size)
+
+
+    return X_start,Y_start,X_end,Y_end
+
 
 
 
@@ -68,7 +82,7 @@ def print_scores(data,Y_train,Y_test,score_train_MSE, score_test_MSE, score_trai
     s = ''.join((s,'MEAN'))
     s+=''.join((s,'\n'))
     s+='------------------------------------------------------------------------------------------------------------------------\n'
-    s=scores_to_tabbed_string(s,np.sqrt(score_train_MSE),np.sqrt(score_test_MSE),cols,data.inverse_transform(pd.concat([Y_train,Y_test],axis=0),'Y'))
+    s=scores_to_tabbed_string(s,np.sqrt(score_train_MSE),np.sqrt(score_test_MSE),cols,data.inverse_transform(Y_test,'Y'))
     s += '-------------------------------------------------------\n'
     s += 'R2 TRAIN:'
     s = print_empty_space(s, n_empty_space-len('R2 TRAIN:'))

@@ -6,15 +6,53 @@ OUTPUT_COLS_ON_SINGLE_PLOT=['GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM',
 
 N_PLOT_SUB=0
 
+def count_number_of_cols_that_ends_with(col_list,tag):
+    N=0
+    for key in col_list:
+        if key.split('_')[-1]==tag:
+            N+=1
+    return N
 
+def count_number_of_different_sensors_tags(col_list):
+    tag_list=[]
+    N_sensors=0
+
+    for col in col_list:
+        tag_end=col.split('_')[-1]
+        if tag_end not in tag_list:
+            tag_list.append(tag_end)
+            N_sensors+=1
+    return N_sensors,tag_list
+
+def split_col_list(col_list,tag_list):
+    multi_tag_col_list=[]
+
+
+    for tag in tag_list:
+        temp_col_list=[]
+        for col in col_list:
+            if col.split('_')[-1]==tag:
+                temp_col_list.append(col)
+        multi_tag_col_list.append(temp_col_list)
+
+    return multi_tag_col_list
+
+
+
+
+
+def ends_with(name,end_tag):
+    if name.split('_')[-1] == end_tag:
+        return True
+    return False
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
 
-    remove_zero_chk=True
+    remove_zero_chk=False
 
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
-    plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
+    #plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
@@ -94,7 +132,7 @@ def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_ta
     ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
                ncol=2, mode="expand", borderaxespad=0.2)
     # plt.legend()
-    fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
+    fig.subplots_adjust(wspace=0.13, hspace=.2, top=0.95, bottom=0.06, left=0.05, right=0.99)
     fig.canvas.set_window_title(model.model_name)
     return ax
 
@@ -130,6 +168,7 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
 
     fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
     fig.canvas.set_window_title(model.model_name)
+    fig.tick_params(axis='both', which='major', labelsize=10)
     return ax
 
 
@@ -142,7 +181,7 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
 
     zero_chk_param = (False, 'name', 0)
     i = 0
-    print(N_PLOTS)
+    #print(N_PLOTS)
     fig, axes = plt.subplots(sp_y, sp_x)
     if N_PLOTS > 1:
         axes = axes.flatten()
@@ -160,7 +199,7 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
 
         if remove_zero_chk:
             zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
-            print(model.get_chk_threshold())
+            #print(model.get_chk_threshold())
 
         ax = get_residual_plot((fig, ax), model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
 
@@ -171,39 +210,53 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
     if len(output_cols) == 0:
         output_cols = model.output_tag_ordered_list
 
-    zero_chk_param = (False, 'name', 0)
-    N_PLOTS = len(output_cols)-N_PLOT_SUB
-    sp_y, sp_x = get_suplot_dim(N_PLOTS)
+    N_sensors, tag_list=count_number_of_different_sensors_tags(output_cols)
+    multi_output_col_list=split_col_list(output_cols,tag_list)
+    N_PLOT_SUB=0
+    for col in output_cols:
+        if col in OUTPUT_COLS_ON_SINGLE_PLOT:
+            N_PLOT_SUB=1
+            break
 
-    i = 0
-    fig_sub, axes = plt.subplots(sp_y, sp_x)
-    #print(len(axes))
-    if N_PLOTS>1:
-        axes = axes.flatten()
-        if N_PLOTS!=sp_y*sp_x:
-             fig_sub.delaxes(axes[-1])
-    for output_tag in output_cols:
-        if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
-            fig_single,ax=plt.subplots(1,1)
-            fig=fig_single
-        else:
-            if N_PLOTS>1:
-                ax=axes[i]
-                fig=fig_sub
-                #plt.subplot(sp_x, sp_y, i)
-                i += 1
-            else:
-                fig=fig_sub
-                ax=axes
-        fig_par = (fig, ax)
-        if remove_zero_chk:
-            zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
-            print(zero_chk_param)
+    for output_cols in multi_output_col_list:
+        zero_chk_param = (False, 'name', 0)
+        N_PLOTS = len(output_cols)-N_PLOT_SUB
+
+        #N_PLOTS=count_number_of_cols_that_ends_with(output_cols,'QGAS')
+        sp_y, sp_x = get_suplot_dim(N_PLOTS)
+
+        i = 0
+        fig_sub, axes = plt.subplots(sp_y, sp_x)
+        #print(len(axes))
+        if N_PLOTS>1:
+            axes = axes.flatten()
+            if N_PLOTS!=sp_y*sp_x:
+                 fig_sub.delaxes(axes[-1])
+        for output_tag in output_cols:
+            #if ends_with(output_tag,'QGAS'):
+                if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
+                    fig_single,ax=plt.subplots(1,1)
+                    fig=fig_single
+                else:
+                    if N_PLOTS>1:
+                        ax=axes[i]
+                        fig=fig_sub
+                        #plt.subplot(sp_x, sp_y, i)
+                        i += 1
+                    else:
+                        fig=fig_sub
+                        ax=axes
+                fig_par = (fig, ax)
+                if remove_zero_chk:
+                    zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
+                    #print(zero_chk_param)
 
 
-        ax=get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
-        # plt.tight_layout()
-        ax.set_title(output_tag)
+                ax=get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
+                # plt.tight_layout()
+                ax.set_title(output_tag,fontsize=20)
+                ax.set_ylabel(output_tag.split('_')[-1],fontsize=20)
+                ax.set_xlabel('Time',fontsize=20)
 
 
 def plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=[], output_cols=[],remove_zero_chk=False):
@@ -275,7 +328,7 @@ def plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_
 
     sp_y = count_n_well_inputs(input_cols) + 1
     sp_x = 1
-    print(sp_y, sp_x, len(input_cols))
+    #print(sp_y, sp_x, len(input_cols))
 
     zero_chk_param = (False, 'name', 0)
 

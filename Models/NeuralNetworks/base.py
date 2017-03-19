@@ -179,9 +179,11 @@ def add_OnOff_state_input(X,X_dict,thresholds):
     #print(thresholds)
     new_X=X_dict.copy()
     for key in thresholds:
-        OnOff_X=np.array([0 if x<thresholds[key] else 1 for x in X[key+'_CHK']])
+        OnOff_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
         OnOff_X=OnOff_X.reshape((len(OnOff_X),1))
         new_X.update({'OnOff_'+key:OnOff_X})
+        new_X.update({'OnOff_PWH_' + key: OnOff_X})
+        new_X.update({'OnOff_PDC_' + key: OnOff_X})
     return new_X
 def add_output_threshold_input(X,X_dict,thresholds):
     new_X=X_dict.copy()
@@ -264,10 +266,10 @@ def names_to_arrowed_string(network_names):
 def find_next_file_number(model_name,file_data):
 
     next_index='-1'
-    print(file_data)
+    #print(file_data)
     for line in file_data:
         name,index=line.split(':')
-        print(name,model_name)
+        #print(name,model_name)
         if name==model_name:
             next_index=int(index)+1
             new_line=model_name+': '+str(next_index)
