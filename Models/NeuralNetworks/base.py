@@ -1,9 +1,11 @@
 from keras.models import Sequential
 from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
+from keras.layers.merge import Concatenate,Add,Average,add,multiply
 from keras.optimizers import Adam
+from keras.initializers import glorot_uniform
 try:
-    from keras.utils.visualize_util import plot
+    from keras.utils import plot_model
 except(AttributeError):
     print('pydot.find_graphviz() not available, can avoid this problem by commenting out it from visualize_util.py file')
 from sklearn.svm import SVR
@@ -21,6 +23,7 @@ from sklearn import metrics
 import keras
 
 INIT='glorot_uniform'
+bINIT='zeros'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
     inception_outputs=[]
     for i in range(n_inception):
@@ -141,7 +144,7 @@ class CustomEarlyStopping(Callback):
 class EpochVerbose(Callback):
 
     def on_train_begin(self, logs={}):
-        self.nb_epoch=self.params['nb_epoch']
+        self.nb_epoch=self.params['epochs']
         self.current_epoch=0
 
     def on_epoch_end(self, epoch, logs={}):
@@ -168,7 +171,7 @@ class LossHistory(Callback):
 
 def plotModel(model,file_name):
     try:
-        plot(model, to_file='Models/NeuralNetworks/model_figures/'+file_name+'.png', show_shapes=True)
+        plot_model(model, to_file='Models/NeuralNetworks/model_figures/'+file_name+'.png', show_shapes=True)
     except(NameError):
         print('Model not plotted')
 

@@ -8,47 +8,35 @@ import pandas as pd
 import seaborn
 from sklearn import ensemble
 import DataManager as DM
-def get_percentage_error(measured,predicted):
+def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
     delta=1e-10
 
 
     return diff/(measured+delta)*100
 
-def get_percentage_sample_error(model,data,X,Y):
-    error_percentage=np.arange(1,200,1)
-    #error_percentage=np.concatenate([error_percentage,np.array([1000])])
+def get_cumulative_performance(model,data,X,Y):
+    N=len(X)
 
+    deviation_points=np.arange(1,50,1)
+    cols = model.output_tag_ordered_list
 
     predicted=data.inverse_transform(model.predict(X),'Y')
-    cols=model.output_tag_ordered_list
 
-    measured = pd.DataFrame(data=Y, columns=cols)
+    measured = pd.DataFrame(data=data.inverse_transform(Y,'Y'), columns=cols)
     predicted=pd.DataFrame(data=predicted,columns=cols)
-    predicted['ind']=Y.index
-    predicted=predicted.set_index('ind')
+    predicted=predicted.set_index(Y.index)
 
+    deviation=get_sample_deviation(measured,predicted)
+    deviation.fillna(0,inplace=True)
 
-    percentage_error=get_percentage_error(measured,predicted)
-
-    percentage_error.fillna(0,inplace=True)
-
-
-    cumulative_error=pd.DataFrame(data=np.zeros((len(error_percentage),len(predicted.columns))),columns=cols)
-    cumulative_error['percentage']=error_percentage
-
-    cumulative_error=cumulative_error.set_index('percentage')
+    cumulative_error=pd.DataFrame(data=np.zeros((len(deviation_points),len(predicted.columns))),columns=cols)
+    cumulative_error=cumulative_error.set_index(deviation_points)
     cumulative_error.index.name=None
 
-    print(measured)
-    print(predicted)
-    print(percentage_error)
-    print(percentage_error['GJOA_OIL_QGAS'][(percentage_error>=100).any(axis=1)])
-
     for col in cols:
-        for percentage in error_percentage:
-            #print(col,percentage,np.sum(percentage_error[col]<=percentage))
-            cumulative_error[col][percentage]=np.sum(percentage_error[col]<=percentage)
+        for percentage in deviation_points:
+            cumulative_error[col][percentage]=np.sum(deviation[col]<=percentage)/N*100
     return cumulative_error
 
 

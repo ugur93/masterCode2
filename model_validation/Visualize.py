@@ -1,6 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
-
+from .base import *
 
 OUTPUT_COLS_ON_SINGLE_PLOT=['GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM','GJOA_OIL_QGASss']
 
@@ -48,7 +48,7 @@ def ends_with(name,end_tag):
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
 
     remove_zero_chk=False
-
+    plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test)
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
@@ -170,6 +170,31 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
     fig.canvas.set_window_title(model.model_name)
     fig.tick_params(axis='both', which='major', labelsize=10)
     return ax
+
+def get_cumulative_performance_plot(cumperf,data_tag):
+
+
+    N_PLOTS = len(cumperf.columns) - N_PLOT_SUB
+    sp_y, sp_x = get_suplot_dim(N_PLOTS)
+
+    fig, axes = plt.subplots(sp_y, sp_x)
+    axes = axes.flatten()
+
+    for i in range(len(cumperf.columns)):
+        axes[i].plot(cumperf.index, cumperf[cumperf.columns[i]])
+        axes[i].set_title(cumperf.columns[i])
+        axes[i].set_xlabel('Deviation (%)')
+        axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
+    fig.suptitle('Cumulative performance of {} data'.format(data_tag))
+    fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
+    return fig, axes
+
+def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
+    cumperf_train = get_cumulative_performance(model, data, X_train, Y_train)
+    cumperf_test = get_cumulative_performance(model, data, X_test, Y_test)
+
+    get_cumulative_performance_plot(cumperf_train, 'Training')
+    get_cumulative_performance_plot(cumperf_test,'Test')
 
 
 def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[],remove_zero_chk=False):

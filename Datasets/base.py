@@ -37,7 +37,7 @@ def get_cols_that_ends_with(df,tag):
 
 
 class CustomScaler:
-    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path=''):
+    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,with_transform=False,csv_path=''):
 
         self.SCALES={
                      'PRESSURES':100,
@@ -72,6 +72,7 @@ class CustomScaler:
             self.with_mean=with_mean
             self.with_std=with_std
         self.with_minmax=with_minmax
+        self.with_transform=with_transform
 
     def transform(self,data):
         data_transformed=data.copy()
@@ -91,9 +92,8 @@ class CustomScaler:
                 elif self.with_minmax:
                     data_transformed[cols] /= self.minmax_scale[cols]
                 else:
-                    #print('hereree')
-
                     data_transformed[cols] /=self.SCALES[tag]
+
 
 
         #print(data_transformed)
@@ -105,7 +105,6 @@ class CustomScaler:
         for tag in self.TAGS:
             cols = self.get_cols_that_ends_with(data, self.TAGS[tag])
             if len(cols) > 0:
-
                 #Scaling
                 if self.with_std:
                     data_transformed[cols] *= self.std[cols]

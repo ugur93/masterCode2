@@ -47,7 +47,8 @@ def fetch_gjoa_data():
             try:
                 axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
+                #axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
+                axes[i].hist( (GjoaData.Y[key])**2)
             axes[i].set_title(key)
             axes[i].set_xlabel('Time')
             axes[i].set_ylabel(key)

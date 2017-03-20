@@ -66,7 +66,7 @@ class NN_BASE:
 
         #self.debug(X_dict,Y_dict,True)
 
-        self.model.fit(X_dict, Y_dict, nb_epoch=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
+        self.model.fit(X_dict, Y_dict, epochs=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
                        callbacks=self.callbacks,shuffle=False,validation_data=(X_val_dict,Y_val_dict))
 
         #print(self.model.get_weights())

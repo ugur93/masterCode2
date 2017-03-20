@@ -5,13 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81ce2653-27ac-48e4-befa-177bfea4b92f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QOIL_CHK_INPUTSCALE.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QOIL_CHK_INPUTSCALE.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET2_OIL_QOIL_CHK_INPUTSCALE.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET2_OIL_QOIL_CHK_INPUTSCALE.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET2_OIL_QOIL_CHK_INPUTSCALE.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET2_OIL_QOIL_CHK_INPUTSCALE.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_2.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_2.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/MasterThesisCode.iml" afterPath="$PROJECT_DIR$/.idea/MasterThesisCode.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/GJOA2.py" afterPath="$PROJECT_DIR$/Datasets/GJOA2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/base.py" afterPath="$PROJECT_DIR$/Datasets/base.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/NCNET2_OIL_QOIL_CHK_INPUTSCALE" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/NCNET2_OIL_QOIL_CHK_INPUTSCALE" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/base.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/Validate.py" afterPath="$PROJECT_DIR$/model_validation/Validate.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/Visualize.py" afterPath="$PROJECT_DIR$/model_validation/Visualize.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/base.py" afterPath="$PROJECT_DIR$/model_validation/base.py" />
     </list>
     <ignored path="MasterThesisCode.iws" />
@@ -25,7 +29,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/MasterThesisCode$main.coverage" NAME="main Coverage Results" MODIFIED="1489957276077" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MasterThesisCode$main.coverage" NAME="main Coverage Results" MODIFIED="1490025712797" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -43,14 +47,14 @@
     <favorites_list name="MasterThesisCode" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.21797451">
+    <splitter split-orientation="horizontal" split-proportion="0.3775216">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file leaf-file-name="NCNET1_GJOA2.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="66">
-                  <caret line="18" column="9" lean-forward="true" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+                <state relative-caret-position="361">
+                  <caret line="49" column="24" lean-forward="false" selection-start-line="49" selection-start-column="24" selection-end-line="49" selection-end-column="24" />
                   <folding />
                 </state>
               </provider>
@@ -59,7 +63,7 @@
           <file leaf-file-name="NET2_PRESSURE.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="300">
+                <state relative-caret-position="340">
                   <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
                   <folding />
                 </state>
@@ -69,7 +73,7 @@
           <file leaf-file-name="NCNET4_combined.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="540">
+                <state relative-caret-position="612">
                   <caret line="37" column="32" lean-forward="false" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="32" />
                   <folding />
                 </state>
@@ -89,7 +93,7 @@
           <file leaf-file-name="NCNET_CHKPRES.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="435">
+                <state relative-caret-position="493">
                   <caret line="32" column="72" lean-forward="false" selection-start-line="32" selection-start-column="72" selection-end-line="32" selection-end-column="72" />
                   <folding />
                 </state>
@@ -99,7 +103,7 @@
           <file leaf-file-name="NN_from_file.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NN_from_file.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="825">
+                <state relative-caret-position="935">
                   <caret line="59" column="38" lean-forward="false" selection-start-line="59" selection-start-column="38" selection-end-line="59" selection-end-column="38" />
                   <folding>
                     <element signature="e#1#20#0" expanded="true" />
@@ -111,7 +115,7 @@
           <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="150">
+                <state relative-caret-position="170">
                   <caret line="14" column="4" lean-forward="false" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
                   <folding />
                 </state>
@@ -122,14 +126,24 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="base.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2670">
-                  <caret line="181" column="34" lean-forward="false" selection-start-line="181" selection-start-column="34" selection-end-line="181" selection-end-column="34" />
+                <state relative-caret-position="408">
+                  <caret line="24" column="20" lean-forward="false" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
                   <folding>
                     <element signature="e#0#35#0" expanded="true" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+            <entry file="file://$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/scipy/__init__.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="273">
+                  <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -147,18 +161,18 @@
           <file leaf-file-name="Gjoa.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="15">
+                <state relative-caret-position="17">
                   <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="base.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="45" column="71" lean-forward="false" selection-start-line="45" selection-start-column="71" selection-end-line="45" selection-end-column="71" />
+                <state relative-caret-position="262">
+                  <caret line="20" column="35" lean-forward="false" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
                   <folding>
                     <element signature="e#1#36#0" expanded="true" />
                   </folding>
@@ -169,9 +183,11 @@
           <file leaf-file-name="Visualize.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="285">
-                  <caret line="120" column="37" lean-forward="false" selection-start-line="120" selection-start-column="37" selection-end-line="120" selection-end-column="37" />
-                  <folding />
+                <state relative-caret-position="513">
+                  <caret line="204" column="0" lean-forward="false" selection-start-line="196" selection-start-column="42" selection-end-line="204" selection-end-column="0" />
+                  <folding>
+                    <element signature="e#0#36#0" expanded="true" />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -179,8 +195,8 @@
           <file leaf-file-name="GJOA2.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1545">
-                  <caret line="108" column="9" lean-forward="false" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
+                <state relative-caret-position="272">
+                  <caret line="39" column="12" lean-forward="false" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="12" />
                   <folding />
                 </state>
               </provider>
@@ -189,8 +205,8 @@
           <file leaf-file-name="Validate.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="360">
-                  <caret line="123" column="55" lean-forward="false" selection-start-line="123" selection-start-column="55" selection-end-line="123" selection-end-column="55" />
+                <state relative-caret-position="599">
+                  <caret line="83" column="32" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
                   <folding>
                     <element signature="e#1#41#0" expanded="true" />
                   </folding>
@@ -201,8 +217,8 @@
           <file leaf-file-name="base_class.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="126">
-                  <caret line="245" column="17" lean-forward="false" selection-start-line="245" selection-start-column="17" selection-end-line="245" selection-end-column="41" />
+                <state relative-caret-position="228">
+                  <caret line="68" column="45" lean-forward="false" selection-start-line="68" selection-start-column="45" selection-end-line="68" selection-end-column="45" />
                   <folding />
                 </state>
               </provider>
@@ -211,8 +227,8 @@
           <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2355">
-                  <caret line="160" column="24" lean-forward="true" selection-start-line="160" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+                <state relative-caret-position="480">
+                  <caret line="168" column="85" lean-forward="false" selection-start-line="168" selection-start-column="85" selection-end-line="168" selection-end-column="85" />
                   <folding />
                 </state>
               </provider>
@@ -253,6 +269,7 @@
       <find>ac</find>
       <find>border_mode</find>
       <find>eva</find>
+      <find>plot</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -298,18 +315,19 @@
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/file_number.txt" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NN_from_file.py" />
         <option value="$PROJECT_DIR$/main.py" />
-        <option value="$PROJECT_DIR$/model_validation/Visualize.py" />
         <option value="$PROJECT_DIR$/Datasets/Gjoa.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
-        <option value="$PROJECT_DIR$/Datasets/base.py" />
-        <option value="$PROJECT_DIR$/Datasets/GJOA2.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
-        <option value="$PROJECT_DIR$/model_validation/Validate.py" />
         <option value="$PROJECT_DIR$/model_validation/base.py" />
+        <option value="$PROJECT_DIR$/model_validation/Visualize.py" />
+        <option value="$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/scipy/__init__.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
+        <option value="$PROJECT_DIR$/Datasets/GJOA2.py" />
+        <option value="$PROJECT_DIR$/model_validation/Validate.py" />
+        <option value="$PROJECT_DIR$/Datasets/base.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
       </list>
     </option>
   </component>
@@ -320,9 +338,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="773" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1176" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -339,8 +358,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -451,6 +468,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -745,16 +764,16 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.31260097" sideWeight="0.8275401" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.075159915" sideWeight="0.8275401" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48939395" sideWeight="0.2003231" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946378" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.49361023" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33510637" sideWeight="0.36261982" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.5090909" sideWeight="0.7996769" order="2" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.48238748" sideWeight="0.7996769" order="2" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37802908" sideWeight="0.49095607" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.20895523" sideWeight="0.1724599" order="2" side_tool="true" content_ui="tabs" />
@@ -841,7 +860,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2-QOIL_GAS_depth2_w100_mnconv_config_5" />
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2-QOIL_GAS_depth2_w100_mnconv_config_7" />
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2-QOIL_GAS_depth2_w100_mnconv_config_8" />
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2-QOIL_GAS_depth2_w100_mnconv_config_6" />
@@ -937,7 +955,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NN_from_file.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
+        <state relative-caret-position="935">
           <caret line="59" column="38" lean-forward="false" selection-start-line="59" selection-start-column="38" selection-end-line="59" selection-end-column="38" />
           <folding>
             <element signature="e#1#20#0" expanded="true" />
@@ -947,7 +965,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
+        <state relative-caret-position="170">
           <caret line="14" column="4" lean-forward="false" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
           <folding />
         </state>
@@ -986,35 +1004,17 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2670">
-          <caret line="181" column="34" lean-forward="false" selection-start-line="181" selection-start-column="34" selection-end-line="181" selection-end-column="34" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="435">
+        <state relative-caret-position="493">
           <caret line="32" column="72" lean-forward="false" selection-start-line="32" selection-start-column="72" selection-end-line="32" selection-end-column="72" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1545">
-          <caret line="108" column="9" lean-forward="false" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
+        <state relative-caret-position="612">
           <caret line="37" column="32" lean-forward="false" selection-start-line="37" selection-start-column="26" selection-end-line="37" selection-end-column="32" />
           <folding />
         </state>
@@ -1022,7 +1022,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
+        <state relative-caret-position="17">
           <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
@@ -1030,7 +1030,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
+        <state relative-caret-position="340">
           <caret line="23" column="26" lean-forward="false" selection-start-line="23" selection-start-column="26" selection-end-line="23" selection-end-column="26" />
           <folding />
         </state>
@@ -1044,55 +1044,83 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/scipy/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="120" column="37" lean-forward="false" selection-start-line="120" selection-start-column="37" selection-end-line="120" selection-end-column="37" />
+        <state relative-caret-position="273">
+          <caret line="60" column="0" lean-forward="false" selection-start-line="60" selection-start-column="0" selection-end-line="60" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
+    <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="18" column="9" lean-forward="true" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="245" column="17" lean-forward="false" selection-start-line="245" selection-start-column="17" selection-end-line="245" selection-end-column="41" />
+        <state relative-caret-position="272">
+          <caret line="39" column="12" lean-forward="false" selection-start-line="39" selection-start-column="12" selection-end-line="39" selection-end-column="12" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="123" column="55" lean-forward="false" selection-start-line="123" selection-start-column="55" selection-end-line="123" selection-end-column="55" />
+        <state relative-caret-position="599">
+          <caret line="83" column="32" lean-forward="true" selection-start-line="83" selection-start-column="0" selection-end-line="84" selection-end-column="0" />
           <folding>
             <element signature="e#1#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/base.py">
+    <entry file="file://$PROJECT_DIR$/model_validation/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2355">
-          <caret line="160" column="24" lean-forward="true" selection-start-line="160" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+        <state relative-caret-position="262">
+          <caret line="20" column="35" lean-forward="false" selection-start-line="20" selection-start-column="35" selection-end-line="20" selection-end-column="35" />
+          <folding>
+            <element signature="e#1#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="204" column="0" lean-forward="false" selection-start-line="196" selection-start-column="42" selection-end-line="204" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="68" column="45" lean-forward="false" selection-start-line="68" selection-start-column="45" selection-end-line="68" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_validation/base.py">
+    <entry file="file://$PROJECT_DIR$/Datasets/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="45" column="71" lean-forward="false" selection-start-line="45" selection-start-column="71" selection-end-line="45" selection-end-column="71" />
+        <state relative-caret-position="480">
+          <caret line="168" column="85" lean-forward="false" selection-start-line="168" selection-start-column="85" selection-end-line="168" selection-end-column="85" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="20" lean-forward="false" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
           <folding>
-            <element signature="e#1#36#0" expanded="true" />
+            <element signature="e#0#35#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="49" column="24" lean-forward="false" selection-start-line="49" selection-start-column="24" selection-end-line="49" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
