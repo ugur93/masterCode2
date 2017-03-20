@@ -26,7 +26,7 @@ class NCNET1_GJOA2(NN_BASE):
 
     def __init__(self,init_weights=None,maxnorm1=4,maxnorm2=1,maxnorm3=1,n_depth=2,n_width=20):
 
-        self.model_name='NCNET2_OIL_QOIL_CHK_INPUTSCALE'
+        self.model_name='NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_2'
 
 
         self.output_layer_activation='linear'
@@ -47,10 +47,10 @@ class NCNET1_GJOA2(NN_BASE):
         self.n_depth = n_depth
         self.n_depth_incept=1
         self.n_width_incept=50
-        self.n_width = 50
+        self.n_width = 20
 
         self.maxnorm=[maxnorm1,maxnorm2,maxnorm3]
-        self.l2weight = 0.00001
+        self.l2weight = 0.000005
 
 
         self.make_same_model_for_all=True
@@ -202,29 +202,32 @@ class NCNET1_GJOA2(NN_BASE):
 
 
         #mod_dense = Flatten()(input_layer)
-        mod_dense = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
+        mod1 = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
                           bias=True)(input_layer)
         for i in range(1, self.n_depth):
-            mod_dense = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
-                                bias=True)(mod_dense)
+            mod1 = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
+                                bias=True)(mod1)
 
-
+        mod1 = Dense(1, init=INIT, W_regularizer=l2(self.l2weight), activation=self.output_layer_activation,
+                             bias=True)(mod1)
         #mod_conv = Dropout(0.5)(input_layer)
 
-        mod_conv = Dense(20, activation='relu', init=INIT,
-                         bias=True, W_regularizer=l2(self.l2weight))(input_layer)
+        mod2 = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
+                          bias=True)(input_layer)
+        for i in range(1, self.n_depth):
+            #mod2=Dropout(0.6)(mod2)
+            mod2 = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
+                              bias=True)(mod2)
 
-        mod_conv = Dropout(0.6)(mod_conv)
-
-        mod_conv = Dense(20, activation='relu', init=INIT,
-                         bias=True, W_regularizer=l2(self.l2weight))(mod_conv)
+        mod2 = Dense(1, init=INIT, W_regularizer=l2(self.l2weight), activation=self.output_layer_activation,
+                          bias=True)(mod2)
 
         #mod_conv = Dropout(0.5)(mod_conv)
 
 
 
         #mod_conv = Flatten()(mod_conv)
-        main_model = merge([mod_conv, mod_dense], mode='concat')
+        main_model = merge([mod1, mod2], mode='concat')
 
 
 

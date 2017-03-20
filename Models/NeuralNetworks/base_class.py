@@ -251,6 +251,13 @@ class NN_BASE:
 
         return score_train_MSE,score_test_MSE,score_train_r2,score_test_r2,cols
 
+    def evaluate_single(self,data,X,Y):
+
+        cols=self.output_tag_ordered_list
+        score_MSE = metrics.mean_squared_error(data.inverse_transform(Y,'Y')[cols], data.inverse_transform(self.predict(X),'Y'), multioutput='raw_values')
+        score_r2 = metrics.r2_score(Y[cols], self.predict(X), multioutput='raw_values')
+
+        return score_MSE,score_r2,cols
     def evaluate_zeros(self,X_train,X_test,Y_train,Y_test):
         cols = self.output_tag_ordered_list
         score_test_MSE=[]
