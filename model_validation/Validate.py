@@ -72,7 +72,7 @@ def validate_train_test_split(Data):
         #GJOA_QOIL
         #pass
         model=NCNET1_GJOA2.NCNET1_GJOA2()
-        model.model.load_weights(PATH)
+        #model.model.load_weights(PATH)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
@@ -87,12 +87,12 @@ def validate_train_test_split(Data):
     start=time.time()
     print(model.get_config())
     #print(model.model.get_config())
-    #model.fit(X_train,Y_train,X_val,Y_val)
+    model.fit(X_train,Y_train,X_val,Y_val)
 
 
     #Fit with old data
     model.update_model()
-    #model.fit(X_train, Y_train, X_val, Y_val)
+    model.fit(X_train, Y_train, X_val, Y_val)
 
     #X_train, Y_train, X_val, Y_val, X_test, Y_test=get_train_test_val_data(X,Y,test_size=0.0,val_size=0.3)
 
@@ -261,10 +261,21 @@ def generate_grid(search_params):
     return params
 
 def grid_search2(Data):
-    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
+    X = Data.X_transformed
+    Y = Data.Y_transformed
+
+    # X_old,Y_old,X_new,Y_new=split_data(X,Y,split_size=0.3)
+
+    # print(X_old.index)
+    # print(X_new.index)
+    # X=X[200:-1]
+    # Y=Y[200:-1]
 
 
-    search_params={'n_depth':[2],'n_width':[20,50,100],'maxnorm1':[1,2,3,4,5],'maxnorm2':[1,2,3,4,5],'maxnorm3':[1,2,3,4,5]}
+    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
+
+    search_params={'n_depth':[4],'n_width':[20,30,40,50,60],
+                   'l2w':np.linspace(0.00000001,0.00001,100)}
 
     grid_params=generate_grid(search_params)
 
@@ -279,9 +290,16 @@ def grid_search2(Data):
     best_r2_max=None
     best_mse_sum=None
     best_r2_sum=None
+    prev_nwidth=0
+    saved_weights=None
     for params in grid_params:
-        #print(params)
+        curr_width=params['n_width']
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+        if curr_width==prev_nwidth:
+            model.model.set_weights(saved_weights)
+        else:
+            prev_nwidth=curr_width
+            saved_weights=model.model.get_weights()
         print('Training with params: {}'.format(params))
         model.initialize_chk_thresholds(Data, True)
         model.fit(X_train,Y_train,X_val,Y_val)

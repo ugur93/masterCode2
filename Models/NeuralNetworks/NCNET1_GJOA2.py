@@ -24,9 +24,9 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,init_weights=None,maxnorm1=4,maxnorm2=1,maxnorm3=1,n_depth=2,n_width=20):
+    def __init__(self,n_depth=5,n_width=20,l2w=0.00001):
 
-        self.model_name='NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_incept'
+        self.model_name='NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_incept4'
 
 
         self.output_layer_activation='linear'
@@ -40,17 +40,17 @@ class NCNET1_GJOA2(NN_BASE):
         self.reg_constraint=False
 
         #Model config
-        self.init_weights=init_weights
+
 
         #Input module config
         self.n_inception =0
-        self.n_depth = 2
-        self.n_depth_incept=1
+        self.n_depth = n_depth
+        self.n_depth_incept=3
         self.n_width_incept=50
-        self.n_width = 20
+        self.n_width = n_width
 
-        self.maxnorm=[maxnorm1,maxnorm2,maxnorm3]
-        self.l2weight = 0.000005
+
+        self.l2weight = l2w
 
 
         self.make_same_model_for_all=True
@@ -151,48 +151,22 @@ class NCNET1_GJOA2(NN_BASE):
         self.model = Model(inputs=all_inputs, outputs=all_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
 
-        if self.init_weights!=None:
-            self.model.set_weights(self.init_weights)
+
 
 
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
+        temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(input_layer)
 
-
-
-        if self.reg_constraint:
-            temp_output = Dense(self.n_width, activation='relu',W_constraint=maxnorm(self.maxnorm[0]),kernel_initializer=INIT,use_bias=True)(input_layer)
-        #temp_output=Dropout(0.5)(temp_output)
-            temp_output = Dense(self.n_width, activation='relu',W_constraint=maxnorm(self.maxnorm[0]),kernel_initializer=INIT,use_bias=True)(temp_output)
-
-        else:
-            temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(input_layer)
-
-            #temp_output=Dropout(0.01)(temp_output)
+        for i in range(1,self.n_depth):
             temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(temp_output)
-            #temp_output=Dropout(0.01)(temp_output)
-            #temp_output = Dropout(0.01)(temp_output)
-            #temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(temp_output)
-            #temp_output = Dropout(0.01)(temp_output)
-            #temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(temp_output)
 
-            #temp_output=Dropout(0.01)(temp_output)
 
-        if thresholded_output:
-            if self.reg_constraint:
-                output_layer = Dense(1, kernel_initializer=INIT,W_constraint=maxnorm(self.maxnorm[0]),activation=self.output_layer_activation, use_bias=True)(temp_output)
-            else:
-                output_layer = Dense(1, kernel_initializer=INIT,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True)(temp_output)
+        output_layer = Dense(1, kernel_initializer=INIT,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True)(temp_output)
 
-            aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
-        else:
-            output_layer = Dense(1, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), use_bias=True,
-                                 name=name + '_out')(temp_output)
-
-            merged_output = output_layer
-            aux_input = input_layer
+        aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
 
         return aux_input, input_layer, merged_output, output_layer
 
@@ -200,24 +174,25 @@ class NCNET1_GJOA2(NN_BASE):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
-
-        mod1 = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+        mod=Dense(50, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                      use_bias=True,trainable=True)(input_layer)
+        mod1 = Dense(10, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+                     use_bias=True,trainable=True)(mod)
         for i in range(1, self.n_depth):
-            mod1 = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+            mod1 = Dense(30, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                          use_bias=True,trainable=True)(mod1)
-        mod1 = Dense(1, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
-                     use_bias=True, trainable=True)(mod1)
+        #mod1 = Dense(1, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+        #            use_bias=True, trainable=True)(mod1)
 
 
 
-        mod2 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
-                     use_bias=True, trainable=True)(input_layer)
+        mod2 = Dense(10, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+                     use_bias=True, trainable=True)(mod)
 
         for i in range(1, self.n_depth):
             mod2 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                               use_bias=True, trainable=True)(mod2)
-        mod2 = Dense(1, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+        mod2 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                      use_bias=True, trainable=True)(mod2)
 
         main_model = concatenate([mod1, mod2])

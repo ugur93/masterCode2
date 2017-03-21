@@ -190,40 +190,32 @@ def get_cumulative_performance_plot(cumperf,data_tag):
     return fig, axes
 def get_cumulative_performance_plot_single(cumperf_train,cumperf_test,data_tag):
 
+    def plot(cumperf,axes, ii, data_type):
+        for i in range(len(cumperf.columns) - 1):
+            axes[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
+                          color=colors[i])
+        axes[ii].set_title('Well performance' + ' ({} data)'.format(data_type))
+        axes[ii].set_xlabel('Deviation (%)')
+        axes[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type))
 
+        axes[ii + 1].plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
+                          label=cumperf.columns[-1])
+        axes[ii + 1].set_title(cumperf.columns[-1] + ' ({} data)'.format(data_type))
+        axes[ii + 1].set_xlabel('Deviation (%)')
+        axes[ii + 1].set_ylabel('Cumulative (% of {} set sample points)'.format(data_type))
 
+        axes[ii].legend()
 
     fig, axes = plt.subplots(2, 2)
+    cmap = plt.get_cmap('Accent')
+    colors = [cmap(i) for i in np.linspace(0, 1, 10)]
     axes = axes.flatten()
 
-    for i in range(len(cumperf_train.columns)-1):
-        axes[0].plot(cumperf_train.index, cumperf_train[cumperf_train.columns[i]],label=cumperf_train.columns[i])
-    axes[0].set_title('Well performance'+' (Training data)')
-    axes[0].set_xlabel('Deviation (%)')
-    axes[0].set_ylabel('Cumulative \n (% of {} set sample points)'.format('Training'))
-
-    axes[1].plot(cumperf_train.index, cumperf_train[cumperf_train.columns[-1]], label=cumperf_train.columns[-1])
-    axes[1].set_title(cumperf_train.columns[-1]+' (Training data)')
-    axes[1].set_xlabel('Deviation (%)')
-    axes[1].set_ylabel('Cumulative (% of {} set sample points)'.format('Training'))
-
-    axes[0].legend()
+    plot(cumperf_train,axes,0,'Training')
+    plot(cumperf_test,axes,2,'Test')
 
 
-    for i in range(len(cumperf_train.columns)-1):
-        axes[2].plot(cumperf_test.index, cumperf_test[cumperf_train.columns[i]],label=cumperf_test.columns[i])
-    axes[2].set_title('Well performance (Test data)')
-    axes[2].set_xlabel('Deviation (%)')
-    axes[2].set_ylabel('Cumulative \n (% of {} set sample points)'.format('Test'))
-
-    axes[3].plot(cumperf_test.index, cumperf_test[cumperf_train.columns[-1]], label=cumperf_test.columns[-1])
-    axes[3].set_title(cumperf_test.columns[-1]+' (Test data)')
-    axes[3].set_xlabel('Deviation (%)')
-    axes[3].set_ylabel('Cumulative (% of {} set sample points)'.format('Test'))
-
-    axes[2].legend()
-
-    fig.suptitle('Cumulative performance of {} data'.format(data_tag))
+    fig.suptitle('Cumulative performance')
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
     return fig, axes
 
