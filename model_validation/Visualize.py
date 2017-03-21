@@ -188,13 +188,51 @@ def get_cumulative_performance_plot(cumperf,data_tag):
     fig.suptitle('Cumulative performance of {} data'.format(data_tag))
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
     return fig, axes
+def get_cumulative_performance_plot_single(cumperf_train,cumperf_test,data_tag):
+
+
+
+
+    fig, axes = plt.subplots(2, 2)
+    axes = axes.flatten()
+
+    for i in range(len(cumperf_train.columns)-1):
+        axes[0].plot(cumperf_train.index, cumperf_train[cumperf_train.columns[i]],label=cumperf_train.columns[i])
+    axes[0].set_title('Well performance'+' (Training data)')
+    axes[0].set_xlabel('Deviation (%)')
+    axes[0].set_ylabel('Cumulative \n (% of {} set sample points)'.format('Training'))
+
+    axes[1].plot(cumperf_train.index, cumperf_train[cumperf_train.columns[-1]], label=cumperf_train.columns[-1])
+    axes[1].set_title(cumperf_train.columns[-1]+' (Training data)')
+    axes[1].set_xlabel('Deviation (%)')
+    axes[1].set_ylabel('Cumulative (% of {} set sample points)'.format('Training'))
+
+    axes[0].legend()
+
+
+    for i in range(len(cumperf_train.columns)-1):
+        axes[2].plot(cumperf_test.index, cumperf_test[cumperf_train.columns[i]],label=cumperf_test.columns[i])
+    axes[2].set_title('Well performance (Test data)')
+    axes[2].set_xlabel('Deviation (%)')
+    axes[2].set_ylabel('Cumulative \n (% of {} set sample points)'.format('Test'))
+
+    axes[3].plot(cumperf_test.index, cumperf_test[cumperf_train.columns[-1]], label=cumperf_test.columns[-1])
+    axes[3].set_title(cumperf_test.columns[-1]+' (Test data)')
+    axes[3].set_xlabel('Deviation (%)')
+    axes[3].set_ylabel('Cumulative (% of {} set sample points)'.format('Test'))
+
+    axes[2].legend()
+
+    fig.suptitle('Cumulative performance of {} data'.format(data_tag))
+    fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
+    return fig, axes
 
 def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
     cumperf_train = get_cumulative_performance(model, data, X_train, Y_train)
     cumperf_test = get_cumulative_performance(model, data, X_test, Y_test)
 
-    get_cumulative_performance_plot(cumperf_train, 'Training')
-    get_cumulative_performance_plot(cumperf_test,'Test')
+    get_cumulative_performance_plot_single(cumperf_train, cumperf_test,'Training')
+    #get_cumulative_performance_plot_single(cumperf_test,'Test')
 
 
 def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[],remove_zero_chk=False):

@@ -56,7 +56,7 @@ def validate_train_test_split(Data):
     #Y_train=Y_old
     #X_val=X_train
     #Y_val=Y_train
-    PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005.h5'
+    PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_incept.h5'
     #PATH = 'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET_GAS_PRETRAINED_WITH_OLD_DATA'3
     #GJOA QGAS
 
@@ -72,7 +72,7 @@ def validate_train_test_split(Data):
         #GJOA_QOIL
         #pass
         model=NCNET1_GJOA2.NCNET1_GJOA2()
-        #model.model.load_weights(PATH)
+        model.model.load_weights(PATH)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
@@ -87,12 +87,12 @@ def validate_train_test_split(Data):
     start=time.time()
     print(model.get_config())
     #print(model.model.get_config())
-    model.fit(X_train,Y_train,X_val,Y_val)
+    #model.fit(X_train,Y_train,X_val,Y_val)
 
 
     #Fit with old data
     model.update_model()
-    model.fit(X_train, Y_train, X_val, Y_val)
+    #model.fit(X_train, Y_train, X_val, Y_val)
 
     #X_train, Y_train, X_val, Y_val, X_test, Y_test=get_train_test_val_data(X,Y,test_size=0.0,val_size=0.3)
 
@@ -125,7 +125,7 @@ def validate_train_test_split(Data):
 
     #model.save_model_config(scores_latex)
     #MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
-    #model.save_model_to_file(model.model_name, scores)
+    model.save_model_to_file(model.model_name, scores)
 
     input_cols =[]
 

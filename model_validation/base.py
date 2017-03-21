@@ -18,7 +18,7 @@ def get_sample_deviation(measured,predicted):
 def get_cumulative_performance(model,data,X,Y):
     N=len(X)
 
-    deviation_points=np.arange(1,50,1)
+    deviation_points=np.arange(0,50,1)
     cols = model.output_tag_ordered_list
 
     predicted=data.inverse_transform(model.predict(X),'Y')

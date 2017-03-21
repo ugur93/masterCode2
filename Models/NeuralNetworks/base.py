@@ -1,14 +1,14 @@
 from keras.models import Sequential
-from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge, Input, merge,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
+from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge,merge, Input,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
-from keras.layers.merge import Concatenate,Add,Average,add,multiply
+from keras.layers.merge import add,multiply,Add,concatenate
 from keras.optimizers import Adam
 from keras.initializers import glorot_uniform
 try:
     from keras.utils import plot_model
 except(AttributeError):
     print('pydot.find_graphviz() not available, can avoid this problem by commenting out it from visualize_util.py file')
-from sklearn.svm import SVR
+
 from keras.regularizers import l2
 
 from keras.callbacks import Callback, EarlyStopping
@@ -60,7 +60,7 @@ def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
 
 def add_thresholded_output(output_layer,n_input,name):
     aux_input = Input(shape=(1,), dtype='float32', name='OnOff_' + name)
-    return aux_input, merge([aux_input, output_layer], mode='mul', name=name + '_out')
+    return aux_input, multiply([aux_input, output_layer], name=name + '_out')
 
 class CustomEarlyStopping(Callback):
 
