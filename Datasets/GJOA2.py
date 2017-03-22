@@ -124,7 +124,7 @@ def set_chk_zero_values_to_zero(X,Y):
         #X = X[~ind_gas_zero]
         #Y = Y[~ind_gas_zero]
 
-        X[key+'_1_PBH']=X[key+'_PBH'].copy()
+        #X[key+'_1_PBH']=X[key+'_PBH'].copy()
 
         X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
         X = set_index_values_to_zero(X, ind_zero, key + '_PBH')

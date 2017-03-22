@@ -3,7 +3,7 @@ from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,Gaus
 from keras.models import Model
 from keras.layers.merge import add,multiply,Add,concatenate
 from keras.optimizers import Adam
-from keras.initializers import glorot_uniform
+from keras.initializers import glorot_uniform,glorot_normal,RandomUniform
 try:
     from keras.utils import plot_model
 except(AttributeError):
@@ -21,8 +21,11 @@ import matplotlib.pyplot as plt
 from keras.optimizers import SGD
 from sklearn import metrics
 import keras
-
-INIT='glorot_uniform'
+np.random.seed(seed=100)
+#INIT=glorot_uniform(seed=1000000)
+#INIT=glorot_normal(seed=1000000)
+INIT='glorot_normal'
+#INIT=RandomUniform(minval=-1,maxval=1,seed=1)
 bINIT='zeros'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
     inception_outputs=[]

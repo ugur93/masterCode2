@@ -59,7 +59,9 @@ def validate_train_test_split(Data):
     PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_incept.h5'
     #PATH = 'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET_GAS_PRETRAINED_WITH_OLD_DATA'3
     #GJOA QGAS
-
+    PATHS=[
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED1024.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED512.h5']
     #pressure_weights=
     if DATA_TYPE=='GAS':
         #model=NCNET_CHKPRES.SSNET3_PRESSURE(Data)
@@ -73,6 +75,7 @@ def validate_train_test_split(Data):
         #pass
         model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model.model.load_weights(PATH)
+        #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
@@ -85,7 +88,7 @@ def validate_train_test_split(Data):
     model.initialize_chk_thresholds(Data, True)
     #model.initialize_zero_thresholds(Data)
     start=time.time()
-    print(model.get_config())
+   # print(model.get_config())
     #print(model.model.get_config())
     model.fit(X_train,Y_train,X_val,Y_val)
 
@@ -113,6 +116,8 @@ def validate_train_test_split(Data):
     #model.fit(X_train[], Y_train, X_val, Y_val)
 
     end=time.time()
+
+    print(model.predict(X_train))
 
     print('Fitted with time: {}'.format(end-start))
 

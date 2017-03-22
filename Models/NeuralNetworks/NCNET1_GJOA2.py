@@ -24,9 +24,9 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=5,n_width=20,l2w=0.00001):
+    def __init__(self,n_depth=2,n_width=100,l2w=0.000005):
 
-        self.model_name='NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_incept4'
+        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048'
 
 
         self.output_layer_activation='linear'
@@ -73,6 +73,12 @@ class NCNET1_GJOA2(NN_BASE):
 
 
         OUT='GAS'
+
+        self.random_seeds={}
+
+        for key in self.well_names:
+            self.random_seeds[key]=np.random.randint(1,1000)
+        print(self.random_seeds)
         if OUT=='GAS':
             self.output_tags = {
 
@@ -132,7 +138,7 @@ class NCNET1_GJOA2(NN_BASE):
             n_input=len(self.input_tags[key])
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=n_depth, n_width=n_width,
                                                                     n_input=n_input, n_inception=self.n_inception,
-                                                                    l2_weight=l2w, name=key,thresholded_output=self.add_thresholded_output)
+                                                                    l2_weight=l2w, name=key,thresholded_output=self.add_thresholded_output,INIT=glorot_normal(seed=self.random_seeds[key]))
             aux_inputs.append(aux_input)
             inputs.append(input)
             merged_outputs.append(merged_out)
@@ -154,8 +160,9 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
-        K.set_image_dim_ordering('th')
+    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception,INIT):
+
+
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
         temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(input_layer)
@@ -265,3 +272,146 @@ class NCNET1_GJOA2(NN_BASE):
         self.model.set_weights(weights)
 
 
+class ENSEMBLE(NN_BASE):
+
+
+
+    def __init__(self,PATHS):
+
+        self.model_name='NCNET2_ENSEMBLE_LEARNING'
+
+        self.PATHS=PATHS
+
+
+        self.output_layer_activation='relu'
+
+        # Training config
+        self.optimizer = 'adam'
+        self.loss = 'mse'
+        self.nb_epoch = 1
+        self.batch_size = 64
+        self.verbose = 0
+        self.reg_constraint=False
+
+        #Model config
+
+
+        #Input module config
+        self.n_inception =0
+        self.n_depth = 2
+        self.n_depth_incept=3
+        self.n_width_incept=50
+        self.n_width = 5
+
+
+        self.l2weight = 0.1
+        self.models=[]
+
+
+        self.make_same_model_for_all=True
+        self.add_thresholded_output=True
+
+        self.input_tags = {}
+
+        self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']
+
+        tags = ['CHK','PWH','PBH','PDC']
+
+        for name in self.well_names:
+
+            self.input_tags[name] = []
+            for tag in tags:
+                if (name=='C2' or name=='D1') and tag=='PBH':
+                    pass
+                else:
+                    self.input_tags[name].append(name + '_' + tag)
+
+
+        OUT='GAS'
+        if OUT=='GAS':
+            self.output_tags = {
+
+
+                'C1_out': ['C1_QGAS'],
+                'C2_out': ['C2_QGAS'],
+                'C3_out': ['C3_QGAS'],
+                'C4_out': ['C4_QGAS'],
+                'D1_out': ['D1_QGAS'],
+                'B3_out': ['B3_QGAS'],
+                'B1_out': ['B1_QGAS'],
+
+
+                'GJOA_TOTAL':['GJOA_OIL_QGAS']
+            }
+        else:
+            self.output_tags = {
+                 'C1_out':['C1_QOIL'],
+                 'C2_out':['C2_QOIL'],
+                 'C3_out':['C3_QOIL'],
+                 'C4_out':['C4_QOIL'],
+                 'D1_out':['D1_QOIL'],
+                 'B3_out':['B3_QOIL'],
+                 'B1_out':['B1_QOIL'],
+                 'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
+            }
+        self.loss_weights = {
+            'B1_out':  0.0,
+            'B3_out':  0.0,
+            'C2_out':  0.0,
+            'C3_out':  0.0,
+            'D1_out':  0.0,
+            'C4_out':  0.0,
+            'C1_out':  0.0,
+
+            'GJOA_TOTAL': 1.0,
+
+
+        }
+
+
+        super().__init__()
+
+    def initialize_model(self):
+        print('Initializing %s' % (self.model_name))
+        from keras.models import load_model
+        self.models=[]
+        for path in self.PATHS:
+            print('Initializing '+path)
+            self.models.append(load_model(path))
+        self.model=self.models[0]
+
+    def predict(self, X):
+        predictions=[]
+
+        for model in self.models:
+            prediction=self.get_prediction(X,model)
+            predictions.append(prediction)
+
+        pred_concat=pd.concat(predictions,axis=1)
+        pred_out=pd.DataFrame()
+
+        for col in self.output_tag_ordered_list:
+            pred_out[col]=pred_concat[col].mean(axis=1)
+
+        return pred_out
+
+    def get_prediction(self, X,model):
+        X_dict,_=self.preprocess_data(X)
+        predicted_data=model.predict(X_dict)
+        #print(predicted_data[0])
+        N_output_modules=len(self.output_tags.keys())
+
+        #print(predicted_data.shape)
+
+
+
+        if N_output_modules>1:
+            predicted_data_reshaped=np.asarray(predicted_data[0])
+            #print(predicted_data_reshaped)
+            for i in range(1,N_output_modules):
+                temp_data=np.asarray(predicted_data[i])
+                predicted_data_reshaped=np.hstack((predicted_data_reshaped,temp_data))
+        else:
+            predicted_data_reshaped=np.asarray(predicted_data)
+        #print(predicted_data_reshaped.shape)
+        return pd.DataFrame(data=predicted_data_reshaped,columns=self.output_tag_ordered_list)
