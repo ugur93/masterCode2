@@ -24,7 +24,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2,n_width=100,l2w=0.000005):
+    def __init__(self,n_depth=2,n_width=20,l2w=0.00001):
 
         self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048'
 
@@ -72,12 +72,12 @@ class NCNET1_GJOA2(NN_BASE):
                     self.input_tags[name].append(name + '_' + tag)
 
 
-        OUT='GAS'
+        OUT='GASs'
 
         self.random_seeds={}
 
-        for key in self.well_names:
-            self.random_seeds[key]=np.random.randint(1,1000)
+        #for key in self.well_names:
+        #    self.random_seeds[key]=np.random.randint(1,1000)
         print(self.random_seeds)
         if OUT=='GAS':
             self.output_tags = {
@@ -138,7 +138,7 @@ class NCNET1_GJOA2(NN_BASE):
             n_input=len(self.input_tags[key])
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=n_depth, n_width=n_width,
                                                                     n_input=n_input, n_inception=self.n_inception,
-                                                                    l2_weight=l2w, name=key,thresholded_output=self.add_thresholded_output,INIT=glorot_normal(seed=self.random_seeds[key]))
+                                                                    l2_weight=l2w, name=key,thresholded_output=self.add_thresholded_output,INIT='glorot_normal')
             aux_inputs.append(aux_input)
             inputs.append(input)
             merged_outputs.append(merged_out)
