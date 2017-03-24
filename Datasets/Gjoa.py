@@ -15,7 +15,7 @@ SENSORS=['CHK','PWH','PBH','PDC','QGAS']
 GJOA_QGAS_COL='GJOA_SEP_1_QGAS_'
 DATA_TYPE = 'mea'
 
-X_tags=['CHK','PWH','PBH','PDC','QGAS']
+X_tags=['CHK','PWH','PBH','PDC']
 Y_tags=['PBH','PWH','PDC','QGAS']
 
 
@@ -110,19 +110,20 @@ def fetch_gjoa_data():
 
     if False:
 
-        cols = ['GJOA_QGAS','B2_QGAS','D3_QGAS','E1_QGAS','F1_QGAS']
+        cols = ['E1_QGAS']
         #ols=['F1_PBH','F1_PWH','F1_PDC']
         fig, axes = plt.subplots(len(cols), 1, sharex=True)
-        # axes=[axes]
+        axes=[axes]
 
         for i, key in zip(range(0, len(cols)), cols):
             try:
                 axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
             except(KeyError):
                 axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
-            axes[i].set_title(key)
-            axes[i].set_xlabel('Time')
-            axes[i].set_ylabel(key)
+           # axes[i].set_title('G2_QGAS',fontsize=30)
+            axes[i].set_xlabel('Time',fontsize=30)
+            axes[i].tick_params(labelsize=20)
+            axes[i].set_ylabel('G2_QGAS',fontsize=30)
             fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()

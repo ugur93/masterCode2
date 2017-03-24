@@ -129,7 +129,6 @@ class CustomScaler:
             #exit()
         self.std = data_transformed.std()
         self.minmax_scale=data_transformed.max()-data_transformed.min()
-        print(self.std)
         self.minmax_min=data_transformed.min()
         #print(self.std)
 

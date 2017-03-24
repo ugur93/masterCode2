@@ -56,7 +56,7 @@ def validate_train_test_split(Data):
     #Y_train=Y_old
     #X_val=X_train
     #Y_val=Y_train
-    PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005_incept.h5'
+    PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048.h5'
     #PATH = 'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET_GAS_PRETRAINED_WITH_OLD_DATA'3
     #GJOA QGAS
     PATHS=[
@@ -88,7 +88,7 @@ def validate_train_test_split(Data):
     model.initialize_chk_thresholds(Data, True)
     #model.initialize_zero_thresholds(Data)
     start=time.time()
-   # print(model.get_config())
+    print(model.get_config())
     #print(model.model.get_config())
     model.fit(X_train,Y_train,X_val,Y_val)
 
@@ -117,7 +117,7 @@ def validate_train_test_split(Data):
 
     end=time.time()
 
-    print(model.predict(X_train))
+    #print(model.predict(X_train))
 
     print('Fitted with time: {}'.format(end-start))
 
@@ -261,50 +261,37 @@ def generate_grid(search_params):
     items=sorted(search_params.items())
     keys, values=zip(*items)
     params=[]
-    for v in  product(*values):
-        params.append( dict(zip(keys,v))  )
+    for v in product(*values):
+        params.append(dict(zip(keys,v)))
     return params
 
 def grid_search2(Data):
     X = Data.X_transformed
     Y = Data.Y_transformed
 
-    # X_old,Y_old,X_new,Y_new=split_data(X,Y,split_size=0.3)
-
-    # print(X_old.index)
-    # print(X_new.index)
-    # X=X[200:-1]
-    # Y=Y[200:-1]
-
+    cum_thresh=15
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[4],'n_width':[20,30,40,50,60],
-                   'l2w':np.linspace(0.00000001,0.00001,100)}
+    search_params={'n_depth':[2],'n_width':[20],
+                   'l2w':[0.000001],'seed':np.random.randint(1,10000,1000)}
 
     grid_params=generate_grid(search_params)
 
     len_grid=len(grid_params)
 
     print('Size of search space: {}'.format(len_grid))
-    best_max=1e100
-    best_sum=1e100
-    best_params_max={}
-    best_params_sum={}
-    best_mse_max=None
-    best_r2_max=None
-    best_mse_sum=None
-    best_r2_sum=None
-    prev_nwidth=0
-    saved_weights=None
+
+    best_sum_cumperf=-1e100
+    best_r2_train=None
+    best_rmse_train=None
+    best_r2_test = None
+    best_rmse_test = None
+    best_params={}
+    filename='GRID_SEARCH_OIL_SEED_D2W20_LARGER'
     for params in grid_params:
-        curr_width=params['n_width']
+        params['seed']=int(params['seed'])
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
-        if curr_width==prev_nwidth:
-            model.model.set_weights(saved_weights)
-        else:
-            prev_nwidth=curr_width
-            saved_weights=model.model.get_weights()
         print('Training with params: {}'.format(params))
         model.initialize_chk_thresholds(Data, True)
         model.fit(X_train,Y_train,X_val,Y_val)
@@ -312,37 +299,40 @@ def grid_search2(Data):
         model.fit(X_train, Y_train, X_val, Y_val)
         score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
 
-        curr_max=np.max(np.sqrt(score_test_MSE))
-        curr_sum=np.sum(np.sqrt(score_test_MSE))
+        cum_perf=get_cumulative_performance(model,Data,X_val,Y_val)
+        #cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][15]
 
+        cum_perf_sum=count_number_of_samples_below_cum_devation(15, cum_perf)
 
-        if curr_max<best_max:
-            best_max=curr_max
-            best_params_max=params
-            best_mse_max=np.sqrt(score_test_MSE)
-            best_r2_max=score_test_r2
-        if curr_sum<best_sum:
-            best_sum=curr_sum
-            best_params_sum=params
-            best_mse_sum=np.sqrt(score_test_MSE)
-            best_r2_sum=score_test_r2
+        if cum_perf_sum>best_sum_cumperf:
+            best_sum_cumperf=cum_perf_sum
+            best_params=params
+            best_rmse_test=np.sqrt(score_test_MSE)
+            best_r2_test=score_test_r2
+            best_rmse_train = np.sqrt(score_train_MSE)
+            best_r2_train = score_train_r2
         del model
 
 
         print('Cols: {}'.format(cols))
-        print('THIS MAX: {}, SUM: {}'.format(curr_max, curr_sum))
-        print('Current best max: {} \n Current best sum: {} \n'.format(best_params_max,best_params_sum))
-        print('Current best max results: {} \n Current best sum results: {} \n'.format(best_max,best_sum))
-        print('Current best rmse max results:\n {} \n Current best rmse sum results:\n {}'.format(best_mse_max,best_mse_sum))
-        print('Current best r2 max results:\n {} \n Current best r2 sum results:\n {}'.format(best_r2_max,best_r2_sum))
+        print('THIS SUM: {}, BEST SUM: {}'.format(cum_perf_sum, best_sum_cumperf))
+        print('Best params:{} \n'.format(best_params))
+        print('Best TEST RMSE: {} \n Best R2: {}'.format(best_rmse_test,best_r2_test))
+        print('Best TRAIN RMSE: {} \n Best R2: {}'.format(best_rmse_train, best_r2_train))
 
 
-    print('Best results: ')
-    print('Cols: {}'.format(cols))
-    print('Current best max: {} \n Current best sum: {}'.format(best_params_max,best_params_sum))
-    print('Current best max results: {} \n Current best sum results: {}'.format(best_max,best_sum))
-    print('Current best rmse max results:\n {} \n Current best rmse sum results:\n {}'.format(best_mse_max,best_mse_sum))
-    print('Current best r2 max results:\n {} \n Current best r2 sum results:\n {}'.format(best_r2_max,best_r2_sum))
+
+    s='Best results: \n'
+    s+='Cols: {}\n'.format(cols)
+    s+='Best params:{} \n'.format(best_params)
+    s+='Best SUM: {} \n'.format(best_sum_cumperf)
+    s+='Best TEST\n RMSE: {} \n Best R2: {}\n'.format(best_rmse_test, best_r2_test)
+    s+='Best TRAINn\n RMSE: {} \n Best R2: {}\n'.format(best_rmse_train, best_r2_train)
+    PATH = 'Models/NeuralNetworks/'+filename
+    f = open(PATH, 'w')
+    f.write(s)
+    f.close()
+
 
 def grid_search(Data):
     X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)

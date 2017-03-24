@@ -1,7 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge,merge, Input,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
-from keras.layers.merge import add,multiply,Add,concatenate
+from keras.layers.merge import add,multiply,Add,concatenate,average,Multiply
 from keras.optimizers import Adam
 from keras.initializers import glorot_uniform,glorot_normal,RandomUniform
 try:
@@ -21,10 +21,46 @@ import matplotlib.pyplot as plt
 from keras.optimizers import SGD
 from sklearn import metrics
 import keras
-np.random.seed(seed=100)
-#INIT=glorot_uniform(seed=1000000)
-#INIT=glorot_normal(seed=1000000)
+
+
+
+
+
+OIL_WELLS_QOIL_OUTPUT_TAGS={
+                'C1_out': ['C1_QOIL'],
+                'C2_out': ['C2_QOIL'],
+                'C3_out': ['C3_QOIL'],
+                'C4_out': ['C4_QOIL'],
+                'D1_out': ['D1_QOIL'],
+                'B3_out': ['B3_QOIL'],
+                'B1_out': ['B1_QOIL'],
+                'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
+            }
+
+OIL_WELLS_QGAS_OUTPUT_TAGS= {
+
+                'C1_out': ['C1_QGAS'],
+                'C2_out': ['C2_QGAS'],
+                'C3_out': ['C3_QGAS'],
+                'C4_out': ['C4_QGAS'],
+                'D1_out': ['D1_QGAS'],
+                'B3_out': ['B3_QGAS'],
+                'B1_out': ['B1_QGAS'],
+
+                'GJOA_TOTAL': ['GJOA_OIL_QGAS']
+            }
+
+
+
+
+
+
+
+
+SEED=1235
+np.random.seed(seed=None)
 INIT='glorot_normal'
+print(SEED)
 #INIT=RandomUniform(minval=-1,maxval=1,seed=1)
 bINIT='zeros'
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
@@ -63,28 +99,9 @@ def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
 
 def add_thresholded_output(output_layer,n_input,name):
     aux_input = Input(shape=(1,), dtype='float32', name='OnOff_' + name)
-    return aux_input, multiply([aux_input, output_layer], name=name + '_out')
+    return aux_input, Multiply(name=name + '_out')([aux_input, output_layer])
 
 class CustomEarlyStopping(Callback):
-
-    """Stop training when a monitored quantity has stopped improving.
-    # Arguments
-        monitor: quantity to be monitored.
-        min_delta: minimum change in the monitored quantity
-            to qualify as an improvement, i.e. an absolute
-            change of less than min_delta, will count as no
-            improvement.
-        patience: number of epochs with no improvement
-            after which training will be stopped.
-        verbose: verbosity mode.
-        mode: one of {auto, min, max}. In `min` mode,
-            training will stop when the quantity
-            monitored has stopped decreasing; in `max`
-            mode it will stop when the quantity
-            monitored has stopped increasing; in `auto`
-            mode, the direction is automatically inferred
-            from the name of the monitored quantity.
-    """
 
     def __init__(self, monitor='val_loss',
                  min_delta=0, patience=0, verbose=0, mode='auto'):
@@ -185,11 +202,11 @@ def add_OnOff_state_input(X,X_dict,thresholds):
     #print(thresholds)
     new_X=X_dict.copy()
     for key in thresholds:
-        OnOff_X=np.array([0 if x<=thresholds[key] else 1 for x in X[key+'_CHK']])
+        OnOff_X=np.array([0 if x<thresholds[key] else 1 for x in X[key+'_CHK']])
         OnOff_X=OnOff_X.reshape((len(OnOff_X),1))
         new_X.update({'OnOff_'+key:OnOff_X})
-        new_X.update({'OnOff_PWH_' + key: OnOff_X})
-        new_X.update({'OnOff_PDC_' + key: OnOff_X})
+        new_X.update({'OnOff_1_' + key: OnOff_X})
+        new_X.update({'OnOff_2_' + key: OnOff_X})
     return new_X
 def add_output_threshold_input(X,X_dict,thresholds):
     new_X=X_dict.copy()

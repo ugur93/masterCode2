@@ -13,17 +13,20 @@ class NN_BASE:
 
 
 
-        #Config
+        #Model Config
         self.chk_threshold_value=5
 
+
+
+
+
+        #Fit callbacks config
         self.history = LossHistory()
         self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.0000001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:
         self.model = None
-
-
 
         self.n_outputs=len(tags_to_list(self.output_tags))
         self.initialize_model()
@@ -42,16 +45,12 @@ class NN_BASE:
         X_dict = df2dict(X,self.input_tags,self.output_tags,'X')
         if self.add_thresholded_output:
             X_dict = add_OnOff_state_input(X,X_dict, self.chk_thresholds)
-            X_dict=add_output_threshold_input(X,X_dict,self.output_zero_thresholds)
+            #X_dict=add_output_threshold_input(X,X_dict,self.output_zero_thresholds)
        # print(X_dict.keys())
         if len(Y)>0:
             Y_dict = df2dict(Y,self.input_tags,self.output_tags,'Y')
         else:
             Y_dict=[]
-        #for key in X_dict.keys():
-        #    if key.split('_')[0]!='OnOff' and key.split('_')[0]!='aux':
-        #           X_dict[key]=X_dict[key].reshape(X_dict[key].shape[0],1,X_dict[key].shape[1])
-
 
         return X_dict,Y_dict
 
@@ -111,7 +110,7 @@ class NN_BASE:
         f.close()
 
         self.model.save_weights(PATH+'Weights/'+name+'.h5')
-        print(json_model)
+        #print(json_model)
 
 
 

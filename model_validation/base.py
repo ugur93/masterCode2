@@ -41,6 +41,8 @@ def get_cumulative_performance(model,data,X,Y):
 
 
 
+def count_number_of_samples_below_cum_devation(thresh,cumulative_error):
+    return cumulative_error.sum(axis=1)[thresh]
 
 
 def train_test_split(X,Y,test_size):

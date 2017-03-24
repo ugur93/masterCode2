@@ -2,9 +2,7 @@
 
 import model_validation.Validate as Validate
 from Datasets import SimulatedData,Gjoa,GJOA2
-#import Models.NeuralNetworks.NET1 as NN1
-from sklearn.preprocessing import StandardScaler
-import pandas as pd
+
 
 if __name__=='__main__':
 

@@ -19,17 +19,47 @@ K.set_image_dim_ordering('th')
 #nbepoch=100
 #batch=64
 
-
+OUT = 'GAsS'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2,n_width=20,l2w=0.00001):
+    def __init__(self,n_depth=2 ,n_width=20,l2w=0.000001,seed=2675):
 
-        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048'
+        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048321'
 
+        self.input_tags = {}
 
-        self.output_layer_activation='linear'
+        self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+
+        measurement_tags = ['CHK', 'PWH', 'PBH', 'PDC']
+        for name in self.well_names:
+            self.input_tags[name] = []
+            for tag in measurement_tags:
+                if (name == 'C2' or name == 'D1') and tag == 'PBH':
+                    pass
+                else:
+                    self.input_tags[name].append(name + '_' + tag)
+
+        if OUT == 'GAS':
+            self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
+        else:
+            self.output_tags = OIL_WELLS_QOIL_OUTPUT_TAGS
+
+        self.loss_weights = {
+            'B1_out': 0.0,
+            'B3_out': 0.0,
+            'C2_out': 0.0,
+            'C3_out': 0.0,
+            'D1_out': 0.0,
+            'C4_out': 0.0,
+            'C1_out': 0.0,
+
+            'GJOA_TOTAL': 1.0,
+
+        }
+
+        self.output_layer_activation = 'linear'
 
         # Training config
         self.optimizer = 'adam'
@@ -37,90 +67,23 @@ class NCNET1_GJOA2(NN_BASE):
         self.nb_epoch = 1
         self.batch_size = 64
         self.verbose = 0
-        self.reg_constraint=False
+        self.reg_constraint = False
 
-        #Model config
-
-
-        #Input module config
-        self.n_inception =0
+        # Model config
         self.n_depth = n_depth
-        self.n_depth_incept=3
-        self.n_width_incept=50
         self.n_width = n_width
-
-
         self.l2weight = l2w
+        self.init = glorot_normal(seed=seed)
 
-
-        self.make_same_model_for_all=True
-        self.add_thresholded_output=True
-
-        self.input_tags = {}
-
-        self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']
-
-        tags = ['CHK','PWH','PBH','PDC']
-
-        for name in self.well_names:
-
-            self.input_tags[name] = []
-            for tag in tags:
-                if (name=='C2' or name=='D1') and tag=='PBH':
-                    pass
-                else:
-                    self.input_tags[name].append(name + '_' + tag)
-
-
-        OUT='GASs'
-
-        self.random_seeds={}
-
-        #for key in self.well_names:
-        #    self.random_seeds[key]=np.random.randint(1,1000)
-        print(self.random_seeds)
-        if OUT=='GAS':
-            self.output_tags = {
-
-
-                'C1_out': ['C1_QGAS'],
-                'C2_out': ['C2_QGAS'],
-                'C3_out': ['C3_QGAS'],
-                'C4_out': ['C4_QGAS'],
-                'D1_out': ['D1_QGAS'],
-                'B3_out': ['B3_QGAS'],
-                'B1_out': ['B1_QGAS'],
-
-
-                'GJOA_TOTAL':['GJOA_OIL_QGAS']
-            }
-        else:
-            self.output_tags = {
-                 'C1_out':['C1_QOIL'],
-                 'C2_out':['C2_QOIL'],
-                 'C3_out':['C3_QOIL'],
-                 'C4_out':['C4_QOIL'],
-                 'D1_out':['D1_QOIL'],
-                 'B3_out':['B3_QOIL'],
-                 'B1_out':['B1_QOIL'],
-                 'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
-            }
-        self.loss_weights = {
-            'B1_out':  0.0,
-            'B3_out':  0.0,
-            'C2_out':  0.0,
-            'C3_out':  0.0,
-            'D1_out':  0.0,
-            'C4_out':  0.0,
-            'C1_out':  0.0,
-
-            'GJOA_TOTAL': 1.0,
-
-
-        }
-
+        self.make_same_model_for_all = True
+        self.add_thresholded_output = True
 
         super().__init__()
+
+
+
+
+
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
@@ -129,49 +92,75 @@ class NCNET1_GJOA2(NN_BASE):
         inputs=[]
         merged_outputs=[]
         outputs=[]
-        #merged_outputs=[]
 
-        n_depth=self.n_depth
-        n_width=self.n_width
-        l2w=self.l2weight
         for key in self.well_names:
             n_input=len(self.input_tags[key])
-            aux_input,input,merged_out,out=self.generate_input_module(n_depth=n_depth, n_width=n_width,
-                                                                    n_input=n_input, n_inception=self.n_inception,
-                                                                    l2_weight=l2w, name=key,thresholded_output=self.add_thresholded_output,INIT='glorot_normal')
+            aux_input,input,merged_out,out=self.generate_input_module(name=key,n_input=n_input)
+
             aux_inputs.append(aux_input)
             inputs.append(input)
             merged_outputs.append(merged_out)
-            outputs.append(out)
 
 
-        merged_input = add(merged_outputs,name='GJOA_TOTAL')
+        merged_input = Add(name='GJOA_TOTAL')(merged_outputs)
 
         all_outputs=merged_outputs+[merged_input]
         all_inputs = inputs
 
         if self.add_thresholded_output:
             all_inputs+=aux_inputs
-        print(all_inputs)
+
+
+        self.model = Model(inputs=all_inputs, outputs=all_outputs)
+        self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
+
+    def initialize_model2(self):
+        print('Initializing %s' % (self.model_name))
+
+        aux_inputs=[]
+        inputs=[]
+        merged_outputs=[]
+        outputs=[]
+        #merged_outputs=[]
+
+        for key in self.well_names:
+            n_input=len(self.input_tags[key])
+            aux_input_mod1, aux_input_mod2, input_layer, merged_output_mod1, merged_output_mod2, main_out=self.generate_input_module_gas(name=key,n_input=n_input)
+
+            aux_inputs.append(aux_input_mod1)
+            aux_inputs.append(aux_input_mod2)
+            inputs.append(input_layer)
+            merged_outputs.append(main_out)
+            #merged_outputs.append(merged_output_mod2)
+            #outputs.append(main_out)
+
+
+        merged_input = Add(name='GJOA_TOTAL')(merged_outputs)
+
+        all_outputs=merged_outputs+[merged_input]
+        all_inputs = inputs
+
+        if self.add_thresholded_output:
+            all_inputs+=aux_inputs
+
 
         self.model = Model(inputs=all_inputs, outputs=all_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
 
 
 
-
-    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception,INIT):
+    def generate_input_module(self, name, n_input):
 
 
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
-        temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(input_layer)
+        temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
 
         for i in range(1,self.n_depth):
-            temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=INIT,use_bias=True)(temp_output)
+            temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(temp_output)
 
 
-        output_layer = Dense(1, kernel_initializer=INIT,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True)(temp_output)
+        output_layer = Dense(1, kernel_initializer=self.init,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True)(temp_output)
 
         aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
 
@@ -181,38 +170,43 @@ class NCNET1_GJOA2(NN_BASE):
         K.set_image_dim_ordering('th')
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
-        mod=Dense(50, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+
+        mod1 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                      use_bias=True,trainable=True)(input_layer)
-        mod1 = Dense(10, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
-                     use_bias=True,trainable=True)(mod)
         for i in range(1, self.n_depth):
-            mod1 = Dense(30, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+            mod1 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                          use_bias=True,trainable=True)(mod1)
-        #mod1 = Dense(1, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
-        #            use_bias=True, trainable=True)(mod1)
+
+        mod1_out = Dense(1, kernel_initializer=INIT, kernel_regularizer=l2(self.l2weight),
+                             activation=self.output_layer_activation,
+                             use_bias=True)(mod1)
+
+        aux_input_mod1 = Input(shape=(1,), dtype='float32', name='OnOff_1_' + name)
+        merged_output_mod1=multiply([aux_input_mod1, mod1_out])
 
 
 
-        mod2 = Dense(10, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
-                     use_bias=True, trainable=True)(mod)
+        mod2 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
+                     use_bias=True, trainable=True)(input_layer)
 
         for i in range(1, self.n_depth):
             mod2 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
                               use_bias=True, trainable=True)(mod2)
-        mod2 = Dense(20, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=INIT,
-                     use_bias=True, trainable=True)(mod2)
 
-        main_model = concatenate([mod1, mod2])
+        mod2_out = Dense(1, kernel_initializer=INIT, kernel_regularizer=l2(self.l2weight),
+                         activation=self.output_layer_activation,
+                         use_bias=True)(mod2)
 
-
-
-        output_layer = Dense(1, kernel_initializer=INIT, kernel_regularizer=l2(self.l2weight), activation=self.output_layer_activation,
-                             use_bias=True)(main_model)
-
-        aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
+        aux_input_mod2 = Input(shape=(1,), dtype='float32', name='OnOff_2_' + name)
+        merged_output_mod2 = multiply([aux_input_mod2, mod2_out])
+        main_out = add([merged_output_mod2, merged_output_mod1],name=name + '_out')
 
 
-        return aux_input, input_layer, merged_output, output_layer
+
+
+
+
+        return aux_input_mod1,aux_input_mod2, input_layer, merged_output_mod1,merged_output_mod2,main_out
 
     def generate_input_module_oil(self, n_depth, n_width, l2_weight, name, n_input, thresholded_output,
                                   n_inception=0):
