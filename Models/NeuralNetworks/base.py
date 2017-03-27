@@ -1,7 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge,merge, Input,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
-from keras.layers.merge import add,multiply,Add,concatenate,average,Multiply
+from keras.layers.merge import add,multiply,Add,concatenate,average,Multiply,Concatenate
 from keras.optimizers import Adam
 from keras.initializers import glorot_uniform,glorot_normal,RandomUniform
 try:
@@ -207,6 +207,8 @@ def add_OnOff_state_input(X,X_dict,thresholds):
         new_X.update({'OnOff_'+key:OnOff_X})
         new_X.update({'OnOff_1_' + key: OnOff_X})
         new_X.update({'OnOff_2_' + key: OnOff_X})
+        new_X.update({'OnOff_PDC_' + key: OnOff_X})
+        new_X.update({'OnOff_PWH_' + key: OnOff_X})
     return new_X
 def add_output_threshold_input(X,X_dict,thresholds):
     new_X=X_dict.copy()
@@ -222,7 +224,7 @@ def df2dict(df,input_tags,output_tags,data_type):
         for key in input_tags:
             data[key]=df[input_tags[key]].as_matrix()
     else:
-        for key in output_tags:
+        for key in output_tags   :
             data[key] = df[output_tags[key]].as_matrix()
     return data
 

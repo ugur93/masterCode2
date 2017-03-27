@@ -155,8 +155,8 @@ class DataContainer:
         self.X=X
         self.Y=Y
 
-        #self.X.fillna(0,inplace=True)
-        #self.Y.fillna(0,inplace=True)
+        self.X.fillna(0,inplace=True)
+        self.Y.fillna(0,inplace=True)
         self.data_size=X.shape[0]
         self.n_cols=X.shape[1]
 

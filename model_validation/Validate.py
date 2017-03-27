@@ -56,7 +56,7 @@ def validate_train_test_split(Data):
     #Y_train=Y_old
     #X_val=X_train
     #Y_val=Y_train
-    PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048.h5'
+    PATH='Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048321.h5'
     #PATH = 'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET_GAS_PRETRAINED_WITH_OLD_DATA'3
     #GJOA QGAS
     PATHS=[
@@ -78,7 +78,7 @@ def validate_train_test_split(Data):
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE(Data)
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE(n_depth=2,n_width=50,l2w=0.0001)
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
@@ -91,7 +91,6 @@ def validate_train_test_split(Data):
     print(model.get_config())
     #print(model.model.get_config())
     model.fit(X_train,Y_train,X_val,Y_val)
-
 
     #Fit with old data
     model.update_model()

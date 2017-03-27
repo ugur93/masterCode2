@@ -14,23 +14,24 @@ class SSNET2(NN_BASE):
 
     def __init__(self):
 
-        self.model_name='GJOA_GAS_WELLS_2017_PRETRAINED_OLD_DATA2'
+        self.model_name='GJOA_GAS_WELLS_2017_PRETRAINED_OLD_DATA2x'
         self.SCALE=100
 
         self.output_layer_activation = 'linear'
         # Input module config
-        self.n_depth = 2
-        self.n_width = 50
-        self.l2weight =0.0001
-        self.add_thresholded_output=True
+        n_depth = 2
+        n_width = 100
+        l2w =0.0000005
+        seed=9035
 
-        self.input_tags=['CHK','PDC']
+
+        self.input_tags=['CHK','PDC','PWH','PBH']
         #Training config
-        self.optimizer = 'adam'
-        self.loss = 'mae'
-        self.nb_epoch = 1
-        self.batch_size = 64
-        self.verbose = 0
+        optimizer = 'adam'
+        loss = 'mse'
+        nb_epoch = 1
+        batch_size = 64
+
 
         self.output_tags = {
             'F1_out': ['F1_QGAS'],
@@ -54,7 +55,8 @@ class SSNET2(NN_BASE):
             'E1_out': 0.0,
             'GJOA_QGAS': 1.0
         }
-        super().__init__()
+        super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
+                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size)
 
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
 
@@ -62,14 +64,15 @@ class SSNET2(NN_BASE):
         # temp_output=Dropout(0.1)(input_layer)
 
 
-        temp_output = Dense(self.n_width, activation='relu',W_regularizer=l2(self.l2weight), init=INIT,
-                            bias=True)(input_layer)
+        temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
+                            use_bias=True)(input_layer)
         #temp_output=Dropout(0.05)(temp_output)
-        temp_output = Dense(self.n_width, activation='relu', W_regularizer=l2(self.l2weight), init=INIT,
-                           bias=True)(temp_output)
+        for i in range(1,self.n_depth):
+            temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
+                            use_bias=True)(temp_output)
         #temp_output=Dropout(0.05)(temp_output)
 
-        output_layer = Dense(1, init=INIT, activation=self.output_layer_activation,W_regularizer=l2(self.l2weight),bias=True)(temp_output)
+        output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
         aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
 
 
@@ -93,14 +96,15 @@ class SSNET2(NN_BASE):
             merged_outputs.append(merged_out)
             outputs.append(out)
 
-        merged_input = merge(merged_outputs, mode='sum', name='GJOA_QGAS')
+        merged_input = Add( name='GJOA_QGAS')(merged_outputs)
 
-        merged_outputs.append(merged_input)
+        all_outputs = merged_outputs + [merged_input]
+       # merged_outputs.append(merged_input)
 
 
         if self.add_thresholded_output:
             inputs+=aux_inputs
-        self.model = Model(input=inputs, output=merged_outputs)
+        self.model = Model(inputs=inputs, outputs=all_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
     def update_model(self):
         self.nb_epoch=5000

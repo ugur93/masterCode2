@@ -3,7 +3,7 @@ from .base import *
 
 class NN_BASE:
 
-    def __init__(self):
+    def __init__(self,n_depth,n_width,l2_weight,seed,optimizer,loss,nb_epoch,batch_size):
 
 
         #Variables:
@@ -15,8 +15,18 @@ class NN_BASE:
 
         #Model Config
         self.chk_threshold_value=5
+        self.do_shuffle=False
+        self.n_depth=n_depth
+        self.n_width=n_width
+        self.l2weight=l2_weight
+        self.init=glorot_normal(seed)
+        self.add_thresholded_output = True
 
-
+        self.optimizer=optimizer
+        self.loss=loss
+        self.nb_epoch=nb_epoch
+        self.batch_size=batch_size
+        self.verbose=0
 
 
 
@@ -29,6 +39,8 @@ class NN_BASE:
         self.model = None
 
         self.n_outputs=len(tags_to_list(self.output_tags))
+
+
         self.initialize_model()
 
         self.output_index,self.output_tag_ordered_list,_ = output_tags_to_index(self.output_tags,self.model.get_config()['output_layers'])
@@ -66,7 +78,7 @@ class NN_BASE:
         #self.debug(X_dict,Y_dict,True)
 
         self.model.fit(X_dict, Y_dict, epochs=self.nb_epoch, batch_size=self.batch_size, verbose=self.verbose,
-                       callbacks=self.callbacks,shuffle=False,validation_data=(X_val_dict,Y_val_dict))
+                       callbacks=self.callbacks,shuffle=self.do_shuffle,validation_data=(X_val_dict,Y_val_dict))
 
         #print(self.model.get_weights())
 

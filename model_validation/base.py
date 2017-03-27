@@ -12,14 +12,29 @@ def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
     delta=1e-10
 
-
+    #return np.abs(predicted/(measured+1e-10))*100
     return diff/(measured+delta)*100
 
+def startswith(col,tag):
+    return col.split('_')[0]==tag
+def remove_zero_measurements(X,Y,cols):
+
+    for col in cols:
+        if not startswith(col,'GJOA'):
+            ind_zero_mes=Y[col]==0
+            ind_not_zero_chk=X[col.split('_')[0] + '_CHK'] != 0
+            X=X[~(ind_zero_mes&ind_not_zero_chk)]
+            Y=Y[~(ind_zero_mes&ind_not_zero_chk)]
+    return X,Y
 def get_cumulative_performance(model,data,X,Y):
     N=len(X)
 
     deviation_points=np.arange(0,50,1)
     cols = model.output_tag_ordered_list
+
+    #X,Y=remove_zero_measurements(X,Y,cols)
+
+    print(len(X))
 
     predicted=data.inverse_transform(model.predict(X),'Y')
 

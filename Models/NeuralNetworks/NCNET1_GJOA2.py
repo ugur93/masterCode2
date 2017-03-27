@@ -19,14 +19,14 @@ K.set_image_dim_ordering('th')
 #nbepoch=100
 #batch=64
 
-OUT = 'GAsS'
+OUT = 'GASs'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=20,l2w=0.000001,seed=2675):
+    def __init__(self,n_depth=3 ,n_width=50,l2w=0.000001,seed=9035):
 
-        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED2048321'
+        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED20483322'
 
         self.input_tags = {}
 
@@ -56,29 +56,22 @@ class NCNET1_GJOA2(NN_BASE):
             'C1_out': 0.0,
 
             'GJOA_TOTAL': 1.0,
-
         }
 
         self.output_layer_activation = 'linear'
 
         # Training config
-        self.optimizer = 'adam'
-        self.loss = 'mse'
-        self.nb_epoch = 1
-        self.batch_size = 64
-        self.verbose = 0
-        self.reg_constraint = False
+        optimizer = 'adam'
+        loss = 'mae'
+        nb_epoch = 1
+        batch_size = 64
 
-        # Model config
-        self.n_depth = n_depth
-        self.n_width = n_width
-        self.l2weight = l2w
-        self.init = glorot_normal(seed=seed)
 
-        self.make_same_model_for_all = True
-        self.add_thresholded_output = True
 
-        super().__init__()
+
+
+        super().__init__(n_width=n_width,n_depth=n_depth,l2_weight=l2w,seed=seed,
+                         optimizer=optimizer,loss=loss,nb_epoch=nb_epoch,batch_size=batch_size)
 
 
 
@@ -155,6 +148,7 @@ class NCNET1_GJOA2(NN_BASE):
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
         temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
+        #temp_output = MaxoutDense(self.n_width,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
 
         for i in range(1,self.n_depth):
             temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(temp_output)
