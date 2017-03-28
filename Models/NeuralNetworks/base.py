@@ -1,6 +1,7 @@
 from keras.models import Sequential
 from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge,merge, Input,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
+from keras.losses import mean_absolute_error,mean_absolute_percentage_error,mean_squared_error
 from keras.layers.merge import add,multiply,Add,concatenate,average,Multiply,Concatenate
 from keras.optimizers import Adam
 from keras.initializers import glorot_uniform,glorot_normal,RandomUniform
@@ -63,6 +64,21 @@ INIT='glorot_normal'
 print(SEED)
 #INIT=RandomUniform(minval=-1,maxval=1,seed=1)
 bINIT='zeros'
+import keras.backend as K
+def root_mean_squared_error(y_true, y_pred):
+    return K.sqrt(K.mean(K.square(y_pred - y_true), axis=-1))
+def smooth_huber_loss(y_true, y_pred, w):
+    """Regression loss function, smooth version of Huber loss function. """
+    return K.mean(w * K.log(K.cosh(y_true - y_pred)))
+
+
+def huber(y_true, y_pred):
+    delta=0.1
+    diff = y_true - y_pred
+    a = 0.5 * (diff**2)
+    b = delta * (abs(diff) - delta / 2.0)
+    loss = K.switch(abs(diff) <= delta, a, b)
+    return loss.sum()
 def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
     inception_outputs=[]
     for i in range(n_inception):

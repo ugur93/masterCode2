@@ -15,7 +15,7 @@ class NN_BASE:
 
         #Model Config
         self.chk_threshold_value=5
-        self.do_shuffle=False
+        self.do_shuffle=True
         self.n_depth=n_depth
         self.n_width=n_width
         self.l2weight=l2_weight
@@ -27,6 +27,7 @@ class NN_BASE:
         self.nb_epoch=nb_epoch
         self.batch_size=batch_size
         self.verbose=0
+        self.seed=seed
 
 
 
@@ -169,14 +170,14 @@ class NN_BASE:
         s+= '-------------------------------------------------\n'
         s+= '##### Input-module config ##### \n'
         s+= '-------------------------------------------------\n'
-        s+= '- n_depth: {} \n- n_width: {} \n- n_inception: {} \n- l2_weight: {} \n- OnOff_state: {} \n- Initialization: {} \n'.format(self.n_depth,self.n_width,0,self.l2weight,self.add_thresholded_output,INIT)
+        s+= '- n_depth: {} \n- n_width: {} \n- n_inception: {} \n- l2_weight: {} \n- OnOff_state: {} \n- Initialization: {} \n- Seed: {}\n'.format(self.n_depth,self.n_width,0,self.l2weight,self.add_thresholded_output,self.init,self.seed)
         s+= '-------------------------------------------------\n'
         s+= '##### Fit config ##### \n'
         s+= '------------------------------------------------- \n'
-        s+= '- epoch: {} \n- batch size: {} \n- verbose: {} \n- callbacks: {} \n- optimizer: {} \n'.format(self.nb_epoch,
+        s+= '- epoch: {} \n- batch size: {} \n- verbose: {} \n- callbacks: {} \n- optimizer: {} \n- Loss: {}\n- Shuffle {} \n'.format(self.nb_epoch,
                                                                                                   self.batch_size,
                                                                                                   self.verbose,
-                                                                                                     self.callbacks,self.optimizer)
+                                                                                                     self.callbacks,self.optimizer,self.loss,self.do_shuffle)
         s += '-------------------------------------------------\n'
         s+='##### Input tags ##### \n'
         s += '-------------------------------------------------\n'

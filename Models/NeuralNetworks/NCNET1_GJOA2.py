@@ -19,14 +19,18 @@ K.set_image_dim_ordering('th')
 #nbepoch=100
 #batch=64
 
-OUT = 'GASs'
+
+#MSE: 5708
+#
+sas=5708
+OUT = 'GAS'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=3 ,n_width=50,l2w=0.000001,seed=9035):
+    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0000001,seed=9035):
 
-        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_SEED20483322'
+        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_MSE'
 
         self.input_tags = {}
 
@@ -62,7 +66,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         # Training config
         optimizer = 'adam'
-        loss = 'mae'
+        loss ='mae'
         nb_epoch = 1
         batch_size = 64
 
@@ -151,6 +155,7 @@ class NCNET1_GJOA2(NN_BASE):
         #temp_output = MaxoutDense(self.n_width,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
 
         for i in range(1,self.n_depth):
+            temp_output=Dropout(0.1)(temp_output)
             temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(temp_output)
 
 
@@ -274,11 +279,11 @@ class ENSEMBLE(NN_BASE):
         self.output_layer_activation='relu'
 
         # Training config
-        self.optimizer = 'adam'
-        self.loss = 'mse'
-        self.nb_epoch = 1
-        self.batch_size = 64
-        self.verbose = 0
+        optimizer = 'adam'
+        loss = 'mse'
+        nb_epoch = 1
+        batch_size = 64
+        verbose = 0
         self.reg_constraint=False
 
         #Model config
@@ -356,8 +361,8 @@ class ENSEMBLE(NN_BASE):
 
         }
 
-
-        super().__init__()
+        super().__init__(n_width=0, n_depth=1, l2_weight=2, seed=2,
+                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size)
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))

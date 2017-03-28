@@ -19,17 +19,17 @@ class SSNET2(NN_BASE):
 
         self.output_layer_activation = 'linear'
         # Input module config
-        n_depth = 2
-        n_width = 100
-        l2w =0.0000005
+        n_depth = 3
+        n_width = 50
+        l2w =0.0005
         seed=9035
 
 
         self.input_tags=['CHK','PDC','PWH','PBH']
         #Training config
         optimizer = 'adam'
-        loss = 'mse'
-        nb_epoch = 1
+        loss = huber
+        nb_epoch = 5000
         batch_size = 64
 
 

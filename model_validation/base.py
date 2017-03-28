@@ -10,10 +10,10 @@ from sklearn import ensemble
 import DataManager as DM
 def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
-    delta=1e-10
+    delta=1e-100
 
     #return np.abs(predicted/(measured+1e-10))*100
-    return diff/(measured+delta)*100
+    return diff/(measured)*100
 
 def startswith(col,tag):
     return col.split('_')[0]==tag
@@ -26,35 +26,63 @@ def remove_zero_measurements(X,Y,cols):
             X=X[~(ind_zero_mes&ind_not_zero_chk)]
             Y=Y[~(ind_zero_mes&ind_not_zero_chk)]
     return X,Y
-def get_cumulative_performance(model,data,X,Y):
-    N=len(X)
-
-    deviation_points=np.arange(0,50,1)
+def get_predicted_and_measured_df(model,data,X,Y):
     cols = model.output_tag_ordered_list
 
-    #X,Y=remove_zero_measurements(X,Y,cols)
+    measured = pd.DataFrame(data=data.inverse_transform(Y, 'Y'), columns=cols)
 
-    print(len(X))
+    predicted = data.inverse_transform(model.predict(X), 'Y')
+    predicted = pd.DataFrame(data=predicted, columns=cols)
+    predicted = predicted.set_index(Y.index)
+    return measured,predicted
 
-    predicted=data.inverse_transform(model.predict(X),'Y')
+def get_cumulative_deviation(model,data,X,Y):
 
-    measured = pd.DataFrame(data=data.inverse_transform(Y,'Y'), columns=cols)
-    predicted=pd.DataFrame(data=predicted,columns=cols)
-    predicted=predicted.set_index(Y.index)
+    cols = model.output_tag_ordered_list
+    deviation_range = np.arange(0, 50, 1)
 
-    deviation=get_sample_deviation(measured,predicted)
-    deviation.fillna(0,inplace=True)
+    measured, predicted=get_predicted_and_measured_df(model,data,X,Y)
 
-    cumulative_error=pd.DataFrame(data=np.zeros((len(deviation_points),len(predicted.columns))),columns=cols)
-    cumulative_error=cumulative_error.set_index(deviation_points)
-    cumulative_error.index.name=None
+    deviation_points = get_sample_deviation(measured, predicted)
+    deviation_points.fillna(0, inplace=True)
 
+
+    cumulative_deviation=pd.DataFrame(data=np.zeros((len(deviation_range),len(cols))),columns=cols)
+    cumulative_deviation=cumulative_deviation.set_index(deviation_range)
+    cumulative_deviation.index.name=None
+
+    N = len(deviation_points)
     for col in cols:
-        for percentage in deviation_points:
-            cumulative_error[col][percentage]=np.sum(deviation[col]<=percentage)/N*100
-    return cumulative_error
+        for percentage in deviation_range:
+            cumulative_deviation[col][percentage]=np.sum(deviation_points[col]<=percentage)/N*100
 
 
+    return cumulative_deviation
+
+
+def get_cumulative_flow(model,data,X,Y):
+    cols = model.output_tag_ordered_list
+    #deviation_range = np.arange(0, 50, 1)
+
+    measured, predicted = get_predicted_and_measured_df(model, data, X, Y)
+
+    deviation_points = get_sample_deviation(measured, predicted)
+    deviation_points.fillna(0, inplace=True)
+
+    cumulative_flow = pd.DataFrame(data=np.zeros((len(X), len(cols))), columns=cols)
+    cumulative_flow = cumulative_flow.set_index(X.index)
+    cumulative_flow.index.name = None
+
+    N = len(deviation_points)
+    print(deviation_points)
+    start=deviation_points.index[0]
+    for col in cols:
+        for i in deviation_points.index:
+            print(deviation_points[col])
+            print(start,i)
+            cumulative_flow[col][i-start] = np.sum(deviation_points[col][start:i])/abs(start-i)*100
+    print(cumulative_flow)
+    return cumulative_flow
 
 def count_number_of_samples_below_cum_devation(thresh,cumulative_error):
     return cumulative_error.sum(axis=1)[thresh]
