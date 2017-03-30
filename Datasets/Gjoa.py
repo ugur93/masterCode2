@@ -69,26 +69,16 @@ def fetch_gjoa_data():
     print('Data size: {}'.format(len(Y)))
 
     #test_bed(X, Y)
+    ind_zero_all=None
     for key in well_names:
-        #ind_gas_zero = Y[key + '_QGAS'] == 0
+        ind_gas_zero = Y[key + '_QGAS'] == 0
 
-        #print(np.sum(ind_gas_zero))
-
-        #fig, axes=plt.subplots(2,1,sharex=True)
-        #axes[0].plot(X[key+'_CHK'],color='red')
-
-
-        #axes[1].plot(X[key + '_CHK'], color='red')
-        #plt.show()
-
-        #if key not in ['E1','D3']:
-        #    X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
-        #
 
-        #ind_gas_zero=ind_gas_zero
-        #print(np.sum(ind_zero))
-        #print('_---')
+        if ind_zero_all is None:
+            ind_zero_all = ind_gas_zero
+        else:
+            ind_zero_all = ind_zero_all & ind_gas_zero
 
         #X = set_index_values_to_zero(X, ind_zero, key + '_PWH')
         #X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
@@ -99,7 +89,7 @@ def fetch_gjoa_data():
         #Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
 
         X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
-
+    #Y = set_index_values_to_zero(Y, ind_zero_all, 'GJOA_QGAS')
     GjoaData=DataContainer(X,Y,name='GJOA',csv_path=MEAN_PATH)
     #for key in GjoaData.X.columns:
     #    print(GjoaData.X_transformed[key])
@@ -110,10 +100,10 @@ def fetch_gjoa_data():
 
     if False:
 
-        cols = ['E1_QGAS']
+        cols = ['GJOA_QGAS','E1_QGAS']
         #ols=['F1_PBH','F1_PWH','F1_PDC']
         fig, axes = plt.subplots(len(cols), 1, sharex=True)
-        axes=[axes]
+        #axes=[axes]
 
         for i, key in zip(range(0, len(cols)), cols):
             try:

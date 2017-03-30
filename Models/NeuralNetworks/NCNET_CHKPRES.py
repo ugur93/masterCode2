@@ -20,6 +20,7 @@ class SSNET3_PRESSURE(NN_BASE):
         loss = 'mae'
         nb_epoch = 10000
         batch_size = 64
+        dp_rate=0
 
 
         chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
@@ -44,7 +45,7 @@ class SSNET3_PRESSURE(NN_BASE):
         self.output_zero_thresholds = {}
 
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
-                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size)
+                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size,dp_rate=dp_rate)
 
 
     def initialize_model2(self):
@@ -109,9 +110,9 @@ class SSNET3_PRESSURE(NN_BASE):
             #                kernel_regularizer=l2(self.l2weight), activation='relu', name=key + '_PDC_out',kernel_initializer=self.init)(sub_model_PDC)
 
             #aux_input_PDC = Input(shape=(1,), dtype='float32', name='OnOff_PDC_' + key)
-            aux_input_PWH = Input(shape=(1,), dtype='float32', name='OnOff_PWH_' + key)
+            #aux_input_PWH = Input(shape=(1,), dtype='float32', name='OnOff_PWH_' + key)
 
-            PWH_out = Multiply(name=key + '_PWH_pred')([PWH_out, aux_input_PWH])
+            #PWH_out = Multiply(name=key + '_PWH_pred')([PWH_out, aux_input_PWH])
             #PDC_out = Multiply(name=key + '_PDC_pred')([PDC_out, aux_input_PDC])
 
 
@@ -120,7 +121,7 @@ class SSNET3_PRESSURE(NN_BASE):
             #outputs.append(PDC_out)
 
             #inputs.append(aux_input_PDC)
-            inputs.append(aux_input_PWH)
+            #inputs.append(aux_input_PWH)
 
         self.model = Model(inputs=inputs, outputs=outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss)

@@ -3,7 +3,7 @@ from .base import *
 
 class NN_BASE:
 
-    def __init__(self,n_depth,n_width,l2_weight,seed,optimizer,loss,nb_epoch,batch_size):
+    def __init__(self,n_depth,n_width,l2_weight,seed,optimizer,loss,nb_epoch,batch_size,dp_rate=0):
 
 
         #Variables:
@@ -28,6 +28,7 @@ class NN_BASE:
         self.batch_size=batch_size
         self.verbose=0
         self.seed=seed
+        self.dp_rate=dp_rate
 
 
 
@@ -170,7 +171,8 @@ class NN_BASE:
         s+= '-------------------------------------------------\n'
         s+= '##### Input-module config ##### \n'
         s+= '-------------------------------------------------\n'
-        s+= '- n_depth: {} \n- n_width: {} \n- n_inception: {} \n- l2_weight: {} \n- OnOff_state: {} \n- Initialization: {} \n- Seed: {}\n'.format(self.n_depth,self.n_width,0,self.l2weight,self.add_thresholded_output,self.init,self.seed)
+        s+= '- n_depth: {} \n- n_width: {}\n- dp_rate: {} \n- l2_weight: {} \n' \
+            '- OnOff_state: {} \n- Initialization: {} \n- Seed: {}\n'.format(self.n_depth,self.n_width,self.dp_rate,self.l2weight,self.add_thresholded_output,self.init,self.seed)
         s+= '-------------------------------------------------\n'
         s+= '##### Fit config ##### \n'
         s+= '------------------------------------------------- \n'

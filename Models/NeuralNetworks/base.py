@@ -73,7 +73,7 @@ def smooth_huber_loss(y_true, y_pred, w):
 
 
 def huber(y_true, y_pred):
-    delta=0.1
+    delta=0.01
     diff = y_true - y_pred
     a = 0.5 * (diff**2)
     b = delta * (abs(diff) - delta / 2.0)

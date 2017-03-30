@@ -7,6 +7,14 @@ import keras.backend as K
 #self.n_depth = 2
 #self.n_width = 20
 #self.l2weight =0.0005
+#n_depth = 2
+#n_width = 50
+#l2w = 0.00005
+#seed = 9035
+#n_depth = 3
+#        n_width = 20
+#        l2w =0.0004
+#        seed=9035
 def abs(x):
     return K.abs(x)
 class SSNET2(NN_BASE):
@@ -14,24 +22,25 @@ class SSNET2(NN_BASE):
 
     def __init__(self):
 
-        self.model_name='GJOA_GAS_WELLS_2017_PRETRAINED_OLD_DATA2x'
+
         self.SCALE=100
 
-        self.output_layer_activation = 'linear'
+        self.output_layer_activation = 'relu'
         # Input module config
-        n_depth = 3
+        n_depth = 2
         n_width = 50
-        l2w =0.0005
+        l2w =0.00001
         seed=9035
 
 
         self.input_tags=['CHK','PDC','PWH','PBH']
         #Training config
         optimizer = 'adam'
-        loss = huber
+        loss = 'mae'
         nb_epoch = 5000
         batch_size = 64
-
+        dp_rate=0
+        self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         self.output_tags = {
             'F1_out': ['F1_QGAS'],
@@ -56,11 +65,13 @@ class SSNET2(NN_BASE):
             'GJOA_QGAS': 1.0
         }
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
-                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size)
+                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size,dp_rate=dp_rate)
 
     def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
 
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
+
+        #temp_output=BatchNormalization()(input_layer)
         # temp_output=Dropout(0.1)(input_layer)
 
 
@@ -68,6 +79,8 @@ class SSNET2(NN_BASE):
                             use_bias=True)(input_layer)
         #temp_output=Dropout(0.05)(temp_output)
         for i in range(1,self.n_depth):
+            if self.dp_rate>0:
+                temp_output = Dropout(self.dp_rate)(temp_output)
             temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
                             use_bias=True)(temp_output)
         #temp_output=Dropout(0.05)(temp_output)

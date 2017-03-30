@@ -39,7 +39,7 @@ def fetch_gjoa_data():
 
     if  False:
 
-        cols=['GJOA_OIL_QGAS','C2_QGAS']
+        cols=['C4_QGAS','C4_CHK']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
 
@@ -109,7 +109,7 @@ def set_chk_zero_values_to_zero(X,Y):
         if ind_zero_gas_all is None:
             ind_zero_gas_all=ind_gas_zero
         else:
-            ind_zero_gas_all=ind_zero_gas_all|ind_gas_zero
+            ind_zero_gas_all=ind_zero_gas_all&ind_gas_zero
 
 
         #X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
@@ -131,17 +131,19 @@ def set_chk_zero_values_to_zero(X,Y):
 
         #X[key+'_1_PBH']=X[key+'_PBH'].copy()
 
-        X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
-        X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
-        X = set_index_values_to_zero(X, ind_zero, key + '_PDC')
+        #X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
+        #X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
+        #X = set_index_values_to_zero(X, ind_zero, key + '_PDC')
 
-        Y = set_index_values_to_zero(Y, ind_zero, key + '_PWH')
-        Y = set_index_values_to_zero(Y, ind_zero, key + '_PBH')
-        Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
+        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PWH')
+        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PBH')
+        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
 
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QOIL')
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QGAS')
 
+        #Y = set_index_values_to_zero(Y, ind_gas_zero, key + '_CHK')
+        #Y = set_index_values_to_zero(Y, ind_gas_zero, key + '_QGAS')
         X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
     print(sum(ind_zero_gas_all))
     #Y = set_index_values_to_zero(Y, ind_zero_gas_all,'GJOA_OIL_QGAS')
@@ -200,7 +202,7 @@ def generate_total_export_variables(X,Y):
 
 
     # Remove bias
-    #Y['GJOA_OIL_QGAS'] += np.ones((len(Y),)) * 5000
+    #Y['GJOA_OIL_QGAS'] += np.ones((len(Y),)) * np.mean(sum_gas-Y['GJOA_OIL_QGAS'])
 
     # Remove negative values
     Y = negative_values_to_zero(Y, 'GJOA_OIL_QGAS')

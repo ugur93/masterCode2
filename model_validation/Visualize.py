@@ -251,10 +251,11 @@ def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
     return fig, axes
 
 def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
-    cumperf_train = get_cumulative_deviation(model, data, X_train, Y_train)
-    cumperf_test = get_cumulative_deviation(model, data, X_test, Y_test)
+    #cumperf_train = get_cumulative_deviation(model, data, X_train, Y_train)
+    #cumperf_test = get_cumulative_deviation(model, data, X_test, Y_test)
 
-    #cumperf_test2 = get_cumulative_flow(model, data, X_test, Y_test)
+    cumperf_test = get_cumulative_flow(model, data, X_test, Y_test)
+    cumperf_train = get_cumulative_flow(model, data, X_train, Y_train)
 
     get_cumulative_performance_plot_single(cumperf_train, cumperf_test,'Training')
     #get_cumulative_performance_plot_single(cumperf_test,'Test')

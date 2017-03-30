@@ -73,16 +73,7 @@ def get_cumulative_flow(model,data,X,Y):
     cumulative_flow = cumulative_flow.set_index(X.index)
     cumulative_flow.index.name = None
 
-    N = len(deviation_points)
-    print(deviation_points)
-    start=deviation_points.index[0]
-    for col in cols:
-        for i in deviation_points.index:
-            print(deviation_points[col])
-            print(start,i)
-            cumulative_flow[col][i-start] = np.sum(deviation_points[col][start:i])/abs(start-i)*100
-    print(cumulative_flow)
-    return cumulative_flow
+    return deviation_points
 
 def count_number_of_samples_below_cum_devation(thresh,cumulative_error):
     return cumulative_error.sum(axis=1)[thresh]

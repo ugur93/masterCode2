@@ -28,9 +28,9 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0000001,seed=9035):
+    def __init__(self,n_depth=2 ,n_width=50,l2w=0.0001,dp_rate=0,seed=3014):
 
-        self.model_name='NCNET2_OIL_QGAS_ENSEMBLE_MODEL_MSE'
+
 
         self.input_tags = {}
 
@@ -62,19 +62,19 @@ class NCNET1_GJOA2(NN_BASE):
             'GJOA_TOTAL': 1.0,
         }
 
-        self.output_layer_activation = 'linear'
+        self.output_layer_activation = 'relu'
 
         # Training config
         optimizer = 'adam'
         loss ='mae'
-        nb_epoch = 1
+        nb_epoch = 5000
         batch_size = 64
 
+        self.model_name = 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 
-
-        super().__init__(n_width=n_width,n_depth=n_depth,l2_weight=l2w,seed=seed,
+        super().__init__(n_width=n_width,n_depth=n_depth,l2_weight=l2w,dp_rate=dp_rate,seed=seed,
                          optimizer=optimizer,loss=loss,nb_epoch=nb_epoch,batch_size=batch_size)
 
 
@@ -155,7 +155,8 @@ class NCNET1_GJOA2(NN_BASE):
         #temp_output = MaxoutDense(self.n_width,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
 
         for i in range(1,self.n_depth):
-            temp_output=Dropout(0.1)(temp_output)
+            if self.dp_rate>0:
+                temp_output=Dropout(self.dp_rate)(temp_output)
             temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(temp_output)
 
 
@@ -206,50 +207,6 @@ class NCNET1_GJOA2(NN_BASE):
 
 
         return aux_input_mod1,aux_input_mod2, input_layer, merged_output_mod1,merged_output_mod2,main_out
-
-    def generate_input_module_oil(self, n_depth, n_width, l2_weight, name, n_input, thresholded_output,
-                                  n_inception=0):
-        K.set_image_dim_ordering('th')
-        input_layer = Input(shape=(n_input,), dtype='float32', name=name)
-
-        #mod_dense = Flatten()(input_layer)
-        mod_dense = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm[0]), init=INIT,
-                          bias=True)(input_layer)
-        for i in range(1, self.n_depth):
-            mod_dense = Dense(self.n_width, activation='relu', W_constraint=maxnorm(self.maxnorm[0]), init=INIT,
-                              bias=True)(mod_dense)
-
-
-        #mod_conv = Dropout(0.5)(input_layer)
-
-        mod_conv = Dense(20, activation='relu', init=INIT,
-                         bias=True, W_constraint=maxnorm(self.maxnorm[0]))(input_layer)
-        mod_conv = Dropout(0.5)(mod_conv)
-
-        mod_conv = Dense(20, activation='relu', init=INIT,
-                         bias=True, W_constraint=maxnorm(self.maxnorm[0]))(mod_conv)
-
-        #mod_conv = Dropout(0.5)(mod_conv)
-
-        #mod_conv = Dense(30, activation='relu', init=INIT,
-        #                 bias=True, W_constraint=maxnorm(5))(mod_conv)
-
-        #mod_conv = Dropout(0.1)(mod_conv)
-
-
-
-        #mod_conv = Flatten()(mod_conv)
-        main_model = merge([mod_conv, mod_dense], mode='concat')
-
-
-
-        output_layer = Dense(1, init=INIT, W_constraint=maxnorm(self.maxnorm[0]),
-                             activation=self.output_layer_activation,
-                             bias=True)(main_model)
-
-        aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
-
-        return aux_input, input_layer, merged_output, output_layer
 
     def update_model(self):
         self.nb_epoch=10000
