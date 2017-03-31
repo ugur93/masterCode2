@@ -39,7 +39,7 @@ def fetch_gjoa_data():
 
     if  False:
 
-        cols=['C4_QGAS','C4_CHK']
+        cols=['B1_PBH','B1_PDC','B1_PWH']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
 
@@ -47,7 +47,7 @@ def fetch_gjoa_data():
             try:
                 axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
+                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
                 #axes[i].hist( (GjoaData.Y[key])**2)
             axes[i].set_title(key)
             axes[i].set_xlabel('Time')

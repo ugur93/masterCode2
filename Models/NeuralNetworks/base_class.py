@@ -51,7 +51,17 @@ class NN_BASE:
 
 
         plotModel(self.model,self.model_name)
+    def get_params(self,deep=False):
+        return {'n_depth': self.n_depth, 'n_width': self.n_width,
+                     'l2w': self.l2weight, 'seed': self.seed}
 
+    def set_params(self):
+        return
+        #self.n_depth=params['n_depth']
+        #self.n_width=params['n_width']
+        #self.l2weight=params['l2w']
+        #self.seed=params['seed']
+        #self.initialize_model()
     def initialize_model(self):
         pass
 

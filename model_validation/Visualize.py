@@ -211,6 +211,9 @@ def get_cumulative_performance_plot_single(cumperf_train,cumperf_test,data_tag):
     colors = [cmap(i) for i in np.linspace(0, 1, 7)]
     axes = axes.flatten()
 
+    fig.canvas.set_window_title(data_tag)
+
+
     plot(cumperf_train,axes,0,'Training')
     plot(cumperf_test,axes,2,'Test')
 
@@ -251,13 +254,17 @@ def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
     return fig, axes
 
 def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
-    #cumperf_train = get_cumulative_deviation(model, data, X_train, Y_train)
-    #cumperf_test = get_cumulative_deviation(model, data, X_test, Y_test)
+    cumperf_train = get_cumulative_deviation(model, data, X_train, Y_train)
+    cumperf_test = get_cumulative_deviation(model, data, X_test, Y_test)
+
+
+
+    get_cumulative_performance_plot_single(cumperf_train, cumperf_test,model.model_name)
 
     cumperf_test = get_cumulative_flow(model, data, X_test, Y_test)
     cumperf_train = get_cumulative_flow(model, data, X_train, Y_train)
 
-    get_cumulative_performance_plot_single(cumperf_train, cumperf_test,'Training')
+    get_cumulative_performance_plot_single(cumperf_train, cumperf_test, model.model_name)
     #get_cumulative_performance_plot_single(cumperf_test,'Test')
 
 

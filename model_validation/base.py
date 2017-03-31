@@ -8,6 +8,7 @@ import pandas as pd
 import seaborn
 from sklearn import ensemble
 import DataManager as DM
+
 def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
     delta=1e-100
@@ -75,8 +76,8 @@ def get_cumulative_flow(model,data,X,Y):
 
     return deviation_points
 
-def count_number_of_samples_below_cum_devation(thresh,cumulative_error):
-    return cumulative_error.sum(axis=1)[thresh]
+def count_number_of_samples_below_cum_devation(thresh,cumulative_error,tag):
+    return cumulative_error.sum(axis=1)[tag][thresh]
 
 
 def train_test_split(X,Y,test_size):

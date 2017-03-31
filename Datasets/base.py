@@ -40,11 +40,11 @@ class CustomScaler:
     def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path=''):
 
         self.SCALES={
-                     'PRESSURES':100,
-                     'QGAS':300000,
+                     'PRESSURES':300,
+                     'QGAS':1,#300000,
                      'CHK':50,
-                     'QOIL':100,
-                     'QWAT':100
+                     'QOIL':1,
+                     'QWAT':1
                      }
 
         self.TAGS={'PRESSURES':['PBH','PWH','delta','PDC'],
@@ -124,10 +124,11 @@ class CustomScaler:
     def fit_transform(self,data):
         data_transformed = data.copy()
         if not self.with_mean_from_csv:
-            self.mean=data_transformed[data_transformed>0].mean()
+            self.mean=data_transformed.mean()
             #self.mean.to_csv('Models/NeuralNetworks/ConfigFilesUseful/GJOA_GAS_MEAN.csv')
             #exit()
         self.std = data_transformed.std()
+        #print(self.std)
         self.minmax_scale=data_transformed.max()-data_transformed.min()
         self.minmax_min=data_transformed.min()
         #print(self.std)
@@ -167,12 +168,15 @@ class DataContainer:
         self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=False,with_std=False)
 
         self.init_transform()
-
+        #print(np.max(self.X_transformed))
+        #print(np.mean(self.X_transformed))
+        #exit()
         #self.X_transformed.fillna(0, inplace=True)
         #self.Y_transformed.fillna(0, inplace=True)
 
     def init_transform(self):
         self.X_transformed =self.SCALER_X.fit_transform(self.X)
+
         #cols=self.X.columns
         self.Y_transformed =self.SCALER_Y.fit_transform(self.Y)
         #self.X_transformed=pd.DataFrame(data=self.X_transformed,columns=cols)

@@ -24,7 +24,7 @@ def validate(DataOIL,DataGAS):
         Data=DataGAS
     else:
         Data=DataOIL
-
+    #bagging_test(Data)
     validate_train_test_split(Data)
     #ensemble_learning(Data)
     #grid_search2(Data)
@@ -298,8 +298,8 @@ def grid_search2(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2],'n_width':[50],
-                   'l2w':[0.0001],'seed':np.random.randint(1,10000,100)}
+    search_params={'n_depth':[2,3,4],'n_width':[20,30,40,50,60,70,80,90,100],
+                   'l2w':np.linspace(0.00001,0.01,100),'seed':np.random.randint(1,10000,100)}
 
     grid_params=generate_grid(search_params)
 
@@ -313,21 +313,26 @@ def grid_search2(Data):
     best_r2_test = None
     best_rmse_test = None
     best_params={}
-    filename='GRID_SEARCH_GAS_SEED_HUBERLOSS'
+    filename='GRID_SEARCH_OIL_ONLY_TOTAL2'
+    ii=1
     for params in grid_params:
         params['seed']=int(params['seed'])
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+        print('\n\n\n')
+        print('On n_grid: {} of {}'.format(ii,len_grid))
+        ii+=1
         print('Training with params: {}'.format(params))
         model.initialize_chk_thresholds(Data, True)
-        model.fit(X_train,Y_train,X_val,Y_val)
-        model.update_model()
+        #model.fit(X_train,Y_train,X_val,Y_val)
+        #model.update_model()
         model.fit(X_train, Y_train, X_val, Y_val)
         score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
 
         cum_perf=get_cumulative_deviation(model,Data,X_val,Y_val)
+        #print(cum_perf)
         #cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][15]
 
-        cum_perf_sum=count_number_of_samples_below_cum_devation(15, cum_perf)
+        cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][1]#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
 
         if cum_perf_sum>best_sum_cumperf:
             best_sum_cumperf=cum_perf_sum
@@ -482,7 +487,24 @@ def ensemble_learning(Data):
 
 
 
+def bagging_test(Data):
+    X = Data.X_transformed
+    Y = Data.Y_transformed
 
+    cum_thresh = 15
 
+    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
+    search_params = {'n_depth': [4], 'n_width': [50],
+                     'l2w': [0.000001], 'seed': np.random.randint(1, 10000, 10)}
 
+    params={'n_depth': 2, 'n_width': 50,
+                     'l2w': 0.0001, 'seed': 9035}
+    model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
 
+    #tags=model.output_tag_ordered_list
+
+    mod=ensemble.BaggingRegressor(base_estimator=model,n_estimators=2)
+    print(X_train.shape)
+    mod.fit(X_train,Y_train['GJOA_OIL_QGAS'])
+
+    print(mod.predict(X_val))

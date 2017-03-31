@@ -10,7 +10,7 @@ try:
 except(AttributeError):
     print('pydot.find_graphviz() not available, can avoid this problem by commenting out it from visualize_util.py file')
 
-from keras.regularizers import l2
+from keras.regularizers import l2,l1
 
 from keras.callbacks import Callback, EarlyStopping
 from keras.constraints import nonneg,unitnorm,maxnorm
