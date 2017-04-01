@@ -40,8 +40,8 @@ class CustomScaler:
     def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path=''):
 
         self.SCALES={
-                     'PRESSURES':300,
-                     'QGAS':1,#300000,
+                     'PRESSURES':100,
+                     'QGAS':100000,
                      'CHK':50,
                      'QOIL':1,
                      'QWAT':1

@@ -42,6 +42,8 @@ def fetch_gjoa_data():
         cols=['B1_PBH','B1_PDC','B1_PWH']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
+        #plt.scatter(Y['B1_QOIL'],X['B1_CHK'])
+        #plt.show()
 
         for i,key in zip(range(0,len(cols)),cols):
             try:

@@ -9,6 +9,22 @@ import seaborn
 from sklearn import ensemble
 import DataManager as DM
 
+from random import seed
+from random import random
+from random import randrange
+
+def subsample(X,Y):
+    X_new=pd.DataFrame()
+    Y_new=pd.DataFrame()
+
+    n_sample = len(X)
+    for i in range(n_sample):
+        index = np.random.randint(0,n_sample)
+        X_new=X_new.append(X.iloc[index])
+        Y_new=Y_new.append(Y.iloc[index])
+
+    return X_new,Y_new
+
 def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
     delta=1e-100

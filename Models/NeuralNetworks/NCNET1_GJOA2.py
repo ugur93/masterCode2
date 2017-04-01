@@ -28,7 +28,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=50,l2w=0.0001,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=2 ,n_width=50,l2w=0.0002,dp_rate=0,seed=3014):
 
 
 
@@ -96,7 +96,7 @@ class NCNET1_GJOA2(NN_BASE):
 
             aux_inputs.append(aux_input)
             inputs.append(input)
-            merged_outputs.append(out)
+            merged_outputs.append(merged_out)
 
 
         merged_input = Add(name='GJOA_TOTAL')(merged_outputs)
@@ -104,8 +104,8 @@ class NCNET1_GJOA2(NN_BASE):
         all_outputs=merged_outputs+[merged_input]
         all_inputs = inputs
 
-        #if self.add_thresholded_output:
-        #    all_inputs+=aux_inputs
+        if self.add_thresholded_output:
+            all_inputs+=aux_inputs
 
 
         self.model = Model(inputs=all_inputs, outputs=all_outputs)
@@ -160,7 +160,7 @@ class NCNET1_GJOA2(NN_BASE):
             temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(temp_output)
 
 
-        output_layer = Dense(1, kernel_initializer=self.init,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True,name=name+'_out')(temp_output)
+        output_layer = Dense(1, kernel_initializer=self.init,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True)(temp_output)
 
         aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
 

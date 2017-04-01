@@ -16,7 +16,7 @@ N_SHUTDOWN_SCALE=5
 np.random.seed(151)
 
 WELL_NAMES=['F1','B2','D3','E1']
-WELL_NAMES=['A','B','C','D']
+#WELL_NAMES=['A','B','C','D']
 #WELL_NAMES=['C1','C2','C3','C4','D1','B3','B1']
 
 def generateChokeConfig():
@@ -80,7 +80,7 @@ def fetchSimulatedData():
         noise = np.random.rand(N_SAMPLES, 1)*10
         data=f_linear(a,b,c,X[WELL_NAMES[i]+'_CHK'])+noise
         #print(data.shape)
-        X_Q[WELL_NAMES[i]+'_QOIL']=data
+        X_Q[WELL_NAMES[i]+'_QGAS']=data
         Y+=data
         WELL_PARAMS[WELL_NAMES[i]]={'a':a,'b':b}
         XT[WELL_NAMES[i]]=X[WELL_NAMES[i]+'_CHK']
@@ -96,7 +96,7 @@ def fetchSimulatedData():
 
     Y=pd.concat([Y,X_Q],axis=1)
 
-    plotData(X, X_Q, Y)
+    #plotData(X, X_Q, Y)
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
 

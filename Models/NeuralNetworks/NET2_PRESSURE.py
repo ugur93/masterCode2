@@ -27,19 +27,21 @@ class SSNET2(NN_BASE):
 
         self.output_layer_activation = 'relu'
         # Input module config
-        n_depth = 2
-        n_width = 50
-        l2w =0.00001
+        n_depth = 1
+        n_width = 10
+        l2w =0.0001
         seed=9035
 
 
-        self.input_tags=['CHK','PDC','PWH','PBH']
+        self.input_tags=['CHK']#,'PDC','PWH','PBH']
         #Training config
         optimizer = 'adam'
         loss = 'mae'
         nb_epoch = 5000
         batch_size = 64
         dp_rate=0
+
+        #self.model_name='SIM_DATA_WONOFF'
         self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         self.output_tags = {
@@ -52,7 +54,7 @@ class SSNET2(NN_BASE):
         self.well_names=['F1','B2','D3','E1']
 
         self.input_tags={}
-        tags=['CHK','PWH','PBH','PDC']
+        tags=['CHK']#,'PWH','PBH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
@@ -85,7 +87,7 @@ class SSNET2(NN_BASE):
                             use_bias=True)(temp_output)
         #temp_output=Dropout(0.05)(temp_output)
 
-        output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
+        output_layer = Dense(1, kernel_initializer=self.init,activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
         aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
 
 
