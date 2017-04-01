@@ -28,7 +28,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=50,l2w=0.0002,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=3 ,n_width=50,l2w=0.0002,dp_rate=0,seed=3014):
 
 
 
@@ -70,7 +70,7 @@ class NCNET1_GJOA2(NN_BASE):
         nb_epoch = 5000
         batch_size = 64
 
-        self.model_name ='GJOA_OIL_GRIDSEARCH2_SHFALSE'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OILWELLS_GAS_CHOKEPRIO'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 

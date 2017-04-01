@@ -25,8 +25,8 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
     #bagging_test(Data)
-    validate_train_test_split(Data)
-    #ensemble_learning_bagging(Data)
+    #validate_train_test_split(Data)
+    ensemble_learning(Data)
     #grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
@@ -64,10 +64,15 @@ def validate_train_test_split(Data):
     #PATH = 'Models/NeuralNetworks/SavedModels2/hdf5_files/NCNET_GAS_PRETRAINED_WITH_OLD_DATA'3
     #GJOA QGAS
     PATHS=['Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_0.h5',
-           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_1.h5',
-           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_2.h5',
-           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_3.h5',
-           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_4.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_1.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_2.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_3.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_4.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_5.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_6.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_7.h5',
+            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_8.h5',
+            #'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_9.h5',
             ]
     #pressure_weights=
     if DATA_TYPE=='GAS':
@@ -99,8 +104,8 @@ def validate_train_test_split(Data):
         #pass
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL2_WELLS_mae_D2_W50_L20.0001_DPR0.h5'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
-        model=NCNET1_GJOA2.NCNET1_GJOA2()
-        #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
+        #model=NCNET1_GJOA2.NCNET1_GJOA2()
+        model=NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model.model.load_weights(PATH)
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
@@ -120,7 +125,7 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        model.fit(X_train, Y_train, X_val, Y_val)
+        #model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
 
@@ -160,7 +165,7 @@ def validate_train_test_split(Data):
 
     #model.save_model_config(scores_latex)
     #MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
-    model.save_model_to_file(model.model_name, scores)
+    #model.save_model_to_file(model.model_name, scores)
 
     input_cols =[]
 
@@ -455,8 +460,8 @@ def ensemble_learning(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params = {'n_depth': [4], 'n_width': [50],
-                     'l2w': [0.000001], 'seed': np.random.randint(1, 10000, 10)}
+    search_params = {'n_depth': [2,3,4], 'n_width': [30,40,50],
+                     'l2w': [0.0002], 'seed': [3014]}
     grid_params = generate_grid(search_params)
 
     len_grid = len(grid_params)
@@ -467,7 +472,7 @@ def ensemble_learning(Data):
     name='ENSEMBLE_LEARNING_GAS_'
     PATH='Models/NeuralNetworks/SavedModels2/Weights/'
     PATHS=[]
-    i=1
+    i=0
     for params in grid_params:
         params['seed'] = int(params['seed'])
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
@@ -477,17 +482,21 @@ def ensemble_learning(Data):
 
         print('Training with params: {}'.format(params))
         model.initialize_chk_thresholds(Data, True)
-        model.fit(X_train, Y_train, X_val, Y_val)
-        model.update_model()
+        #model.fit(X_train, Y_train, X_val, Y_val)
+        #model.update_model()
         model.fit(X_train, Y_train, X_val, Y_val)
 
         scores, scores_latex = evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
         model.save_model_to_file(model.model_name, scores)
+        print(scores)
 
 
         del model
 
-    print(PATHS)
+    print('[')
+    for path in PATHS:
+        print(path + ',')
+    print(']')
 
 
 
@@ -527,7 +536,7 @@ def ensemble_learning_bagging(Data):
     grid_params = generate_grid(search_params)
 
     params = {'n_depth': 2, 'n_width': 50,
-              'l2w': 0.0001, 'seed': 9035}
+              'l2w': 0.0002, 'seed': 3014}
 
     len_grid = len(grid_params)
 
@@ -538,7 +547,7 @@ def ensemble_learning_bagging(Data):
     PATH='Models/NeuralNetworks/SavedModels2/Weights/'
     PATHS=[]
     i=1
-    for i in range(5):
+    for i in range(10):
 
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
         model.model_name=name+str(i)
@@ -557,5 +566,7 @@ def ensemble_learning_bagging(Data):
 
 
         del model
-
-    print(PATHS)
+    print('[')
+    for path in PATHS:
+        print(path+',')
+    print(']')

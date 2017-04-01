@@ -114,7 +114,7 @@ def set_chk_zero_values_to_zero(X,Y):
             ind_zero_gas_all=ind_zero_gas_all&ind_gas_zero
 
 
-        #X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
+        X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
         #X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
         # X[key + '_CHK'][ind_gas_zero] = 0
 
