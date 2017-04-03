@@ -1,6 +1,7 @@
 from keras.models import Sequential
-from keras.layers import Dense, ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge,merge, Input,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
+from keras.layers import Dense,ThresholdedReLU,UpSampling2D, ZeroPadding1D,GaussianDropout,Activation, Merge,merge, Input,GlobalMaxPooling1D,Layer,Dropout,MaxoutDense,BatchNormalization,GaussianNoise,Convolution1D,MaxPooling1D,Flatten,LocallyConnected1D,UpSampling1D,AveragePooling1D,Convolution2D,MaxPooling2D
 from keras.models import Model
+from keras.layers.advanced_activations import PReLU
 from keras.losses import mean_absolute_error,mean_absolute_percentage_error,mean_squared_error
 from keras.layers.merge import add,multiply,Add,concatenate,average,Multiply,Concatenate
 from keras.optimizers import Adam
@@ -73,7 +74,7 @@ def smooth_huber_loss(y_true, y_pred, w):
 
 
 def huber(y_true, y_pred):
-    delta=0.01
+    delta=0.1
     diff = y_true - y_pred
     a = 0.5 * (diff**2)
     b = delta * (abs(diff) - delta / 2.0)

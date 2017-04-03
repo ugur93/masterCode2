@@ -28,7 +28,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=3 ,n_width=50,l2w=0.0002,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=2 ,n_width=50,l2w=0.0001,dp_rate=0,seed=3014):
 
 
 
@@ -69,8 +69,9 @@ class NCNET1_GJOA2(NN_BASE):
         loss ='mae'
         nb_epoch = 5000
         batch_size = 64
+        self.activation='relu'
 
-        self.model_name ='GJOA_OILWELLS_GAS_CHOKEPRIO'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_GAS'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 
@@ -151,16 +152,16 @@ class NCNET1_GJOA2(NN_BASE):
 
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
-        temp_output = Dense(self.n_width,  activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
+        temp_output = Dense(self.n_width,activation=self.activation,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True,name=name+'_0')(input_layer)
         #temp_output = MaxoutDense(self.n_width,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
-
+        #temp_output=PReLU()(temp_output)
         for i in range(1,self.n_depth):
             if self.dp_rate>0:
-                temp_output=Dropout(self.dp_rate)(temp_output)
-            temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(temp_output)
+                temp_output=Dropout(self.dp_rate,name=name+'_dp_'+str(i))(temp_output)
+            temp_output = Dense(self.n_width, activation=self.activation,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True,name=name+'_'+str(i))(temp_output)
+            #temp_output = PReLU()(temp_output)
 
-
-        output_layer = Dense(1, kernel_initializer=self.init,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True)(temp_output)
+        output_layer = Dense(1, kernel_initializer=self.init,kernel_regularizer=l2(self.l2weight),activation=self.output_layer_activation, use_bias=True,name=name+'_o')(temp_output)
 
         aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
 

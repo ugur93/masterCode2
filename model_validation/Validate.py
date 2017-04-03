@@ -25,8 +25,8 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
     #bagging_test(Data)
-    #validate_train_test_split(Data)
-    ensemble_learning(Data)
+    validate_train_test_split(Data)
+    #ensemble_learning(Data)
     #grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
@@ -78,8 +78,8 @@ def validate_train_test_split(Data):
     if DATA_TYPE=='GAS':
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_MAE.h5'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.0, val_size=0.2)
-        #model=NCNET_CHKPRES.SSNET3_PRESSURE(Data)
-        model = NET2_PRESSURE.SSNET2()
+        model=NCNET_CHKPRES.SSNET3_PRESSURE(Data)
+        #model = NET2_PRESSURE.SSNET2()
 
         #
         #model.load_weights_from_file(PATH)
@@ -105,12 +105,12 @@ def validate_train_test_split(Data):
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL2_WELLS_mae_D2_W50_L20.0001_DPR0.h5'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         #model=NCNET1_GJOA2.NCNET1_GJOA2()
-        model=NCNET1_GJOA2.ENSEMBLE(PATHS)
+        #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model.model.load_weights(PATH)
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE(n_depth=2,n_width=50,l2w=0.0001)
+        model = NCNET_CHKPRES.SSNET3_PRESSURE()
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
@@ -125,7 +125,7 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        #model.fit(X_train, Y_train, X_val, Y_val)
+        model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
 
@@ -165,7 +165,7 @@ def validate_train_test_split(Data):
 
     #model.save_model_config(scores_latex)
     #MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
-    #model.save_model_to_file(model.model_name, scores)
+    model.save_model_to_file(model.model_name, scores)
 
     input_cols =[]
 
@@ -227,22 +227,28 @@ def validateRepeat(Data):
 
 
 def validateCV(Data,cv=10):
-    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.1, val_size=0.2)
+    X = Data.X_transformed
+    Y = Data.Y_transformed
 
-    kfold=model_selection.KFold(n_splits=5,random_state=False)
+
+
+    kfold=model_selection.KFold(n_splits=10,random_state=False)
 
     scores_rmse_train=np.empty(shape=(0,))
     scores_r2_test = np.empty(shape=(0,))
     scores_rmse_test = np.empty(shape=(0,))
     scores_r2_train = np.empty(shape=(0,))
 
-    rmse_train_list = []
-    rmse_test_list = []
-    r2_train_list = []
-    r2_test_list = []
+    rmse_train_list = None
+    rmse_test_list = None
+
     #zprint scores
     #print(chkInputs.index)
     i=1
+
+
+
+
     for train_index,test_index in kfold.split(X.index):
         #print("TRAIN:", train_index, "TEST:", test_index)
         #print(chkInputs[test_index])
@@ -250,34 +256,40 @@ def validateCV(Data,cv=10):
         #print('Train index: {}'.format(train_index))
         #print('Val index: {}'.format(test_index))
         #model = NN1.SSNET1()
-        model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
         model.initialize_chk_thresholds(Data, True)
         X_train=X.iloc[train_index]
         X_val=X.iloc[test_index]
         Y_train=Y.iloc[train_index]
         Y_val=Y.iloc[test_index]
         model.fit(X_train, Y_train,X_val,Y_val)
-        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2 = model.evaluate(X_train, X_val, Y_train,
-                                                                                        Y_val)
+        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
+        #score_train_MSE=pd.DataFrame(data=score_train_MSE,columns=cols)
+        #score_test_MSE = pd.DataFrame(data=score_test_MSE, columns=cols)
 
-        rmse_train_list.append(np.sqrt(score_train_MSE[-1]))
-        rmse_test_list.append(np.sqrt(score_test_MSE[-1]))
-        r2_train_list.append(score_train_r2[-1])
-        r2_test_list.append(score_test_r2[-1])
-        print('Scores on fold: {} \n RMSE: {} \n R2: {}'.format(i,rmse_test_list[-1],r2_test_list[-1]))
+        if rmse_train_list is None:
+            rmse_train_list=pd.DataFrame(data=[],columns=cols,index=[0])
+            rmse_test_list = pd.DataFrame(data=[], columns=cols, index=[0])
+        rmse_train_list.loc[-1]=np.sqrt(score_train_MSE)
+        rmse_train_list.index+=1
+        rmse_test_list.loc[-1]=np.sqrt(score_test_MSE)
+        rmse_test_list.index+=1
+        print(rmse_train_list)
+
+
         del model
         i+=1
     RMSE_TRAIN = np.mean(rmse_train_list)
     RMSE_TEST = np.mean(rmse_test_list)
-    R2_TEST = np.mean(r2_test_list)
-    R2_TRAIN = np.mean(r2_train_list)
-    s_rmse = "Accuracy RMSE \n TRAIN: %0.2f (+/- %0.2f) \n TEST: %0.2f (+/- %0.2f)" % (
-    RMSE_TRAIN, np.std(rmse_train_list) * 2, RMSE_TEST, np.std(rmse_test_list) * 2)
-    s_r2 = "Accuracy R2 \n TRAIN: %0.2f (+/- %0.2f) \n TEST: %0.2f (+/- %0.2f)" % (
-        R2_TRAIN, np.std(r2_train_list) * 2, R2_TEST, np.std(r2_test_list) * 2)
 
-    print(s_rmse)
-    print(s_r2)
+
+    print(RMSE_TRAIN)
+
+    print(RMSE_TEST)
+
+
+
 
 
 def plotTrainingHistory(model):

@@ -8,7 +8,7 @@ import keras.backend as K
 class SSNET3_PRESSURE(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=50,l2w=0.000005,seed=9035):
+    def __init__(self,n_depth=2 ,n_width=50,l2w=0.001,seed=9035):
 
 
 
@@ -25,6 +25,7 @@ class SSNET3_PRESSURE(NN_BASE):
 
         chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
         self.well_names = ['C1', 'C2', 'C3', 'C4', 'B3','B1','D1']
+        #self.well_names=['C1','C3', 'C4','B1','B3']
 
 
         self.input_tags={'PRESSURE_INPUT':[]}
@@ -33,13 +34,13 @@ class SSNET3_PRESSURE(NN_BASE):
                 self.input_tags['PRESSURE_INPUT'].append(key+'_'+tag)
         for key in ['C1','C3', 'C4','B1','B3']:
                 self.input_tags['PRESSURE_INPUT'].append(key + '_' + 'PBH')
-        self.input_tags['RISER_B_CHK_INPUT']=['GJOA_RISER_OIL_B_CHK']
+        self.input_tags['PRESSURE_INPUT'].append('GJOA_RISER_OIL_B_CHK')
 
         self.output_tags = {}
 
         for name in self.well_names:
 
-            self.output_tags[name + '_PWH_pred'] = [name + '_' + 'PWH']
+            self.output_tags[name + '_PWH_out'] = [name + '_' + 'PWH']
             #self.output_tags[name + '_PDC_pred'] = [name + '_' + 'PDC']
 
         self.output_zero_thresholds = {}
@@ -84,18 +85,18 @@ class SSNET3_PRESSURE(NN_BASE):
         print('Initializing %s' % (self.model_name))
 
         all_chk_input = Input(shape=(len(self.input_tags['PRESSURE_INPUT']),), dtype='float32', name='PRESSURE_INPUT')
-        riser_chk_input = Input(shape=(len(self.input_tags['RISER_B_CHK_INPUT']),), dtype='float32', name='RISER_B_CHK_INPUT')
+        #riser_chk_input = Input(shape=(len(self.input_tags['RISER_B_CHK_INPUT']),), dtype='float32', name='RISER_B_CHK_INPUT')
 
-        all_and_riser_chk_input=Concatenate(name='RISER_MERGE')([all_chk_input,riser_chk_input])
+        #all_and_riser_chk_input=Concatenate(name='RISER_MERGE')([all_chk_input,riser_chk_input])
 
         output_layers = {}
         outputs = []
         inputs = [all_chk_input]#,riser_chk_input]
 
         #
-        sub_model_all = Dense(50, W_regularizer=l2(self.l2weight), activation='relu',name='pres_sub_all')(all_chk_input)
-        sub_model_all = Dense(50, W_regularizer=l2(self.l2weight), activation='relu',name='pres_sub_all2')(sub_model_all)
-        sub_model_all = Dense(50, W_regularizer=l2(self.l2weight), activation='relu',name='pres_sub_all3')(sub_model_all)
+        #sub_model_all = Dense(50, W_regularizer=l2(self.l2weight), activation='relu',name='pres_sub_all')(all_chk_input)
+        #sub_model_all = Dense(50, W_regularizer=l2(self.l2weight), activation='relu',name='pres_sub_all2')(sub_model_all)
+        #sub_model_all = Dense(50, W_regularizer=l2(self.l2weight), activation='relu',name='pres_sub_all3')(sub_model_all)
 
 
 
@@ -104,7 +105,7 @@ class SSNET3_PRESSURE(NN_BASE):
             #sub_model_PDC=self.generate_sub_model(all_and_riser_chk_input,name=key+'_PDC')
 
             PWH_out = Dense(1,
-                            kernel_regularizer=l2(self.l2weight), activation='relu', name=key + '_PWH_out',kernel_initializer=self.init)(sub_model_all)
+                            kernel_regularizer=l2(self.l2weight), activation='relu', name=key + '_PWH_out',kernel_initializer=self.init)(sub_model_PWH)
 
             #PDC_out = Dense(1,
             #                kernel_regularizer=l2(self.l2weight), activation='relu', name=key + '_PDC_out',kernel_initializer=self.init)(sub_model_PDC)
