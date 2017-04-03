@@ -41,13 +41,15 @@ class CustomScaler:
 
         self.SCALES={
                      'PRESSURES':100,
+                      'PRESSURES2':100,
                      'QGAS':100000,
                      'CHK':50,
                      'QOIL':1,
                      'QWAT':1
                      }
 
-        self.TAGS={'PRESSURES':['PBH','PWH','delta','PDC'],
+        self.TAGS={'PRESSURES':['PBH2','PWH','delta','PDC'],
+                   'PRESSURES2':['PBH'],
                    'QGAS':['QGAS','DEPRECATED'],
                    'CHK':['CHK','time'],
                    'QOIL':['QOIL','SUM'],
@@ -165,7 +167,7 @@ class DataContainer:
         self.Y_transformed=None
 
         self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False)
-        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=False,with_std=False)
+        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=True,with_std=False)
 
         self.init_transform()
         #print(np.max(self.X_transformed))

@@ -39,7 +39,7 @@ def fetch_gjoa_data():
 
     if  False:
 
-        cols=['B1_PBH','B1_PDC','B1_PWH']
+        cols=['B1_1_PBH','B1_PDC','B1_PWH','B1_CHK']
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
         #plt.scatter(Y['B1_QOIL'],X['B1_CHK'])
@@ -47,7 +47,7 @@ def fetch_gjoa_data():
 
         for i,key in zip(range(0,len(cols)),cols):
             try:
-                axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
+                axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
             except(KeyError):
                 axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
                 #axes[i].hist( (GjoaData.Y[key])**2)
@@ -131,7 +131,7 @@ def set_chk_zero_values_to_zero(X,Y):
         #X = X[~ind_gas_zero]
         #Y = Y[~ind_gas_zero]
 
-        #X[key+'_1_PBH']=X[key+'_PBH'].copy()
+        X[key+'_1_PBH']=X[key+'_PBH'].copy()
 
         #X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
         #X = set_index_values_to_zero(X, ind_zero, key + '_PBH')

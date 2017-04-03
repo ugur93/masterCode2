@@ -208,7 +208,7 @@ def get_cumulative_performance_plot_single(cumperf_train,cumperf_test,data_tag):
 
     fig, axes = plt.subplots(2, 2)
     cmap = plt.get_cmap('Vega10')
-    colors = [cmap(i) for i in np.linspace(0, 1, 7)]
+    colors = [cmap(i) for i in np.linspace(0, 1, 30)]
     axes = axes.flatten()
 
     fig.canvas.set_window_title(data_tag)

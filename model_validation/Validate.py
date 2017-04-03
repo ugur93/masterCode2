@@ -102,7 +102,7 @@ def validate_train_test_split(Data):
     else:
         #GJOA_QOIL
         #pass
-        PATH = 'Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL2_WELLS_mae_D2_W50_L20.0001_DPR0.h5'
+        PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         #model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
@@ -114,6 +114,13 @@ def validate_train_test_split(Data):
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
+
+
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL.h5', by_name=True)
+
+        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL.h5',by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PWH_MODEL.h5', by_name=True)
+
 
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
@@ -320,8 +327,8 @@ def grid_search2(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2,3,4],'n_width':[20,30,40,50,60,70,80,90,100],
-                   'l2w':np.linspace(0.00001,0.01,100),'seed':np.random.randint(1,10000,100)}
+    search_params={'n_depth':[2,3,4],'n_width':[50,60,70,80,90,100],
+                   'l2w':np.linspace(0.0001,0.01,100),'seed':[3014]}
 
     grid_params=generate_grid(search_params)
 
@@ -329,7 +336,7 @@ def grid_search2(Data):
 
     print('Size of search space: {}'.format(len_grid))
 
-    best_sum_cumperf=-1e100
+    best_sum_cumperf=1e100
     best_r2_train=None
     best_rmse_train=None
     best_r2_test = None
@@ -354,9 +361,9 @@ def grid_search2(Data):
         #print(cum_perf)
         #cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][15]
 
-        cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][1]#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
+        cum_perf_sum=np.sqrt(score_test_MSE[-1])#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
 
-        if cum_perf_sum>best_sum_cumperf:
+        if cum_perf_sum<best_sum_cumperf:
             best_sum_cumperf=cum_perf_sum
             best_params=params
             best_rmse_test=np.sqrt(score_test_MSE)
