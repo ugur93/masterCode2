@@ -268,10 +268,10 @@ class NET4_W_PRESSURE(NN_BASE):
         if l2w==0:
             l2w=self.l2weight
         i=0
-        sub_model = Dense(50, kernel_regularizer=l2(l2w), activation='relu',name=name+'_'+str(i),trainable=False)(input_layer)
+        sub_model = Dense(100, kernel_regularizer=l2(l2w), activation='relu',name=name+'_'+str(i),trainable=False)(input_layer)
 
         for i in range(1,depth):
             # sub_model_temp=Dropout(0.01)(sub_model_temp)
-            sub_model = Dense(50, kernel_regularizer=l2(l2w), activation='relu',name=name+'_'+str(i),trainable=False)(sub_model)
+            sub_model = Dense(100, kernel_regularizer=l2(l2w), activation='relu',name=name+'_'+str(i),trainable=False)(sub_model)
 
         return sub_model

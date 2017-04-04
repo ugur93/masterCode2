@@ -110,16 +110,16 @@ def validate_train_test_split(Data):
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
-        #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
+        model=NCNET4_combined.NET4_W_PRESSURE(PATH)
 
 
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL.h5', by_name=True)
+        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL.h5', by_name=True)
 
-        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL.h5',by_name=True)
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PWH_MODEL.h5', by_name=True)
+        model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL2.h5',by_name=True)
+        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PWH_MODEL2.h5', by_name=True)
 
 
         # model.initialize_zero_thresholds(Data)
@@ -132,7 +132,7 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        model.fit(X_train, Y_train, X_val, Y_val)
+        #model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
 

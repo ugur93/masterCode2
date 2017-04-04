@@ -167,7 +167,7 @@ class DataContainer:
         self.Y_transformed=None
 
         self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False)
-        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=True,with_std=False)
+        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=False,with_std=False)
 
         self.init_transform()
         #print(np.max(self.X_transformed))
