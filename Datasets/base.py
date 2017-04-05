@@ -41,15 +41,15 @@ class CustomScaler:
 
         self.SCALES={
                      'PRESSURES':100,
-                      'PRESSURES2':100,
+                      'PRESSURES2':50,
                      'QGAS':100000,
                      'CHK':50,
                      'QOIL':1,
                      'QWAT':1
                      }
 
-        self.TAGS={'PRESSURES':['PBH2','PWH','delta','PDC'],
-                   'PRESSURES2':['PBH'],
+        self.TAGS={'PRESSURES':['PBH','PWH','delta','PDC'],
+                   #'PRESSURES2':['PBH'],
                    'QGAS':['QGAS','DEPRECATED'],
                    'CHK':['CHK','time'],
                    'QOIL':['QOIL','SUM'],
@@ -133,7 +133,7 @@ class CustomScaler:
         #print(self.std)
         self.minmax_scale=data_transformed.max()-data_transformed.min()
         self.minmax_min=data_transformed.min()
-        #print(self.std)
+        print(self.mean)
 
 
         return self.transform(data)

@@ -39,7 +39,12 @@ def fetch_gjoa_data():
 
     if  False:
 
-        cols=['B1_1_PBH','B1_PDC','B1_PWH','B1_CHK']
+        cols=['B3_PBH','B3_PDC','B3_PWH','B3_CHK']
+
+        cols=[]
+        for key in ['QGAS','PBH','PDC','PWH','CHK']:
+            cols.append('C2'+'_'+key)
+        #cols.append('GJOA_RISER_OIL_B_CHK')
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
         #plt.scatter(Y['B1_QOIL'],X['B1_CHK'])
@@ -114,45 +119,21 @@ def set_chk_zero_values_to_zero(X,Y):
             ind_zero_gas_all=ind_zero_gas_all&ind_gas_zero
 
 
-        #X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
-        #X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
-        # X[key + '_CHK'][ind_gas_zero] = 0
-
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
-
-        #ind_gas_zero = Y[key + '_QGAS'] == 0
-        #ind_oil_zero = Y[key + '_QOIL'] == 0
-        ##ind_gas_zero=ind_gas_zero!=ind_zero
-        #ind_oil_zero = ind_oil_zero != ind_zero
-
-        #X = X[~ind_oil_zero]
-        #Y = Y[~ind_oil_zero]
-
-        #X = X[~ind_gas_zero]
-        #Y = Y[~ind_gas_zero]
 
         X[key+'_1_PBH']=X[key+'_PBH'].copy()
 
-        #X=set_index_values_to_zero(X, ind_zero, key + '_PWH')
-        #X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
-        #X = set_index_values_to_zero(X, ind_zero, key + '_PDC')
-
-        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PWH')
-        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PBH')
-        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
-
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QOIL')
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QGAS')
+        X = set_index_values_to_zero(X, ind_zero, key + '_CHK')
 
-        #Y = set_index_values_to_zero(Y, ind_gas_zero, key + '_CHK')
-        #Y = set_index_values_to_zero(Y, ind_gas_zero, key + '_QGAS')
         X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
     print(sum(ind_zero_gas_all))
     #Y = set_index_values_to_zero(Y, ind_zero_gas_all,'GJOA_OIL_QGAS')
     return X,Y
 
 def preprocesss(X,Y):
-    DROP = [808, 807, 173, 416, 447, 487]
+    DROP = [808, 809, 807, 173, 416, 447, 487,764,713,685,670]
 
     X['time'] = np.arange(0, len(X))
 
@@ -160,8 +141,8 @@ def preprocesss(X,Y):
 
         cols=[]
         TAG='PWH'
-        for key in well_names:
-            cols.append(key+'_'+TAG)
+        for key in ['QGAS','PBH','PDC','PWH','CHK']:
+            cols.append('C2'+'_'+key)
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
 

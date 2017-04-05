@@ -31,7 +31,20 @@ def get_sample_deviation(measured,predicted):
 
     #return np.abs(predicted/(measured+1e-10))*100
     return diff/(measured)*100
+def get_sample_deviation_flow(measured,predicted):
+    diff=measured-predicted
+    print(np.mean(diff))
+    #diff=diff-np.mean(diff)
+    delta=1e-100
 
+    #return np.abs(predicted/(measured+1e-10))*100
+    #ind_zero=measured==0
+    #print(np.sum(ind_zero))
+    res=diff/(measured)*100
+    #res[ind_zero]=0
+    #res.loc[ind_zero] = 0
+
+    return res
 def startswith(col,tag):
     return col.split('_')[0]==tag
 def remove_zero_measurements(X,Y,cols):
@@ -64,6 +77,7 @@ def get_cumulative_deviation(model,data,X,Y):
     deviation_points.fillna(0, inplace=True)
 
 
+
     cumulative_deviation=pd.DataFrame(data=np.zeros((len(deviation_range),len(cols))),columns=cols)
     cumulative_deviation=cumulative_deviation.set_index(deviation_range)
     cumulative_deviation.index.name=None
@@ -73,11 +87,11 @@ def get_cumulative_deviation(model,data,X,Y):
         for percentage in deviation_range:
             cumulative_deviation[col][percentage]=np.sum(deviation_points[col]<=percentage)/N*100
 
-
+    #print(cumulative_deviation)
     return cumulative_deviation
 
 
-def get_cumulative_flow(model,data,X,Y):
+def get_absolute_deviation(model,data,X,Y):
     cols = model.output_tag_ordered_list
     #deviation_range = np.arange(0, 50, 1)
 
@@ -85,10 +99,6 @@ def get_cumulative_flow(model,data,X,Y):
 
     deviation_points = get_sample_deviation(measured, predicted)
     deviation_points.fillna(0, inplace=True)
-
-    cumulative_flow = pd.DataFrame(data=np.zeros((len(X), len(cols))), columns=cols)
-    cumulative_flow = cumulative_flow.set_index(X.index)
-    cumulative_flow.index.name = None
 
     return deviation_points
 

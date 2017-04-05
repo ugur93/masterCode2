@@ -26,19 +26,20 @@ class NET4_W_PRESSURE(NN_BASE):
         batch_size = 64
         verbose = 0
 
-        self.pressure_weights_path=pressure_weights_path
 
-        self.n_inputs=5
-        self.n_outputs=1
-        self.SCALE=100000
-        # Input module config
-        self.n_inception = 0 #(n_inception, n_depth inception)
         n_depth = 2
-        self.n_conv=1
-        n_width = 50
-        l2w = 0.0001
+        n_width = 80
+        l2w = 0.0003
+
+        self.n_depth_pdc=2
+        self.n_depth_pwh=2
+        self.n_depth_pbh=2
+
+        self.n_width_pdc=100
+        self.n_width_pwh=100
+        self.n_width_pbh=100
         self.add_thresholded_output=True
-        self.n_out=1
+
 
 
 
@@ -54,10 +55,6 @@ class NET4_W_PRESSURE(NN_BASE):
                     pass
                 else:
                     self.input_tags[name+'_CHK'].append(name + '_' + tag)
-                    # self.input_tags[name].append('GJOA_RISER_OIL_B_CHK')
-
-        pressure_in_tags = ['CHK']
-        # self.well_names=chk_names
 
         self.input_tags['PRESSURE_INPUT']=[]
         for key in self.well_names:
@@ -66,10 +63,7 @@ class NET4_W_PRESSURE(NN_BASE):
         for key in ['C1','C3', 'C4','B1','B3']:
                 self.input_tags['PRESSURE_INPUT'].append(key + '_' + '1_PBH')
         self.input_tags['RISER_B_CHK_INPUT']=['GJOA_RISER_OIL_B_CHK']
-        # self.input_tags['A1']=['C1_CHK','C1_PWH','C1_PDC','C1_PBH']
-        # self.input_tags['B1']=['B1_CHK']
-        # self.input_tags['C1']=['C1_CHK']
-        #print(self.input_tags)
+
 
 
         self.output_tags = {
@@ -131,15 +125,8 @@ class NET4_W_PRESSURE(NN_BASE):
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
 
-        aux_inputs = []
-        inputs = []
-        rate_outputs = []
-        outputs = []
-        # merged_outputs=[]
 
-        n_depth = self.n_depth
-        n_width = self.n_width
-        l2w = self.l2weight
+        rate_outputs = []
 
         pres_inputs,pres_outputs,pres_output_layers=self.generate_pressure_model()
 
@@ -185,14 +172,14 @@ class NET4_W_PRESSURE(NN_BASE):
 
 
 
-        output_layer = Dense(self.n_width, activation=self.activation, kernel_regularizer=l2(self.l2weight),
+        output_layer = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight),
                             kernel_initializer=self.init, use_bias=True, name=name + '_0')(all_inputs)
         # temp_output = MaxoutDense(self.n_width,kernel_regularizer=l2(self.l2weight),kernel_initializer=self.init,use_bias=True)(input_layer)
         # temp_output=PReLU()(temp_output)
         for i in range(1, self.n_depth):
             if self.dp_rate > 0:
                 output_layer = Dropout(self.dp_rate, name=name + '_dp_' + str(i))(output_layer)
-            output_layer = Dense(self.n_width, activation=self.activation, kernel_regularizer=l2(self.l2weight),
+            output_layer = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight),
                                 kernel_initializer=self.init, use_bias=True, name=name + '_' + str(i))(output_layer)
             # temp_output = PReLU()(temp_output)
 
@@ -238,8 +225,8 @@ class NET4_W_PRESSURE(NN_BASE):
 
 
         for key in self.well_names:
-            sub_model_PWH = self.generate_sub_pressure_model(all_chk_input, name=key + '_PWH')
-            sub_model_PDC = self.generate_sub_pressure_model(all_and_riser_chk_input, name=key + '_PDC')
+            sub_model_PWH = self.generate_sub_pressure_model(all_chk_input, name=key + '_PWH',depth=self.n_depth_pwh,width=self.n_width_pwh)
+            sub_model_PDC = self.generate_sub_pressure_model(all_and_riser_chk_input, name=key + '_PDC',depth=self.n_depth_pdc,width=self.n_width_pdc)
             # sub_model_temp = Dense(20, W_regularizer=l2(self.l2weight), activation='relu')(sub_model_temp)
 
 
@@ -264,14 +251,11 @@ class NET4_W_PRESSURE(NN_BASE):
 
         return inputs,outputs,output_layers
 
-    def generate_sub_pressure_model(self,input_layer,name,l2w=0,depth=2):
-        if l2w==0:
-            l2w=self.l2weight
+    def generate_sub_pressure_model(self,input_layer,name,depth=2,width=50):
         i=0
-        sub_model = Dense(100, kernel_regularizer=l2(l2w), activation='relu',name=name+'_'+str(i),trainable=False)(input_layer)
-
+        sub_model = Dense(width, kernel_regularizer=l2(self.l2weight), activation='relu',name=name+'_'+str(i),trainable=False)(input_layer)
         for i in range(1,depth):
             # sub_model_temp=Dropout(0.01)(sub_model_temp)
-            sub_model = Dense(100, kernel_regularizer=l2(l2w), activation='relu',name=name+'_'+str(i),trainable=False)(sub_model)
+            sub_model = Dense(width, kernel_regularizer=l2(self.l2weight), activation='relu',name=name+'_'+str(i),trainable=False)(sub_model)
 
         return sub_model

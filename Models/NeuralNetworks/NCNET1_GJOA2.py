@@ -28,7 +28,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=50,l2w=0.0002,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=2 ,n_width=80,l2w=0.00003,dp_rate=0.05,seed=3014):
 
 
 
@@ -36,7 +36,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
 
-        measurement_tags = ['CHK', 'PWH', 'PBH', 'PDC']
+        measurement_tags = ['CHK', 'PWH', 'PBH','PDC']
         for name in self.well_names:
             self.input_tags[name] = []
             for tag in measurement_tags:
@@ -66,12 +66,12 @@ class NCNET1_GJOA2(NN_BASE):
 
         # Training config
         optimizer = 'adam'
-        loss ='mae'
+        loss =huber
         nb_epoch = 5000
         batch_size = 64
         self.activation='relu'
 
-        self.model_name ='GJOA_OIL_WELLS_GAS_MODEL2'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_GAS_MODEL_FINAL_2'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 

@@ -52,7 +52,7 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
-    #plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
+    plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
@@ -168,7 +168,7 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
 
     fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
     fig.canvas.set_window_title(model.model_name)
-    fig.tick_params(axis='both', which='major', labelsize=10)
+    #fig.tick_params(axis='both', which='major', labelsize=10)
     return ax
 
 def get_cumulative_performance_plot(cumperf,data_tag):
@@ -188,11 +188,29 @@ def get_cumulative_performance_plot(cumperf,data_tag):
     fig.suptitle('Cumulative performance of {} data'.format(data_tag))
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
     return fig, axes
-def get_cumulative_performance_plot_single(cumperf_train,cumperf_test,data_tag):
+
+def get_cumulative_flow_plot(cumperf,data_tag):
+
+
+    N_PLOTS = len(cumperf.columns) - N_PLOT_SUB
+    sp_y, sp_x = get_suplot_dim(N_PLOTS)
+
+    fig, axes = plt.subplots(sp_y, sp_x)
+    axes = axes.flatten()
+
+    for i in range(len(cumperf.columns)):
+        axes[i].plot(cumperf.index, cumperf[cumperf.columns[i]])
+        axes[i].set_title(cumperf.columns[i])
+        axes[i].set_xlabel('Deviation (%)')
+        axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
+    fig.suptitle('Cumulative performance of {} data'.format(data_tag))
+    fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
+    return fig, axes
+def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
 
     def plot(cumperf,axes, ii, data_type):
         for i in range(len(cumperf.columns) - 1):
-            axes[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
+            axes[ii].plot(range(len(cumperf)), cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
                           color=colors[i])
         axes[ii].set_title('Well performance' + ' ({} data)'.format(data_type))
         axes[ii].set_xlabel('Deviation (%)')
@@ -208,7 +226,7 @@ def get_cumulative_performance_plot_single(cumperf_train,cumperf_test,data_tag):
 
     fig, axes = plt.subplots(2, 2)
     cmap = plt.get_cmap('Vega10')
-    colors = [cmap(i) for i in np.linspace(0, 1, 30)]
+    colors = [cmap(i) for i in np.linspace(0, 1, 7)]
     axes = axes.flatten()
 
     fig.canvas.set_window_title(data_tag)
@@ -230,13 +248,13 @@ def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
                           color=colors[i])
         axes[ii].set_title('Well performance' + ' ({} data)'.format(data_type))
         axes[ii].set_xlabel('Time')
-        axes[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type))
+        axes[ii].set_ylabel('Absolute per sample deviation {}'.format(data_type))
 
         axes[ii + 1].plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
                           label=cumperf.columns[-1])
         axes[ii + 1].set_title(cumperf.columns[-1] + ' ({} data)'.format(data_type))
         axes[ii + 1].set_xlabel('Time')
-        axes[ii + 1].set_ylabel('Cumulative (% of {} set sample points)'.format(data_type))
+        axes[ii + 1].set_ylabel('Absolute per sample deviation {}'.format(data_type))
 
         axes[ii].legend()
 
@@ -249,7 +267,7 @@ def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
     plot(cumperf_test,axes,2,'Test')
 
 
-    fig.suptitle('Cumulative performance')
+    fig.suptitle('Absolute per sample deviation plot')
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
     return fig, axes
 
@@ -259,12 +277,13 @@ def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
 
 
 
-    get_cumulative_performance_plot_single(cumperf_train, cumperf_test,model.model_name)
+    get_cumulative_deviation_plot_single(cumperf_train, cumperf_test,model.model_name)
 
-    cumperf_test = get_cumulative_flow(model, data, X_test, Y_test)
-    cumperf_train = get_cumulative_flow(model, data, X_train, Y_train)
+    cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
+    cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
 
-    get_cumulative_performance_plot_single(cumperf_train, cumperf_test, model.model_name)
+    get_cumulative_flow_plot(cumperf_train, model.model_name)
+    get_cumulative_flow_plot(cumperf_test, model.model_name)
     #get_cumulative_performance_plot_single(cumperf_test,'Test')
 
 

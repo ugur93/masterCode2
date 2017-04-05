@@ -90,7 +90,16 @@ def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weig
     output_merged = merge(inception_outputs, mode='concat')
     return output_merged
 
+def generate_pressure_sub_model(input_layer,name,init,l2weight,depth,n_width,dp_rate):
+        i=0
+        sub_model = Dense(n_width, kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init)(input_layer)
 
+        for i in range(1,depth):
+            if dp_rate>0:
+                sub_model=Dropout(dp_rate,name=name+'_dp_'+str(i))(sub_model)
+            sub_model = Dense(n_width,kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init)(sub_model)
+
+        return sub_model
 def add_layers(input_layer,n_depth,n_width,l2_weight):
     if n_depth==0:
         return input_layer

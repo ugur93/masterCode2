@@ -26,7 +26,7 @@ def validate(DataOIL,DataGAS):
         Data=DataOIL
     #bagging_test(Data)
     validate_train_test_split(Data)
-    #ensemble_learning(Data)
+    #ensemble_learning_bagging(Data)
     #grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
@@ -72,14 +72,20 @@ def validate_train_test_split(Data):
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_6.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_7.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_8.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_9.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_10.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_11.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_12.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_13.h5',
             #'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_9.h5',
             ]
     #pressure_weights=
     if DATA_TYPE=='GAS':
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_MAE.h5'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.0, val_size=0.2)
-        model=NCNET_CHKPRES.SSNET3_PRESSURE(Data)
-        #model = NET2_PRESSURE.SSNET2()
+        #model=NCNET_CHKPRES.PRESSURE_PDC(Data)
+        #model=NCNET_CHKPRES.PRESSURE_PWH(Data)
+        model = NET2_PRESSURE.SSNET2()
 
         #
         #model.load_weights_from_file(PATH)
@@ -104,22 +110,24 @@ def validate_train_test_split(Data):
         #pass
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
-        #model=NCNET1_GJOA2.NCNET1_GJOA2()
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
-        #model.model.load_weights(PATH)
+        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_GAS_MODEL22.h5')
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
+        #model = NCNET_CHKPRES.PRESSURE_PBH()
+        #model = NCNET_CHKPRES.PRESSURE_PWH()
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
-        model=NCNET4_combined.NET4_W_PRESSURE(PATH)
+        #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
 
 
-        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_MODEL2.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL_FINAL22.h5', by_name=True)
 
-        model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL2.h5',by_name=True)
-        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PWH_MODEL2.h5', by_name=True)
+        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL2.h5',by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PWH_MODEL2.h5', by_name=True)
 
 
         # model.initialize_zero_thresholds(Data)
@@ -132,7 +140,7 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        #model.fit(X_train, Y_train, X_val, Y_val)
+        model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
 
@@ -327,8 +335,8 @@ def grid_search2(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2,3,4],'n_width':[50,60,70,80,90,100],
-                   'l2w':np.linspace(0.0001,0.01,100),'seed':[3014]}
+    search_params={'n_depth':[2,3],'n_width':[50,60,70,80,90,100],
+                   'l2w':np.linspace(0.0003,0.01,20),'seed':[3014]}
 
     grid_params=generate_grid(search_params)
 
@@ -342,11 +350,13 @@ def grid_search2(Data):
     best_r2_test = None
     best_rmse_test = None
     best_params={}
-    filename='GRID_SEARCH_OIL_ONLY_TOTAL2'
+    filename='GRID_SEARCH_PBH'
     ii=1
     for params in grid_params:
         params['seed']=int(params['seed'])
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+        #model=NCNET_CHKPRES.PRESSURE_PBH(**params)
+        #model = NCNET_CHKPRES.PRESSURE_PWH(**params)
         print('\n\n\n')
         print('On n_grid: {} of {}'.format(ii,len_grid))
         ii+=1
@@ -361,8 +371,8 @@ def grid_search2(Data):
         #print(cum_perf)
         #cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][15]
 
-        cum_perf_sum=np.sqrt(score_test_MSE[-1])#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
-
+       # cum_perf_sum=np.sum(np.sqrt(score_test_MSE))#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
+        cum_perf_sum = np.sqrt(score_test_MSE[-1])
         if cum_perf_sum<best_sum_cumperf:
             best_sum_cumperf=cum_perf_sum
             best_params=params
@@ -554,8 +564,8 @@ def ensemble_learning_bagging(Data):
                      'l2w': [0.000001], 'seed': np.random.randint(1, 10000, 10)}
     grid_params = generate_grid(search_params)
 
-    params = {'n_depth': 2, 'n_width': 50,
-              'l2w': 0.0002, 'seed': 3014}
+    params = {'n_depth': 2, 'n_width': 80,
+              'l2w': 0.0003, 'seed': 3014}
 
     len_grid = len(grid_params)
 
@@ -563,10 +573,10 @@ def ensemble_learning_bagging(Data):
 
 
     name='ENSEMBLE_LEARNING_GAS_'
-    PATH='Models/NeuralNetworks/SavedModels2/Weights/'
+    PATH='Models/NeuralNetworks/SavedModels2/hdf5_files/'
     PATHS=[]
     i=1
-    for i in range(10):
+    for i in range(15):
 
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
         model.model_name=name+str(i)

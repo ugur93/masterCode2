@@ -27,9 +27,9 @@ class SSNET2(NN_BASE):
 
         self.output_layer_activation = 'relu'
         # Input module config
-        n_depth = 1
-        n_width = 10
-        l2w =0.0001
+        n_depth = 2
+        n_width = 80
+        l2w =0.0003
         seed=9035
 
 
@@ -41,8 +41,8 @@ class SSNET2(NN_BASE):
         batch_size = 64
         dp_rate=0
 
-        #self.model_name='SIM_DATA_WONOFF'
-        self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
+        self.model_name='GJOA_GAS_WELLS_QGAS_FINAL'
+        #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         self.output_tags = {
             'F1_out': ['F1_QGAS'],
@@ -54,7 +54,7 @@ class SSNET2(NN_BASE):
         self.well_names=['F1','B2','D3','E1']
 
         self.input_tags={}
-        tags=['CHK']#,'PWH','PBH','PDC']
+        tags=['CHK','PWH','PBH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
