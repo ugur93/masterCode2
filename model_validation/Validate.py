@@ -26,7 +26,7 @@ def validate(DataOIL,DataGAS):
         Data=DataOIL
     #bagging_test(Data)
     validate_train_test_split(Data)
-    #ensemble_learning_bagging(Data)
+    #ensemble_learning(Data)
     #grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
@@ -65,9 +65,9 @@ def validate_train_test_split(Data):
     #GJOA QGAS
     PATHS=['Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_0.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_1.h5',
-            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_2.h5',
+            #'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_2.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_3.h5',
-            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_4.h5',
+            #'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_4.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_5.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_6.h5',
             'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_7.h5',
@@ -77,12 +77,13 @@ def validate_train_test_split(Data):
            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_11.h5',
            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_12.h5',
            'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_13.h5',
+           'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_14.h5',
             #'Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_9.h5',
             ]
     #pressure_weights=
     if DATA_TYPE=='GAS':
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/NCNET2_OIL_QGAS_ENSEMBLE_MODEL_MAE.h5'
-        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.0, val_size=0.2)
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         #model=NCNET_CHKPRES.PRESSURE_PDC(Data)
         #model=NCNET_CHKPRES.PRESSURE_PWH(Data)
         model = NET2_PRESSURE.SSNET2()
@@ -180,14 +181,14 @@ def validate_train_test_split(Data):
 
     #model.save_model_config(scores_latex)
     #MODEL_SAVEFILE_NAME = 'NCNET2_OIL_QGAS_INCEPTION_LOCALLY_P_DENSE'
-    model.save_model_to_file(model.model_name, scores)
+    #model.save_model_to_file(model.model_name, scores)
 
     input_cols =[]
 
 
     output_cols=[]
-    #plt.plot(model.get_history())
-    #plt.title('History')
+    #print(model.history.history)
+
     visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=output_cols, input_cols=input_cols)
 
     plt.show()
@@ -335,8 +336,8 @@ def grid_search2(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2,3],'n_width':[50,60,70,80,90,100],
-                   'l2w':np.linspace(0.0003,0.01,20),'seed':[3014]}
+    search_params={'n_depth':[2,3,4],'n_width':[50,60,70,80,90,100],
+                   'l2w':np.linspace(0.0001,0.01,50),'seed':[3014]}
 
     grid_params=generate_grid(search_params)
 
@@ -371,7 +372,7 @@ def grid_search2(Data):
         #print(cum_perf)
         #cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][15]
 
-       # cum_perf_sum=np.sum(np.sqrt(score_test_MSE))#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
+        #cum_perf_sum=np.sum(np.sqrt(score_test_MSE))#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
         cum_perf_sum = np.sqrt(score_test_MSE[-1])
         if cum_perf_sum<best_sum_cumperf:
             best_sum_cumperf=cum_perf_sum
@@ -489,8 +490,8 @@ def ensemble_learning(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params = {'n_depth': [2,3,4], 'n_width': [30,40,50],
-                     'l2w': [0.0002], 'seed': [3014]}
+    search_params = {'n_depth': [2], 'n_width': [100],
+                     'l2w': [0.0003], 'seed': np.random.randint(100,10000,15)}
     grid_params = generate_grid(search_params)
 
     len_grid = len(grid_params)
@@ -499,7 +500,7 @@ def ensemble_learning(Data):
 
 
     name='ENSEMBLE_LEARNING_GAS_'
-    PATH='Models/NeuralNetworks/SavedModels2/Weights/'
+    PATH='Models/NeuralNetworks/SavedModels2/hdf5_files/'
     PATHS=[]
     i=0
     for params in grid_params:

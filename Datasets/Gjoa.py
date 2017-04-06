@@ -100,16 +100,19 @@ def fetch_gjoa_data():
 
     if False:
 
-        cols = ['GJOA_QGAS','E1_QGAS']
+        #cols = ['GJOA_QGAS','E1_QGAS']
+        cols=[]
         #ols=['F1_PBH','F1_PWH','F1_PDC']
+        for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
+            cols.append(key+'_'+'QGAS')
         fig, axes = plt.subplots(len(cols), 1, sharex=True)
         #axes=[axes]
 
         for i, key in zip(range(0, len(cols)), cols):
             try:
-                axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
+                axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
+                axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
            # axes[i].set_title('G2_QGAS',fontsize=30)
             axes[i].set_xlabel('Time',fontsize=30)
             axes[i].tick_params(labelsize=20)

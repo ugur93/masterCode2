@@ -48,6 +48,7 @@ def ends_with(name,end_tag):
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
 
     remove_zero_chk=False
+    plot_history(model)
     plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test)
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
@@ -58,7 +59,18 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #                       remove_zero_chk=remove_zero_chk)
     #plt.show()
 
+def plot_history(model):
 
+    fig,ax=plt.subplots(1,1)
+    N=len(model.history.history['val_GJOA_TOTAL_loss'])
+    ax.plot(range(1,N+1 ),model.history.history['val_GJOA_TOTAL_loss'], label='Validation set loss',color='green',marker='o')
+    ax.plot(range(1,N+1),model.history.history['GJOA_TOTAL_loss'], label='Training set loss',color='blue', linestyle='--', marker='o')
+    ax.set_title('History',fontsize=20)
+    ax.set_xlabel('Time (epochs)',fontsize=20)
+    ax.set_ylabel('Loss',fontsize=20)
+    ax.legend(fontsize=20)
+    ax.tick_params(axis='both', labelsize=20)
+    plt.show()
 def tags_to_list(tags):
 
     tags_list=[]

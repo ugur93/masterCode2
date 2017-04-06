@@ -13,7 +13,7 @@ except(AttributeError):
 
 from keras.regularizers import l2,l1
 
-from keras.callbacks import Callback, EarlyStopping
+from keras.callbacks import Callback, EarlyStopping,History
 from keras.constraints import nonneg,unitnorm,maxnorm
 import numpy as np
 import warnings
@@ -49,46 +49,30 @@ OIL_WELLS_QGAS_OUTPUT_TAGS= {
                 'B3_out': ['B3_QGAS'],
                 'B1_out': ['B1_QGAS'],
 
-                'GJOA_TOTAL': ['GJOA_OIL_QGAS']
+                'GJOA_TOTAL': ['GJOA_OIL_SUM_QGAS']
             }
 
+GAS_WELLS_QGAS_OUTPUT_TAGS= {
+
+    'F1_out': ['F1_QGAS'],
+    'B2_out': ['B2_QGAS'],
+    'D3_out': ['D3_QGAS'],
+    'E1_out': ['E1_QGAS'],
+    'GJOA_QGAS': ['GJOA_QGAS']
+}
 
 
 
 
-
-
-
-SEED=1235
-np.random.seed(seed=None)
-INIT='glorot_normal'
-print(SEED)
-#INIT=RandomUniform(minval=-1,maxval=1,seed=1)
-bINIT='zeros'
 import keras.backend as K
-def root_mean_squared_error(y_true, y_pred):
-    return K.sqrt(K.mean(K.square(y_pred - y_true), axis=-1))
-def smooth_huber_loss(y_true, y_pred, w):
-    """Regression loss function, smooth version of Huber loss function. """
-    return K.mean(w * K.log(K.cosh(y_true - y_pred)))
-
 
 def huber(y_true, y_pred):
-    delta=0.1
+    delta=0.01
     diff = y_true - y_pred
     a = 0.5 * (diff**2)
     b = delta * (abs(diff) - delta / 2.0)
     loss = K.switch(abs(diff) <= delta, a, b)
     return loss.sum()
-def generate_inception_module(input_layer, n_inception,n_depth, n_width, l2_weight):
-    inception_outputs=[]
-    for i in range(n_inception):
-        out_temp=Dense(n_width, init=INIT, activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(input_layer)
-        for j in range(n_depth-1):
-            out_temp = Dense(n_width, init=INIT,activation='relu', W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight),bias=True)(out_temp)
-        inception_outputs.append(out_temp)
-    output_merged = merge(inception_outputs, mode='concat')
-    return output_merged
 
 def generate_pressure_sub_model(input_layer,name,init,l2weight,depth,n_width,dp_rate):
         i=0
@@ -100,26 +84,15 @@ def generate_pressure_sub_model(input_layer,name,init,l2weight,depth,n_width,dp_
             sub_model = Dense(n_width,kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init)(sub_model)
 
         return sub_model
-def add_layers(input_layer,n_depth,n_width,l2_weight):
+def add_layers(input_layer,n_depth,n_width,l2weight,init):
     if n_depth==0:
         return input_layer
-    output_layer=Dense(n_width, activation='relu',init=INIT,bias=True,W_constraint=maxnorm(1))(input_layer)
+    output_layer=Dense(n_width, activation='relu',kernel_initializer=init,use_bias=True,kernel_regularizer=l2(l2weight))(input_layer)
     for i in range(n_depth-1):
         #output_layer = BatchNormalization()(output_layer)
         #output_layer = GaussianNoise(0.05)(output_layer)
-        output_layer = Dense(n_width, activation='relu', init=INIT, W_constraint=maxnorm(1),bias=True)(output_layer)
+        output_layer = Dense(n_width, activation='relu', kernel_initializer=init,kernel_regularizer=l2(l2weight),use_bias=True)(output_layer)
     #output_layer = BatchNormalization()(output_layer)
-    return output_layer
-
-
-def add_layers_maxout(input_layer,n_depth,n_width,l2_weight):
-    if n_depth==0:
-        return input_layer
-    output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True)(input_layer)
-    # output_layer=Activation('relu')(output_layer)
-    for i in range(n_depth - 1):
-        output_layer = MaxoutDense(n_width, init=INIT, W_regularizer=l2(l2_weight),b_regularizer=l2(l2_weight), bias=True)(output_layer)
-        # output_layer=Activation('relu')(output_layer)
     return output_layer
 
 

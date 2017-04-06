@@ -33,8 +33,8 @@ class NN_BASE:
 
 
         #Fit callbacks config
-        self.history = LossHistory()
-        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.0000001, patience=500, verbose=1, mode='min')
+        self.history = History()
+        self.Earlystopping=CustomEarlyStopping(monitor='val_loss', min_delta=0.0001, patience=500, verbose=1, mode='min')
         self.callbacks=[self.history,EpochVerbose(),self.Earlystopping]
 
         #Model Params:

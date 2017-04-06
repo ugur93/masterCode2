@@ -44,15 +44,9 @@ class SSNET2(NN_BASE):
         self.model_name='GJOA_GAS_WELLS_QGAS_FINAL'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
-        self.output_tags = {
-            'F1_out': ['F1_QGAS'],
-            'B2_out': ['B2_QGAS'],
-            'D3_out': ['D3_QGAS'],
-            'E1_out': ['E1_QGAS'],
-            'GJOA_QGAS': ['GJOA_QGAS']
-        }
-        self.well_names=['F1','B2','D3','E1']
+        self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
 
+        self.well_names=['F1','B2','D3','E1']
         self.input_tags={}
         tags=['CHK','PWH','PBH','PDC']
         for name in self.well_names:

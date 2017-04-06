@@ -39,11 +39,11 @@ def fetch_gjoa_data():
 
     if  False:
 
-        cols=['B3_PBH','B3_PDC','B3_PWH','B3_CHK']
+        #cols=['B3_PBH','B3_PDC','B3_PWH','B3_CHK']
 
         cols=[]
-        for key in ['QGAS','PBH','PDC','PWH','CHK']:
-            cols.append('C2'+'_'+key)
+        for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
+            cols.append(key+'_'+'QGAS')
         #cols.append('GJOA_RISER_OIL_B_CHK')
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
@@ -52,9 +52,9 @@ def fetch_gjoa_data():
 
         for i,key in zip(range(0,len(cols)),cols):
             try:
-                axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
+                axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue')
+                axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
                 #axes[i].hist( (GjoaData.Y[key])**2)
             axes[i].set_title(key)
             axes[i].set_xlabel('Time')
@@ -133,7 +133,7 @@ def set_chk_zero_values_to_zero(X,Y):
     return X,Y
 
 def preprocesss(X,Y):
-    DROP = [808, 809, 807, 173, 416, 447, 487,764,713,685,670]
+    DROP = [808, 809, 807, 173, 416, 447, 487,685,670,257,258,286,181,167,63,234,590,6,594,64,671,713,764]#,764,713,685,670]
 
     X['time'] = np.arange(0, len(X))
 

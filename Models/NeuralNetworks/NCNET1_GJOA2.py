@@ -21,14 +21,15 @@ K.set_image_dim_ordering('th')
 
 
 #MSE: 5708
-#
+#Best params:{'n_depth': 3, 'l2w': 0.00029999999999999997, 'n_width': 100, 'seed': 3014}
+
 sas=5708
 OUT = 'GAS'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=80,l2w=0.00003,dp_rate=0.05,seed=3014):
+    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0003,dp_rate=0,seed=3014):
 
 
 
@@ -280,31 +281,10 @@ class ENSEMBLE(NN_BASE):
 
         OUT='GAS'
         if OUT=='GAS':
-            self.output_tags = {
-
-
-                'C1_out': ['C1_QGAS'],
-                'C2_out': ['C2_QGAS'],
-                'C3_out': ['C3_QGAS'],
-                'C4_out': ['C4_QGAS'],
-                'D1_out': ['D1_QGAS'],
-                'B3_out': ['B3_QGAS'],
-                'B1_out': ['B1_QGAS'],
-
-
-                'GJOA_TOTAL':['GJOA_OIL_QGAS']
-            }
+            self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
         else:
-            self.output_tags = {
-                 'C1_out':['C1_QOIL'],
-                 'C2_out':['C2_QOIL'],
-                 'C3_out':['C3_QOIL'],
-                 'C4_out':['C4_QOIL'],
-                 'D1_out':['D1_QOIL'],
-                 'B3_out':['B3_QOIL'],
-                 'B1_out':['B1_QOIL'],
-                 'GJOA_TOTAL': ['GJOA_TOTAL_SUM_QOIL']
-            }
+            self.output_tags = OIL_WELLS_QOIL_OUTPUT_TAGS
+
         self.loss_weights = {
             'B1_out':  0.0,
             'B3_out':  0.0,

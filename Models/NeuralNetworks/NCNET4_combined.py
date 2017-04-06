@@ -66,19 +66,7 @@ class NET4_W_PRESSURE(NN_BASE):
 
 
 
-        self.output_tags = {
-
-
-            'C1_out': ['C1_QGAS'],
-            'C2_out': ['C2_QGAS'],
-            'C3_out': ['C3_QGAS'],
-            'C4_out': ['C4_QGAS'],
-            'D1_out': ['D1_QGAS'],
-            'B3_out': ['B3_QGAS'],
-            'B1_out': ['B1_QGAS'],
-
-            'GJOA_TOTAL': ['GJOA_OIL_QGAS']
-        }
+        self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
 
         for key in self.well_names:
             self.output_tags[key+'_PWH_out']=[key+'_PWH']
