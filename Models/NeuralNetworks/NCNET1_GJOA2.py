@@ -22,14 +22,16 @@ K.set_image_dim_ordering('th')
 
 #MSE: 5708
 #Best params:{'n_depth': 3, 'l2w': 0.00029999999999999997, 'n_width': 100, 'seed': 3014}
+#OIL Best params:{'seed': 3014, 'l2w': 0.000706122448979592, 'n_depth': 2, 'n_width': 90}
+#GAS Best params:{'n_depth': 2, 'seed': 3014, 'l2w': 0.00030204081632653063, 'n_width': 60}
 
 sas=5708
-OUT = 'GAS'
+OUT = 'GASs'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0003,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=2 ,n_width=80,l2w=0.0003,dp_rate=0,seed=3014):
 
 
 
@@ -67,12 +69,12 @@ class NCNET1_GJOA2(NN_BASE):
 
         # Training config
         optimizer = 'adam'
-        loss =huber
+        loss ='mae'
         nb_epoch = 5000
-        batch_size = 64
+        batch_size = 32
         self.activation='relu'
 
-        self.model_name ='GJOA_OIL_WELLS_GAS_MODEL_FINAL_2'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_OIL_MODEL_FINAL_2'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 

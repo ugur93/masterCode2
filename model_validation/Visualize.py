@@ -48,7 +48,7 @@ def ends_with(name,end_tag):
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
 
     remove_zero_chk=False
-    plot_history(model)
+    #plot_history(model)
     plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test)
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)

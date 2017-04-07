@@ -8,16 +8,16 @@ import keras.backend as K
 class PRESSURE_PDC(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=80,l2w=0.003 ,seed=3014,dp_rate=0):
+    def __init__(self,n_depth=4 ,n_width=50,l2w=0.002 ,seed=3014,dp_rate=0):
 
 
 
-        self.model_name='GJOA_OIL_WELLS_PDC_MODEL_2'
+        self.model_name='GJOA_OIL_WELLS_PDC_MODEL_FINAL'
         self.out_act='linear'
 
         # Training config
         optimizer ='adam'
-        loss = 'mae'
+        loss = huber
         nb_epoch = 10000
         batch_size = 64
         dp_rate=0
@@ -32,8 +32,8 @@ class PRESSURE_PDC(NN_BASE):
         for key in chk_names:
             for tag in ['CHK']:
                 self.input_tags['PRESSURE_INPUT'].append(key+'_'+tag)
-        for key in ['C1','C3', 'C4','B1','B3']:
-                self.input_tags['PRESSURE_INPUT'].append(key + '_' + 'PBH')
+        #for key in ['C1','C3', 'C4','B1','B3']:
+        #        self.input_tags['PRESSURE_INPUT'].append(key + '_' + 'PBH')
         self.input_tags['RISER_B_CHK_INPUT']=['GJOA_RISER_OIL_B_CHK']
 
         self.output_tags = {}
