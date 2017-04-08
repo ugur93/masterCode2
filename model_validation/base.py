@@ -88,6 +88,8 @@ def get_cumulative_deviation(model,data,X,Y):
             cumulative_deviation[col][percentage]=np.sum(deviation_points[col]<=percentage)/N*100
 
     #print(cumulative_deviation)
+    #for i in deviation_points.index.values:
+    #    print(deviation_points['B1_QGAS'].loc[[i]])
     return cumulative_deviation
 
 
@@ -99,6 +101,11 @@ def get_absolute_deviation(model,data,X,Y):
 
     deviation_points = get_sample_deviation(measured, predicted)
     deviation_points.fillna(0, inplace=True)
+    for key in cols:
+        if key.split('_')[0] not in ['GJOA']:
+            chk_col=key.split('_')[0]+'_CHK'
+            ind_zero=data.inverse_transform(X,'X')[chk_col]<5
+            deviation_points.loc[ind_zero, key] = 0
 
     return deviation_points
 

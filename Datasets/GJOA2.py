@@ -43,7 +43,7 @@ def fetch_gjoa_data():
 
         cols=[]
         for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
-            cols.append(key+'_'+'QGAS')
+            cols.append(key+'_'+'CHK')
         #cols.append('GJOA_RISER_OIL_B_CHK')
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
@@ -133,7 +133,7 @@ def set_chk_zero_values_to_zero(X,Y):
     return X,Y
 
 def preprocesss(X,Y):
-    DROP = [808, 809, 807, 173, 416, 447, 487,685,670,257,258,286,181,167,63,234,590,6,594,64,671,713,764]#,764,713,685,670]
+    DROP = [808, 809, 807, 173, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
 
     X['time'] = np.arange(0, len(X))
 

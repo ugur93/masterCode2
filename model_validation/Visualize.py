@@ -211,7 +211,7 @@ def get_cumulative_flow_plot(cumperf,data_tag):
     axes = axes.flatten()
 
     for i in range(len(cumperf.columns)):
-        axes[i].plot(cumperf.index, cumperf[cumperf.columns[i]])
+        axes[i].scatter(cumperf.index, cumperf[cumperf.columns[i]])
         axes[i].set_title(cumperf.columns[i])
         axes[i].set_xlabel('Deviation (%)')
         axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
@@ -294,8 +294,8 @@ def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
     cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
     cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
 
-    get_cumulative_flow_plot(cumperf_train, model.model_name)
-    get_cumulative_flow_plot(cumperf_test, model.model_name)
+    get_cumulative_flow_plot(cumperf_train, 'Training')
+    get_cumulative_flow_plot(cumperf_test, 'Test')
     #get_cumulative_performance_plot_single(cumperf_test,'Test')
 
 

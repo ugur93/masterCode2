@@ -40,6 +40,7 @@ class SSNET2(NN_BASE):
         nb_epoch = 5000
         batch_size = 64
         dp_rate=0
+        self.add_onoff_state=True
 
         self.model_name='GJOA_GAS_WELLS_QGAS_FINAL'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
@@ -63,29 +64,6 @@ class SSNET2(NN_BASE):
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
                          optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size,dp_rate=dp_rate)
 
-    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
-
-        input_layer = Input(shape=(n_input,), dtype='float32', name=name)
-
-        #temp_output=BatchNormalization()(input_layer)
-        # temp_output=Dropout(0.1)(input_layer)
-
-
-        temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
-                            use_bias=True)(input_layer)
-        #temp_output=Dropout(0.05)(temp_output)
-        for i in range(1,self.n_depth):
-            if self.dp_rate>0:
-                temp_output = Dropout(self.dp_rate)(temp_output)
-            temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
-                            use_bias=True)(temp_output)
-        #temp_output=Dropout(0.05)(temp_output)
-
-        output_layer = Dense(1, kernel_initializer=self.init,activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
-        aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
-
-
-        return aux_input, input_layer, merged_output, output_layer
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
@@ -111,10 +89,40 @@ class SSNET2(NN_BASE):
        # merged_outputs.append(merged_input)
 
 
-        if self.add_thresholded_output:
+        if self.add_onoff_state:
             inputs+=aux_inputs
         self.model = Model(inputs=inputs, outputs=all_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
+
+    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
+
+        input_layer = Input(shape=(n_input,), dtype='float32', name=name)
+
+        #temp_output=BatchNormalization()(input_layer)
+        # temp_output=Dropout(0.1)(input_layer)
+
+
+        temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
+                            use_bias=True)(input_layer)
+        #temp_output=Dropout(0.05)(temp_output)
+        for i in range(1,self.n_depth):
+            if self.dp_rate>0:
+                temp_output = Dropout(self.dp_rate)(temp_output)
+            temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
+                            use_bias=True)(temp_output)
+        #temp_output=Dropout(0.05)(temp_output)
+        if self.add_onoff_state:
+            output_layer = Dense(1, kernel_initializer=self.init,activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
+            aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
+        else:
+            output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,
+                                 kernel_regularizer=l2(self.l2weight), use_bias=True,name='OnOff_'+name)(temp_output)
+            merged_output=output_layer
+            aux_input=input_layer
+            #aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
+
+        return aux_input, input_layer, merged_output, output_layer
+
     def update_model(self):
         self.nb_epoch=5000
         self.output_layer_activation='relu'
@@ -132,37 +140,4 @@ class SSNET2(NN_BASE):
         self.model.load_weights(PATH)
 
 
-    def generate_input_module_incept(self, n_depth, n_width, l2_weight, name, n_input, thresholded_output,
-                              n_inception=0):
-        K.set_image_dim_ordering('th')
-        input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
-        #mod_dense = Flatten()(input_layer)
-        mod_dense = Dense(self.n_width, activation='relu',W_regularizer=l2(self.l2weight), init=INIT,
-                          bias=True)(input_layer)
-        #for i in range(1, self.n_depth):
-        #    mod_dense = Dense(self.n_width, activation='relu',W_regularizer=l2(self.l2weight), init=INIT,
-        #                      bias=True)(mod_dense)
-
-        #mod_conv = Dropout(0.1)(input_layer)
-
-        mod_conv = Dense(20, activation='relu', init=INIT,
-                         bias=True,W_regularizer=l2(self.l2weight))(input_layer)
-
-        mod_conv = Dropout(0.1)(mod_conv)
-
-        #mod_conv = Dense(20, activation='relu', init=INIT,
-        #                 bias=True,W_regularizer=l2(self.l2weight))(mod_conv)
-
-        #mod_conv = Dropout(0.1)(mod_conv)
-
-        #mod_conv = Flatten()(mod_conv)
-        main_model = merge([mod_conv, mod_dense], mode='concat')
-
-        output_layer = Dense(1, init=INIT,W_regularizer=l2(self.l2weight),
-                             activation=self.output_layer_activation,
-                             bias=True)(main_model)
-
-        aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
-
-        return aux_input, input_layer, merged_output, output_layer
