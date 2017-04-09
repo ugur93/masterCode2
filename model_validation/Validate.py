@@ -25,9 +25,9 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
     #bagging_test(Data)
-    #validate_train_test_split(Data)
+    validate_train_test_split(Data)
     #ensemble_learning_bagging(Data)
-    grid_search2(Data)
+    #grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
 
@@ -110,24 +110,24 @@ def validate_train_test_split(Data):
         #GJOA_QOIL
         #pass
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
-        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
-        model=NCNET1_GJOA2.NCNET1_GJOA2()
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.1)
+        #model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model.model.load_weights(PATH+'GJOA_OIL_WELLS_GAS_MODEL22.h5')
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PWH()
-        #model = NCNET_CHKPRES.PRESSURE_PDC()
+        model = NCNET_CHKPRES.PRESSURE_PBH()
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
 
 
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL_FINAL.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL_FINAL_2.h5', by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_MODEL_FINAL22.h5', by_name=True)
 
-        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL_2.h5',by_name=True)
+        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL.h5',by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PWH_MODEL2.h5', by_name=True)
 
 
@@ -144,7 +144,7 @@ def validate_train_test_split(Data):
         model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
-    scores, scores_latex = evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
+    scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
     print(scores)
     model.save_model_to_file(model.model_name, scores)
 
@@ -201,8 +201,92 @@ def validateRepeat(Data):
 
 
 
+def validateCV(Data,params=None,save=True):
+    X = Data.X_transformed
+    Y = Data.Y_transformed
 
-def validateCV(Data,cv=10):
+
+
+    kfold=model_selection.KFold(n_splits=5,random_state=False)
+
+    scores_rmse_train=None
+    scores_r2_test = None
+    scores_rmse_test = None
+    scores_r2_train = None
+
+
+
+    #zprint scores
+    #print(chkInputs.index)
+    i=1
+
+    filename='GJOA_OIL_WELLS_GAS_1'
+
+
+    for train_index,test_index in kfold.split(X.index):
+
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
+        model.initialize_chk_thresholds(Data, True)
+
+        X_train=X.iloc[train_index]
+        X_val=X.iloc[test_index]
+        Y_train=Y.iloc[train_index]
+        Y_val=Y.iloc[test_index]
+        model.fit(X_train,Y_train,X_val,Y_val)
+
+        # Fit with old data
+        model.update_model()
+        model.fit(X_train, Y_train,X_val,Y_val)
+        scores= evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
+
+        if scores_rmse_train is None:
+            scores_rmse_train=np.sqrt(scores['MSE_train']).to_frame().T
+            scores_rmse_test = np.sqrt(scores['MSE_test']).to_frame().T
+            scores_r2_train = np.sqrt(scores['R2_train']).to_frame().T
+            scores_r2_test = np.sqrt(scores['R2_test']).to_frame().T
+        else:
+            scores_rmse_train=scores_rmse_train.append(np.sqrt(scores['MSE_train']).to_frame().T)
+            scores_rmse_test=scores_rmse_test.append(np.sqrt(scores['MSE_test']).to_frame().T)
+            scores_r2_train=scores_r2_train.append(np.sqrt(scores['R2_train']).to_frame().T)
+            scores_r2_test=scores_r2_test.append(np.sqrt(scores['R2_test']).to_frame().T)
+
+        #print(scores_rmse_train)
+        del model
+        i+=1
+
+    scores_rmse_train.set_index(pd.Index(range(0,len(scores_rmse_train))))
+    scores_rmse_test.set_index(pd.Index(range(0, len(scores_rmse_test))))
+    scores_r2_train.set_index(pd.Index(range(0, len(scores_r2_train))))
+    scores_r2_test.set_index(pd.Index(range(0, len(scores_r2_test))))
+
+    RMSE_TRAIN = np.mean(scores_rmse_train)
+    RMSE_TEST = np.mean(scores_rmse_test)
+    R2_TRAIN = np.mean(scores_r2_train)
+    R2_TEST = np.mean(scores_r2_test)
+    R2_TRAIN = np.mean(scores_r2_train)
+    R2_TEST = np.mean(scores_r2_test)
+
+
+    print(RMSE_TRAIN)
+    print(RMSE_TEST)
+    print(scores_rmse_train)
+    print(scores_rmse_test)
+
+    if save:
+        s='RMSE_TRAIN: \n{}\n'.format(RMSE_TRAIN)
+        s += 'RMSE_TEST: \n{}\n'.format(RMSE_TEST)
+        s += 'RMSE_TRAIN_SCORES: \n{}\n'.format(scores_rmse_train)
+        s += 'RMSE_TEST_SCORES: \n{}\n'.format(scores_rmse_test)
+
+        PATH = 'Models/NeuralNetworks/CV_results/' + filename
+        f = open(PATH, 'w')
+        f.write(s)
+        f.close()
+
+    return RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST
+
+
+def validateCV2(Data,cv=10):
     X = Data.X_transformed
     Y = Data.Y_transformed
 
@@ -294,70 +378,65 @@ def grid_search2(Data):
 
     cum_thresh=15
 
-    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
+    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.1)
 
     search_params={'n_depth':[2,3],'n_width':[50,60,70,80,90,100,110,120,130],
-                   'l2w':np.arange(0.0001,0.0005,0.00001),'seed':[3014]}
+                   'l2w':np.arange(0.01,0.0001,0.00001),'seed':[3014]}
+
+    #search_params = {'n_depth': [2], 'n_width': [50],
+    #                 'l2w':[0.0001], 'seed': [3014]}
 
     grid_params=generate_grid(search_params)
-    print(np.arange(0.0001,0.0005,0.00001))
+
     len_grid=len(grid_params)
 
     print('Size of search space: {}'.format(len_grid))
 
-    best_sum_cumperf=1e100
-    best_r2_train=None
-    best_rmse_train=None
-    best_r2_test = None
-    best_rmse_test = None
+
+    best_results=None
+    best_cost=1e100
     best_params={}
-    filename='GRID_SEARCH_OIL_WELLS_OIL'
+    #filename='GRID_SEARCH_OIL_WELLS_OIL2'
+    filename = 'GRID_SEARCH_OIL_WELLS_PBH'
     ii=1
+    pd.options.display.float_format = '{:.2f}'.format
+    col_eval=['GJOA_OIL_SUM_QGAS']
     for params in grid_params:
+
+        print('Training with params: {}, filename: {} '.format(params, filename))
         params['seed']=int(params['seed'])
-        model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
-        #model=NCNET_CHKPRES.PRESSURE_PBH(**params)
+        #model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+        model=NCNET_CHKPRES.PRESSURE_PBH(**params)
         #model = NCNET_CHKPRES.PRESSURE_PDC(**params)
         print('\n\n\n')
         print('On n_grid: {} of {}'.format(ii,len_grid))
         ii+=1
-        print('Training with params: {}, filename: {} '.format(params,filename))
         model.initialize_chk_thresholds(Data, True)
-        #model.fit(X_train,Y_train,X_val,Y_val)
-        #model.update_model()
         model.fit(X_train, Y_train, X_val, Y_val)
-        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
+        scores= evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
 
-        cum_perf=get_cumulative_deviation(model,Data,X_val,Y_val)
-        #print(cum_perf)
-        #cum_perf_sum=cum_perf['GJOA_TOTAL_SUM_QOIL'][15]
-
-        #cum_perf_sum=np.sum(np.sqrt(score_test_MSE))#count_number_of_samples_below_cum_devation(1, cum_perf,'GJOA_OIL_QGAS')
-        cum_perf_sum = np.sqrt(score_test_MSE[-1])
-        if cum_perf_sum<best_sum_cumperf:
-            best_sum_cumperf=cum_perf_sum
+        #current_cost =np.sqrt(scores['MSE_test'][col_eval]).values
+        current_cost = np.sum(np.sqrt(scores['MSE_test']))
+        #print(np.sqrt(scores['MSE_test']))
+        #print(current_cost)
+        if current_cost<best_cost:
+            best_cost=current_cost
             best_params=params
-            best_rmse_test=np.sqrt(score_test_MSE)
-            best_r2_test=score_test_r2
-            best_rmse_train = np.sqrt(score_train_MSE)
-            best_r2_train = score_train_r2
+            best_results=scores
         del model
 
-
-        print('Cols: {}'.format(cols))
-        print('THIS SUM: {}, BEST SUM: {}'.format(cum_perf_sum, best_sum_cumperf))
+        print('THIS COST: {}, BEST COST: {}'.format(current_cost, best_cost))
         print('Best params:{} \n'.format(best_params))
-        print('Best TEST RMSE: {} \n Best R2: {}'.format(best_rmse_test,best_r2_test))
-        print('Best TRAIN RMSE: {} \n Best R2: {}'.format(best_rmse_train, best_r2_train))
+        print('BEST SCORES: ')
+        print(best_results)
 
 
 
     s='Best results: \n'
-    s+='Cols: {}\n'.format(cols)
     s+='Best params:{} \n'.format(best_params)
-    s+='Best SUM: {} \n'.format(best_sum_cumperf)
-    s+='Best TEST\n RMSE: {} \n Best R2: {}\n'.format(best_rmse_test, best_r2_test)
-    s+='Best TRAINn\n RMSE: {} \n Best R2: {}\n'.format(best_rmse_train, best_r2_train)
+    s+='Best COST: {} \n'.format(best_cost)
+    s+='BEST SCORES: \n {}'.format(best_results)
+
     PATH = 'Models/NeuralNetworks/'+filename
     f = open(PATH, 'w')
     f.write(s)
@@ -437,39 +516,30 @@ def bagging_test(Data):
 def ensemble_learning_bagging(Data):
     X = Data.X_transformed
     Y = Data.Y_transformed
+    GS_SIZE=15
 
-    cum_thresh = 15
-
-    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
-
-    search_params = {'n_depth': [4], 'n_width': [50],
-                     'l2w': [0.000001], 'seed': np.random.randint(1, 10000, 10)}
-    grid_params = generate_grid(search_params)
-
+    print('Grid Search size: {}'.format(GS_SIZE))
     params = {'n_depth': 2, 'n_width': 100,
               'l2w': 0.00015, 'seed': 3014}
-
-    len_grid = len(grid_params)
-
-    print('Size of search space: {}'.format(len_grid))
-
 
     name='ENSEMBLE_LEARNING_GAS_2_'
     PATH='Models/NeuralNetworks/SavedModels2/hdf5_files/'
     PATHS=[]
     i=1
-    for i in range(15):
+    for i in range(GS_SIZE):
+        print('Training with params: {}'.format(params))
 
         model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+
         model.model_name=name+str(i)
+
         PATHS.append(PATH+model.model_name+'.h5')
+
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         X_train,Y_train=subsample(X_train,Y_train)
 
-        print('Training with params: {}'.format(params))
+
         model.initialize_chk_thresholds(Data, True)
-        #model.fit(X_train, Y_train, X_val, Y_val)
-        #model.update_model()
         model.fit(X_train, Y_train, X_val, Y_val)
 
         scores, scores_latex = evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)

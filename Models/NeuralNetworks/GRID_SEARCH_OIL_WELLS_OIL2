@@ -1,0 +1,53 @@
+Best results: 
+Best params:{'seed': 3014, 'n_width': 50, 'l2w': 0.0001, 'n_depth': 2} 
+Best COST: [ 272648.35638399] 
+BEST SCORES: 
+ {'R2_train': C1_QGAS             -11.50
+C2_QGAS             -12.63
+C3_QGAS             -11.21
+C4_QGAS             -12.60
+B1_QGAS              -5.08
+B3_QGAS             -11.04
+D1_QGAS             -12.32
+GJOA_OIL_SUM_QGAS   -13.94
+dtype: float64, 'R2_test': C1_QGAS             -41.74
+C2_QGAS             -36.53
+C3_QGAS             -46.53
+C4_QGAS             -47.53
+B1_QGAS             -12.12
+B3_QGAS             -10.42
+D1_QGAS             -22.46
+GJOA_OIL_SUM_QGAS   -40.84
+dtype: float64, 'MSE_train': C1_QGAS              1426723423.65
+C2_QGAS              1486545212.62
+C3_QGAS              1477887451.56
+C4_QGAS              1467679537.04
+B1_QGAS              1291188186.28
+B3_QGAS              1449156713.86
+D1_QGAS              1531748100.41
+GJOA_OIL_SUM_QGAS   69233528115.40
+dtype: float64, 'MSE_test_std': C1_QGAS               2727057.17
+C2_QGAS               3427787.47
+C3_QGAS               2556730.04
+C4_QGAS               2564560.75
+B1_QGAS               6234397.15
+B3_QGAS               9353328.42
+D1_QGAS               6515473.19
+GJOA_OIL_SUM_QGAS   135795716.54
+dtype: float64, 'MSE_train_std': C1_QGAS               4455090.50
+C2_QGAS               4329881.56
+C3_QGAS               4820836.26
+C4_QGAS               4169301.94
+B1_QGAS               7981938.47
+B3_QGAS               4807140.04
+D1_QGAS               4583831.69
+GJOA_OIL_SUM_QGAS   182177675.06
+dtype: float64, 'MSE_test': C1_QGAS              1584934043.37
+C2_QGAS              1629178073.53
+C3_QGAS              1618520259.52
+C4_QGAS              1636309819.26
+B1_QGAS              1154754862.91
+B3_QGAS              1401583329.00
+D1_QGAS              1828242851.55
+GJOA_OIL_SUM_QGAS   74337126238.89
+dtype: float64}

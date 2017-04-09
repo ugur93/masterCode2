@@ -26,12 +26,12 @@ K.set_image_dim_ordering('th')
 #GAS Best params:{'n_depth': 2, 'seed': 3014, 'l2w': 0.00030204081632653063, 'n_width': 60}
 
 sas=5708
-OUT = 'GASs'
+OUT = 'GAS'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=200,l2w=0.0001,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=2 ,n_width=90,l2w=0.0002,dp_rate=0,seed=3014):
 
 
 
@@ -65,12 +65,12 @@ class NCNET1_GJOA2(NN_BASE):
             'GJOA_TOTAL': 1.0,
         }
 
-        self.output_layer_activation = 'relu'
+        self.output_layer_activation = 'linear'
 
         # Training config
         optimizer = 'adam'
         loss ='mae'
-        nb_epoch = 5000
+        nb_epoch = 1
         batch_size = 64
         self.activation='relu'
 
@@ -213,7 +213,7 @@ class NCNET1_GJOA2(NN_BASE):
         return aux_input_mod1,aux_input_mod2, input_layer, merged_output_mod1,merged_output_mod2,main_out
 
     def update_model(self):
-        self.nb_epoch=10000
+        self.nb_epoch=5000
         self.output_layer_activation='relu'
         self.aux_inputs=[]
         self.inputs=[]

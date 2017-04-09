@@ -8,11 +8,11 @@ import keras.backend as K
 class PRESSURE_PDC(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=80,l2w=0.05 ,seed=9035,dp_rate=0):
+    def __init__(self,n_depth=2 ,n_width=50,l2w=0.002 ,seed=3014,dp_rate=0):
 
 
 
-        self.model_name='GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL'
+        self.model_name='GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL'
         self.out_act='linear'
 
         # Training config
@@ -58,6 +58,10 @@ class PRESSURE_PDC(NN_BASE):
         output_layers = {}
         outputs = []
         inputs = [all_chk_input,riser_chk_input]
+
+        #sub_model_PDC = generate_pressure_sub_model(all_and_riser_chk_input, name='ALL' + '_PDC', depth=self.n_depth,
+        #                                            n_width=self.n_width, dp_rate=self.dp_rate, init=self.init,
+        #                                            l2weight=self.l2weight)
 
         for key in self.well_names:
 
@@ -110,7 +114,7 @@ class PRESSURE_PWH(NN_BASE):
 
 
         self.input_tags={'PRESSURE_INPUT':[]}
-        self.input_tags['PRESSURE_INPUT'].append('GJOA_RISER_OIL_B_CHK')
+        #self.input_tags['PRESSURE_INPUT'].append('GJOA_RISER_OIL_B_CHK')
         for key in chk_names:
             for tag in ['CHK']:
                 self.input_tags['PRESSURE_INPUT'].append(key+'_'+tag)
@@ -170,7 +174,7 @@ class PRESSURE_PWH(NN_BASE):
 class PRESSURE_PBH(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.00001 ,seed=3014,dp_rate=0):
+    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0001 ,seed=3014,dp_rate=0):
 
 
 
@@ -179,7 +183,7 @@ class PRESSURE_PBH(NN_BASE):
 
         # Training config
         optimizer ='adam'
-        loss = huber
+        loss = 'mae'
         nb_epoch = 10000
         batch_size = 64
         dp_rate=dp_rate

@@ -140,7 +140,7 @@ def split_data(X,Y,split_size):
 
 
 
-def evaluate_model(model,data,X_train,X_test,Y_train,Y_test):
+def evaluate_model2(model,data,X_train,X_test,Y_train,Y_test):
     score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(data, X_train, X_test,Y_train, Y_test)
 
     return print_scores(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols),scores_to_latex(data, Y_train, Y_test, score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols)
@@ -265,3 +265,33 @@ def scores_to_latex(data, Y_train, Y_test, score_train_MSE, score_test_MSE, scor
         #s += '-------------------------------------------------------\\\ \n'
         #s += '#### ------ #### \\\ \n'
         return s
+
+def evaluate_model(model,data,X_train,X_test,Y_train,Y_test):
+
+    cols=model.output_tag_ordered_list
+
+    y_true_test=data.inverse_transform(Y_test,'Y')[cols]
+    y_pred_test=data.inverse_transform(model.predict(X_test),'Y')
+    y_pred_test=y_pred_test.set_index(y_true_test.index)
+    y_true_train = data.inverse_transform(Y_train, 'Y')[cols]
+    y_pred_train = data.inverse_transform(model.predict(X_train), 'Y')
+
+    diff_test=y_true_test-y_pred_test
+    diff_train=y_true_train-y_pred_train
+
+    score_test_MSE = metrics.mean_squared_error(y_true_test,y_pred_test, multioutput='raw_values')
+    score_train_MSE = metrics.mean_squared_error(y_true_train, y_pred_train, multioutput='raw_values')
+    score_test_std=np.var(diff_test)/np.sqrt(len(X_test))
+    score_train_std=np.var(diff_train)/np.sqrt(len(X_train))
+
+    score_test_r2 = metrics.r2_score(y_true_test, y_pred_test, multioutput='raw_values')
+    score_train_r2 = metrics.r2_score(y_true_train, y_pred_train, multioutput='raw_values')
+
+    score_train_MSE = pd.Series(data=score_train_MSE, index=cols)
+    score_test_MSE = pd.Series(data=score_test_MSE, index=cols)
+
+    score_train_r2 = pd.Series(data=score_train_r2, index=cols)
+    score_test_r2 = pd.Series(data=score_test_r2, index=cols)
+
+
+    return {'MSE_train':score_train_MSE,'MSE_test':score_test_MSE,'R2_train':score_train_r2,'R2_test':score_test_r2}#,'MSE_train_std':score_train_std,'MSE_test_std':score_test_std}
