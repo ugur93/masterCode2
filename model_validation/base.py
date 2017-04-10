@@ -279,19 +279,19 @@ def evaluate_model(model,data,X_train,X_test,Y_train,Y_test):
     diff_test=y_true_test-y_pred_test
     diff_train=y_true_train-y_pred_train
 
-    score_test_MSE = metrics.mean_squared_error(y_true_test,y_pred_test, multioutput='raw_values')
-    score_train_MSE = metrics.mean_squared_error(y_true_train, y_pred_train, multioutput='raw_values')
+    score_test_RMSE = np.sqrt(metrics.mean_squared_error(y_true_test,y_pred_test, multioutput='raw_values'))
+    score_train_RMSE = np.sqrt(metrics.mean_squared_error(y_true_train, y_pred_train, multioutput='raw_values'))
     score_test_std=np.var(diff_test)/np.sqrt(len(X_test))
     score_train_std=np.var(diff_train)/np.sqrt(len(X_train))
 
     score_test_r2 = metrics.r2_score(y_true_test, y_pred_test, multioutput='raw_values')
     score_train_r2 = metrics.r2_score(y_true_train, y_pred_train, multioutput='raw_values')
 
-    score_train_MSE = pd.Series(data=score_train_MSE, index=cols)
-    score_test_MSE = pd.Series(data=score_test_MSE, index=cols)
+    score_train_RMSE = pd.Series(data=score_train_RMSE, index=cols)
+    score_test_RMSE = pd.Series(data=score_test_RMSE, index=cols)
 
     score_train_r2 = pd.Series(data=score_train_r2, index=cols)
     score_test_r2 = pd.Series(data=score_test_r2, index=cols)
 
 
-    return {'MSE_train':score_train_MSE,'MSE_test':score_test_MSE,'R2_train':score_train_r2,'R2_test':score_test_r2}#,'MSE_train_std':score_train_std,'MSE_test_std':score_test_std}
+    return {'RMSE_train':score_train_RMSE,'RMSE_test':score_test_RMSE,'R2_train':score_train_r2,'R2_test':score_test_r2}#,'MSE_train_std':score_train_std,'MSE_test_std':score_test_std}

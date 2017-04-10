@@ -25,9 +25,9 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
     #bagging_test(Data)
-    validate_train_test_split(Data)
+    #validate_train_test_split(Data)
     #ensemble_learning_bagging(Data)
-    #grid_search2(Data)
+    grid_search2(Data)
     #validateRepeat(Data)
     #validateCV(Data)
 
@@ -110,15 +110,15 @@ def validate_train_test_split(Data):
         #GJOA_QOIL
         #pass
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
-        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.1)
-        #model=NCNET1_GJOA2.NCNET1_GJOA2()
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
+        model=NCNET1_GJOA2.NCNET1_GJOA2()
         #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model.model.load_weights(PATH+'GJOA_OIL_WELLS_GAS_MODEL22.h5')
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PWH()
-        model = NCNET_CHKPRES.PRESSURE_PBH()
+        #model = NCNET_CHKPRES.PRESSURE_PWH()
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE(PATH)
@@ -378,10 +378,10 @@ def grid_search2(Data):
 
     cum_thresh=15
 
-    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.1)
+    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2,3],'n_width':[50,60,70,80,90,100,110,120,130],
-                   'l2w':np.arange(0.01,0.0001,0.00001),'seed':[3014]}
+    search_params={'n_depth':[2,3],'n_width':[50,60,70,80,90,100],
+                   'l2w':np.arange(0.0005,0.01,0.0001),'seed':[3014]}
 
     #search_params = {'n_depth': [2], 'n_width': [50],
     #                 'l2w':[0.0001], 'seed': [3014]}
@@ -397,16 +397,16 @@ def grid_search2(Data):
     best_cost=1e100
     best_params={}
     #filename='GRID_SEARCH_OIL_WELLS_OIL2'
-    filename = 'GRID_SEARCH_OIL_WELLS_PBH'
+    filename = 'GRID_SEARCH_OIL_WELLS_OIL_2'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
-    col_eval=['GJOA_OIL_SUM_QGAS']
+    col_eval=['GJOA_TOTAL_SUM_QOIL']
     for params in grid_params:
 
         print('Training with params: {}, filename: {} '.format(params, filename))
         params['seed']=int(params['seed'])
-        #model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
-        model=NCNET_CHKPRES.PRESSURE_PBH(**params)
+        model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+        #model=NCNET_CHKPRES.PRESSURE_PBH(**params)
         #model = NCNET_CHKPRES.PRESSURE_PDC(**params)
         print('\n\n\n')
         print('On n_grid: {} of {}'.format(ii,len_grid))
@@ -414,9 +414,9 @@ def grid_search2(Data):
         model.initialize_chk_thresholds(Data, True)
         model.fit(X_train, Y_train, X_val, Y_val)
         scores= evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
-
-        #current_cost =np.sqrt(scores['MSE_test'][col_eval]).values
-        current_cost = np.sum(np.sqrt(scores['MSE_test']))
+        #print(scores)
+        current_cost =scores['RMSE_test'][col_eval].values
+        #current_cost = np.sum(scores['RMSE_test'])
         #print(np.sqrt(scores['MSE_test']))
         #print(current_cost)
         if current_cost<best_cost:
@@ -519,10 +519,10 @@ def ensemble_learning_bagging(Data):
     GS_SIZE=15
 
     print('Grid Search size: {}'.format(GS_SIZE))
-    params = {'n_depth': 2, 'n_width': 100,
-              'l2w': 0.00015, 'seed': 3014}
+    params = {'n_depth': 2, 'n_width': 60,
+              'l2w': 0.001, 'seed': 3014}
 
-    name='ENSEMBLE_LEARNING_GAS_2_'
+    name='ENSEMBLE_LEARNING_OIL_'
     PATH='Models/NeuralNetworks/SavedModels2/hdf5_files/'
     PATHS=[]
     i=1
@@ -542,7 +542,7 @@ def ensemble_learning_bagging(Data):
         model.initialize_chk_thresholds(Data, True)
         model.fit(X_train, Y_train, X_val, Y_val)
 
-        scores, scores_latex = evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
+        scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
         model.save_model_to_file(model.model_name, scores)
         print(scores)
 

@@ -93,7 +93,7 @@ class PRESSURE_PDC(NN_BASE):
 class PRESSURE_PWH(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.002 ,seed=3014,dp_rate=0):
+    def __init__(self,n_depth=3 ,n_width=50,l2w=0.0001 ,seed=3014,dp_rate=0):
 
 
 
