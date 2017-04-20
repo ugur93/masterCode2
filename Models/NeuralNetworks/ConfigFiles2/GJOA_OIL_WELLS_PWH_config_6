@@ -1,0 +1,69 @@
+########### LAYER CONFIG ########### 
+
+CHK_INPUT_NOW -> CHK_DELTA -> MAIN_INPUT -> C1_PWH_0 -> C1_PWH_out
+['CHK_INPUT_NOW', {'name': 'CHK_DELTA', 'trainable': True}, {'name': 'MAIN_INPUT', 'trainable': True, 'axis': -1}, {'name': 'C1_PWH_0', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C1_PWH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+CHK_INPUT_PREV -> CHK_DELTA -> MAIN_INPUT -> C1_PWH_0 -> C1_PWH_out
+['CHK_INPUT_PREV', {'name': 'CHK_DELTA', 'trainable': True}, {'name': 'MAIN_INPUT', 'trainable': True, 'axis': -1}, {'name': 'C1_PWH_0', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C1_PWH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+SHIFTED_PRESSURE_PWH_C1 -> MAIN_INPUT -> C1_PWH_0 -> C1_PWH_out
+['SHIFTED_PRESSURE_PWH_C1', {'name': 'MAIN_INPUT', 'trainable': True, 'axis': -1}, {'name': 'C1_PWH_0', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C1_PWH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: -0.676362743317
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_PWH: 0
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 1 
+- n_width: 50
+- dp_rate: 0 
+- l2_weight: 0.001 
+- OnOff_state: True 
+- Initialization: <keras.initializers.VarianceScaling object at 0x1035901d0> 
+- Seed: 3014
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 5000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<keras.callbacks.History object at 0x10d5c19b0>, <Models.NeuralNetworks.base.EpochVerbose object at 0x10d58afd0>, <Models.NeuralNetworks.base.CustomEarlyStopping object at 0x10d5c1940>] 
+- optimizer: adam 
+- Loss: <function huber at 0x102a7ac80>
+- Shuffle True 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+CHK_INPUT_NOW: ['GJOA_RISER_OIL_B_CHK', 'C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+CHK_INPUT_PREV: ['GJOA_RISER_OIL_B_shifted_CHK', 'C1_shifted_CHK', 'C2_shifted_CHK', 'C3_shifted_CHK', 'C4_shifted_CHK', 'B1_shifted_CHK', 'B3_shifted_CHK', 'D1_shifted_CHK']
+SHIFTED_PRESSURE_PWH_C1: ['C1_shifted_PWH']
+SHIFTED_PRESSURE_PWH_C2: ['C2_shifted_PWH']
+SHIFTED_PRESSURE_PWH_C3: ['C3_shifted_PWH']
+SHIFTED_PRESSURE_PWH_C4: ['C4_shifted_PWH']
+SHIFTED_PRESSURE_PWH_B1: ['B1_shifted_PWH']
+SHIFTED_PRESSURE_PWH_B3: ['B3_shifted_PWH']
+SHIFTED_PRESSURE_PWH_D1: ['D1_shifted_PWH']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+C1_PWH_out: ['C1_PWH']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_PWH: 7.03                  C1_PWH: 2.78                  C1_PWH: 2.44%                           C1_PWH: 113.90
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_PWH: 0.49                  C1_PWH: 0.31
+-------------------------------------------------------
+#### ------ #### 

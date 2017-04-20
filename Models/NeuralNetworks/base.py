@@ -67,7 +67,7 @@ GAS_WELLS_QGAS_OUTPUT_TAGS= {
 import keras.backend as K
 
 def huber(y_true, y_pred):
-    delta=0.01
+    delta=0.1
     diff = y_true - y_pred
     a = 0.5 * (diff**2)
     b = delta * (abs(diff) - delta / 2.0)

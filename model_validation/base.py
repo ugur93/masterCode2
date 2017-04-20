@@ -5,7 +5,6 @@ from sklearn.svm import SVR
 import numpy as np
 from matplotlib import pyplot as plt
 import pandas as pd
-import seaborn
 from sklearn import ensemble
 import DataManager as DM
 
@@ -65,11 +64,46 @@ def get_predicted_and_measured_df(model,data,X,Y):
     predicted = pd.DataFrame(data=predicted, columns=cols)
     predicted = predicted.set_index(Y.index)
     return measured,predicted
+def get_choke_diff_deviation(model,data,X,Y):
+    cols = model.output_tag_ordered_list
+    choke_delta_range=np.arange(10, 100, 10)
+
+    deviation_points=pd.Series()
+    X_transformed=data.inverse_transform(X,'X')
+
+    measured, predicted = get_predicted_and_measured_df(model, data, X, Y)
+
+    for delta in choke_delta_range:
+        ind=None
+        for col in cols:
+            name=col.split('_')[0]
+            if ind is None:
+                ind_temp1=X_transformed[name+'_delta_CHK']>=(delta-10)
+                ind_temp2=X_transformed[name+'_delta_CHK']<=delta
+                ind=ind_temp1&ind_temp2
+            else:
+                ind_temp1 = X_transformed[name + '_delta_CHK'] >= (delta - 10)
+                ind_temp2 = X_transformed[name + '_delta_CHK'] <= delta
+                ind_temp = ind_temp1&ind_temp2
+                ind=ind|ind_temp
+        print(np.sum(ind))
+        deviation=get_sample_deviation(measured,predicted)
+
+
+        deviation.fillna(0, inplace=True)
+
+        #print(deviation)
+        #exit()
+        print(delta)
+        deviation_points[str(delta-10)+'-'+str(delta)]=deviation['B1_PDC'].mean()
+        count, division = np.histogram(deviation_points)
+        deviation_points.hist(bins=division)
+        plt.show()
 
 def get_cumulative_deviation(model,data,X,Y):
 
     cols = model.output_tag_ordered_list
-    deviation_range = np.arange(0, 50, 1)
+    deviation_range = np.arange(0, 30, 0.5)
 
     measured, predicted=get_predicted_and_measured_df(model,data,X,Y)
 

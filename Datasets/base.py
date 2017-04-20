@@ -37,8 +37,8 @@ def get_cols_that_ends_with(df,tag):
 
 
 class CustomScaler:
-    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path=''):
-
+    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path='',type='X'):
+        self.type=type
         self.SCALES={
                      'PRESSURES':100,
                       'PRESSURES2':50,
@@ -82,13 +82,13 @@ class CustomScaler:
             cols = self.get_cols_that_ends_with(data, self.TAGS[tag])
             if len(cols)>0:
 
-                if self.with_mean:
+                if self.with_mean and tag not in ['QGAS','QOIL']:
                     data_transformed[cols] -= self.mean[cols]
                 elif self.with_minmax:
                     data_transformed[cols] -= self.minmax_min[cols]
 
                 #Scaling
-                if self.with_std:
+                if self.with_std and tag not in ['QGAS','QOIL']:
                     data_transformed[cols] /= self.std[cols]
                 elif self.with_minmax:
                     data_transformed[cols] /= self.minmax_scale[cols]
@@ -107,7 +107,7 @@ class CustomScaler:
             cols = self.get_cols_that_ends_with(data, self.TAGS[tag])
             if len(cols) > 0:
                 #Scaling
-                if self.with_std:
+                if self.with_std and tag not in ['QGAS','QOIL']:
                     data_transformed[cols] *= self.std[cols]
                 elif self.with_minmax:
                     data_transformed[cols] *= self.minmax_scale[cols]
@@ -116,7 +116,7 @@ class CustomScaler:
                     data_transformed[cols] *=self.SCALES[tag]
 
 
-                if self.with_mean:
+                if self.with_mean and tag not in ['QGAS','QOIL']:
                     data_transformed[cols] += self.mean[cols]
                 elif self.with_minmax:
                     data_transformed[cols] += self.minmax_min[cols]
@@ -166,8 +166,8 @@ class DataContainer:
         self.X_transformed=None
         self.Y_transformed=None
 
-        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False)
-        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=False,with_std=False)
+        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False,type='X')
+        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=True,with_std=False,type='Y')
 
         self.init_transform()
         #print(np.max(self.X_transformed))

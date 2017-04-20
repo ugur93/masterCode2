@@ -1,0 +1,75 @@
+########### LAYER CONFIG ########### 
+
+CHK_INPUT -> C1_PBH_0 -> C3_PBH_0 -> C4_PBH_0 -> B1_PBH_0 -> B3_PBH_0 -> C1_PBH_out -> C3_PBH_out -> C4_PBH_out -> B1_PBH_out -> B3_PBH_out
+['CHK_INPUT', {'name': 'C1_PBH_0', 'trainable': True, 'units': 20, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C3_PBH_0', 'trainable': True, 'units': 20, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C4_PBH_0', 'trainable': True, 'units': 20, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B1_PBH_0', 'trainable': True, 'units': 20, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B3_PBH_0', 'trainable': True, 'units': 20, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C1_PBH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C3_PBH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C4_PBH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B1_PBH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B3_PBH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: -0.676362743317
+C3: -0.686281752268
+C4: -0.623065711649
+B1: -0.78027264002
+B3: -0.522634359244
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_PBH: 0
+C3_PBH: 1
+C4_PBH: 2
+B1_PBH: 3
+B3_PBH: 4
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 1 
+- n_width: 20
+- dp_rate: 0.1 
+- l2_weight: 0.001 
+- OnOff_state: True 
+- Initialization: <keras.initializers.VarianceScaling object at 0x103595cf8> 
+- Seed: 3014
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 4000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<keras.callbacks.History object at 0x103590240>, <Models.NeuralNetworks.base.EpochVerbose object at 0x1035905c0>, <Models.NeuralNetworks.base.CustomEarlyStopping object at 0x103590198>] 
+- optimizer: adam 
+- Loss: mae
+- Shuffle True 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+CHK_INPUT: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+C1_PBH_out: ['C1_PBH']
+C3_PBH_out: ['C3_PBH']
+C4_PBH_out: ['C4_PBH']
+B1_PBH_out: ['B1_PBH']
+B3_PBH_out: ['B3_PBH']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_PBH: 2.79                  C1_PBH: 2.78                  C1_PBH: 1.74%                           C1_PBH: 160.01
+C3_PBH: 2.62                  C3_PBH: 2.81                  C3_PBH: 1.76%                           C3_PBH: 160.00
+C4_PBH: 2.96                  C4_PBH: 3.32                  C4_PBH: 2.09%                           C4_PBH: 158.87
+B1_PBH: 4.20                  B1_PBH: 5.82                  B1_PBH: 4.88%                           B1_PBH: 119.08
+B3_PBH: 2.67                  B3_PBH: 3.09                  B3_PBH: 2.01%                           B3_PBH: 154.24
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_PBH: 0.76                  C1_PBH: -33.69
+C3_PBH: 0.76                  C3_PBH: -130.80
+C4_PBH: 0.70                  C4_PBH: -64.95
+B1_PBH: 0.81                  B1_PBH: -88.59
+B3_PBH: 0.71                  B3_PBH: -44.13
+-------------------------------------------------------
+#### ------ #### 

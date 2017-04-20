@@ -123,7 +123,7 @@ class NN_BASE:
     def get_layer_weights(self,layer_name):
         return self.model.get_layer(layer_name).get_weights()
 
-    def save_model_to_file(self,name,scores,save_weights=True):
+    def save_model_to_file(self,name):
         PATH='./Models/NeuralNetworks/SavedModels2/'
 
         self.model.save(PATH+'hdf5_files/'+name+'.h5')
@@ -270,10 +270,14 @@ class NN_BASE:
     def evaluate(self,data,X_train,X_test,Y_train,Y_test,as_dict=False):
 
         cols=self.output_tag_ordered_list
-        score_test_MSE = metrics.mean_squared_error(data.inverse_transform(Y_test,'Y')[cols], data.inverse_transform(self.predict(X_test),'Y'), multioutput='raw_values')
-        score_train_MSE = metrics.mean_squared_error(data.inverse_transform(Y_train,'Y')[cols], data.inverse_transform(self.predict(X_train),'Y'), multioutput='raw_values')
-        score_test_r2 = metrics.r2_score(Y_test[cols], self.predict(X_test), multioutput='raw_values')
-        score_train_r2 = metrics.r2_score(Y_train[cols], self.predict(X_train), multioutput='raw_values')
+        Y_test_pred=data.inverse_transform(self.predict(X_test),'Y').set_index(Y_test.index)
+        Y_train_pred=data.inverse_transform(self.predict(X_train),'Y').set_index(Y_train.index)
+
+
+        score_test_MSE = metrics.mean_squared_error(data.inverse_transform(Y_test,'Y')[cols], Y_test_pred, multioutput='raw_values')
+        score_train_MSE = metrics.mean_squared_error(data.inverse_transform(Y_train,'Y')[cols],Y_train_pred , multioutput='raw_values')
+        score_test_r2 = metrics.r2_score(data.inverse_transform(Y_test,'Y')[cols], Y_test_pred, multioutput='raw_values')
+        score_train_r2 = metrics.r2_score(data.inverse_transform(Y_train,'Y')[cols],Y_train_pred, multioutput='raw_values')
         if as_dict:
             score_train_MSE = pd.DataFrame(data=score_train_MSE, index=cols).T
             score_test_MSE = pd.DataFrame(data=score_test_MSE, index=cols).T

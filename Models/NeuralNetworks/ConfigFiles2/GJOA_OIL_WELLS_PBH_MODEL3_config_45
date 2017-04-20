@@ -1,0 +1,55 @@
+########### LAYER CONFIG ########### 
+
+CHK_INPUT -> B3_PBH_0 -> B3_PBH_dp_1 -> B3_PBH_1 -> B3_PBH_dp_2 -> B3_PBH_2 -> B3_PBH_dp_3 -> B3_PBH_3 -> B3_PBH_out
+['CHK_INPUT', {'name': 'B3_PBH_0', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 4.999999873689376e-05}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B3_PBH_dp_1', 'trainable': True, 'rate': 0.1}, {'name': 'B3_PBH_1', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 4.999999873689376e-05}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B3_PBH_dp_2', 'trainable': True, 'rate': 0.1}, {'name': 'B3_PBH_2', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 4.999999873689376e-05}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B3_PBH_dp_3', 'trainable': True, 'rate': 0.1}, {'name': 'B3_PBH_3', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 4.999999873689376e-05}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'B3_PBH_out', 'trainable': True, 'units': 1, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 4.999999873689376e-05}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+B3: -3.11938025038
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+B3_PBH: 0
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 4 
+- n_width: 50
+- dp_rate: 0.1 
+- l2_weight: 5e-05 
+- OnOff_state: True 
+- Initialization: <keras.initializers.VarianceScaling object at 0x1023407b8> 
+- Seed: 3014
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<keras.callbacks.History object at 0x10ed6ba20>, <Models.NeuralNetworks.base.EpochVerbose object at 0x10ed49b38>, <Models.NeuralNetworks.base.CustomEarlyStopping object at 0x10ed49c88>] 
+- optimizer: adam 
+- Loss: mae
+- Shuffle True 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+CHK_INPUT: ['C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+B3_PBH_out: ['B3_PBH']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+B3_PBH: 6.22                  B3_PBH: 2.39                  B3_PBH: 1.57%                           B3_PBH: 152.01
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+B3_PBH: -0.51                 B3_PBH: -1.34
+-------------------------------------------------------
+#### ------ #### 

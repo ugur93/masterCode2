@@ -53,7 +53,7 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
-    plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
+    #plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
@@ -127,28 +127,57 @@ def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_ta
         X_test=X_test[ind_test]
         Y_train = Y_train[ind_train]
         Y_test = Y_test[ind_test]
-
+    ax.grid(which='major',linestyle='-')
+    ax.set_axisbelow(True)
+    SCALE=1
     ax.scatter(data.inverse_transform(X_train,'X')[x_tag],
-                data.inverse_transform(Y_train,'Y')[y_tag], color='blue',
+                data.inverse_transform(Y_train,'Y')[y_tag]/SCALE, color='blue',
                 label='true - train')
     ax.scatter(data.inverse_transform(X_train,'X')[x_tag],
-                data.inverse_transform(model.predict(X_train),'Y')[y_tag], color='black',
+                data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag]/SCALE, color='black',
                 label='pred - train')
 
     ax.scatter(data.inverse_transform(X_test,'X')[x_tag],
-                data.inverse_transform(Y_test,'Y')[y_tag], color='red', label='true - test')
+                data.inverse_transform(Y_test,'Y')[y_tag]/SCALE, color='red', label='true - test')
     ax.scatter(data.inverse_transform(X_test,'X')[x_tag],
-                data.inverse_transform(model.predict(X_test),'Y')[y_tag], color='green',
+                data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag]/SCALE, color='green',
                 label= 'pred - test')
+
+    ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
+               ncol=2, mode="expand", borderaxespad=0.2)
+    # plt.legend()
+    fig.subplots_adjust(wspace=0.4, hspace=.3, top=0.95, bottom=0.06, left=0.05, right=0.99)
+    fig.canvas.set_window_title(model.model_name)
+    ax.tick_params(axis='both', which='major', labelsize=15)
+    return ax
+
+def get_line_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,remove_zero_chk=(False,'name',0)):
+    ax=fig_par[-1]
+    fig=fig_par[0]
+
+    if remove_zero_chk[0] and remove_zero_chk[1]!='GJOA':
+        ind_train = X_train[remove_zero_chk[1] + '_CHK'] > remove_zero_chk[-1]
+        ind_test = X_test[remove_zero_chk[1]+ '_CHK'] > remove_zero_chk[-1]
+
+        X_train=X_train[ind_train]
+        X_test=X_test[ind_test]
+        Y_train = Y_train[ind_train]
+        Y_test = Y_test[ind_test]
+    ax.grid(which='major', linestyle='-')
+    ax.set_axisbelow(True)
+    ax.plot(data.inverse_transform(Y_train,'Y')[y_tag], color='blue',label='true - train')
+    ax.plot(data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag], color='black',label='pred - train')
+
+    ax.plot(data.inverse_transform(Y_test,'Y')[y_tag], color='red', label='true - test')
+    ax.plot(data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag], color='green',label= 'pred - test')
 
     ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
                ncol=2, mode="expand", borderaxespad=0.2)
     # plt.legend()
     fig.subplots_adjust(wspace=0.13, hspace=.2, top=0.95, bottom=0.06, left=0.05, right=0.99)
     fig.canvas.set_window_title(model.model_name)
+    ax.tick_params(axis='both', which='major', labelsize=15)
     return ax
-
-
 def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,remove_zero_chk=(False,'name',0)):
     ax = fig_par[-1]
     fig = fig_par[0]
@@ -180,7 +209,7 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
 
     fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
     fig.canvas.set_window_title(model.model_name)
-    #fig.tick_params(axis='both', which='major', labelsize=10)
+    fig.tick_params(axis='both', which='major', labelsize=20)
     return ax
 
 def get_cumulative_performance_plot(cumperf,data_tag):
@@ -197,8 +226,10 @@ def get_cumulative_performance_plot(cumperf,data_tag):
         axes[i].set_title(cumperf.columns[i])
         axes[i].set_xlabel('Deviation (%)')
         axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
+        axes[i].tick_params(axis='both', which='major', labelsize=15)
     fig.suptitle('Cumulative performance of {} data'.format(data_tag))
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
+
     return fig, axes
 
 def get_cumulative_flow_plot(cumperf,data_tag):
@@ -208,49 +239,76 @@ def get_cumulative_flow_plot(cumperf,data_tag):
     sp_y, sp_x = get_suplot_dim(N_PLOTS)
 
     fig, axes = plt.subplots(sp_y, sp_x)
-    axes = axes.flatten()
 
-    for i in range(len(cumperf.columns)):
-        axes[i].scatter(cumperf.index, cumperf[cumperf.columns[i]])
-        axes[i].set_title(cumperf.columns[i])
-        axes[i].set_xlabel('Deviation (%)')
-        axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
+    print(N_PLOTS)
+    if N_PLOTS==1:
+
+        axes.scatter(cumperf.index, cumperf[cumperf.columns])
+        axes.set_title(cumperf.columns)
+        axes.set_xlabel('Deviation (%)')
+        axes.set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
+    else:
+        axes = axes.flatten()
+        for i in range(len(cumperf.columns)):
+            axes[i].grid(which='major', linestyle='-')
+            axes[i].set_axisbelow(True)
+            axes[i].scatter(cumperf.index, cumperf[cumperf.columns[i]])
+            axes[i].set_title(cumperf.columns[i])
+            axes[i].set_xlabel('Deviation (%)')
+            axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
+            axes[i].tick_params(axis='both', which='major', labelsize=20)
+
     fig.suptitle('Cumulative performance of {} data'.format(data_tag))
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
     return fig, axes
 def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
 
-    def plot(cumperf,axes, ii, data_type):
+    def plot(cumperf,axes_wells,axes_tot, colors,ii, data_type):
+        axes_wells[ii].grid(which='major', linestyle='-')
+        axes_wells[ii].set_axisbelow(True)
+        axes_tot[ii].grid(which='major', linestyle='-')
+        axes_tot[ii].set_axisbelow(True)
         for i in range(len(cumperf.columns) - 1):
-            axes[ii].plot(range(len(cumperf)), cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
+            axes_wells[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
                           color=colors[i])
-        axes[ii].set_title('Well performance' + ' ({} data)'.format(data_type))
-        axes[ii].set_xlabel('Deviation (%)')
-        axes[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type))
+            axes_wells[ii].set_title('Well performance' + ' ({} data)'.format(data_type),fontsize=20)
 
-        axes[ii + 1].plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
+        axes_wells[ii].set_xlabel('Deviation (%)',fontsize=20)
+        axes_wells[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=20)
+        axes_wells[ii].tick_params(axis='both', which='major', labelsize=20)
+        axes_tot[ii].tick_params(axis='both', which='major', labelsize=20)
+
+        axes_tot[ii].plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
                           label=cumperf.columns[-1])
-        axes[ii + 1].set_title(cumperf.columns[-1] + ' ({} data)'.format(data_type))
-        axes[ii + 1].set_xlabel('Deviation (%)')
-        axes[ii + 1].set_ylabel('Cumulative (% of {} set sample points)'.format(data_type))
+        axes_tot[ii].set_title('Total production' + ' ({} data)'.format(data_type),fontsize=20)
+        axes_tot[ii].set_xlabel('Deviation (%)',fontsize=20)
+        axes_tot[ii].set_ylabel('Cumulative (% of {} set sample points)'.format(data_type),fontsize=20)
 
-        axes[ii].legend()
+        axes_wells[ii].legend(fontsize=15)
 
-    fig, axes = plt.subplots(2, 2)
+    fig_wells, axes_wells = plt.subplots(1, 2)
+    fig_tot, axes_tot = plt.subplots(1, 2)
     cmap = plt.get_cmap('Vega10')
-    colors = [cmap(i) for i in np.linspace(0, 1, 7)]
-    axes = axes.flatten()
+    colors = [cmap(i) for i in np.linspace(0, 1, len(cumperf_train.columns))]
 
-    fig.canvas.set_window_title(data_tag)
+    axes_wells = axes_wells.flatten()
+    axes_tot = axes_tot.flatten()
+
+    fig_wells.canvas.set_window_title(data_tag)
+    fig_tot.canvas.set_window_title(data_tag)
 
 
-    plot(cumperf_train,axes,0,'Training')
-    plot(cumperf_test,axes,2,'Test')
 
 
-    fig.suptitle('Cumulative performance')
-    fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
-    return fig, axes
+    plot(cumperf_train,axes_wells,axes_tot,colors,0,'Training')
+    plot(cumperf_test,axes_wells,axes_tot,colors,1,'Validation')
+
+    fig_wells.suptitle('Cumulative performance wells',fontsize=30)
+    fig_wells.subplots_adjust(wspace=0.17, hspace=.18, top=0.9, bottom=0.1, left=0.07, right=0.99)
+
+    fig_tot.suptitle('Cumulative performance total', fontsize=30)
+    fig_tot.subplots_adjust(wspace=0.17, hspace=.18, top=0.9, bottom=0.1, left=0.07, right=0.99)
+    #return fig, axes
 
 def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
 
@@ -351,7 +409,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
 
         #N_PLOTS=count_number_of_cols_that_ends_with(output_cols,'QGAS')
         sp_y, sp_x = get_suplot_dim(N_PLOTS)
-
+        #N_PLOTS=sp_y=sp_x=1
         i = 0
         fig_sub, axes = plt.subplots(sp_y, sp_x)
         #print(len(axes))
@@ -360,6 +418,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
             if N_PLOTS!=sp_y*sp_x:
                  fig_sub.delaxes(axes[-1])
         for output_tag in output_cols:
+                #fig_sub, axes = plt.subplots(sp_y, sp_x)
             #if ends_with(output_tag,'QGAS'):
                 if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
                     fig_single,ax=plt.subplots(1,1)
@@ -379,7 +438,15 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                     #print(zero_chk_param)
 
 
-                ax=get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
+                ax=get_line_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
+
+                #ax.set_title(output_tag, fontsize=20)
+                #ax.set_ylabel(output_tag.split('_')[-1], fontsize=20)
+                #ax.set_xlabel('Time', fontsize=20)
+
+
+                #ax = get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
+                #                   y_tag=output_tag, remove_zero_chk=zero_chk_param)
                 # plt.tight_layout()
                 ax.set_title(output_tag,fontsize=20)
                 ax.set_ylabel(output_tag.split('_')[-1],fontsize=20)

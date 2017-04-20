@@ -1,0 +1,61 @@
+########### LAYER CONFIG ########### 
+
+PRESSURE_INPUT -> C1_PWH_0 -> C1_PWH_out
+['PRESSURE_INPUT', {'name': 'C1_PWH_0', 'trainable': True, 'units': 50, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C1_PWH_out', 'trainable': True, 'units': 3, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: -3.36565950133
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_PWH: 0
+C1_PDC: 1
+C1_PBH: 2
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 1 
+- n_width: 50
+- dp_rate: 0 
+- l2_weight: 0.001 
+- OnOff_state: True 
+- Initialization: <keras.initializers.VarianceScaling object at 0x10e699b70> 
+- Seed: 3014
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 10000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<keras.callbacks.History object at 0x10e699ac8>, <Models.NeuralNetworks.base.EpochVerbose object at 0x10e699908>, <Models.NeuralNetworks.base.CustomEarlyStopping object at 0x10e6999e8>] 
+- optimizer: adam 
+- Loss: mae
+- Shuffle True 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+PRESSURE_INPUT: ['GJOA_RISER_OIL_B_CHK', 'C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+C1_PWH_out: ['C1_PWH', 'C1_PDC', 'C1_PBH']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_PWH: 8.24                  C1_PWH: 4.03                  C1_PWH: 3.54%                           C1_PWH: 113.90
+C1_PDC: 2.01                  C1_PDC: 9.28                  C1_PDC: 16.15%                          C1_PDC: 57.46
+C1_PBH: 1.28                  C1_PBH: 6.30                  C1_PBH: 4.01%                           C1_PBH: 157.24
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_PWH: 0.30                  C1_PWH: -0.45
+C1_PDC: 0.85                  C1_PDC: -1.82
+C1_PBH: 0.95                  C1_PBH: -9.00
+-------------------------------------------------------
+#### ------ #### 

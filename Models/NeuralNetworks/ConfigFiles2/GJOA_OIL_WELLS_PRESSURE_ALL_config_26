@@ -1,0 +1,73 @@
+########### LAYER CONFIG ########### 
+
+PRESSURE_INPUT -> C1_PWH_0 -> C1_PWH_out
+['PRESSURE_INPUT', {'name': 'C1_PWH_0', 'trainable': True, 'units': 100, 'activation': 'relu', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}, {'name': 'C1_PWH_out', 'trainable': True, 'units': 7, 'activation': 'linear', 'use_bias': True, 'kernel_initializer': {'class_name': 'VarianceScaling', 'config': {'scale': 1.0, 'mode': 'fan_avg', 'distribution': 'normal', 'seed': 3014}}, 'bias_initializer': {'class_name': 'Zeros', 'config': {}}, 'kernel_regularizer': {'class_name': 'L1L2', 'config': {'l1': 0.0, 'l2': 0.0010000000474974513}}, 'bias_regularizer': None, 'activity_regularizer': None, 'kernel_constraint': None, 'bias_constraint': None}]
+
+----------------------------------- 
+##### CHK thresholds ##### 
+----------------------------------- 
+C1: -0.676362743317
+----------------------------------- 
+##### OUTPUT INDEX ##### 
+----------------------------------- 
+C1_PDC: 0
+C2_PDC: 1
+C3_PDC: 2
+C4_PDC: 3
+B3_PDC: 4
+B1_PDC: 5
+D1_PDC: 6
+-------------------------------------------------
+##### Input-module config ##### 
+-------------------------------------------------
+- n_depth: 1 
+- n_width: 100
+- dp_rate: 0 
+- l2_weight: 0.001 
+- OnOff_state: True 
+- Initialization: <keras.initializers.VarianceScaling object at 0x10e4b3e80> 
+- Seed: 3014
+-------------------------------------------------
+##### Fit config ##### 
+------------------------------------------------- 
+- epoch: 5000 
+- batch size: 64 
+- verbose: 0 
+- callbacks: [<keras.callbacks.History object at 0x10e474518>, <Models.NeuralNetworks.base.EpochVerbose object at 0x10e332940>, <Models.NeuralNetworks.base.CustomEarlyStopping object at 0x10e452c88>] 
+- optimizer: adam 
+- Loss: mae
+- Shuffle True 
+-------------------------------------------------
+##### Input tags ##### 
+-------------------------------------------------
+PRESSURE_INPUT: ['GJOA_RISER_OIL_B_CHK', 'C1_CHK', 'C2_CHK', 'C3_CHK', 'C4_CHK', 'B1_CHK', 'B3_CHK', 'D1_CHK']
+-------------------------------------------------
+##### Output tags ##### 
+ -------------------------------------------------
+C1_PWH_out: ['C1_PDC', 'C2_PDC', 'C3_PDC', 'C4_PDC', 'B3_PDC', 'B1_PDC', 'D1_PDC']
+-------------------------------------------------
+-------------------------------------------------
+
+                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN                 #### Scores #### 
+RMSE TRAIN:                   RMSE VAL:                     Percentage error (VAL/MEAN)*100         MEAN
+------------------------------------------------------------------------------------------------------------------------
+C1_PDC: 2.56                  C1_PDC: 7.13                  C1_PDC: 13.32%                          C1_PDC: 53.54
+C2_PDC: 2.58                  C2_PDC: 7.01                  C2_PDC: 13.09%                          C2_PDC: 53.53
+C3_PDC: 2.56                  C3_PDC: 7.09                  C3_PDC: 13.22%                          C3_PDC: 53.59
+C4_PDC: 2.60                  C4_PDC: 6.92                  C4_PDC: 12.87%                          C4_PDC: 53.79
+B3_PDC: 2.59                  B3_PDC: 7.15                  B3_PDC: 13.52%                          B3_PDC: 52.87
+B1_PDC: 2.82                  B1_PDC: 7.15                  B1_PDC: 13.44%                          B1_PDC: 53.17
+D1_PDC: 2.59                  D1_PDC: 7.02                  D1_PDC: 13.08%                          D1_PDC: 53.69
+-------------------------------------------------------
+R2 TRAIN:                     R2 VAL: 
+-------------------------------------------------------
+C1_PDC: 0.79                  C1_PDC: -3.03
+C2_PDC: 0.78                  C2_PDC: -2.90
+C3_PDC: 0.79                  C3_PDC: -2.98
+C4_PDC: 0.78                  C4_PDC: -2.78
+B3_PDC: 0.78                  B3_PDC: -3.19
+B1_PDC: 0.75                  B1_PDC: -3.17
+D1_PDC: 0.78                  D1_PDC: -2.87
+-------------------------------------------------------
+#### ------ #### 

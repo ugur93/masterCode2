@@ -28,15 +28,15 @@ class SSNET2(NN_BASE):
         self.output_layer_activation = 'relu'
         # Input module config
         n_depth = 2
-        n_width = 80
-        l2w =0.0003
-        seed=9035
+        n_width = 100
+        l2w =0.00012
+        seed=3014
 
 
-        self.input_tags=['CHK']#,'PDC','PWH','PBH']
+        self.input_tags=['CHK','PBH','PWH','PDC']
         #Training config
         optimizer = 'adam'
-        loss = 'mae'
+        loss = huber
         nb_epoch = 5000
         batch_size = 64
         dp_rate=0
@@ -49,7 +49,7 @@ class SSNET2(NN_BASE):
 
         self.well_names=['F1','B2','D3','E1']
         self.input_tags={}
-        tags=['CHK','PWH','PBH','PDC']
+        tags=['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
