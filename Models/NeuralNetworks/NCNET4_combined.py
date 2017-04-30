@@ -547,8 +547,8 @@ class NET4_W_PRESSURE3(NN_BASE):
         self.input_tags['CHK_INPUT_NOW'] = []
         self.input_tags['CHK_INPUT_PREV'] = []
         #if tag == 'PDC':
-        self.input_tags['CHK_INPUT_NOW'].append('GJOA_RISER_OIL_B_CHK')
-        self.input_tags['CHK_INPUT_PREV'].append('GJOA_RISER_OIL_B_shifted_CHK')
+        self.input_tags['CHK_INPUT_NOW_RISER']= ['GJOA_RISER_OIL_B_CHK']
+        self.input_tags['CHK_INPUT_PREV_RISER']=['GJOA_RISER_OIL_B_shifted_CHK']
         for key in self.well_names:
             for tag in tags:
                 self.input_tags['CHK_INPUT_NOW'].append(key + '_' + tag)
@@ -704,10 +704,18 @@ class NET4_W_PRESSURE3(NN_BASE):
         chk_input_prev = Input(shape=(len(self.input_tags['CHK_INPUT_PREV']),), dtype='float32',
                                name='CHK_INPUT_PREV')
 
+        chk_input_now_riser = Input(shape=(len(self.input_tags['CHK_INPUT_NOW_RISER']),), dtype='float32',
+                              name='CHK_INPUT_NOW_RISER')
+        chk_input_prev_riser = Input(shape=(len(self.input_tags['CHK_INPUT_PREV_RISER']),), dtype='float32',
+                               name='CHK_INPUT_PREV_RISER')
+
         chk_delta = Add(name='CHK_DELTA')([chk_input_now, chk_input_prev])
+        chk_delta_riser = Add(name='CHK_DELTA_RISER')([chk_input_now_riser, chk_input_prev_riser])
+
+        chk_delta_riser=Concatenate(name='CHK_INPUT_RISER')([chk_delta_riser,chk_delta])
         output_layers = {}
         outputs = []
-        inputs = [chk_input_now, chk_input_prev]
+        inputs = [chk_input_now, chk_input_prev,chk_input_now_riser,chk_input_prev_riser]
 
         for key in self.well_names:
             sub_model_PWH = generate_pressure_sub_model(chk_delta, name=key + '_PWH', depth=self.n_depth_pwh,
@@ -717,7 +725,7 @@ class NET4_W_PRESSURE3(NN_BASE):
             sub_model_PBH = generate_pressure_sub_model(chk_delta, name=key + '_PBH', depth=self.n_depth_pbh,
                                                         n_width=self.n_width_pbh, dp_rate=self.dp_rate, init=self.init,
                                                         l2weight=self.presl2weight)
-            sub_model_PDC = generate_pressure_sub_model(chk_delta, name=key + '_PDC', depth=self.n_depth_pdc,
+            sub_model_PDC = generate_pressure_sub_model(chk_delta_riser, name=key + '_PDC', depth=self.n_depth_pdc,
                                                         n_width=self.n_width_pdc, dp_rate=self.dp_rate, init=self.init,
                                                         l2weight=self.presl2weight)
 

@@ -1,0 +1,25 @@
+Best results: 
+Best params:{'seed': 3014, 'n_width': 80, 'l2w': 0.0001, 'n_depth': 2} 
+Best COST: [ 7982.19369607] 
+BEST SCORES: 
+ {'R2_train': F1_QGAS     0.98
+B2_QGAS     0.98
+D3_QGAS     0.43
+E1_QGAS     0.31
+GJOA_QGAS   1.00
+dtype: float64, 'RMSE_train': F1_QGAS      2999.56
+B2_QGAS      4028.97
+D3_QGAS     17960.27
+E1_QGAS     55778.77
+GJOA_QGAS    4080.92
+dtype: float64, 'R2_test': F1_QGAS     0.96
+B2_QGAS     0.98
+D3_QGAS     0.41
+E1_QGAS     0.42
+GJOA_QGAS   0.98
+dtype: float64, 'RMSE_test': F1_QGAS      3584.71
+B2_QGAS      3225.14
+D3_QGAS     12810.69
+E1_QGAS     35831.29
+GJOA_QGAS    7982.19
+dtype: float64}

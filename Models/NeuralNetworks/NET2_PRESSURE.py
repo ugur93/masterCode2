@@ -20,29 +20,26 @@ def abs(x):
 class SSNET2(NN_BASE):
 
 
-    def __init__(self):
+    def __init__(self,n_width=60,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
 
 
         self.SCALE=100
 
-        self.output_layer_activation = 'relu'
+        self.output_layer_activation =output_act
         # Input module config
-        n_depth = 2
-        n_width = 100
-        l2w =0.00012
-        seed=3014
+
 
 
         self.input_tags=['CHK','PBH','PWH','PDC']
         #Training config
         optimizer = 'adam'
         loss = huber
-        nb_epoch = 5000
+        nb_epoch = n_epoch
         batch_size = 64
         dp_rate=0
         self.add_onoff_state=True
 
-        self.model_name='GJOA_GAS_WELLS_QGAS_FINAL'
+        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
@@ -67,6 +64,11 @@ class SSNET2(NN_BASE):
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
+        print('Training with params:\n n_width: {}\n n_depth: {}\n l2_weight: {}\n'
+              'dp_rate: {}\n seed: {}\n loss: {}\n optimizer: {}\n nb_epoch: {}\n'
+              'batch_size: {}\n output_activation: {}'.format(self.n_width, self.n_depth, self.l2weight, self.dp_rate,
+                                                              self.seed, self.optimizer, self.loss, self.nb_epoch,
+                                                              self.batch_size, self.output_layer_activation))
 
         aux_inputs=[]
         inputs=[]
@@ -124,7 +126,7 @@ class SSNET2(NN_BASE):
         return aux_input, input_layer, merged_output, output_layer
 
     def update_model(self):
-        self.nb_epoch=5000
+        self.nb_epoch=10000
         self.output_layer_activation='relu'
         self.aux_inputs=[]
         self.inputs=[]

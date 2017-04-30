@@ -76,12 +76,12 @@ def huber(y_true, y_pred):
 
 def generate_pressure_sub_model(input_layer,name,init,l2weight,depth,n_width,dp_rate):
         i=0
-        sub_model = Dense(n_width, kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init)(input_layer)
+        sub_model = Dense(n_width,use_bias=True, kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init)(input_layer)
 
         for i in range(1,depth):
             if dp_rate>0:
                 sub_model=Dropout(dp_rate,name=name+'_dp_'+str(i))(sub_model)
-            sub_model = Dense(n_width,kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init)(sub_model)
+            sub_model = Dense(n_width,kernel_regularizer=l2(l2weight), activation='relu',name=name+'_'+str(i),kernel_initializer=init,use_bias=True)(sub_model)
 
         return sub_model
 def add_layers(input_layer,n_depth,n_width,l2weight,init):
@@ -190,7 +190,7 @@ class LossHistory(Callback):
 
 def plotModel(model,file_name):
     try:
-        plot_model(model, to_file='Models/NeuralNetworks/model_figures/'+file_name+'.png', show_shapes=True)
+        plot_model(model, to_file='Models/NeuralNetworks/model_figures/'+file_name+'.pdf', show_shapes=True)
     except(NameError):
         print('Model not plotted')
 

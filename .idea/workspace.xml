@@ -5,176 +5,39 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81ce2653-27ac-48e4-befa-177bfea4b92f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_dropout_mid_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_dropout_midend_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_dropout_midend_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_10_DP0c5_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_20_DP0c5_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_20_DP0c5_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_20_DP0c5_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_20_DP0c5_config_4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_20_DP0c5_config_5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_20_DP0c5_config_6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_30_DP0c5_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_config_4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_incept_config_5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_maxnorm_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_maxnorm_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_maxnorm_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000001_noPP_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c000005_noPP_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noCustomEarlyStop_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noMean_noCustomEarlyStop_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noMean_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noMean_noCustomEarly_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarlyStop_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_10" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_11" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_12" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_13" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_14" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_15" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_8" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QGAS_dense2x20_l20c00001_noPP_noMean_noCustomEarly_config_9" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_config_4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_config_5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_config_6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_7" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_8" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_incept_maxnorm_config_9" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_maxnorm_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_maxnorm_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_maxnorm_config_3" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_maxnorm_config_4" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_maxnorm_config_5" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_maxnorm_config_6" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_noCustomEarly_config_2" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_noPP_noCustomEarly_config_1" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/NCNET2_OIL_QOIL_dense2x20_noPP_noMean_noCustomEarly_config_1" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_QGAS_FINAL.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_QGAS_FINAL.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_GAS_MODEL_FINAL.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_GAS_MODEL_FINAL.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_OIL_MODEL_FINAL.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_OIL_MODEL_FINAL.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PBH_MODEL2.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PBH_MODEL2.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PBH.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PBH.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET2_ENSEMBLE_LEARNING.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET2_ENSEMBLE_LEARNING.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET3_PBH_INPUT.png" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET3_PBH_INPUT.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/MasterThesisCode.iml" afterPath="$PROJECT_DIR$/.idea/MasterThesisCode.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/GJOA2.py" afterPath="$PROJECT_DIR$/Datasets/GJOA2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/Gjoa.py" afterPath="$PROJECT_DIR$/Datasets/Gjoa.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/base.py" afterPath="$PROJECT_DIR$/Datasets/base.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/file_number.txt" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/file_number.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PBH" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PBH" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PWH" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PWH" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PWH_2" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PWH_2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_0" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_0" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_1" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_1" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_10" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_10" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_11" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_11" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_12" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_12" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_13" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_13" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_14" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_14" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_2" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_3" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_4" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_4" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_6" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_6" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_7" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_7" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_8" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_8" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_9" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_GAS_9" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_0" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_0" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_1" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_1" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_2" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_3" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_4" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/ENSEMBLE_LEARNING_OIL_4" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_GAS_MODEL_FINAL" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_GAS_MODEL_FINAL" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_OIL_MODEL_FINAL" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_OIL_MODEL_FINAL" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PBH_MODEL2" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PBH_MODEL2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_0.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_0.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_1.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_1.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_10.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_10.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_11.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_11.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_12.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_12.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_13.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_13.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_14.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_14.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_3.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_3.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_4.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_4.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_5.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_5.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_6.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_6.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_7.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_7.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_8.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_8.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_9.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_GAS_9.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_0.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_0.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_1.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_1.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_3.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_3.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_4.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/ENSEMBLE_LEARNING_OIL_4.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_GAS_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_GAS_MODEL_FINAL.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_OIL_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_OIL_MODEL_FINAL.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PBH_MODEL2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PBH_MODEL2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_0.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_0.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_1.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_1.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_10.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_10.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_11.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_11.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_12.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_12.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_13.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_13.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_14.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_14.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_3.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_3.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_4.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_4.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_5.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_5.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_6.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_6.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_7.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_7.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_8.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_8.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_9.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_GAS_9.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_0.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_0.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_1.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_1.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_3.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_3.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_4.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/ENSEMBLE_LEARNING_OIL_4.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_GAS_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_GAS_MODEL_FINAL.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_OIL_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_OIL_MODEL_FINAL.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PBH_MODEL2.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PBH_MODEL2.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PBH" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PBH" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PDC" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PDC" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PWH" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PWH" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PBH.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PBH.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PDC.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PDC.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PWH.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_PWH.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PBH.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PBH.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PDC.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PDC.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PWH.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PWH.h5" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/base.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/Validate.py" afterPath="$PROJECT_DIR$/model_validation/Validate.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/Visualize.py" afterPath="$PROJECT_DIR$/model_validation/Visualize.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/base.py" afterPath="$PROJECT_DIR$/model_validation/base.py" />
@@ -190,7 +53,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/MasterThesisCode$main.coverage" NAME="main Coverage Results" MODIFIED="1492713832523" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MasterThesisCode$main.coverage" NAME="main Coverage Results" MODIFIED="1493558287192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -208,13 +71,13 @@
     <favorites_list name="MasterThesisCode" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.52038956">
+    <splitter split-orientation="horizontal" split-proportion="0.57277775">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="NCNET1_GJOA2.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="NCNET1_GJOA2.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="210">
+                <state relative-caret-position="289">
                   <caret line="35" column="54" lean-forward="false" selection-start-line="35" selection-start-column="54" selection-end-line="35" selection-end-column="54" />
                   <folding />
                 </state>
@@ -224,7 +87,7 @@
           <file leaf-file-name="SimulatedData.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/SimulatedData.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="60">
+                <state relative-caret-position="68">
                   <caret line="4" column="29" lean-forward="false" selection-start-line="4" selection-start-column="29" selection-end-line="4" selection-end-column="29" />
                   <folding />
                 </state>
@@ -234,18 +97,18 @@
           <file leaf-file-name="NCNET4_combined.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="114">
-                  <caret line="548" column="9" lean-forward="false" selection-start-line="548" selection-start-column="9" selection-end-line="548" selection-end-column="9" />
+                <state relative-caret-position="4734">
+                  <caret line="550" column="80" lean-forward="false" selection-start-line="550" selection-start-column="80" selection-end-line="550" selection-end-column="80" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="NCNET_CHKPRES.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="NCNET_CHKPRES.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="294">
-                  <caret line="498" column="89" lean-forward="false" selection-start-line="498" selection-start-column="89" selection-end-line="498" selection-end-column="89" />
+                <state relative-caret-position="1065">
+                  <caret line="490" column="56" lean-forward="false" selection-start-line="490" selection-start-column="56" selection-end-line="490" selection-end-column="56" />
                   <folding />
                 </state>
               </provider>
@@ -254,8 +117,8 @@
           <file leaf-file-name="Gjoa.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-270">
-                  <caret line="22" column="29" lean-forward="true" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+                <state relative-caret-position="306">
+                  <caret line="69" column="62" lean-forward="false" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
                   <folding>
                     <element signature="e#3#22#0" expanded="true" />
                   </folding>
@@ -270,8 +133,8 @@
           <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="135">
-                  <caret line="69" column="13" lean-forward="false" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
+                <state relative-caret-position="614">
+                  <caret line="192" column="88" lean-forward="false" selection-start-line="192" selection-start-column="88" selection-end-line="192" selection-end-column="88" />
                   <folding>
                     <element signature="e#0#35#0" expanded="true" />
                   </folding>
@@ -282,11 +145,9 @@
           <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1470">
-                  <caret line="105" column="36" lean-forward="false" selection-start-line="105" selection-start-column="36" selection-end-line="105" selection-end-column="36" />
-                  <folding>
-                    <element signature="e#1#36#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="-1376">
+                  <caret line="113" column="51" lean-forward="false" selection-start-line="113" selection-start-column="51" selection-end-line="113" selection-end-column="51" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -294,11 +155,9 @@
           <file leaf-file-name="Visualize.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="414">
-                  <caret line="166" column="26" lean-forward="false" selection-start-line="166" selection-start-column="26" selection-end-line="166" selection-end-column="26" />
-                  <folding>
-                    <element signature="e#0#36#0" expanded="true" />
-                  </folding>
+                <state relative-caret-position="161">
+                  <caret line="344" column="31" lean-forward="false" selection-start-line="344" selection-start-column="31" selection-end-line="344" selection-end-column="31" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -306,8 +165,8 @@
           <file leaf-file-name="Validate.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-15">
-                  <caret line="102" column="114" lean-forward="false" selection-start-line="102" selection-start-column="114" selection-end-line="102" selection-end-column="114" />
+                <state relative-caret-position="280">
+                  <caret line="118" column="0" lean-forward="true" selection-start-line="118" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
                   <folding>
                     <element signature="e#1#41#0" expanded="true" />
                   </folding>
@@ -315,11 +174,18 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="GJOA2.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="GJOA_OIL_WELLS_PDC_ALL_DATA.png" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_ALL_DATA.png">
+              <provider selected="true" editor-type-id="images">
+                <state />
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="GJOA2.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="199" column="52" lean-forward="false" selection-start-line="199" selection-start-column="52" selection-end-line="199" selection-end-column="52" />
+                <state relative-caret-position="3145">
+                  <caret line="218" column="66" lean-forward="false" selection-start-line="218" selection-start-column="46" selection-end-line="218" selection-end-column="66" />
                   <folding>
                     <element signature="e#3#22#0" expanded="true" />
                   </folding>
@@ -330,18 +196,18 @@
           <file leaf-file-name="base_class.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1905">
-                  <caret line="127" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+                <state relative-caret-position="208">
+                  <caret line="52" column="14" lean-forward="false" selection-start-line="52" selection-start-column="14" selection-end-line="52" selection-end-column="14" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="base.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Datasets/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="333">
-                  <caret line="169" column="69" lean-forward="false" selection-start-line="169" selection-start-column="69" selection-end-line="169" selection-end-column="69" />
+                <state relative-caret-position="510">
+                  <caret line="168" column="106" lean-forward="false" selection-start-line="168" selection-start-column="106" selection-end-line="168" selection-end-column="106" />
                   <folding>
                     <element signature="e#1#95#0" expanded="true" />
                   </folding>
@@ -352,18 +218,8 @@
           <file leaf-file-name="NET2_PRESSURE.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="210">
-                  <caret line="31" column="20" lean-forward="false" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/main.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="45">
-                  <caret line="3" column="11" lean-forward="false" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
+                <state relative-caret-position="867">
+                  <caret line="77" column="35" lean-forward="true" selection-start-line="77" selection-start-column="35" selection-end-line="77" selection-end-column="35" />
                   <folding />
                 </state>
               </provider>
@@ -382,14 +238,11 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>STATUS</find>
-      <find>acti</find>
       <find>data_type</find>
       <find>chk_thresholds</find>
       <find>ac</find>
       <find>border_mode</find>
       <find>eva</find>
-      <find>plot</find>
       <find>RMSE</find>
       <find>seed</find>
       <find>8483</find>
@@ -412,6 +265,9 @@
       <find>line</find>
       <find>seab</find>
       <find>save_</find>
+      <find>plot</find>
+      <find>get_line</find>
+      <find>cumulat</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -457,20 +313,20 @@
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_SEED_D3W50" />
         <option value="$PROJECT_DIR$/Models/melding" />
         <option value="$PROJECT_DIR$/Datasets/SimulatedData.py" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/keras/utils/generic_utils.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py" />
-        <option value="$PROJECT_DIR$/Datasets/base.py" />
-        <option value="$PROJECT_DIR$/model_validation/base.py" />
+        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
-        <option value="$PROJECT_DIR$/Datasets/Gjoa.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py" />
         <option value="$PROJECT_DIR$/model_validation/Visualize.py" />
-        <option value="$PROJECT_DIR$/model_validation/Validate.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
+        <option value="$PROJECT_DIR$/model_validation/base.py" />
+        <option value="$PROJECT_DIR$/Datasets/Gjoa.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" />
         <option value="$PROJECT_DIR$/Datasets/GJOA2.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" />
+        <option value="$PROJECT_DIR$/model_validation/Validate.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
+        <option value="$PROJECT_DIR$/Datasets/base.py" />
       </list>
     </option>
   </component>
@@ -481,9 +337,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="23" />
-    <option name="width" value="1280" />
-    <option name="height" value="773" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1936" />
+    <option name="height" value="1176" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -501,6 +358,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -524,6 +382,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="model_validation" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MasterThesisCode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MasterThesisCode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model_figures" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -591,83 +463,12 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NeuralNetworks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SavedModels2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="hdf5_files" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MasterThesisCode" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MasterThesisCode" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NeuralNetworks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="SavedModels2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MasterThesisCode" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MasterThesisCode" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Models" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NeuralNetworks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CV_results" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MasterThesisCode" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="MasterThesisCode" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="Datasets" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -962,19 +763,19 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="773" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1898223" sideWeight="0.79820627" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.040511727" sideWeight="0.79820627" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48939395" sideWeight="0.2003231" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.49361023" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33085108" sideWeight="0.36261982" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3242424" sideWeight="0.7996769" order="9" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33072406" sideWeight="0.36261982" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19960861" sideWeight="0.7996769" order="9" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37802908" sideWeight="0.49095607" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1898223" sideWeight="0.20179372" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1898223" sideWeight="0.20179372" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -984,6 +785,26 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297456" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
+    <layout-to-restore>
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48939395" sideWeight="0.2003231" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.49361023" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33072406" sideWeight="0.36261982" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3189824" sideWeight="0.7996769" order="9" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.09808102" sideWeight="0.79820627" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297456" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37802908" sideWeight="0.49095607" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1898223" sideWeight="0.20179372" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="processedProjectFiles" value="true" />
@@ -1027,65 +848,20 @@
           <line>14</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py</url>
+          <line>765</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
       </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NN_from_file.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="0" lean-forward="false" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/NCNET2_OIL_QGAS_BEST_MODEL_2x20_l20c000005" />
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_SEED_D3W50">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="14" lean-forward="false" selection-start-line="0" selection-start-column="14" selection-end-line="0" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_SEED_D2W20">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_SEED_D2W20_2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_SEED_D2W20_3">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/melding">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_GAS_SEED_HUBERLOSS">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/sklearn/utils/validation.py" />
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_mae_D2_W20_L20.0001.png">
       <provider selected="true" editor-type-id="images">
@@ -1148,7 +924,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1161,7 +936,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1569">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1169,15 +943,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="11" lean-forward="false" selection-start-line="3" selection-start-column="11" selection-end-line="3" selection-end-column="11" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1205,60 +970,23 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2445">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/keras/utils/generic_utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="635">
-          <caret line="154" column="26" lean-forward="false" selection-start-line="154" selection-start-column="26" selection-end-line="154" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/keras/utils/generic_utils.py" />
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_PWH.h5">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-15">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET3_PBH_INPUT.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="548" column="9" lean-forward="false" selection-start-line="548" selection-start-column="9" selection-end-line="548" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Datasets/SimulatedData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
+        <state relative-caret-position="68">
           <caret line="4" column="29" lean-forward="false" selection-start-line="4" selection-start-column="29" selection-end-line="4" selection-end-column="29" />
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model_validation/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1470">
-          <caret line="105" column="36" lean-forward="false" selection-start-line="105" selection-start-column="36" selection-end-line="105" selection-end-column="36" />
-          <folding>
-            <element signature="e#1#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS2_PWH.png">
@@ -1270,99 +998,187 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="12" lean-forward="false" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding>
+            <element signature="e#2#46#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_PDC.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/theano/tensor/var.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="88" column="0" lean-forward="false" selection-start-line="88" selection-start-column="0" selection-end-line="88" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
+    <entry file="file://$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/keras/layers/advanced_activations.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-270">
-          <caret line="22" column="29" lean-forward="true" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="e#3#22#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="538">
+          <caret line="204" column="0" lean-forward="false" selection-start-line="204" selection-start-column="0" selection-end-line="204" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base.py">
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_PWH.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PWH_2">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="69" column="13" lean-forward="false" selection-start-line="69" selection-start-column="13" selection-end-line="69" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/base.py">
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PWH">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="169" column="69" lean-forward="false" selection-start-line="169" selection-start-column="69" selection-end-line="169" selection-end-column="69" />
-          <folding>
-            <element signature="e#1#95#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_PDC">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="31" column="20" lean-forward="false" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
+        <state relative-caret-position="0">
+          <caret line="0" column="14" lean-forward="false" selection-start-line="0" selection-start-column="14" selection-end-line="0" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="52" column="14" lean-forward="false" selection-start-line="52" selection-start-column="14" selection-end-line="52" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="166" column="26" lean-forward="false" selection-start-line="166" selection-start-column="26" selection-end-line="166" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1905">
-          <caret line="127" column="0" lean-forward="false" selection-start-line="126" selection-start-column="0" selection-end-line="127" selection-end-column="0" />
+        <state relative-caret-position="161">
+          <caret line="344" column="31" lean-forward="false" selection-start-line="344" selection-start-column="31" selection-end-line="344" selection-end-column="31" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/NCNET3_PBH_INPUT.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15">
-          <caret line="102" column="114" lean-forward="false" selection-start-line="102" selection-start-column="114" selection-end-line="102" selection-end-column="114" />
+        <state relative-caret-position="867">
+          <caret line="77" column="35" lean-forward="true" selection-start-line="77" selection-start-column="35" selection-end-line="77" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_validation/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1376">
+          <caret line="113" column="51" lean-forward="false" selection-start-line="113" selection-start-column="51" selection-end-line="113" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="614">
+          <caret line="192" column="88" lean-forward="false" selection-start-line="192" selection-start-column="88" selection-end-line="192" selection-end-column="88" />
           <folding>
-            <element signature="e#1#41#0" expanded="true" />
+            <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_ALL_DATA.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="199" column="52" lean-forward="false" selection-start-line="199" selection-start-column="52" selection-end-line="199" selection-end-column="52" />
+        <state relative-caret-position="1065">
+          <caret line="490" column="56" lean-forward="false" selection-start-line="490" selection-start-column="56" selection-end-line="490" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="69" column="62" lean-forward="false" selection-start-line="69" selection-start-column="62" selection-end-line="69" selection-end-column="62" />
           <folding>
             <element signature="e#3#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3145">
+          <caret line="218" column="66" lean-forward="false" selection-start-line="218" selection-start-column="46" selection-end-line="218" selection-end-column="66" />
+          <folding>
+            <element signature="e#3#22#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4734">
+          <caret line="550" column="80" lean-forward="false" selection-start-line="550" selection-start-column="80" selection-end-line="550" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="118" column="0" lean-forward="true" selection-start-line="118" selection-start-column="0" selection-end-line="119" selection-end-column="0" />
+          <folding>
+            <element signature="e#1#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
+        <state relative-caret-position="289">
           <caret line="35" column="54" lean-forward="false" selection-start-line="35" selection-start-column="54" selection-end-line="35" selection-end-column="54" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py">
+    <entry file="file://$PROJECT_DIR$/Datasets/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="294">
-          <caret line="498" column="89" lean-forward="false" selection-start-line="498" selection-start-column="89" selection-end-line="498" selection-end-column="89" />
-          <folding />
+        <state relative-caret-position="510">
+          <caret line="168" column="106" lean-forward="false" selection-start-line="168" selection-start-column="106" selection-end-line="168" selection-end-column="106" />
+          <folding>
+            <element signature="e#1#95#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

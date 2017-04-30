@@ -17,7 +17,7 @@ MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
 
 
 
-DATA_TYPE='GASs'
+DATA_TYPE='GAsS'
 def validate(DataOIL,DataGAS):
 
     if DATA_TYPE=='GAS':
@@ -32,8 +32,8 @@ def validate(DataOIL,DataGAS):
     #validateCV(Data)
 
 def validate_train_test_split(Data):
-    X = Data.X_transformed
-    Y = Data.Y_transformed
+    X = Data.X_transformed#[500:-1]
+    Y = Data.Y_transformed#[500:-1]
 
 
     #subsample(X,Y)
@@ -65,8 +65,8 @@ def validate_train_test_split(Data):
     #GJOA QGAS
     PATHS=[]
     for i in range(15):
-        if i not in [16]:
-            PATHS.append('Models/NeuralNetworks/SavedModels2/weights/ENSEMBLE_LEARNING_GAS_'+str(i)+'.h5')
+        if i not in [0,16]:
+            PATHS.append('Models/NeuralNetworks/SavedModels2/weights/ENSEMBLE_LEARNING_GAS_WELLS_QGAS_'+str(i)+'.h5')
     print(PATHS)
     #exit()
     #pressure_weights=
@@ -75,7 +75,9 @@ def validate_train_test_split(Data):
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         #model=NCNET_CHKPRES.PRESSURE_PDC(Data)
         #model=NCNET_CHKPRES.PRESSURE_PWH(Data)
-        model = NET2_PRESSURE.SSNET2()
+        #model = NET2_PRESSURE.SSNET2()
+        model = NCNET1_GJOA2.ENSEMBLE(PATHS)
+        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PWH', data='GAS')
 
         #
         #model.load_weights_from_file(PATH)
@@ -88,17 +90,18 @@ def validate_train_test_split(Data):
         # model.initialize_zero_thresholds(Data)
         start = time.time()
         print(model.get_config())
-        #model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_FINAL.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5', by_name=True)
         # print(model.model.get_config())
-        # model.fit(X_train,Y_train,X_val,Y_val)
+        #model.fit(X_train,Y_train,X_val,Y_val)
 
         # Fit with old data
         #model.update_model()
-        model.fit(X_train, Y_train, X_val, Y_val)
+        #model.fit(X_train, Y_train, X_val, Y_val)
         #X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.0, val_size=0.2)
     else:
         #GJOA_QOIL
         #pass
+        PRESSURE_TAG = 'PDC'
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         model=NCNET1_GJOA2.NCNET1_GJOA2()
@@ -108,8 +111,8 @@ def validate_train_test_split(Data):
         #model=NCNET_VANILLA_GJOA2.NCNET_VANILLA()
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PBH()
-        #
-        #model = NCNET_CHKPRES.PRESSURE(tag='PWH')
+
+        #model = NCNET_CHKPRES.PRESSURE(tag='PDC')
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE2(PATH)
@@ -117,11 +120,11 @@ def validate_train_test_split(Data):
         #model=NCNET4_combined.NET4_W_PRESSURE3()
 
 
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH.h5', by_name=True)
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC.h5', by_name=True)
-        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PWH.h5',by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_ALL_DATA.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
+        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL.h5', by_name=True)
-
+       # exit()
 
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
@@ -138,53 +141,82 @@ def validate_train_test_split(Data):
     print('Fitted with time: {}'.format(end - start))
     scores, scores_latex = evaluate_model2(model, Data, X_train[1:-1], X_val, Y_train[1:-1], Y_val)
     print(scores)
-    model.save_model_to_file(model.model_name)
+    with_line_plot=False
+    with_separate_plot=False
+   # model.save_model_to_file(model.model_name)
    # exit()
     #model.save_model_config(scores)
 
     #get_choke_diff_deviation(model, Data, X_train, Y_train)
     if False:
         #import seaborn
-        tag = 'PWH'
-        name='C1'
+        tag = model.tag
+
         Y_p=model.predict(X).set_index(X.index)
-        #Y_p=Y_p.add(X_val['C1_shifted_PDC'],axis=0)
-        print(X_val[name+'_shifted_CHK'].head(10))
-        print(X_val[name+'_CHK'].head(10))
-        print(X_val[name+'_delta_CHK'].head(10))
-        print(Y_p.head(10))
-        fig,axes=plt.subplots(3,1,sharex=True)
-        axes=axes.flatten()
-        #+Data.inverse_transform(X, 'X')['C1_shifted_PWH']
-        axes[0].grid()
-        axes[1].grid()
-        axes[2].grid()
 
-        axes[0].plot(Data.inverse_transform(Y_p,'Y')[name+'_'+tag],'*',color='red',label=name+'_'+tag+'_predicted')
-        axes[0].plot(Data.inverse_transform(Y,'Y')[name+'_'+tag],'.',color='blue',label=name+'_'+tag)
-        axes[0].legend()
-        axes[1].plot(Data.inverse_transform(X,'X')[name+'_CHK'],label=name+'_CHK')
-        axes[1].plot(Data.inverse_transform(X,'X')[name+'_shifted_CHK']*-1,color='red',label=name+'_shifted_CHK')
 
-        for key in ['C1', 'C2', 'C3', 'C4', 'B3','B1','D1']:
-            axes[1].plot(Data.inverse_transform(X,'X')[key+'_delta_CHK'],label=key+'_delta_CHK')
-        axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_delta_CHK'], label='GJOA_RISER_delta_CHK')
-        axes[1].legend()
+        for name in model.well_names:
+            fig,axes=plt.subplots(3,1,sharex=True)
+            axes=axes.flatten()
+            #+Data.inverse_transform(X, 'X')['C1_shifted_PWH']
+            axes[0].grid()
+            axes[1].grid()
+            axes[2].grid()
+            axes[0].axvline(len(X_train)+X_train.index[0],-20,20)
+            axes[1].axvline(len(X_train)+X_train.index[0], -20, 20)
+            axes[2].axvline(len(X_train)+X_train.index[0], -20, 20)
 
-        axes[2].plot(Data.inverse_transform(X,'X')[name+'_shifted_'+tag],color='red',label=name+'_prev_'+tag)
-        axes[2].plot(Data.inverse_transform(X,'X')[name+'_'+tag], color='blue',label=name+'_now_'+tag)
-        axes[2].plot(Data.inverse_transform(Y,'Y')[name+'_delta_'+tag], color='green', label=name+'_delta_'+tag)
-        plt.legend()
-        if False:
-            fig,axes=plt.subplots(1,1)
-            axes.scatter(Data.inverse_transform(X,'X')[name+'_delta_'+'CHK'],Data.inverse_transform(Y_p,'Y')[name+'_delta_'+tag],color='red',label='True')
-            axes.scatter(Data.inverse_transform(X, 'X')[name + '_delta_' + 'CHK'],
-                         Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag],label='predicted',color='blue')
-            axes.set_xlabel(name+'_delta_'+'CHK')
-            axes.set_ylabel(name+'_delta_'+tag)
+
+            axes[0].plot(Data.inverse_transform(Y_p,'Y')[name+'_'+tag],'*',color='red',label=name+'_'+tag+'_predicted')
+            axes[0].plot(Data.inverse_transform(Y,'Y')[name+'_'+tag],'.',color='blue',label=name+'_'+tag)
+            axes[0].legend()
+
+            if model.type=='DELTA':
+                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_CHK'], label=name + '_CHK')
+                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_shifted_CHK'] * -1, color='red',
+                             label=name + '_shifted_CHK')
+                for key in model.chk_names:
+                    axes[1].plot(Data.inverse_transform(X,'X')[key+'_delta_CHK'],label=key+'_delta_CHK')
+                if DATA_TYPE!='GAS' and model.tag=='PDC':
+                    axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_delta_CHK'], label='GJOA_RISER_delta_CHK')
+                axes[1].legend()
+                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_shifted_' + tag], color='red',
+                             label=name + '_prev_' + tag)
+                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_' + tag], color='blue', label=name + '_now_' + tag)
+                axes[2].plot(Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag], color='green',
+                             label=name + '_delta_' + tag)
+                axes[2].plot(Data.inverse_transform(Y_p, 'Y')[name + '_delta_' + tag], color='orange',
+                             label=name + '_delta_' + tag + '_predicted')
+                plt.legend()
+            else:
+                for key in model.chk_names:
+                    axes[1].plot(Data.inverse_transform(X,'X')[key+'_CHK'],label=key+'_CHK')
+                if DATA_TYPE!='GAS' and model.tag=='PDC':
+                    axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_OIL_B_CHK'], label='GJOA_RISER_OIL_B_CHK')
+                axes[1].legend()
+
+            if True:
+                if model.type=='DELTA':
+                    fig,axes=plt.subplots(1,1)
+                    axes.scatter(Data.inverse_transform(X,'X')[name+'_delta_'+'CHK'],Data.inverse_transform(Y_p,'Y')[name+'_delta_'+tag],color='red',label='True')
+                    axes.scatter(Data.inverse_transform(X, 'X')[name + '_delta_' + 'CHK'],
+                                 Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag],label='predicted',color='blue')
+                    axes.set_xlabel(name+'_delta_'+'CHK')
+                    axes.set_ylabel(name+'_delta_'+tag)
+                    plt.legend()
+                else:
+                    fig, axes = plt.subplots(1, 1)
+                    axes.scatter(Data.inverse_transform(X, 'X')[name + '_' + 'CHK'],
+                                 Data.inverse_transform(Y_p, 'Y')[name + '_' + tag], color='red', label='True')
+                    axes.scatter(Data.inverse_transform(X, 'X')[name + '_' + 'CHK'],
+                                 Data.inverse_transform(Y, 'Y')[name + '_' + tag], label='predicted',
+                                 color='blue')
+                    axes.set_xlabel(name + '_delta_' + 'CHK')
+                    axes.set_ylabel(name + '_delta_' + tag)
+                    plt.legend()
 
     else:
-        visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=[], input_cols=[])
+        visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=[], input_cols=[],with_line_plot=with_line_plot,with_separate_plot=with_separate_plot)
 
     plt.show()
 
@@ -241,7 +273,7 @@ def validateCV(Data,params=None,save=True):
     Y = Data.Y_transformed
 
 
-    X, Y, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0)
+    X, Y, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0, val_size=0)
 
     X.drop([0], inplace=True)
     Y.drop([0], inplace=True)
@@ -263,23 +295,30 @@ def validateCV(Data,params=None,save=True):
     filename='GJOA_OIL_WELLS_OIL_1'
 
 
+    init_weights=None
+
     for train_index,test_index in kfold.split(X.index):
 
-        #model=NCNET1_GJOA2.NCNET1_GJOA2()
-        model = NCNET_CHKPRES.PRESSURE(**params, tag='PWH')
+        #model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='linear',n_epoch=1)
+        model = NET2_PRESSURE.SSNET2(**params,output_act='linear',n_epoch=1)
+        if init_weights is None:
+            init_weights=model.model.get_weights()
+        else:
+            model.model.set_weights(init_weights)
+        #model = NCNET_CHKPRES.PRESSURE(**params, tag='PWH')
         model.initialize_chk_thresholds(Data, True)
 
         X_train=X.iloc[train_index]
         X_val=X.iloc[test_index]
         Y_train=Y.iloc[train_index]
         Y_val=Y.iloc[test_index]
-        #model.fit(X_train,Y_train,X_val,Y_val)
+        model.fit(X_train,Y_train,X_val,Y_val)
 
         # Fit with old data
-        #model.update_model()
+        model.update_model()
         model.fit(X_train, Y_train,X_val,Y_val)
         scores= evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
-        print(scores)
+        #print(scores)
 
         if scores_rmse_train is None:
             scores_rmse_train=scores['RMSE_train'].to_frame().T
@@ -306,12 +345,6 @@ def validateCV(Data,params=None,save=True):
     R2_TRAIN = np.mean(scores_r2_train)
     R2_TEST = np.mean(scores_r2_test)
 
-
-
-    print(RMSE_TRAIN)
-    print(RMSE_TEST)
-    print(scores_rmse_train)
-    print(scores_rmse_test)
 
     if save:
         s='RMSE_TRAIN: \n{}\n'.format(RMSE_TRAIN)
@@ -420,9 +453,9 @@ def grid_search3(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2],'n_width':[50,60,70,80,90,100],
-                   'l2w':np.arange(0.00005,0.0005,0.00001),'seed':[3014]}
-
+    search_params={'n_depth':[2],'n_width':[20,30,40,50,60,70,80,90,100],
+                   'l2w':np.concatenate((np.arange(0.0001,0.001,0.00005),np.arange(0.001,0.005,0.0005))),'seed':[3014]}
+    print(search_params['l2w'])
     #search_params = {'n_depth': [2], 'n_width': [50],
     #                 'l2w':[0.0001], 'seed': [3014]}
 
@@ -437,11 +470,12 @@ def grid_search3(Data):
     best_cost=1e100
     best_params={}
     #filename='GRID_SEARCH_OIL_WELLS_OIL2'
-    filename = 'GRID_SEARCH_OIL_WELLS_PWH_2'
+    filename = 'GRID_SEARCH_REALLY_GAS_WELLS_QGAS_DEPTH_2_TEST_1'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
     #col_eval=['GJOA_OIL_SUM_QGAS']
-    col_eval=['GJOA_TOTAL_SUM_QOIL']
+    #col_eval=['GJOA_TOTAL_SUM_QOIL']
+    col_eval=['GJOA_QGAS']
     for params in grid_params:
 
         print('Training with params: {}, filename: {} '.format(params, filename))
@@ -451,8 +485,8 @@ def grid_search3(Data):
         params['seed']=int(params['seed'])
         scores=validateCV(Data,params,save=False)
 
-        #current_cost =scores['RMSE_test'][col_eval].values
-        current_cost = np.sum(scores['RMSE_test'])
+        current_cost =scores['RMSE_test'][col_eval].values
+        #current_cost = np.sum(scores['RMSE_test'])
         #print(np.sqrt(scores['MSE_test']))
         #print(current_cost)
         if current_cost<best_cost:
@@ -485,8 +519,8 @@ def grid_search2(Data):
 
     X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
 
-    search_params={'n_depth':[2],'n_width':[30,40,50,60,80,90,100],
-                   'l2w':np.arange(0.00005,0.001,0.0001),'seed':[3014]}
+    search_params={'n_depth':[2],'n_width':[30,40,50,60,70,80,90,100],
+                   'l2w':np.arange(0.001,0.003,0.0001),'seed':[3014]}
 
     #search_params = {'n_depth': [2], 'n_width': [50],
     #                 'l2w':[0.0001], 'seed': [3014]}
@@ -501,18 +535,22 @@ def grid_search2(Data):
     best_results=None
     best_cost=1e100
     best_params={}
+
+    PRESSURE_TYPE='PWH'
     #filename='GRID_SEARCH_OIL_WELLS_OIL2'
-    filename = 'GRID_SEARCH_OIL_WELLS_PBH'
+    filename = 'GRID_SEARCH_GAS_WELLS_GAS_2_REGHIGH'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
-    col_eval=['GJOA_TOTAL_SUM_QOIL']
+    #col_eval=['GJOA_TOTAL_SUM_QOIL']
+    col_eval = ['GJOA_QGAS']
     for params in grid_params:
 
         print('Training with params: {}, filename: {} '.format(params, filename))
         params['seed']=int(params['seed'])
         #model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
-        model=NCNET_CHKPRES.PRESSURE(**params,tag='PBH')
+        #model=NCNET_CHKPRES.PRESSURE(**params,tag=PRESSURE_TYPE)
         #model = NCNET_CHKPRES.PRESSURE_PDC(**params)
+        model = NET2_PRESSURE.SSNET2(**params)
         print('\n\n\n')
         print('On n_grid: {} of {}'.format(ii,len_grid))
         ii+=1
@@ -520,8 +558,8 @@ def grid_search2(Data):
         model.fit(X_train, Y_train, X_val, Y_val)
         scores= evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
         #print(scores)
-        #current_cost =scores['RMSE_test'][col_eval].values
-        current_cost = np.sum(scores['RMSE_test'])
+        current_cost =scores['RMSE_test'][col_eval].values
+        #current_cost = np.sum(scores['RMSE_test'])
         #print(np.sqrt(scores['MSE_test']))
         #print(current_cost)
         if current_cost<best_cost:
@@ -624,18 +662,19 @@ def ensemble_learning_bagging(Data):
     GS_SIZE=15
 
     print('Grid Search size: {}'.format(GS_SIZE))
-    params = {'n_depth': 2, 'n_width': 100,
-              'l2w': 0.0002, 'seed': 3014}
+    params = {'n_depth': 2, 'n_width': 60,
+              'l2w': 0.0001, 'seed': 3014}
 
-    name='ENSEMBLE_LEARNING_GAS_'
+    name='ENSEMBLE_LEARNING_GAS_WELLS_QGAS_'
     PATH='Models/NeuralNetworks/SavedModels2/hdf5_files/'
     PATHS=[]
     i=1
     for i in range(GS_SIZE):
-        if i>=12:
+        if i>=0:
             print('Training with params: {}'.format(params))
 
-            model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+            #model = NCNET1_GJOA2.NCNET1_GJOA2(**params)
+            model = NET2_PRESSURE.SSNET2(**params)
 
             model.model_name=name+str(i)
 

@@ -1,0 +1,37 @@
+Best results: 
+Best params:{'n_width': 60, 'n_depth': 2, 'l2w': 0.0007000000000000001, 'seed': 3014} 
+Best COST: [ 1.37310902] 
+BEST SCORES: 
+ {'R2_test': C1_QOIL               0.96
+C2_QOIL               0.87
+C3_QOIL               0.36
+C4_QOIL               0.41
+B1_QOIL               0.86
+B3_QOIL               0.65
+D1_QOIL               0.86
+GJOA_TOTAL_SUM_QOIL   0.99
+dtype: float64, 'R2_train': C1_QOIL               0.97
+C2_QOIL               0.95
+C3_QOIL               0.91
+C4_QOIL               0.89
+B1_QOIL               0.84
+B3_QOIL               0.66
+D1_QOIL               0.91
+GJOA_TOTAL_SUM_QOIL   0.99
+dtype: float64, 'RMSE_train': C1_QOIL               0.99
+C2_QOIL               1.09
+C3_QOIL               1.55
+C4_QOIL               1.62
+B1_QOIL               3.34
+B3_QOIL               2.00
+D1_QOIL               1.42
+GJOA_TOTAL_SUM_QOIL   2.33
+dtype: float64, 'RMSE_test': C1_QOIL               0.55
+C2_QOIL               0.81
+C3_QOIL               2.00
+C4_QOIL               1.71
+B1_QOIL               1.69
+B3_QOIL               1.50
+D1_QOIL               1.26
+GJOA_TOTAL_SUM_QOIL   1.37
+dtype: float64}

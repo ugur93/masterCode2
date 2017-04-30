@@ -3,7 +3,6 @@
 import model_validation.Validate as Validate
 from Datasets import SimulatedData,Gjoa,GJOA2
 
-
 if __name__=='__main__':
 
 

@@ -1,33 +1,33 @@
 Best results: 
-Best params:{'l2w': 0.0017000000000000006, 'n_depth': 1, 'n_width': 20, 'seed': 3014} 
-Best COST: 31.894807058262433 
+Best params:{'seed': 3014, 'n_depth': 3, 'n_width': 90, 'l2w': 0.0025000000000000001} 
+Best COST: 6.244517298591337 
 BEST SCORES: 
- {'RMSE_train': C1_PWH   8.92
-C2_PWH   7.48
-C3_PWH   7.92
-C4_PWH   7.47
-B3_PWH   5.98
-B1_PWH   8.07
-D1_PWH   7.26
-dtype: float64, 'RMSE_test': C1_PWH   3.83
-C2_PWH   3.63
-C3_PWH   3.93
-C4_PWH   3.79
-B3_PWH   4.62
-B1_PWH   7.98
-D1_PWH   4.12
-dtype: float64, 'R2_train': C1_PWH   0.18
-C2_PWH   0.20
-C3_PWH   0.19
-C4_PWH   0.22
-B3_PWH   0.13
-B1_PWH   0.52
-D1_PWH   0.16
-dtype: float64, 'R2_test': C1_PWH   -0.30
-C2_PWH   -0.81
-C3_PWH   -1.61
-C4_PWH   -1.24
-B3_PWH   -6.36
-B1_PWH   -2.00
-D1_PWH   -0.42
+ {'RMSE_test': C1_PWH   0.40
+C2_PWH   0.48
+C3_PWH   0.63
+C4_PWH   0.75
+B3_PWH   0.35
+B1_PWH   2.30
+D1_PWH   1.33
+dtype: float64, 'RMSE_train': C1_PWH   2.82
+C2_PWH   2.22
+C3_PWH   2.89
+C4_PWH   3.02
+B3_PWH   1.97
+B1_PWH   3.28
+D1_PWH   0.72
+dtype: float64, 'R2_train': C1_PWH   0.86
+C2_PWH   0.87
+C3_PWH   0.83
+C4_PWH   0.82
+B3_PWH   0.81
+B1_PWH   0.91
+D1_PWH   0.99
+dtype: float64, 'R2_test': C1_PWH   0.97
+C2_PWH   0.93
+C3_PWH   0.89
+C4_PWH   0.88
+B3_PWH   0.95
+B1_PWH   0.43
+D1_PWH   0.80
 dtype: float64}

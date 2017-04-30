@@ -45,58 +45,66 @@ def fetch_gjoa_data():
 
     X,Y=data_to_X_Y(data)
 
-    DROP = [900]
+    DROP = [900]#,443,605,442]
     X.drop(DROP, inplace=True)
     Y.drop(DROP, inplace=True)
 
 
-
-
-    #if FILENAME=='STABLE_GJOA_GAS_2017.csv':
-    #    X=set_index_values_to_zero(X, X['D3_CHK']!=0, 'D3_CHK')
-    #Y=add_diff(Y)
-
-    #Y=addModify(X,Y,'E1_PWH')
-    #X = addModify(Y, X, 'E1_PDC')
     X['time']=np.arange(0,len(X))
 
-    #test_bed(X,Y)
-    #print(Y.columns)
-    #plt.scatter(X['time'],Y['GJOA_QGAS'])
-    #plt.show()
 
     print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_QGAS']),np.mean(Y['GJOA_QGAS'])))
     print('Data size: {}'.format(len(Y)))
 
-    #test_bed(X, Y)
     ind_zero_all=None
     for key in well_names:
         ind_gas_zero = Y[key + '_QGAS'] == 0
-
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
-
         if ind_zero_all is None:
-            ind_zero_all = ind_gas_zero
+            ind_zero_all=ind_zero
         else:
-            ind_zero_all = ind_zero_all & ind_gas_zero
+            ind_zero_all=ind_zero_all&ind_zero
 
-        #X = set_index_values_to_zero(X, ind_zero, key + '_PWH')
-        #X = set_index_values_to_zero(X, ind_zero, key + '_PBH')
-        #X = set_index_values_to_zero(X, ind_zero, key + '_PDC')
 
-        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PWH')
-        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PBH')
-        #Y = set_index_values_to_zero(Y, ind_zero, key + '_PDC')
+        X = set_index_values_to_zero(X, ind_zero, key + '_CHK')
+        Y = set_index_values_to_zero(Y, ind_zero, key + '_QGAS')
 
-        X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
-    #Y = set_index_values_to_zero(Y, ind_zero_all, 'GJOA_QGAS')
+        X[key + '_shifted_CHK'] = X[key + '_CHK'].shift(1) * -1
+        X[key + '_shifted_PWH'] = X[key + '_PWH'].shift(1)
+        X[key + '_shifted_PDC'] = X[key + '_PDC'].shift(1)
+        X[key + '_shifted_PBH'] = X[key + '_PBH'].shift(1)
+
+        delta_CHK = X[key + '_CHK'] - X[key + '_CHK'].shift(1)
+
+        Y[key + '_delta_PWH'] = Y[key + '_PWH'] - Y[key + '_PWH'].shift(1)
+        Y[key + '_delta_PDC'] = Y[key + '_PDC'] - Y[key + '_PDC'].shift(1)
+        Y[key + '_delta_PBH'] = Y[key + '_PBH'] - Y[key + '_PBH'].shift(1)
+        X[key + '_delta_CHK'] = delta_CHK
+        Y[key + '_delta_CHK'] = delta_CHK
+
+    Y = set_index_values_to_zero(Y, ind_zero_all, 'GJOA_QGAS')
+
     GjoaData=DataContainer(X,Y,name='GJOA',csv_path=MEAN_PATH)
-    #for key in GjoaData.X.columns:
-    #    print(GjoaData.X_transformed[key])
-    #    print('------------')
-    #exit()
-    #plt.scatter(X['time'], GjoaData.Y_transformed['B2_QGAS'])
-    #plt.show()
+    if False:
+        CTHRESH=10
+        ind_zero=None
+        chk_zero=None
+        for key in well_names:
+
+            if ind_zero is None:
+                ind_zero = abs(X[key + '_delta_CHK']) > CTHRESH
+                chk_zero = abs(X[key + '_CHK']) ==0
+                ind_zero=ind_zero#|ind_zero2
+            else:
+                ind_temp = abs(X[key + '_delta_CHK']) > CTHRESH
+                chk_zero_temp = abs(X[key + '_CHK']) == 0
+                ind_zero=ind_zero|ind_temp#|ind_zero2
+                chk_zero=chk_zero&chk_zero_temp
+        ind_zero=ind_zero|chk_zero
+        GjoaData.X =GjoaData.X[~ind_zero]
+        GjoaData.Y = GjoaData.Y[~ind_zero]
+        GjoaData.X_transformed = GjoaData.X_transformed[~ind_zero]
+        GjoaData.Y_transformed = GjoaData.Y_transformed[~ind_zero]
 
     if False:
 

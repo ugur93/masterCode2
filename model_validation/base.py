@@ -99,8 +99,10 @@ def get_choke_diff_deviation(model,data,X,Y):
         count, division = np.histogram(deviation_points)
         deviation_points.hist(bins=division)
         plt.show()
-
-def get_cumulative_deviation(model,data,X,Y):
+def get_chk_zero_ind(data,col):
+    name=col.split('_')[0]
+    return data[name+'_CHK']==0
+def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
 
     cols = model.output_tag_ordered_list
     deviation_range = np.arange(0, 30, 0.5)
@@ -109,6 +111,15 @@ def get_cumulative_deviation(model,data,X,Y):
 
     deviation_points = get_sample_deviation(measured, predicted)
     deviation_points.fillna(0, inplace=True)
+    deviation_points.replace(np.inf, 0,inplace=True)
+
+
+    if do_remove_zeros:
+        for col in cols:
+            if col.split('_')[0] != 'GJOA':
+                ind=get_chk_zero_ind(data.inverse_transform(X,'X'),col)
+                print(np.sum(ind))
+                deviation_points.loc[ind,col]=0
 
 
 
@@ -121,7 +132,8 @@ def get_cumulative_deviation(model,data,X,Y):
         for percentage in deviation_range:
             cumulative_deviation[col][percentage]=np.sum(deviation_points[col]<=percentage)/N*100
 
-    #print(cumulative_deviation)
+
+    print(deviation_points)
     #for i in deviation_points.index.values:
     #    print(deviation_points['B1_QGAS'].loc[[i]])
     return cumulative_deviation

@@ -62,16 +62,20 @@ def fetch_gjoa_data():
     #print('Data size: {}'.format(len(Y)))
 
     GjoaData=DataContainer(X,Y,name='GJOA2')
+    print(len(GjoaData.X))
     if False:
-        CTHRESH=20
+        CTHRESH=100
         ind_zero=None
         for key in well_names:
 
             if ind_zero is None:
                 ind_zero = abs(X[key + '_delta_CHK']) > CTHRESH
+                #ind_zero2 = abs(X[key + '_CHK']) ==0
+                ind_zero=ind_zero#|ind_zero2
             else:
                 ind_temp = abs(X[key + '_delta_CHK']) > CTHRESH
-                ind_zero=ind_zero&ind_temp
+                ind_zero2 = abs(X[key + '_CHK']) == 0
+                ind_zero=ind_zero|ind_temp|ind_zero2
 
         GjoaData.X =GjoaData.X[~ind_zero]
         GjoaData.Y = GjoaData.Y[~ind_zero]
@@ -83,49 +87,52 @@ def fetch_gjoa_data():
         GjoaData.Y = GjoaData.Y[~ind_zero]
         GjoaData.X_transformed = GjoaData.X_transformed[~ind_zero]
         GjoaData.Y_transformed = GjoaData.Y_transformed[~ind_zero]
-
+    print(len(GjoaData.X))
+    #exit()
     if False:
 
         #cols=['B3_PBH','B3_PDC','B3_PWH','B3_CHK']
 
-        fig,axes=plt.subplots(1,1,sharex=True)
+        #fig,axes=plt.subplots(1,1,sharex=True)
         #axes=axes.flatten()
 
 
-        axes.plot(Y['C1_CHK'],'.',ms=30)
+        #axes.scatter(X['C1_CHK'],Y['C1_QOIL'])
 
-        axes.set_xlabel('Time',fontsize=20)
-        axes.set_ylabel('O1 CHK',fontsize=20)
-        axes.tick_params(axis='both', labelsize=20)
+        #axes.set_xlabel('Time',fontsize=20)
+        #axes.set_ylabel('O1 CHK',fontsize=20)
+        #axes.tick_params(axis='both', labelsize=20)
         #plt.annotate('Outlier', xy=(808, 181.9), xytext=(790, 181),
          #            arrowprops=dict(facecolor='black', shrink=0.05),
          #            fontsize=20)
-        fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.1, left=0.08, right=0.99)
+        #fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.1, left=0.08, right=0.99)
         #axes[1].plot(Y['C2_QWAT'], '.')
         #axes[1].plot(Y['C1_PWH'].shift(-1)-Y['C1_PWH'])
         #plt.figure()
         #plt.plot(X['C1_PWH'])
         plt.show()
         cols=[]
-        for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
-            cols.append(key+'_'+'CHK')
-        cols.append('C1' + '_' + 'QWAT')
-        #cols.append('GJOA_RISER_OIL_B_CHK')
-        fig,axes=plt.subplots(len(cols),1,sharex=True)
-        #axes=[axes]
-        #plt.scatter(Y['B1_QOIL'],X['B1_CHK'])
-        #plt.show()
+        for key1 in well_names:
+            cols=[]
+            for key in ['CHK','PBH','PWH','PDC','QOIL']:#['QGAS','PBH','PDC','PWH','CHK']:
+                cols.append(key1+'_'+key)
+            #cols.append('B1' + '_' + 'QGAS')
+            #cols.append('GJOA_RISER_OIL_B_CHK')
+            fig,axes=plt.subplots(len(cols),1,sharex=True)
+            #axes=[axes]
+            #plt.scatter(Y['B1_QOIL'],X['B1_CHK'])
+            #plt.show()
 
-        for i,key in zip(range(0,len(cols)),cols):
-            try:
-                axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='blue')
-            except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
-                #axes[i].hist( (GjoaData.Y[key])**2)
-            axes[i].set_title(key)
-            axes[i].set_xlabel('Time')
-            axes[i].set_ylabel(key)
-            fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
+            for i,key in zip(range(0,len(cols)),cols):
+                try:
+                    axes[i].scatter(X['time'], GjoaData.X[key], color='blue')
+                except(KeyError):
+                    axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
+                    #axes[i].hist( (GjoaData.Y[key])**2)
+                axes[i].set_title(key)
+                axes[i].set_xlabel('Time')
+                axes[i].set_ylabel(key)
+                fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
 
@@ -160,11 +167,13 @@ def data_to_X_Y(data):
 def calculate_sum_multiphase(Y):
     tags_OIL = []
     tags_GAS = []
+    #sum_oil2=np.zeros((len(Y),))
     for key in well_names:
         name_oil = key + '_' + 'QOIL'
         name_qgas = key + '_' + 'QGAS'
         tags_OIL.append(name_oil)
         tags_GAS.append(name_qgas)
+        #sum_oil2+=Y[name_oil]
 
     sum_oil = Y[tags_OIL].sum(axis=1)
     sum_gas = Y[tags_GAS].sum(axis=1)
@@ -174,99 +183,66 @@ def calculate_sum_multiphase(Y):
 
 
 def set_chk_zero_values_to_zero(X,Y):
-    ind_delta_chk=None
 
-    ind_zero = X['C1_CHK'] <5
+
 
 
 
     for key in well_names:
-        ind_gas_zero = Y[key + '_QGAS'] == 0
-        ind_oil_zero = Y[key + '_QOIL'] == 0
 
 
 
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
-
-        #X = X[~ind_zero]
-        #Y = Y[~ind_zero]
 
         X[key+'_1_PBH']=X[key+'_PBH'].copy()
 
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QOIL')
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QGAS')
         X = set_index_values_to_zero(X, ind_zero, key + '_CHK')
-        X = set_index_values_to_zero(X, ind_oil_zero, key + '_CHK')
-        X = set_index_values_to_zero(X, ind_gas_zero, key + '_CHK')
-        #model=Ridge()
-        #Xt=np.arange(0,len(X),1).reshape(len(X),1)
-        #Yt=Y[key+'_PBH'].values.reshape(len(Xt),1)
-        #model.fit(Xt,Yt)
-        #Y[key+'_stat_PBH']=Yt-model.predict(Xt)
+
         X[key+'_shifted_CHK']=X[key+'_CHK'].shift(1)*-1
-        X[key +'_shifted_PWH'] = Y[key + '_PWH'].shift(1)
+        X[key +'_shifted_PWH'] = X[key + '_PWH'].shift(1)
         X[key + '_shifted_PDC'] = X[key + '_PDC'].shift(1)
         X[key + '_shifted_PBH'] = X[key + '_PBH'].shift(1)
+
+
         delta_CHK = X[key+'_CHK']-X[key+'_CHK'].shift(1)
-        delta_Pres_PWH =  Y[key+'_PWH']-Y[key+'_PWH'].shift(1)
-        delta_Pres_PDC =  Y[key + '_PDC']-Y[key + '_PDC'].shift(1)
-        delta_Pres_PBH= Y[key + '_PBH']-Y[key + '_PBH'].shift(1)
 
-
-
-        #ind=abs(delta_CHK) < 0.05
-        #delta_CHK[ind]=0
-
-        ind_delta_chk_zero = abs(delta_CHK) < 0.05
-        if ind_delta_chk is None:
-            ind_delta_chk = ind_delta_chk_zero
-        else:
-            ind_delta_chk = ind_delta_chk & ind_delta_chk_zero
-
-        Y[key + '_delta_PWH'] = delta_Pres_PWH
-        Y[key + '_delta_PDC'] = delta_Pres_PDC
-        Y[key + '_delta_PBH'] = delta_Pres_PBH
+        Y[key + '_delta_PWH'] = Y[key+'_PWH']-Y[key+'_PWH'].shift(1)
+        Y[key + '_delta_PDC'] = Y[key + '_PDC']-Y[key + '_PDC'].shift(1)
+        X[key + '_delta_PDC'] = X[key + '_PDC'] - X[key + '_PDC'].shift(1)
+        Y[key + '_delta_PBH'] =Y[key + '_PBH']-Y[key + '_PBH'].shift(1)
         X[key + '_delta_CHK'] = delta_CHK
         Y[key + '_delta_CHK'] = delta_CHK
 
-
-
-
-
-
-
-        X[key + '_CHK_zero'] = np.array([0 if x < CHK_THRESHOLD else 1 for x in X[key + '_CHK']])
 
     delta_CHK =  X['GJOA_RISER_OIL_B_CHK']-X['GJOA_RISER_OIL_B_CHK'].shift(1)
     X['GJOA_RISER_OIL_B_shifted_CHK'] = X['GJOA_RISER_OIL_B_CHK'].shift(1)*-1
     X['GJOA_RISER_delta_CHK']=delta_CHK
     Y['GJOA_RISER_delta_CHK'] = delta_CHK
+    if False:
+        from mpl_toolkits.mplot3d import Axes3D
+        plt.plot(Y['C1_delta_PWH'],color='red')
+        plt.plot(X['C1_PWH'],color='blue')
+        plt.plot(X['C1_shifted_PWH'],color='green')
+        plt.show()
 
-    #for key in well_names:
-    #    Y[key + '_delta_PWH'][ind_delta_chk] = 0
-    #    Y[key + '_delta_PDC'][ind_delta_chk]  = 0
-    #    Y[key + '_delta_PBH'][ind_delta_chk]  = 0
+        #fig = plt.figure()
+        #ax = fig.add_subplot(111, projection='3d')
+       #
+        #  ax.scatter(Y['C1_CHK'],Y['C1_PBH'],Y['C1_PWH'])
+       # ax.set_xlabel('CHK')
+       # ax.set_ylabel('PBH')
+        #ax.set_zlabel('PWH')
+        plt.show()
 
-
-    #ind_zero = abs(X['C1_delta_CHK']) <0.01
-
-    #X = X[~ind_zero]
-    #Y = Y[~ind_zero]
-
-    #fig, axes=plt.subplots(1,1,sharex=True)
-
-    #axes=axes.flatten()
-    #axes.scatter(X['C1_delta_CHK'],Y['C1_delta_PWH'])
-    #plt.show()
-
-
-
-    #Y = set_index_values_to_zero(Y, ind_zero_gas_all,'GJOA_OIL_QGAS')
     return X,Y
 
 def preprocesss(X,Y):
-    DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
-    DROP_OIL=list(range(110,200))
+    #DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
+    DROP=[416,447,487,808,173,806,819,820,821,822]
+
+    DROP_OIL=[287,130,132,292,290,196]
 
     #DROP=DROP+DROP_OIL
     X['time'] = np.arange(0, len(X))
@@ -292,10 +268,10 @@ def preprocesss(X,Y):
 
         plt.show()
 
+    X, Y = set_chk_zero_values_to_zero(X, Y)
 
     X.drop(DROP, inplace=True)
     Y.drop(DROP, inplace=True)
-    X, Y = set_chk_zero_values_to_zero(X, Y)
     #X.loc[114:129, 'GJOA_RISER_OIL_B_CHK'] = 0
 
 

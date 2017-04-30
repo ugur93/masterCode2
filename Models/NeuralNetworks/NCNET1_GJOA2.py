@@ -28,18 +28,19 @@ K.set_image_dim_ordering('th')
 #GAS Best params:{'n_width': 100, 'l2w': 0.00015000000000000001, 'n_depth': 2, 'seed': 3014}
 #OIL Best params:{'n_width': 60, 'l2w': 0.001, 'n_depth': 2, 'seed': 3014},Best params:{'n_width': 90, 'l2w': 0.0007, 'n_depth': 3, 'seed': 3014}
 sas=5708
-OUT = 'GASs'
+OUT = 'GAS'
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2 ,n_width=20,l2w=0.0005,dp_rate=0,seed=3014):
+    def __init__(self,n_depth=2,n_width=100,l2w=0.0002,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
 
 
 
         self.input_tags = {}
 
         self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+
 
         measurement_tags = ['CHK','PBH', 'PWH','PDC']
         for name in self.well_names:
@@ -67,16 +68,16 @@ class NCNET1_GJOA2(NN_BASE):
             'GJOA_TOTAL': 1.0,
         }
 
-        self.output_layer_activation = 'relu'
+        self.output_layer_activation = output_act
 
         # Training config
         optimizer = 'adam'
         loss =huber
-        nb_epoch = 10000
+        nb_epoch = n_epoch
         batch_size = 64
         self.activation='relu'
 
-        self.model_name ='GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL_CVNET'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 
@@ -90,6 +91,9 @@ class NCNET1_GJOA2(NN_BASE):
 
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
+        print('Training with params:\n n_width: {}\n n_depth: {}\n l2_weight: {}\n'
+              'dp_rate: {}\n seed: {}\n loss: {}\n optimizer: {}\n nb_epoch: {}\n'
+              'batch_size: {}\n output_activation: {}'.format(self.n_width,self.n_depth,self.l2weight,self.dp_rate,self.seed,self.optimizer,self.loss,self.nb_epoch,self.batch_size,self.output_layer_activation))
 
         aux_inputs=[]
         inputs=[]
@@ -175,7 +179,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
     def update_model(self):
-        self.nb_epoch=5000
+        self.nb_epoch=10000
         self.output_layer_activation='relu'
         self.aux_inputs=[]
         self.inputs=[]
@@ -218,11 +222,11 @@ class ENSEMBLE(NN_BASE):
         n_depth = 2
         self.n_depth_incept=3
         self.n_width_incept=50
-        n_width = 100
+        n_width = 60
         seed=3014
 
 
-        l2weight = 0.1
+        l2weight = 0.0001
         self.models=[]
 
 
@@ -232,6 +236,7 @@ class ENSEMBLE(NN_BASE):
         self.input_tags = {}
 
         self.well_names = ['C1','C2', 'C3', 'C4','B1','B3','D1']
+        self.well_names = ['F1', 'B2', 'D3', 'E1']
 
         tags = ['CHK','PBH','PWH','PDC']
 
@@ -246,20 +251,26 @@ class ENSEMBLE(NN_BASE):
 
         OUT='GAS'
         if OUT=='GAS':
-            self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
+            self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
         else:
             self.output_tags = OIL_WELLS_QOIL_OUTPUT_TAGS
 
         self.loss_weights = {
-            'B1_out':  0.0,
-            'B3_out':  0.0,
-            'C2_out':  0.0,
-            'C3_out':  0.0,
-            'D1_out':  0.0,
-            'C4_out':  0.0,
-            'C1_out':  0.0,
+            #'B1_out':  0.0,
+            #'B3_out':  0.0,
+            #'C2_out':  0.0,
+            #'C3_out':  0.0,
+            #'D1_out':  0.0,
+            #'C4_out':  0.0,
+            #'C1_out':  0.0,
 
-            'GJOA_TOTAL': 1.0,
+            #'GJOA_TOTAL': 1.0,
+
+            'F1_out': 0.0,
+            'B2_out': 0.0,
+            'D3_out': 0.0,
+            'E1_out': 0.0,
+            'GJOA_QGAS': 1.0
 
 
         }
@@ -283,7 +294,7 @@ class ENSEMBLE(NN_BASE):
             inputs.append(input)
             merged_outputs.append(merged_out)
 
-        merged_input = Add(name='GJOA_TOTAL')(merged_outputs)
+        merged_input = Add(name='GJOA_QGAS')(merged_outputs)
 
         all_outputs = merged_outputs + [merged_input]
         all_inputs = inputs

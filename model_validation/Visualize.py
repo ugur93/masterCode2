@@ -45,7 +45,7 @@ def ends_with(name,end_tag):
     if name.split('_')[-1] == end_tag:
         return True
     return False
-def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[]):
+def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[],with_line_plot=False,with_separate_plot=False):
 
     remove_zero_chk=False
     #plot_history(model)
@@ -54,7 +54,7 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
     #plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
-    plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
+    plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk,with_separate_plot=with_separate_plot,with_line_plot=with_line_plot)
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
     #plt.show()
@@ -391,7 +391,7 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
         ax.set_title(output_tag + '-' + 'Residuals (true-pred)')
 
 
-def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=[],remove_zero_chk=False):
+def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=[],remove_zero_chk=False,with_line_plot=False,with_separate_plot=False):
     if len(output_cols) == 0:
         output_cols = model.output_tag_ordered_list
 
@@ -410,15 +410,19 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
         #N_PLOTS=count_number_of_cols_that_ends_with(output_cols,'QGAS')
         sp_y, sp_x = get_suplot_dim(N_PLOTS)
         #N_PLOTS=sp_y=sp_x=1
-        i = 0
-        fig_sub, axes = plt.subplots(sp_y, sp_x)
-        #print(len(axes))
-        if N_PLOTS>1:
-            axes = axes.flatten()
-            if N_PLOTS!=sp_y*sp_x:
-                 fig_sub.delaxes(axes[-1])
+        if with_separate_plot==False:
+            i = 0
+            fig_sub, axes = plt.subplots(sp_y, sp_x)
+            #print(len(axes))
+            if N_PLOTS>1:
+                axes = axes.flatten()
+                if N_PLOTS!=sp_y*sp_x:
+                     fig_sub.delaxes(axes[-1])
         for output_tag in output_cols:
-                #fig_sub, axes = plt.subplots(sp_y, sp_x)
+                if with_separate_plot:
+                    N_PLOTS=1
+                    sp_y, sp_x = get_suplot_dim(N_PLOTS)
+                    fig_sub, axes = plt.subplots(sp_y, sp_x)
             #if ends_with(output_tag,'QGAS'):
                 if output_tag in OUTPUT_COLS_ON_SINGLE_PLOT:
                     fig_single,ax=plt.subplots(1,1)
@@ -437,16 +441,16 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                     zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
                     #print(zero_chk_param)
 
-
-                ax=get_line_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
+                if with_line_plot:
+                    ax=get_line_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
 
                 #ax.set_title(output_tag, fontsize=20)
                 #ax.set_ylabel(output_tag.split('_')[-1], fontsize=20)
                 #ax.set_xlabel('Time', fontsize=20)
 
-
-                #ax = get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
-                #                   y_tag=output_tag, remove_zero_chk=zero_chk_param)
+                else:
+                    ax = get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
+                                   y_tag=output_tag, remove_zero_chk=zero_chk_param)
                 # plt.tight_layout()
                 ax.set_title(output_tag,fontsize=20)
                 ax.set_ylabel(output_tag.split('_')[-1],fontsize=20)
