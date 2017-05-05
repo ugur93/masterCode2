@@ -61,7 +61,7 @@ def fetch_gjoa_data():
     #print('MAX: {}, MEAN: {}'.format(np.max(Y['GJOA_TOTAL_SUM_QOIL']), np.mean(Y['GJOA_TOTAL_SUM_QOIL'])))
     #print('Data size: {}'.format(len(Y)))
 
-    GjoaData=DataContainer(X,Y,name='GJOA2')
+    GjoaData=DataContainer(X,Y,name='GJOA2',well_names=well_names)
     print(len(GjoaData.X))
     if False:
         CTHRESH=10

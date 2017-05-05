@@ -129,7 +129,7 @@ def validate_train_test_split(Data):
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5', by_name=True)
+        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5', by_name=True)
        # exit()
 
         # model.initialize_zero_thresholds(Data)
@@ -144,7 +144,7 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        model.fit(X_train, Y_train, X_val, Y_val)
+        #model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
     scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)

@@ -37,8 +37,9 @@ def get_cols_that_ends_with(df,tag):
 
 
 class CustomScaler:
-    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path='',type='X'):
+    def __init__(self,with_minmax=False,with_mean=False, with_std=False,with_mean_from_csv=False,csv_path='',type='X',well_names=[]):
         self.type=type
+        self.well_names=well_names
         self.SCALES={
                      'PRESSURES3':100,
                       'PRESSURES2':50,
@@ -108,6 +109,19 @@ class CustomScaler:
         #print(data_transformed)
         return data_transformed
 
+    def change_scale_of_shifted_variables(self):
+        for key in self.well_names:
+            self.std[key + '_shifted_PDC'] = self.std[key + '_PDC']
+            self.std[key + '_shifted_PWH'] = self.std[key + '_PWH']
+            self.std[key + '_shifted_PBH'] = self.std[key + '_PBH']
+            if self.type == 'X':
+                self.std[key + '_shifted_CHK'] = self.std[key + '_CHK']
+                self.mean[key + '_shifted_CHK'] = self.mean[key + '_CHK']
+
+            self.mean[key + '_shifted_PDC'] = self.mean[key + '_PDC']
+            self.mean[key + '_shifted_PWH'] = self.mean[key + '_PWH']
+            self.mean[key + '_shifted_PBH'] = self.mean[key + '_PBH']
+
     def inverse_transform(self,data):
 
         data_transformed = data.copy()
@@ -144,7 +158,7 @@ class CustomScaler:
         #print(self.std)
         self.minmax_scale=data_transformed.max()-data_transformed.min()
         self.minmax_min=data_transformed.min()
-        print(self.mean)
+        self.change_scale_of_shifted_variables()
 
 
         return self.transform(data)
@@ -164,7 +178,7 @@ class CustomScaler:
 
 
 class DataContainer:
-    def __init__(self,X,Y,name='unnamed',csv_path=''):
+    def __init__(self,X,Y,name='unnamed',csv_path='',well_names=[]):
         self.name=name
         self.X=X
         self.Y=Y
@@ -177,8 +191,8 @@ class DataContainer:
         self.X_transformed=None
         self.Y_transformed=None
 
-        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False,type='X')
-        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=True,with_std=False,type='Y')
+        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False,type='X',well_names=well_names)
+        self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=True,with_std=False,type='Y',well_names=well_names)
 
         self.init_transform()
         #print(np.max(self.X_transformed))

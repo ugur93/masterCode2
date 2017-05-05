@@ -84,7 +84,7 @@ def fetch_gjoa_data():
 
     Y = set_index_values_to_zero(Y, ind_zero_all, 'GJOA_QGAS')
 
-    GjoaData=DataContainer(X,Y,name='GJOA',csv_path=MEAN_PATH)
+    GjoaData=DataContainer(X,Y,name='GJOA',csv_path=MEAN_PATH,well_names=well_names)
     if False:
         CTHRESH=10
         ind_zero=None

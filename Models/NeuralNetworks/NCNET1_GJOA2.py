@@ -39,7 +39,7 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.input_tags = {}
 
-        self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+        self.well_names = ['C1', 'C3']#, 'C3', 'C4', 'B1', 'B3', 'D1']
 
 
         measurement_tags = ['CHK','PBH', 'PWH','PDC']
@@ -120,7 +120,8 @@ class NCNET1_GJOA2(NN_BASE):
 
         self.model = Model(inputs=all_inputs, outputs=all_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
-
+        print(self.model.summary())
+        exit()
     def initialize_model2(self):
         print('Initializing %s' % (self.model_name))
 

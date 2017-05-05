@@ -27,8 +27,8 @@ FONTSIZEX=25
 FONTSIZEY=25
 FONTSIZETITLE=30
 TRUE_DATA_TAG='(MPFM)'
-PREDICTED_DATA_TAG='(Estimate)'
-
+PREDICTED_DATA_TAG='(Prediction)'
+TICK_STEP_SIZE=10
 
 
 TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
@@ -85,7 +85,7 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
     #plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
-    plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk,with_separate_plot=with_separate_plot,with_line_plot=with_line_plot)
+    #plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk,with_separate_plot=with_separate_plot,with_line_plot=with_line_plot)
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
     #plt.show()
@@ -302,6 +302,12 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
         axes_tot.set_axisbelow(True)
         axes_tot.set_xlim([-0.1, 2])
         axes_wells[ii].set_xlim([-0.1, 21])
+        axes_wells[ii].set_ylim([20, 105])
+        axes_tot.set_ylim([20, 105])
+
+        #axes_tot.yaxis.set_ticks(np.arange(0, 110, TICK_STEP_SIZE))
+        #axes_wells[ii].yaxis.set_ticks(np.arange(0, 110, TICK_STEP_SIZE))
+
         for i in range(len(cumperf.columns) - 1):
             axes_wells[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=KEY_MAP[cumperf.columns[i]],
                           color=colors[i])
@@ -387,11 +393,11 @@ def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
 
     get_cumulative_deviation_plot_single(cumperf_train, cumperf_test,model.model_name)
 
-    cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
-    cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
+    #cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
+    #cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
 
-    get_cumulative_flow_plot(cumperf_train, 'Training')
-    get_cumulative_flow_plot(cumperf_test, 'Test')
+    #get_cumulative_flow_plot(cumperf_train, 'Training')
+    #get_cumulative_flow_plot(cumperf_test, 'Test')
     #get_cumulative_performance_plot_single(cumperf_test,'Test')
 
 
