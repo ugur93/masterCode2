@@ -33,7 +33,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2,n_width=100,l2w=0.0002,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
+    def __init__(self,n_depth=2,n_width=100,l2w=0.0002,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000,DATA='GAS'):
 
 
 
@@ -51,7 +51,7 @@ class NCNET1_GJOA2(NN_BASE):
                 else:
                     self.input_tags[name].append(name + '_' + tag)
 
-        if OUT == 'GAS':
+        if DATA == 'GAS':
             self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
         else:
             self.output_tags = OIL_WELLS_QOIL_OUTPUT_TAGS
@@ -77,7 +77,7 @@ class NCNET1_GJOA2(NN_BASE):
         batch_size = 64
         self.activation='relu'
 
-        self.model_name ='GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL_CVNET'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 
@@ -178,9 +178,9 @@ class NCNET1_GJOA2(NN_BASE):
         return aux_input, input_layer, merged_output, output_layer
 
 
-    def update_model(self):
-        self.nb_epoch=10000
-        self.output_layer_activation='relu'
+    def update_model(self,activation='relu',epoch=10000):
+        self.nb_epoch=epoch
+        self.output_layer_activation=activation
         self.aux_inputs=[]
         self.inputs=[]
         self.merged_outputs=[]

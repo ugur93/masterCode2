@@ -120,6 +120,11 @@ class NN_BASE:
     def get_history(self):
         return self.history.losses
 
+    def get_weights(self):
+        return self.model.get_weights()
+    def set_weights(self,init_weights):
+        self.model.set_weights(init_weights)
+
     def get_layer_weights(self,layer_name):
         return self.model.get_layer(layer_name).get_weights()
 
@@ -205,22 +210,17 @@ class NN_BASE:
     def initialize_chk_thresholds(self,data,scaled=True):
 
         chk_cols=[]
-        output_cols=tags_to_list(self.output_tags)
         for tag in self.well_names:
             chk_cols.append(tag+'_'+'CHK')
 
-        #output_threshold=pd.DataFrame(data=np.zeros((1,len(output_cols))))
-        chk_threshold_data=pd.DataFrame(data=self.chk_threshold_value*np.ones((1,len(chk_cols))),columns=chk_cols)
-        #print(chk_threshold_data.shape)
-        thresh_transformed=data.transform(chk_threshold_data,'X')
-        #print(thresh_transformed)
-        self.chk_thresh_val=np.min(thresh_transformed.values)
+        chk_threshold=pd.DataFrame(data=self.chk_threshold_value*np.ones((1,len(chk_cols))),columns=chk_cols)
+        thresh_transformed=data.transform(chk_threshold,'X')
+
         for col in thresh_transformed.columns:
             key=col.split('_')[0]
             self.chk_thresholds[key]=thresh_transformed[col][0]
 
-        #print(self.chk_thresholds)
-        #exit()
+
     def initialize_zero_thresholds(self,data):
 
         cols=tags_to_list(self.output_tags)

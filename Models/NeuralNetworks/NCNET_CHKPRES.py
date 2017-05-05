@@ -488,7 +488,7 @@ class PRESSURE_PWH3(NN_BASE):
 class PRESSURE(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.00001,seed=3014,dp_rate=0,tag='PWH'):
+    def __init__(self,n_depth=2 ,n_width=100,l2w=0.001,seed=3014,dp_rate=0,tag='PWH'):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
@@ -512,10 +512,10 @@ class PRESSURE(NN_BASE):
         dp_rate=0
 
 
-        self.chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+        self.chk_names=['C1', 'C2', 'C3', 'C4']#, 'B1', 'B3', 'D1']
 
         if self.tag=='PBH':
-            self.well_names = ['C1', 'C3', 'C4', 'B3', 'B1']
+            self.well_names = ['C1']#, 'C3', 'C4', 'B3', 'B1']
 
         else:
 
@@ -586,11 +586,13 @@ class PRESSURE(NN_BASE):
 
         self.model = Model(inputs=inputs, outputs=outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
+        print(self.model.summary())
+        exit()
 
 class PRESSURE_DELTA(NN_BASE):
 
 
-    def __init__(self,n_depth=1 ,n_width=50,l2w=0.0001,seed=3014,dp_rate=0,tag='PWH',data='OIL'):
+    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0001,seed=3014,dp_rate=0,tag='PWH',data='OIL'):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
@@ -618,9 +620,9 @@ class PRESSURE_DELTA(NN_BASE):
         else:
             self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
             if self.tag == 'PBH':
-                self.well_names = ['C1', 'C3', 'C4', 'B3', 'B1']
+                self.well_names = ['C1']#, 'C3', 'C4', 'B3', 'B1']
             else:
-                self.well_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
+                self.well_names = ['C1']#, 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
         self.delta_in=False
         self.input_tags={}
 
@@ -671,7 +673,7 @@ class PRESSURE_DELTA(NN_BASE):
                 self.loss_weights[key]=1.0
             else:
                 self.loss_weights[key]=0.0
-        print(self.loss_weights)
+
 
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
                          optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size,dp_rate=dp_rate)
@@ -719,6 +721,8 @@ class PRESSURE_DELTA(NN_BASE):
 
         self.model = Model(inputs=inputs, outputs=outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss)
+        print(self.model.summary())
+        exit()
 
 
     def initialize_model(self):
@@ -762,6 +766,7 @@ class PRESSURE_DELTA(NN_BASE):
 
         self.model = Model(inputs=inputs, outputs=outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss,loss_weights=self.loss_weights)
+
 
     def initialize_model3(self):
         print('Initializing %s' % (self.model_name))

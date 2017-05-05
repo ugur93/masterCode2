@@ -61,6 +61,15 @@ GAS_WELLS_QGAS_OUTPUT_TAGS= {
     'GJOA_QGAS': ['GJOA_QGAS']
 }
 
+SIM_OUTPUT_TAGS= {
+
+    'A_out': ['A_QGAS'],
+    'B_out': ['B_QGAS'],
+    'C_out': ['C_QGAS'],
+    'D_out': ['D_QGAS'],
+    'Total_production': ['Total_production']
+}
+
 
 
 
@@ -199,16 +208,12 @@ def plotModel(model,file_name):
 
 def add_OnOff_state_input(X,X_dict,thresholds):
     #print(thresholds)
-    new_X=X_dict.copy()
+    new_X_dict=X_dict.copy()
     for key in thresholds:
         OnOff_X=np.array([0 if x<thresholds[key] else 1 for x in X[key+'_CHK']])
-        OnOff_X=OnOff_X.reshape((len(OnOff_X),1))
-        new_X.update({'OnOff_'+key:OnOff_X})
-        new_X.update({'OnOff_1_' + key: OnOff_X})
-        new_X.update({'OnOff_2_' + key: OnOff_X})
-        new_X.update({'OnOff_PDC_' + key: OnOff_X})
-        new_X.update({'OnOff_PWH_' + key: OnOff_X})
-    return new_X
+        new_X_dict.update({'OnOff_'+key:OnOff_X})
+    return new_X_dict
+
 def add_output_threshold_input(X,X_dict,thresholds):
     new_X=X_dict.copy()
     N=len(X)
@@ -247,6 +252,7 @@ def output_tags_to_index(output_tags,output_layers):
     output_tag_index={}
     output_tag_ordered_list=[]
     i=0
+    print(output_tags)
     for layer_name,_,_ in output_layers:
         for tag_name in output_tags[layer_name]:
             output_tag_index[tag_name]=i

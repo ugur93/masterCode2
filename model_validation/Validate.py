@@ -27,13 +27,15 @@ def validate(DataOIL,DataGAS):
     #bagging_test(Data)
     validate_train_test_split(Data)
     #ensemble_learning_bagging(Data)
-    #grid_search3(Data)
+    #grid_searchCV(Data)
     #validateRepeat(Data)
-    #validateCV(Data)
+    #search_params = {'n_depth': 2, 'n_width': 100,
+    #                 'l2w': 0.0002, 'seed': 3014, 'DATA': 'GAS'}
+    #validateCV(Data,params=search_params,save=True)
 
 def validate_train_test_split(Data):
-    X = Data.X_transformed#[500:-1]
-    Y = Data.Y_transformed#[500:-1]
+    X = Data.X_transformed#[1:-1]#[500:-1]
+    Y = Data.Y_transformed#[1:-1]#[500:-1]
 
 
     #subsample(X,Y)
@@ -72,11 +74,11 @@ def validate_train_test_split(Data):
     #pressure_weights=
     if DATA_TYPE=='GAS':
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
-        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.2, val_size=0.1)
         #model=NCNET_CHKPRES.PRESSURE_PDC(Data)
         #model=NCNET_CHKPRES.PRESSURE_PWH(Data)
-        #model = NET2_PRESSURE.SSNET2()
-        model = NCNET1_GJOA2.ENSEMBLE(PATHS)
+        model = NET2_PRESSURE.SSNET2()
+        #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PWH', data='GAS')
 
         #
@@ -90,13 +92,13 @@ def validate_train_test_split(Data):
         # model.initialize_zero_thresholds(Data)
         start = time.time()
         print(model.get_config())
-        #model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5', by_name=True)
+        #model.model.load_weights(PATH + 'SIM_DATA_WITH_ONOFF.h5', by_name=True)
         # print(model.model.get_config())
         #model.fit(X_train,Y_train,X_val,Y_val)
 
         # Fit with old data
         #model.update_model()
-        #model.fit(X_train, Y_train, X_val, Y_val)
+        model.fit(X_train, Y_train, X_val, Y_val)
         #X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.0, val_size=0.2)
     else:
         #GJOA_QOIL
@@ -105,6 +107,8 @@ def validate_train_test_split(Data):
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
         X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
         model=NCNET1_GJOA2.NCNET1_GJOA2()
+
+
         #model=NCNET1_GJOA2.ENSEMBLE(PATHS)
         #model.model.load_weights(PATH+'GJOA_OIL_WELLS_GAS_MODEL22.h5')
         #model = NCNET1_GJOA2.ENSEMBLE(PATHS)
@@ -112,7 +116,9 @@ def validate_train_test_split(Data):
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PBH()
 
-        #model = NCNET_CHKPRES.PRESSURE(tag='PDC')
+        #model = NCNET_CHKPRES.PRESSURE(tag='PBH')
+
+        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PDC',data='OIL')
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE2(PATH)
@@ -123,11 +129,13 @@ def validate_train_test_split(Data):
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
-        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5', by_name=True)
        # exit()
 
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
+        #validateCV(model, model.get_weights(), Data, save=True)
+        #exit()
         # model.initialize_zero_thresholds(Data)
         start = time.time()
         print(model.get_config())
@@ -136,14 +144,15 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        model.fit(X_train[1:-1], Y_train[1:-1], X_val, Y_val)
+        model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
-    scores, scores_latex = evaluate_model2(model, Data, X_train[1:-1], X_val, Y_train[1:-1], Y_val)
+    scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
+    scores=evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
     print(scores)
     with_line_plot=False
-    with_separate_plot=False
-   # model.save_model_to_file(model.model_name)
+    with_separate_plot=True
+    #   model.save_model_to_file(model.model_name)
    # exit()
     #model.save_model_config(scores)
 
@@ -172,20 +181,20 @@ def validate_train_test_split(Data):
             axes[0].legend()
 
             if model.type=='DELTA':
-                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_CHK'], label=name + '_CHK')
-                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_shifted_CHK'] * -1, color='red',
+                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_CHK'], '.', label=name + '_CHK')
+                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_shifted_CHK'] * -1, '.', color='red',
                              label=name + '_shifted_CHK')
                 for key in model.chk_names:
-                    axes[1].plot(Data.inverse_transform(X,'X')[key+'_delta_CHK'],label=key+'_delta_CHK')
+                    axes[1].plot(Data.inverse_transform(X,'X')[key+'_delta_CHK'], '.',label=key+'_delta_CHK')
                 if DATA_TYPE!='GAS' and model.tag=='PDC':
-                    axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_delta_CHK'], label='GJOA_RISER_delta_CHK')
+                    axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_delta_CHK'], '.', label='GJOA_RISER_delta_CHK')
                 axes[1].legend()
-                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_shifted_' + tag], color='red',
+                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_shifted_' + tag], '.', color='red',
                              label=name + '_prev_' + tag)
-                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_' + tag], color='blue', label=name + '_now_' + tag)
-                axes[2].plot(Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag], color='green',
+                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_' + tag], '.', color='blue', label=name + '_now_' + tag)
+                axes[2].plot(Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag], '.', color='green',
                              label=name + '_delta_' + tag)
-                axes[2].plot(Data.inverse_transform(Y_p, 'Y')[name + '_delta_' + tag], color='orange',
+                axes[2].plot(Data.inverse_transform(Y_p, 'Y')[name + '_delta_' + tag], '.',color='orange',
                              label=name + '_delta_' + tag + '_predicted')
                 plt.legend()
             else:
@@ -222,61 +231,28 @@ def validate_train_test_split(Data):
 
 
 
-def validateRepeat(Data):
-    X, Y, X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(Data, test_size=0.0, val_size=0.1)
 
-    N_REPEAT=10
+def train_and_evaluate(model,Data,X_train,X_val,Y_train,Y_val):
 
 
-    mse_train_list=[]
-    mse_test_list=[]
-    r2_train_list=[]
-    r2_test_list=[]
+    model.update_model(activation='linear',epoch=1)
+    model.fit(X_train,Y_train,X_val,Y_val)
+
+    model.update_model(activation='relu',epoch=10000)
+    model.fit(X_train, Y_train, X_val, Y_val)
+
+    return evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
 
 
-    for i in range(N_REPEAT):
-        print('Training status: \n N_REPEAT= {}\n STATUS: {}\n '.format(N_REPEAT,i))
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
-        #model = NN1.SSNET1()
-        model = NCNET1_GJOA2.NCNET1_GJOA2()
-        #model = NCNET_VANILLA_GJOA2.NCNET_VANILLA()
-        #model=NET2_PRESSURE.SSNET2()
-        model.initialize_chk_thresholds(Data, True)
-        conf=model.get_config()
-        model_name=model.model_name
-        model.fit(X_train, Y_train, X_val, Y_val)
-        model.update_model()
-        model.fit(X_train, Y_train, X_val, Y_val)
-        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2,cols = model.evaluate(Data,X_train, X_val, Y_train,Y_val)
-        del model
-        #ind=cols.index()
-        #print(cols)
-        mse_train_list.append(score_train_MSE)
-        mse_test_list.append(score_test_MSE)
-        r2_train_list.append(score_train_r2)
-        r2_test_list.append(score_test_r2)
-
-    MSE_TRAIN=np.mean(mse_train_list,axis=0)
-    MSE_TEST=np.mean(mse_test_list,axis=0)
-    R2_TEST=np.mean(r2_test_list,axis=0)
-    R2_TRAIN=np.mean(r2_train_list,axis=0)
-
-    s=print_scores(Data, Y_train, Y_val, MSE_TRAIN, MSE_TEST, R2_TRAIN, R2_TEST, cols)
-
-
-    save_to_file(model_name + '_NREPEAT' + str(N_REPEAT)+'_results_QOIL_CHK_7_THIS',conf+s+'\n NREPEAT: '+str(N_REPEAT))
-
-
-
-def validateCV(Data,params=None,save=True):
+def validateCV(model,init_weights,Data,params=None,save=True):
     X = Data.X_transformed
     Y = Data.Y_transformed
 
 
     X, Y, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0, val_size=0)
 
-    X.drop([0], inplace=True)
-    Y.drop([0], inplace=True)
+    #X.drop([0], inplace=True)
+    #Y.drop([0], inplace=True)
 
 
     kfold=model_selection.KFold(n_splits=5,random_state=False)
@@ -292,135 +268,82 @@ def validateCV(Data,params=None,save=True):
     #print(chkInputs.index)
     i=1
 
-    filename='GJOA_OIL_WELLS_OIL_1'
+    filename='GJOA_OIL_WELLS_GAS_FINAL'
 
 
-    init_weights=None
 
     for train_index,test_index in kfold.split(X.index):
 
-        #model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='linear',n_epoch=1)
-        model = NET2_PRESSURE.SSNET2(**params,output_act='linear',n_epoch=1)
-        if init_weights is None:
-            init_weights=model.model.get_weights()
-        else:
-            model.model.set_weights(init_weights)
-        #model = NCNET_CHKPRES.PRESSURE(**params, tag='PWH')
-        model.initialize_chk_thresholds(Data, True)
+        model.set_weights(init_weights)
+
 
         X_train=X.iloc[train_index]
         X_val=X.iloc[test_index]
         Y_train=Y.iloc[train_index]
         Y_val=Y.iloc[test_index]
-        model.fit(X_train,Y_train,X_val,Y_val)
 
-        # Fit with old data
-        model.update_model()
-        model.fit(X_train, Y_train,X_val,Y_val)
-        scores= evaluate_model(model,Data, X_train, X_val, Y_train, Y_val)
-        #print(scores)
+
+        scores=train_and_evaluate(model,Data,X_train,X_val,Y_train,Y_val)
 
         if scores_rmse_train is None:
             scores_rmse_train=scores['RMSE_train'].to_frame().T
             scores_rmse_test = scores['RMSE_test'].to_frame().T
             scores_r2_train = scores['R2_train'].to_frame().T
             scores_r2_test = scores['R2_test'].to_frame().T
+            scores_mape_train = scores['MAPE_train'].to_frame().T
+            scores_mape_test = scores['MAPE_test'].to_frame().T
         else:
             scores_rmse_train=scores_rmse_train.append(scores['RMSE_train'].to_frame().T)
             scores_rmse_test=scores_rmse_test.append(scores['RMSE_test'].to_frame().T)
             scores_r2_train=scores_r2_train.append(scores['R2_train'].to_frame().T)
             scores_r2_test=scores_r2_test.append(scores['R2_test'].to_frame().T)
+            scores_mape_train = scores_mape_train.append(scores['MAPE_train'].to_frame().T)
+            scores_mape_test = scores_mape_test.append(scores['MAPE_test'].to_frame().T)
+
 
         print(scores_rmse_test)
-        del model
-        i+=1
+        print(scores_mape_test)
+
 
     scores_rmse_train.set_index(pd.Index(range(0,len(scores_rmse_train))))
     scores_rmse_test.set_index(pd.Index(range(0, len(scores_rmse_test))))
     scores_r2_train.set_index(pd.Index(range(0, len(scores_r2_train))))
     scores_r2_test.set_index(pd.Index(range(0, len(scores_r2_test))))
+    scores_mape_train.set_index(pd.Index(range(0, len(scores_mape_train))))
+    scores_mape_test.set_index(pd.Index(range(0, len(scores_mape_test))))
 
     RMSE_TRAIN = np.mean(scores_rmse_train)
     RMSE_TEST = np.mean(scores_rmse_test)
     R2_TRAIN = np.mean(scores_r2_train)
     R2_TEST = np.mean(scores_r2_test)
+    MAPE_TRAIN = np.mean(scores_mape_train)
+    MAPE_TEST = np.mean(scores_mape_test)
+
+    print(MAPE_TRAIN)
+    print(MAPE_TEST)
 
 
     if save:
         s='RMSE_TRAIN: \n{}\n'.format(RMSE_TRAIN)
         s += 'RMSE_TEST: \n{}\n'.format(RMSE_TEST)
+        s += 'R2_TRAIN: \n{}\n'.format(R2_TRAIN)
+        s += 'R2_TEST: \n{}\n'.format(R2_TEST)
+        s += 'sMAPE_TRAIN: \n{}\n'.format(MAPE_TRAIN)
+        s += 'sMAPE_TEST: \n{}\n'.format(MAPE_TEST)
         s += 'RMSE_TRAIN_SCORES: \n{}\n'.format(scores_rmse_train)
         s += 'RMSE_TEST_SCORES: \n{}\n'.format(scores_rmse_test)
+
+        s += 'sMAPE_TRAIN_SCORES: \n{}\n'.format(scores_mape_train)
+        s += 'sMAPE_TEST_SCORES: \n{}\n'.format(scores_mape_test)
+
+
 
         PATH = 'Models/NeuralNetworks/CV_results/' + filename
         f = open(PATH, 'w')
         f.write(s)
         f.close()
-
+    #exit()
     return {'RMSE_train':RMSE_TRAIN,'RMSE_test':RMSE_TEST,'R2_train':R2_TRAIN,'R2_test':R2_TEST}
-
-
-def validateCV2(Data,cv=10):
-    X = Data.X_transformed
-    Y = Data.Y_transformed
-
-
-
-    kfold=model_selection.KFold(n_splits=10,random_state=False)
-
-    scores_rmse_train=np.empty(shape=(0,))
-    scores_r2_test = np.empty(shape=(0,))
-    scores_rmse_test = np.empty(shape=(0,))
-    scores_r2_train = np.empty(shape=(0,))
-
-    rmse_train_list = None
-    rmse_test_list = None
-
-    #zprint scores
-    #print(chkInputs.index)
-    i=1
-
-
-
-
-    for train_index,test_index in kfold.split(X.index):
-        #print("TRAIN:", train_index, "TEST:", test_index)
-        #print(chkInputs[test_index])
-
-        #print('Train index: {}'.format(train_index))
-        #print('Val index: {}'.format(test_index))
-        #model = NN1.SSNET1()
-        #model = NCNET_CHKPRES.SSNET3_PRESSURE()
-        model=NCNET1_GJOA2.NCNET1_GJOA2()
-        model.initialize_chk_thresholds(Data, True)
-        X_train=X.iloc[train_index]
-        X_val=X.iloc[test_index]
-        Y_train=Y.iloc[train_index]
-        Y_val=Y.iloc[test_index]
-        model.fit(X_train, Y_train,X_val,Y_val)
-        score_train_MSE, score_test_MSE, score_train_r2, score_test_r2, cols = model.evaluate(Data, X_train, X_val, Y_train, Y_val)
-        #score_train_MSE=pd.DataFrame(data=score_train_MSE,columns=cols)
-        #score_test_MSE = pd.DataFrame(data=score_test_MSE, columns=cols)
-
-        if rmse_train_list is None:
-            rmse_train_list=pd.DataFrame(data=[],columns=cols,index=[0])
-            rmse_test_list = pd.DataFrame(data=[], columns=cols, index=[0])
-        rmse_train_list.loc[-1]=np.sqrt(score_train_MSE)
-        rmse_train_list.index+=1
-        rmse_test_list.loc[-1]=np.sqrt(score_test_MSE)
-        rmse_test_list.index+=1
-        print(rmse_train_list)
-
-
-        del model
-        i+=1
-    RMSE_TRAIN = np.mean(rmse_train_list)
-    RMSE_TEST = np.mean(rmse_test_list)
-
-
-    print(RMSE_TRAIN)
-
-    print(RMSE_TEST)
 
 
 
@@ -445,16 +368,11 @@ def generate_grid(search_params):
     for v in product(*values):
         params.append(dict(zip(keys,v)))
     return params
-def grid_search3(Data):
-    X = Data.X_transformed
-    Y = Data.Y_transformed
+def grid_searchCV(Data):
 
-    cum_thresh=15
-
-    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
-
-    search_params={'n_depth':[2],'n_width':[20,30,40,50,60,70,80,90,100],
-                   'l2w':np.concatenate((np.arange(0.0001,0.001,0.00005),np.arange(0.001,0.005,0.0005))),'seed':[3014]}
+    L2_WEIGHTS=np.concatenate((np.arange(0.0001,0.001,0.00005),np.arange(0.001,0.003,0.0001)))
+    search_params={'n_depth':[2],'n_width':[20,30,50,70,90,100],
+                   'l2w':np.arange(0.0001,0.0005,0.00005),'seed':[3014],'DATA':['GAS']}
     print(search_params['l2w'])
     #search_params = {'n_depth': [2], 'n_width': [50],
     #                 'l2w':[0.0001], 'seed': [3014]}
@@ -470,20 +388,26 @@ def grid_search3(Data):
     best_cost=1e100
     best_params={}
     #filename='GRID_SEARCH_OIL_WELLS_OIL2'
-    filename = 'GRID_SEARCH_REALLY_GAS_WELLS_QGAS_DEPTH_2_TEST_1'
+    filename = 'GRID_SEARCH_OIL_WELLS_QGAS_DEPTH_2_TEST_3'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
-    #col_eval=['GJOA_OIL_SUM_QGAS']
+    col_eval=['GJOA_OIL_SUM_QGAS']
     #col_eval=['GJOA_TOTAL_SUM_QOIL']
-    col_eval=['GJOA_QGAS']
+    #col_eval=['GJOA_QGAS']
     for params in grid_params:
-
+        params['seed'] = int(params['seed'])
         print('Training with params: {}, filename: {} '.format(params, filename))
         print('\n\n\n')
         print('On n_grid: {} of {}'.format(ii, len_grid))
-        ii += 1
-        params['seed']=int(params['seed'])
-        scores=validateCV(Data,params,save=False)
+
+        ii+=1
+
+        model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='relu',n_epoch=10000)
+        model.initialize_chk_thresholds(Data, True)
+
+        init_weights=model.get_weights()
+
+        scores=validateCV(model,init_weights,Data,params,save=False)
 
         current_cost =scores['RMSE_test'][col_eval].values
         #current_cost = np.sum(scores['RMSE_test'])
@@ -499,7 +423,7 @@ def grid_search3(Data):
         print('Best params:{} \n'.format(best_params))
         print('BEST SCORES: ')
         print(best_results)
-
+        del model
 
 
     s='Best results: \n'

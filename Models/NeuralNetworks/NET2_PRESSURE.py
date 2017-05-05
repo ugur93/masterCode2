@@ -20,7 +20,7 @@ def abs(x):
 class SSNET2(NN_BASE):
 
 
-    def __init__(self,n_width=60,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
+    def __init__(self,n_width=10,n_depth=1,l2w=0.001,dp_rate=0,seed=3014,output_act='relu',n_epoch=2800):
 
 
         self.SCALE=100
@@ -30,34 +30,45 @@ class SSNET2(NN_BASE):
 
 
 
-        self.input_tags=['CHK','PBH','PWH','PDC']
+        self.input_tags=['CHK']#,'PBH','PWH','PDC']
         #Training config
         optimizer = 'adam'
-        loss = huber
+        loss =huber
         nb_epoch = n_epoch
         batch_size = 64
         dp_rate=0
         self.add_onoff_state=True
 
-        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
+        #self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
+        self.model_name = 'SIM_DATA_WITH_ONOFF_TEST'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
-        self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
+        self.output_tags = SIM_OUTPUT_TAGS
 
-        self.well_names=['F1','B2','D3','E1']
+        #self.well_names=['F1','B2','D3','E1']
+        self.well_names=['A','B','C','D']
         self.input_tags={}
-        tags=['CHK','PBH','PWH','PDC']
+        tags=['CHK']#,'PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
                 self.input_tags[name].append(name+'_'+tag)
+        #self.loss_weights = {
+        #    'F1_out': 0.0,
+        #    'B2_out': 0.0,
+        #    'D3_out': 0.0,
+        #    'E1_out': 0.0,
+        #    'GJOA_QGAS': 1.0
+        #}
         self.loss_weights = {
-            'F1_out': 0.0,
-            'B2_out': 0.0,
-            'D3_out': 0.0,
-            'E1_out': 0.0,
-            'GJOA_QGAS': 1.0
-        }
+            'A_out': 0.0,
+            'B_out': 0.0,
+            'C_out': 0.0,
+            'D_out': 0.0,
+            'Total_production': 1.0
+         }
+
+
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
                          optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size,dp_rate=dp_rate)
 
@@ -85,7 +96,7 @@ class SSNET2(NN_BASE):
             merged_outputs.append(merged_out)
             outputs.append(out)
 
-        merged_input = Add( name='GJOA_QGAS')(merged_outputs)
+        merged_input = Add( name='Total_production')(merged_outputs)
 
         all_outputs = merged_outputs + [merged_input]
        # merged_outputs.append(merged_input)
@@ -118,7 +129,7 @@ class SSNET2(NN_BASE):
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:
             output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,
-                                 kernel_regularizer=l2(self.l2weight), use_bias=True,name='OnOff_'+name)(temp_output)
+                                 kernel_regularizer=l2(self.l2weight), use_bias=True,name=name+'_out')(temp_output)
             merged_output=output_layer
             aux_input=input_layer
             #aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)

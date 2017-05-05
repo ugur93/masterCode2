@@ -24,12 +24,22 @@ def subsample(X,Y):
 
     return X_new,Y_new
 
+
+def MAPE(Y_measured,Y_pred):
+    abs_diff=np.abs(Y_measured-Y_pred)
+
+    sAPE=pd.DataFrame(data=np.where(Y_measured==Y_pred,0,abs_diff/(np.abs(Y_measured))),columns=abs_diff.columns,index=abs_diff.index)
+
+    return np.mean(sAPE)*100
+
 def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
     delta=1e-100
 
     #return np.abs(predicted/(measured+1e-10))*100
-    return diff/(measured)*100
+    return pd.DataFrame(data=np.where(measured==predicted,0,2*diff/(predicted+measured)*100),columns=diff.columns,index=diff.index)
+
+
 def get_sample_deviation_flow(measured,predicted):
     diff=measured-predicted
     print(np.mean(diff))
@@ -49,7 +59,7 @@ def startswith(col,tag):
 def remove_zero_measurements(X,Y,cols):
 
     for col in cols:
-        if not startswith(col,'GJOA'):
+        if not (startswith(col,'GJOA') or startswith(col,'Total')):
             ind_zero_mes=Y[col]==0
             ind_not_zero_chk=X[col.split('_')[0] + '_CHK'] != 0
             X=X[~(ind_zero_mes&ind_not_zero_chk)]
@@ -86,15 +96,15 @@ def get_choke_diff_deviation(model,data,X,Y):
                 ind_temp2 = X_transformed[name + '_delta_CHK'] <= delta
                 ind_temp = ind_temp1&ind_temp2
                 ind=ind|ind_temp
-        print(np.sum(ind))
+        #print(np.sum(ind))
         deviation=get_sample_deviation(measured,predicted)
 
 
-        deviation.fillna(0, inplace=True)
+        #deviation.fillna(0, inplace=True)
 
         #print(deviation)
         #exit()
-        print(delta)
+        #print(delta)
         deviation_points[str(delta-10)+'-'+str(delta)]=deviation['B1_PDC'].mean()
         count, division = np.histogram(deviation_points)
         deviation_points.hist(bins=division)
@@ -110,13 +120,12 @@ def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
     measured, predicted=get_predicted_and_measured_df(model,data,X,Y)
 
     deviation_points = get_sample_deviation(measured, predicted)
-    deviation_points.fillna(0, inplace=True)
-    deviation_points.replace(np.inf, 0,inplace=True)
+
 
 
     if do_remove_zeros:
         for col in cols:
-            if col.split('_')[0] != 'GJOA':
+            if col.split('_')[0] not in ['GJOA','Total']:
                 ind=get_chk_zero_ind(data.inverse_transform(X,'X'),col)
                 print(np.sum(ind))
                 deviation_points.loc[ind,col]=0
@@ -133,7 +142,7 @@ def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
             cumulative_deviation[col][percentage]=np.sum(deviation_points[col]<=percentage)/N*100
 
 
-    print(deviation_points)
+    #print(deviation_points)
     #for i in deviation_points.index.values:
     #    print(deviation_points['B1_QGAS'].loc[[i]])
     return cumulative_deviation
@@ -148,7 +157,7 @@ def get_absolute_deviation(model,data,X,Y):
     deviation_points = get_sample_deviation(measured, predicted)
     deviation_points.fillna(0, inplace=True)
     for key in cols:
-        if key.split('_')[0] not in ['GJOA']:
+        if key.split('_')[0] not in ['GJOA','Total']:
             chk_col=key.split('_')[0]+'_CHK'
             ind_zero=data.inverse_transform(X,'X')[chk_col]<5
             deviation_points.loc[ind_zero, key] = 0
@@ -316,28 +325,33 @@ def evaluate_model(model,data,X_train,X_test,Y_train,Y_test):
 
     cols=model.output_tag_ordered_list
 
+    scores={}
+
     y_true_test=data.inverse_transform(Y_test,'Y')[cols]
     y_pred_test=data.inverse_transform(model.predict(X_test),'Y')
     y_pred_test=y_pred_test.set_index(y_true_test.index)
     y_true_train = data.inverse_transform(Y_train, 'Y')[cols]
     y_pred_train = data.inverse_transform(model.predict(X_train), 'Y')
+    y_pred_train = y_pred_train.set_index(y_true_train.index)
 
-    diff_test=y_true_test-y_pred_test
-    diff_train=y_true_train-y_pred_train
 
     score_test_RMSE = np.sqrt(metrics.mean_squared_error(y_true_test,y_pred_test, multioutput='raw_values'))
     score_train_RMSE = np.sqrt(metrics.mean_squared_error(y_true_train, y_pred_train, multioutput='raw_values'))
-    score_test_std=np.var(diff_test)/np.sqrt(len(X_test))
-    score_train_std=np.var(diff_train)/np.sqrt(len(X_train))
 
     score_test_r2 = metrics.r2_score(y_true_test, y_pred_test, multioutput='raw_values')
     score_train_r2 = metrics.r2_score(y_true_train, y_pred_train, multioutput='raw_values')
 
-    score_train_RMSE = pd.Series(data=score_train_RMSE, index=cols)
-    score_test_RMSE = pd.Series(data=score_test_RMSE, index=cols)
+    score_train_mape=MAPE(y_true_train,y_pred_train)
+    score_test_mape = MAPE(y_true_test, y_pred_test)
 
-    score_train_r2 = pd.Series(data=score_train_r2, index=cols)
-    score_test_r2 = pd.Series(data=score_test_r2, index=cols)
+    scores['RMSE_train']=pd.Series(data=score_train_RMSE, index=cols)
+    scores['RMSE_test']= pd.Series(data=score_test_RMSE, index=cols)
+
+    scores['R2_train']= pd.Series(data=score_train_r2, index=cols)
+    scores['R2_test'] = pd.Series(data=score_test_r2, index=cols)
+
+    scores['MAPE_train'] = pd.Series(data=score_train_mape, index=cols)
+    scores['MAPE_test'] = pd.Series(data=score_test_mape, index=cols)
 
 
-    return {'RMSE_train':score_train_RMSE,'RMSE_test':score_test_RMSE,'R2_train':score_train_r2,'R2_test':score_test_r2}#,'MSE_train_std':score_train_std,'MSE_test_std':score_test_std}
+    return scores

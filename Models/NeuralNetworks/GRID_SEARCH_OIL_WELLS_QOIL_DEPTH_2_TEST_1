@@ -1,0 +1,37 @@
+Best results: 
+Best params:{'n_width': 100, 'DATA': 'OIL', 'l2w': 0.0019000000000000006, 'seed': 3014, 'n_depth': 2} 
+Best COST: [ 2.60558067] 
+BEST SCORES: 
+ {'R2_train': C1_QOIL               0.89
+C2_QOIL               0.95
+C3_QOIL               0.93
+C4_QOIL               0.95
+B1_QOIL               0.92
+B3_QOIL               0.47
+D1_QOIL               0.94
+GJOA_TOTAL_SUM_QOIL   0.99
+dtype: float64, 'RMSE_test': C1_QOIL               2.02
+C2_QOIL               1.19
+C3_QOIL               1.60
+C4_QOIL               1.33
+B1_QOIL               2.86
+B3_QOIL               1.85
+D1_QOIL               1.42
+GJOA_TOTAL_SUM_QOIL   2.61
+dtype: float64, 'R2_test': C1_QOIL               0.57
+C2_QOIL               0.88
+C3_QOIL               0.89
+C4_QOIL               0.85
+B1_QOIL               0.77
+B3_QOIL               0.35
+D1_QOIL               0.84
+GJOA_TOTAL_SUM_QOIL   0.99
+dtype: float64, 'RMSE_train': C1_QOIL               1.41
+C2_QOIL               1.05
+C3_QOIL               1.18
+C4_QOIL               1.01
+B1_QOIL               2.07
+B3_QOIL               2.04
+D1_QOIL               1.11
+GJOA_TOTAL_SUM_QOIL   2.19
+dtype: float64}

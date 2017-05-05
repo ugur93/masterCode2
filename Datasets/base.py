@@ -47,6 +47,14 @@ class CustomScaler:
                      'QOIL':1,
                      'QWAT':1
                      }
+        self.InverseScales = {
+            'PRESSURES3': 100,
+            'PRESSURES2': 50,
+            'QGAS': 100000,
+            'CHK': 50,
+            'QOIL': 1,
+            'QWAT': 1
+        }
 
         self.TAGS={'PRESSURES3':['PBH','PWH','delta','PDC'],
                    #'PRESSURES2':['PBH'],
@@ -113,7 +121,7 @@ class CustomScaler:
                     data_transformed[cols] *= self.minmax_scale[cols]
                 else:
                     #print('hereree')
-                    data_transformed[cols] *=self.SCALES[tag]
+                    data_transformed[cols] *=self.InverseScales[tag]
 
 
                 if self.with_mean and tag not in ['QGAS','QOIL','PRESSURES']:
@@ -130,6 +138,9 @@ class CustomScaler:
             #self.mean.to_csv('Models/NeuralNetworks/ConfigFilesUseful/GJOA_GAS_MEAN.csv')
             #exit()
         self.std = data_transformed.std()
+
+
+        self.std.replace(0,1,inplace=True)
         #print(self.std)
         self.minmax_scale=data_transformed.max()-data_transformed.min()
         self.minmax_min=data_transformed.min()
@@ -166,7 +177,7 @@ class DataContainer:
         self.X_transformed=None
         self.Y_transformed=None
 
-        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=True,with_minmax=False,type='X')
+        self.SCALER_X=CustomScaler(with_mean=True,with_mean_from_csv=False,csv_path=csv_path,with_std=False,with_minmax=False,type='X')
         self.SCALER_Y = CustomScaler(with_minmax=False,with_mean=True,with_std=False,type='Y')
 
         self.init_transform()

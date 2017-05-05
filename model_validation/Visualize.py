@@ -1,10 +1,41 @@
 from matplotlib import pyplot as plt
 import numpy as np
 from .base import *
-
-OUTPUT_COLS_ON_SINGLE_PLOT=['GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM','GJOA_OIL_QGASss']
+#from matplotlib import rc
+#rc('text', usetex=True)
+OUTPUT_COLS_ON_SINGLE_PLOT=['Total production','GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM','GJOA_OIL_QGASss']
 
 N_PLOT_SUB=0
+well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+KEY_MAP={}
+for i,key in zip(range(1,len(well_names)+1),well_names):
+    KEY_MAP[key+'_QGAS']='Well O{}'.format(i)
+    KEY_MAP[key + '_QGAS'] = 'Well O{}'.format(i)
+    KEY_MAP[key + '_PDC'] = 'Well O{}'.format(i)
+    KEY_MAP[key + '_PBH'] = 'Well O{}'.format(i)
+    KEY_MAP[key + '_PWH'] = 'Well O{}'.format(i)
+well_names=['F1','B2','D3','E1']
+for i,key in zip(range(1,len(well_names)+1),well_names):
+    KEY_MAP[key+'_QGAS']='Well G{}'.format(i)
+KEY_MAP['GJOA_OIL_SUM_QGAS']='Total production flow rate'
+#print(KEY_MAP)
+#exit()
+
+TICKSIZE=20
+FONTSIZELEGEND=25
+FONTSIZEX=25
+FONTSIZEY=25
+FONTSIZETITLE=30
+TRUE_DATA_TAG='(MPFM)'
+PREDICTED_DATA_TAG='(Estimate)'
+
+
+
+TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
+TRUE_TEST_LABEL='Test '+TRUE_DATA_TAG
+PRED_TRAIN_LABEL='Train '+PREDICTED_DATA_TAG
+PRED_TEST_LABEL='Test '+PREDICTED_DATA_TAG
+
 
 def count_number_of_cols_that_ends_with(col_list,tag):
     N=0
@@ -132,23 +163,23 @@ def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_ta
     SCALE=1
     ax.scatter(data.inverse_transform(X_train,'X')[x_tag],
                 data.inverse_transform(Y_train,'Y')[y_tag]/SCALE, color='blue',
-                label='true - train')
+                label=TRUE_TRAIN_LABEL)
     ax.scatter(data.inverse_transform(X_train,'X')[x_tag],
                 data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag]/SCALE, color='black',
-                label='pred - train')
+                label=PRED_TRAIN_LABEL)
 
     ax.scatter(data.inverse_transform(X_test,'X')[x_tag],
-                data.inverse_transform(Y_test,'Y')[y_tag]/SCALE, color='red', label='true - test')
+                data.inverse_transform(Y_test,'Y')[y_tag]/SCALE, color='red', label=TRUE_TEST_LABEL)
     ax.scatter(data.inverse_transform(X_test,'X')[x_tag],
                 data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag]/SCALE, color='green',
-                label= 'pred - test')
+                label=PRED_TEST_LABEL)
 
-    ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
-               ncol=2, mode="expand", borderaxespad=0.2)
-    # plt.legend()
+    #ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
+    #           ncol=2, mode="expand", borderaxespad=0.2)
+    ax.legend(fontsize=FONTSIZELEGEND)
     fig.subplots_adjust(wspace=0.4, hspace=.3, top=0.95, bottom=0.06, left=0.05, right=0.99)
     fig.canvas.set_window_title(model.model_name)
-    ax.tick_params(axis='both', which='major', labelsize=15)
+    ax.tick_params(axis='both', which='major', labelsize=TICKSIZE)
     return ax
 
 def get_line_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,remove_zero_chk=(False,'name',0)):
@@ -165,18 +196,19 @@ def get_line_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,r
         Y_test = Y_test[ind_test]
     ax.grid(which='major', linestyle='-')
     ax.set_axisbelow(True)
-    ax.plot(data.inverse_transform(Y_train,'Y')[y_tag], color='blue',label='true - train')
-    ax.plot(data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag], color='black',label='pred - train')
+    ax.plot(data.inverse_transform(Y_train,'Y')[y_tag], color='blue',label=TRUE_TRAIN_LABEL)
+    ax.plot(data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag], color='black',label=PRED_TRAIN_LABEL)
 
-    ax.plot(data.inverse_transform(Y_test,'Y')[y_tag], color='red', label='true - test')
-    ax.plot(data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag], color='green',label= 'pred - test')
+    ax.plot(data.inverse_transform(Y_test,'Y')[y_tag], color='red', label=TRUE_TEST_LABEL)
+    ax.plot(data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag], color='green',label= PRED_TEST_LABEL)
 
-    ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
-               ncol=2, mode="expand", borderaxespad=0.2)
+    #ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
+    #           ncol=2, mode="expand", borderaxespad=0.2)
+    ax.legend(fontsize=15)
     # plt.legend()
     fig.subplots_adjust(wspace=0.13, hspace=.2, top=0.95, bottom=0.06, left=0.05, right=0.99)
     fig.canvas.set_window_title(model.model_name)
-    ax.tick_params(axis='both', which='major', labelsize=15)
+    ax.tick_params(axis='both', which='major', labelsize=20)
     return ax
 def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,remove_zero_chk=(False,'name',0)):
     ax = fig_par[-1]
@@ -266,33 +298,35 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
     def plot(cumperf,axes_wells,axes_tot, colors,ii, data_type):
         axes_wells[ii].grid(which='major', linestyle='-')
         axes_wells[ii].set_axisbelow(True)
-        axes_tot[ii].grid(which='major', linestyle='-')
-        axes_tot[ii].set_axisbelow(True)
+        axes_tot.grid(which='major', linestyle='-')
+        axes_tot.set_axisbelow(True)
+        axes_tot.set_xlim([-0.1, 2])
+        axes_wells[ii].set_xlim([-0.1, 21])
         for i in range(len(cumperf.columns) - 1):
-            axes_wells[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
+            axes_wells[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=KEY_MAP[cumperf.columns[i]],
                           color=colors[i])
-            axes_wells[ii].set_title('Well performance' + ' ({} data)'.format(data_type),fontsize=20)
+            axes_wells[ii].set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
 
-        axes_wells[ii].set_xlabel('Deviation (%)',fontsize=20)
-        axes_wells[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=20)
-        axes_wells[ii].tick_params(axis='both', which='major', labelsize=20)
-        axes_tot[ii].tick_params(axis='both', which='major', labelsize=20)
+        axes_wells[ii].set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
+        axes_wells[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
+        axes_wells[ii].tick_params(axis='both', which='major', labelsize=TICKSIZE)
+        axes_tot.tick_params(axis='both', which='major', labelsize=TICKSIZE)
 
-        axes_tot[ii].plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
-                          label=cumperf.columns[-1])
-        axes_tot[ii].set_title('Total production' + ' ({} data)'.format(data_type),fontsize=20)
-        axes_tot[ii].set_xlabel('Deviation (%)',fontsize=20)
-        axes_tot[ii].set_ylabel('Cumulative (% of {} set sample points)'.format(data_type),fontsize=20)
+        axes_tot.plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
+                          label='{} data'.format(data_type))
+        #axes_tot.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
+        axes_tot.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
+        axes_tot.set_ylabel('Cumulative (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
 
-        axes_wells[ii].legend(fontsize=15)
+        axes_wells[ii].legend(fontsize=FONTSIZELEGEND)
 
     fig_wells, axes_wells = plt.subplots(1, 2)
-    fig_tot, axes_tot = plt.subplots(1, 2)
+    fig_tot, axes_tot = plt.subplots(1, 1)
     cmap = plt.get_cmap('Vega10')
     colors = [cmap(i) for i in np.linspace(0, 1, len(cumperf_train.columns))]
 
     axes_wells = axes_wells.flatten()
-    axes_tot = axes_tot.flatten()
+    #axes_tot = axes_tot.flatten()
 
     fig_wells.canvas.set_window_title(data_tag)
     fig_tot.canvas.set_window_title(data_tag)
@@ -301,27 +335,31 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
 
 
     plot(cumperf_train,axes_wells,axes_tot,colors,0,'Training')
-    plot(cumperf_test,axes_wells,axes_tot,colors,1,'Validation')
+    plot(cumperf_test,axes_wells,axes_tot,colors,1,'Test')
 
-    fig_wells.suptitle('Cumulative performance wells',fontsize=30)
-    fig_wells.subplots_adjust(wspace=0.17, hspace=.18, top=0.9, bottom=0.1, left=0.07, right=0.99)
+    axes_tot.legend(fontsize=FONTSIZELEGEND)
 
-    fig_tot.suptitle('Cumulative performance total', fontsize=30)
+    fig_wells.suptitle('Cumulative performance of wells',fontsize=30)
+    fig_wells.subplots_adjust(wspace=0.17, hspace=.18, top=0.88, bottom=0.09, left=0.08, right=0.99)
+
+
+    fig_tot.suptitle('Cumulative performance of total production', fontsize=30)
     fig_tot.subplots_adjust(wspace=0.17, hspace=.18, top=0.9, bottom=0.1, left=0.07, right=0.99)
+    #fig_tot.set_xlim([0, 20])
     #return fig, axes
 
 def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
 
     def plot(cumperf,axes, ii, data_type):
         for i in range(len(cumperf.columns) - 1):
-            axes[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=cumperf.columns[i],
+            axes[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=KEY_MAP[cumperf.columns[i]],
                           color=colors[i])
         axes[ii].set_title('Well performance' + ' ({} data)'.format(data_type))
         axes[ii].set_xlabel('Time')
         axes[ii].set_ylabel('Absolute per sample deviation {}'.format(data_type))
 
         axes[ii + 1].plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
-                          label=cumperf.columns[-1])
+                          label=KEY_MAP[cumperf.columns[-1]])
         axes[ii + 1].set_title(cumperf.columns[-1] + ' ({} data)'.format(data_type))
         axes[ii + 1].set_xlabel('Time')
         axes[ii + 1].set_ylabel('Absolute per sample deviation {}'.format(data_type))
@@ -452,9 +490,13 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                     ax = get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
                                    y_tag=output_tag, remove_zero_chk=zero_chk_param)
                 # plt.tight_layout()
-                ax.set_title(output_tag,fontsize=20)
-                ax.set_ylabel(output_tag.split('_')[-1],fontsize=20)
-                ax.set_xlabel('Time',fontsize=20)
+                if output_tag.split('_')[-1]=='QGAS':
+                    #ax.set_title('Well '+output_tag.split('_')[0], fontsize=20)
+                    ax.set_title(KEY_MAP[output_tag], fontsize=FONTSIZETITLE)
+                else:
+                    ax.set_title(output_tag.split('_')[0]+' '+output_tag.split('_')[1],fontsize=FONTSIZETITLE)
+                ax.set_ylabel('Gas flow rate '+ '[Sm3/h] (scaled)',fontsize=FONTSIZEY)
+                ax.set_xlabel('Sample number',fontsize=FONTSIZEX)
 
 
 def plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=[], output_cols=[],remove_zero_chk=False):

@@ -20,7 +20,7 @@ DATA_TYPE = 'mea'
 
 
 
-well_names=['C1','C2','C3','C4','D1','B3','B1']
+well_names=['C1','C2','C3','C4','B3','B1','D1']
 
 def huber(diff2):
     delta=1
@@ -64,19 +64,19 @@ def fetch_gjoa_data():
     GjoaData=DataContainer(X,Y,name='GJOA2')
     print(len(GjoaData.X))
     if False:
-        CTHRESH=100
+        CTHRESH=10
         ind_zero=None
         for key in well_names:
 
             if ind_zero is None:
                 ind_zero = abs(X[key + '_delta_CHK']) > CTHRESH
-                #ind_zero2 = abs(X[key + '_CHK']) ==0
+                ind_zero2 = abs(X[key + '_CHK']) ==0
                 ind_zero=ind_zero#|ind_zero2
             else:
                 ind_temp = abs(X[key + '_delta_CHK']) > CTHRESH
-                ind_zero2 = abs(X[key + '_CHK']) == 0
-                ind_zero=ind_zero|ind_temp|ind_zero2
-
+                ind_zero2 = ind_zero2 & abs(X[key + '_CHK']) == 0
+                ind_zero=ind_zero|ind_temp
+        ind_zero=ind_zero|ind_zero2
         GjoaData.X =GjoaData.X[~ind_zero]
         GjoaData.Y = GjoaData.Y[~ind_zero]
         GjoaData.X_transformed = GjoaData.X_transformed[~ind_zero]
@@ -110,11 +110,11 @@ def fetch_gjoa_data():
         #axes[1].plot(Y['C1_PWH'].shift(-1)-Y['C1_PWH'])
         #plt.figure()
         #plt.plot(X['C1_PWH'])
-        plt.show()
+        #plt.show()
         cols=[]
         for key1 in well_names:
             cols=[]
-            for key in ['CHK','PBH','PWH','PDC','QOIL']:#['QGAS','PBH','PDC','PWH','CHK']:
+            for key in ['CHK','PBH','PWH','PDC','QGAS']:#['QGAS','PBH','PDC','PWH','CHK']:
                 cols.append(key1+'_'+key)
             #cols.append('B1' + '_' + 'QGAS')
             #cols.append('GJOA_RISER_OIL_B_CHK')
@@ -136,6 +136,36 @@ def fetch_gjoa_data():
 
         plt.show()
 
+    if False:
+
+        #cols = ['GJOA_QGAS','E1_QGAS']
+        cols=[]
+        #ols=['F1_PBH','F1_PWH','F1_PDC']
+        cols=['C1_PDC','C1_PBH','C1_PWH','C1_CHK']
+        #cols=['C1_PBH','C2_PBH','C3_PBH','C4_PBH','B1_PBH','B3_PBH','D1_PBH']
+        MAP_cols={'C1_PDC':'O1 downstream choke pressure','C1_PBH':'O1 bottom hole pressure','C1_PWH':'O1 wellhead pressure','D1_PBH':'O7'
+            ,'C1_CHK':'O1 choke','C4_PBH':'O4','B3_PBH':'O6'}
+        MAP_color={'C2_PDC':'red','C2_shifted_PDC':'blue'}
+
+        #for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
+        #    cols.append(key+'_'+'QGAS')
+        fig, axes = plt.subplots(1, 1, sharex=True)
+        axes=[axes]
+
+        for i, key in zip(range(0, len(cols)), cols):
+            i=0
+            try:
+                axes[i].plot(X['time'], GjoaData.X_transformed[key], '-',color=MAP_color[key],label=MAP_cols[key])
+            except(KeyError):
+                axes[i].scatter(X['time'], GjoaData.Y_transformed[key],label=MAP_cols[key])
+           # axes[i].set_title('G2_QGAS',fontsize=30)
+            axes[i].set_xlabel('Sample number',fontsize=40)
+            axes[i].tick_params(labelsize=30)
+            axes[i].set_ylabel('Downstream choke pressure (scaled)',fontsize=30)
+            plt.legend(fontsize=40)
+            fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
+
+        plt.show()
     return GjoaData
 
 def data_to_X_Y(data):
@@ -187,15 +217,14 @@ def set_chk_zero_values_to_zero(X,Y):
 
 
 
-
+    print(len(X))
     for key in well_names:
 
-
+        gas_zero=(Y[key+'_QGAS']==0)&(X[key+'_CHK']>5)
+        Y = Y[~gas_zero]
+        X = X[~gas_zero]
 
         ind_zero = X[key + '_CHK'] < CHK_THRESHOLD
-
-        X[key+'_1_PBH']=X[key+'_PBH'].copy()
-
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QOIL')
         Y = set_index_values_to_zero(Y, ind_zero, key + '_QGAS')
         X = set_index_values_to_zero(X, ind_zero, key + '_CHK')
@@ -235,12 +264,12 @@ def set_chk_zero_values_to_zero(X,Y):
        # ax.set_ylabel('PBH')
         #ax.set_zlabel('PWH')
         plt.show()
-
+    print(len(X))
     return X,Y
 
 def preprocesss(X,Y):
     #DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
-    DROP=[416,447,487,808,173,806,819,820,821,822]
+    DROP=[416,447,487,808,173,806,819,820,821,822,805,807]
 
     DROP_OIL=[287,130,132,292,290,196]
 
@@ -272,6 +301,13 @@ def preprocesss(X,Y):
 
     X.drop(DROP, inplace=True)
     Y.drop(DROP, inplace=True)
+
+    #for key in well_names:
+    #    gas_zero = (Y[key + '_QGAS'] == 0) & (X[key + '_CHK'] > 5) | (Y[key + '_QGAS'] == 0)&(X[key+'_CHK']!=0)
+
+
+
+
     #X.loc[114:129, 'GJOA_RISER_OIL_B_CHK'] = 0
 
 

@@ -13,10 +13,10 @@ N_WELLS=4
 N_SHUTDOWNS=3
 N_SHUTDOWN_STEPS=3
 N_SHUTDOWN_SCALE=5
-np.random.seed(151)
+np.random.seed(150)
 
-WELL_NAMES=['F1','B2','D3','E1']
-#WELL_NAMES=['A','B','C','D']
+#WELL_NAMES=['F1','B2','D3','E1']
+WELL_NAMES=['A','B','C','D']
 #WELL_NAMES=['C1','C2','C3','C4','D1','B3','B1']
 
 def generateChokeConfig():
@@ -73,11 +73,11 @@ def fetchSimulatedData():
     Y=np.zeros((N_SAMPLES,1))
     WELL_PARAMS={}
     for i in range(N_WELLS):
-        a=np.random.randint(1,10,1)
-        b=np.random.randint(1, 100, 1)
+        a=np.random.randint(1,5,1)
+        b=np.random.randint(1, 50, 1)
         print(WELL_NAMES[i],a,b)
         c=np.linspace(0,10,N_SAMPLES)*np.random.rand()
-        noise = np.random.rand(N_SAMPLES, 1)*10
+        noise = np.random.rand(N_SAMPLES, 1)*5
         data=f_linear(a,b,c,X[WELL_NAMES[i]+'_CHK'])+noise
         #print(data.shape)
         X_Q[WELL_NAMES[i]+'_QGAS']=data
@@ -91,7 +91,7 @@ def fetchSimulatedData():
     #print_rank(XT,'Simulated')
 
 
-    Y=pd.DataFrame(Y,columns=['GJOA_QGAS'])
+    Y=pd.DataFrame(Y,columns=['Total_production'])
     X['time'] = np.arange(0, len(X))
 
     Y=pd.concat([Y,X_Q],axis=1)
@@ -114,33 +114,42 @@ def plotData(X,X_Q,Y):
     plt.subplot(2,1,1)
     plotChokeInputs(X)
     plt.subplot(2,1,2)
-    plotWellOutputs(X_Q)
+    plotWellOutputs(Y)
     plt.figure()
-    plt.plot(Y['GJOA_QGAS'])
+    plt.plot(Y['Total_production'])
     plt.title('Total production',fontsize=30)
     plt.ylabel('Q', fontsize=30,rotation=0,labelpad=20)
-    plt.xlabel('Time', fontsize=30)
+    plt.xlabel('Sample', fontsize=30)
+    plt.tick_params(axis='both', which='major', labelsize=20)
+
     plt.show()
 def plotChokeInputs(X):
+    plt.grid(which='major', linestyle='-')
+    #plt.set_axisbelow(True)
     for i in range(1,N_WELLS+1):
         #plt.subplot(2,2,i)
         plt.plot(X[WELL_NAMES[i-1]+'_CHK'],label=WELL_NAMES[i-1])
+
     plt.title('Choke opening',fontsize=30)
     plt.ylabel('u',fontsize=30,rotation=0,labelpad=20)
-    plt.xlabel('Time',fontsize=30)
-    #plt.legend()
-    plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-               ncol=4, mode="expand", borderaxespad=0., fontsize=20)
+    plt.xlabel('Sample',fontsize=30)
+    plt.legend(fontsize=20)
+    plt.tick_params(axis='both', which='major', labelsize=20)
+
+    #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+    #           ncol=4, mode="expand", borderaxespad=0., fontsize=20)
 
 
 def plotWellOutputs(X_Q):
    for i in range(1,N_WELLS+1):
        #plt.subplot(2, 2, i)
-       plt.plot(X_Q[WELL_NAMES[i-1]+'_QOIL'],label=WELL_NAMES[i-1])
-   plt.title('Well outputs',fontsize=30)
+       plt.plot(X_Q[WELL_NAMES[i-1]+'_QGAS'],label=WELL_NAMES[i-1])
+   plt.title('Well productions',fontsize=30)
    plt.ylabel('q', fontsize=30,rotation=0,labelpad=20)
-   plt.xlabel('Time', fontsize=30)
-   plt.legend(fontsize=30)
-   plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
-              ncol=4, mode="expand", borderaxespad=0., fontsize=20)
+   plt.xlabel('Sample', fontsize=30)
+   plt.legend(fontsize=20)
+   plt.tick_params(axis='both', which='major', labelsize=20)
+
+   #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
+   #           ncol=4, mode="expand", borderaxespad=0., fontsize=20)
    #plt.show()
