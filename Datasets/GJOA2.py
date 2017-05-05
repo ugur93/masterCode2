@@ -140,12 +140,14 @@ def fetch_gjoa_data():
 
         #cols = ['GJOA_QGAS','E1_QGAS']
         cols=[]
+
+
         #ols=['F1_PBH','F1_PWH','F1_PDC']
-        cols=['C1_PDC','C1_PBH','C1_PWH','C1_CHK']
+        cols=['C1_PDC','C1_shifted_PDC']
         #cols=['C1_PBH','C2_PBH','C3_PBH','C4_PBH','B1_PBH','B3_PBH','D1_PBH']
-        MAP_cols={'C1_PDC':'O1 downstream choke pressure','C1_PBH':'O1 bottom hole pressure','C1_PWH':'O1 wellhead pressure','D1_PBH':'O7'
+        MAP_cols={'C1_PDC':'O1 downstream choke pressure','C1_shifted_PDC':'O1 downstream choke pressure (shifted)','C1_PBH':'O1 bottom hole pressure','C1_PWH':'O1 wellhead pressure','D1_PBH':'O7'
             ,'C1_CHK':'O1 choke','C4_PBH':'O4','B3_PBH':'O6'}
-        MAP_color={'C2_PDC':'red','C2_shifted_PDC':'blue'}
+        MAP_color={'C1_PDC':'red','C1_shifted_PDC':'blue'}
 
         #for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
         #    cols.append(key+'_'+'QGAS')
@@ -155,14 +157,14 @@ def fetch_gjoa_data():
         for i, key in zip(range(0, len(cols)), cols):
             i=0
             try:
-                axes[i].plot(X['time'], GjoaData.X_transformed[key], '-',color=MAP_color[key],label=MAP_cols[key])
+                axes[i].plot(X['time'], GjoaData.X_transformed[key],color=MAP_color[key],label=MAP_cols[key])
             except(KeyError):
                 axes[i].scatter(X['time'], GjoaData.Y_transformed[key],label=MAP_cols[key])
            # axes[i].set_title('G2_QGAS',fontsize=30)
             axes[i].set_xlabel('Sample number',fontsize=40)
             axes[i].tick_params(labelsize=30)
             axes[i].set_ylabel('Downstream choke pressure (scaled)',fontsize=30)
-            plt.legend(fontsize=40)
+            plt.legend(fontsize=30)
             fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()

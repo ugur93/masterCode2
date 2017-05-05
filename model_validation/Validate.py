@@ -17,7 +17,7 @@ MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
 
 
 
-DATA_TYPE='GAsS'
+DATA_TYPE='GAS'
 def validate(DataOIL,DataGAS):
 
     if DATA_TYPE=='GAS':
@@ -25,9 +25,9 @@ def validate(DataOIL,DataGAS):
     else:
         Data=DataOIL
     #bagging_test(Data)
-    validate_train_test_split(Data)
+    #validate_train_test_split(Data)
     #ensemble_learning_bagging(Data)
-    #grid_searchCV(Data)
+    grid_searchCV(Data)
     #validateRepeat(Data)
     #search_params = {'n_depth': 2, 'n_width': 100,
     #                 'l2w': 0.0002, 'seed': 3014, 'DATA': 'GAS'}
@@ -92,20 +92,20 @@ def validate_train_test_split(Data):
         # model.initialize_zero_thresholds(Data)
         start = time.time()
         print(model.get_config())
-        #model.model.load_weights(PATH + 'SIM_DATA_WITH_ONOFF.h5', by_name=True)
+        model.model.load_weights(PATH + 'SIM_DATA_WITH_ONOFF.h5', by_name=True)
         # print(model.model.get_config())
         #model.fit(X_train,Y_train,X_val,Y_val)
 
         # Fit with old data
         #model.update_model()
-        model.fit(X_train, Y_train, X_val, Y_val)
+        #model.fit(X_train, Y_train, X_val, Y_val)
         #X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.0, val_size=0.2)
     else:
         #GJOA_QOIL
         #pass
         PRESSURE_TAG = 'PDC'
         PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
-        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0.1, val_size=0.2)
+        X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0, val_size=0.1)
         model=NCNET1_GJOA2.NCNET1_GJOA2()
 
 
@@ -129,13 +129,13 @@ def validate_train_test_split(Data):
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
-        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5', by_name=True)
+       # model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2.h5', by_name=True)
        # exit()
 
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
-        #validateCV(model, model.get_weights(), Data, save=True)
-        #exit()
+        validateCV(model, model.get_weights(), Data, save=True,filename='GJOA_OIL_WELLS_GAS_FINAL_TEST_2x20_MAPE')
+        exit()
         # model.initialize_zero_thresholds(Data)
         start = time.time()
         print(model.get_config())
@@ -144,7 +144,7 @@ def validate_train_test_split(Data):
 
         # Fit with old data
         #model.update_model()
-        #model.fit(X_train, Y_train, X_val, Y_val)
+        model.fit(X_train, Y_train, X_val, Y_val)
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
     scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
@@ -152,7 +152,7 @@ def validate_train_test_split(Data):
     print(scores)
     with_line_plot=False
     with_separate_plot=True
-    #   model.save_model_to_file(model.model_name)
+    model.save_model_to_file(model.model_name)
    # exit()
     #model.save_model_config(scores)
 
@@ -243,15 +243,39 @@ def train_and_evaluate(model,Data,X_train,X_val,Y_train,Y_val):
 
     return evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
 
+def results_to_latex(RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST,MAPE_TRAIN,MAPE_TEST,well_names):
+    temp_s='\n'
+    well_names2 = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+    KEY_MAP = {}
+    for i, key in zip(range(1, len(well_names2) + 1), well_names2):
+        KEY_MAP[key + '_QGAS'] = 'Well O{}'.format(i)
+        KEY_MAP[key + '_QOIL'] = 'Well O{}'.format(i)
+        KEY_MAP[key + '_PDC'] = 'Well O{}'.format(i)
+        KEY_MAP[key + '_PBH'] = 'Well O{}'.format(i)
+        KEY_MAP[key + '_PWH'] = 'Well O{}'.format(i)
+    well_names2 = ['F1', 'B2', 'D3', 'E1']
+    for i, key in zip(range(1, len(well_names2) + 1), well_names2):
+        KEY_MAP[key + '_QGAS'] = 'Well G{}'.format(i)
+    KEY_MAP['GJOA_OIL_SUM_QGAS'] = 'Total production flow rate'
+    # print(KEY_MAP)
+    # exit()
+    for key in ['A', 'B', 'C', 'D']:
+        KEY_MAP[key + '_QGAS'] = 'Well ' + key
+    R2_TRAIN=R2_TRAIN*100
+    R2_TEST = R2_TEST * 100
+    for key in well_names:
+        temp_s+='{0:s} & {1:0.2f} & {2:0.2f}% & {3:0.2f}% &  {4:0.2f} & {5:0.2f}% & {6:0.2f}% \\\\ \n '.format(KEY_MAP[key],RMSE_TRAIN[key],R2_TRAIN[key],MAPE_TRAIN[key]
+                                                                  ,RMSE_TEST[key],R2_TEST[key],MAPE_TEST[key])
+    return temp_s
 
-def validateCV(model,init_weights,Data,params=None,save=True):
+def validateCV(model,init_weights,Data,params=None,save=True,filename=''):
     X = Data.X_transformed
     Y = Data.Y_transformed
 
 
     X, Y, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0, val_size=0)
 
-    #X.drop([0], inplace=True)
+   # X.drop([0], inplace=True)
     #Y.drop([0], inplace=True)
 
 
@@ -268,7 +292,7 @@ def validateCV(model,init_weights,Data,params=None,save=True):
     #print(chkInputs.index)
     i=1
 
-    filename='GJOA_OIL_WELLS_GAS_FINAL'
+    #filename='GJOA_OIL_WELLS_GAS_FINAL_TEST2'
 
 
 
@@ -337,6 +361,9 @@ def validateCV(model,init_weights,Data,params=None,save=True):
         s += 'sMAPE_TEST_SCORES: \n{}\n'.format(scores_mape_test)
 
 
+        s+=results_to_latex(RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST,MAPE_TRAIN,MAPE_TEST,model.output_tag_ordered_list)
+
+
 
         PATH = 'Models/NeuralNetworks/CV_results/' + filename
         f = open(PATH, 'w')
@@ -372,7 +399,7 @@ def grid_searchCV(Data):
 
     L2_WEIGHTS=np.concatenate((np.arange(0.0001,0.001,0.00005),np.arange(0.001,0.003,0.0001)))
     search_params={'n_depth':[2],'n_width':[20,30,50,70,90,100],
-                   'l2w':np.arange(0.0001,0.0005,0.00005),'seed':[3014],'DATA':['GAS']}
+                   'l2w':np.arange(0.0001,0.001,0.00005),'seed':[3014]}
     print(search_params['l2w'])
     #search_params = {'n_depth': [2], 'n_width': [50],
     #                 'l2w':[0.0001], 'seed': [3014]}
@@ -388,12 +415,12 @@ def grid_searchCV(Data):
     best_cost=1e100
     best_params={}
     #filename='GRID_SEARCH_OIL_WELLS_OIL2'
-    filename = 'GRID_SEARCH_OIL_WELLS_QGAS_DEPTH_2_TEST_3'
+    filename = 'GRID_SEARCH_GAS_WELLS_QGAS_DEPTH_2_TEST_4'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
-    col_eval=['GJOA_OIL_SUM_QGAS']
+    #col_eval=['GJOA_OIL_SUM_QGAS']
     #col_eval=['GJOA_TOTAL_SUM_QOIL']
-    #col_eval=['GJOA_QGAS']
+    col_eval=['GJOA_QGAS']
     for params in grid_params:
         params['seed'] = int(params['seed'])
         print('Training with params: {}, filename: {} '.format(params, filename))
@@ -402,7 +429,8 @@ def grid_searchCV(Data):
 
         ii+=1
 
-        model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='relu',n_epoch=10000)
+        #model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='relu',n_epoch=10000)
+        model = NET2_PRESSURE.SSNET2(**params, output_act='relu', n_epoch=10000)
         model.initialize_chk_thresholds(Data, True)
 
         init_weights=model.get_weights()

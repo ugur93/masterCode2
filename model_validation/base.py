@@ -37,7 +37,7 @@ def get_sample_deviation(measured,predicted):
     delta=1e-100
 
     #return np.abs(predicted/(measured+1e-10))*100
-    return pd.DataFrame(data=np.where(measured==predicted,0,2*diff/(predicted+measured)*100),columns=diff.columns,index=diff.index)
+    return pd.DataFrame(data=np.where(measured==predicted,0,diff/(measured)*100),columns=diff.columns,index=diff.index)
 
 
 def get_sample_deviation_flow(measured,predicted):
@@ -115,7 +115,7 @@ def get_chk_zero_ind(data,col):
 def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
 
     cols = model.output_tag_ordered_list
-    deviation_range = np.arange(0, 30, 0.5)
+    deviation_range = np.arange(0, 40, 0.5)
 
     measured, predicted=get_predicted_and_measured_df(model,data,X,Y)
 

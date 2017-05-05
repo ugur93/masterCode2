@@ -14,7 +14,7 @@ if __name__=='__main__':
     #GjoaOIL.merge(GjoaGAS.X,GjoaGAS.Y)
     #exit()
 
-    GjoaGAS = SimulatedData.fetchSimulatedData()
+    #GjoaGAS = SimulatedData.fetchSimulatedData()
     #exit()
 
     #print('\n \n')

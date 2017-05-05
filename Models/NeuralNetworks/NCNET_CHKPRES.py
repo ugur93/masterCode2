@@ -592,7 +592,7 @@ class PRESSURE(NN_BASE):
 class PRESSURE_DELTA(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.0001,seed=3014,dp_rate=0,tag='PWH',data='OIL'):
+    def __init__(self,n_depth=1 ,n_width=100,l2w=0.0001,seed=3014,dp_rate=0,tag='PWH',data='OIL'):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
@@ -620,9 +620,9 @@ class PRESSURE_DELTA(NN_BASE):
         else:
             self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
             if self.tag == 'PBH':
-                self.well_names = ['C1']#, 'C3', 'C4', 'B3', 'B1']
+                self.well_names = ['C1', 'C3', 'C4', 'B3', 'B1']
             else:
-                self.well_names = ['C1']#, 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
+                self.well_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
         self.delta_in=False
         self.input_tags={}
 

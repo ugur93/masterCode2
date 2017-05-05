@@ -10,7 +10,7 @@ well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
 KEY_MAP={}
 for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well O{}'.format(i)
-    KEY_MAP[key + '_QGAS'] = 'Well O{}'.format(i)
+    KEY_MAP[key + '_QOIL'] = 'Well O{}'.format(i)
     KEY_MAP[key + '_PDC'] = 'Well O{}'.format(i)
     KEY_MAP[key + '_PBH'] = 'Well O{}'.format(i)
     KEY_MAP[key + '_PWH'] = 'Well O{}'.format(i)
@@ -20,16 +20,17 @@ for i,key in zip(range(1,len(well_names)+1),well_names):
 KEY_MAP['GJOA_OIL_SUM_QGAS']='Total production flow rate'
 #print(KEY_MAP)
 #exit()
-
+for key in ['A','B','C','D']:
+    KEY_MAP[key+'_QGAS']='Well '+key
 TICKSIZE=20
 FONTSIZELEGEND=25
 FONTSIZEX=25
 FONTSIZEY=25
 FONTSIZETITLE=30
-TRUE_DATA_TAG='(MPFM)'
+TRUE_DATA_TAG='(Simulated)'
 PREDICTED_DATA_TAG='(Prediction)'
 TICK_STEP_SIZE=10
-
+TRUE_AND_PREDICTED_Y_LABEL='Simulated flow rate'
 
 TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
 TRUE_TEST_LABEL='Test '+TRUE_DATA_TAG
@@ -85,7 +86,7 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #                     remove_zero_chk=remove_zero_chk)
     #plot_true_and_predicted_with_input(model, data, X_train, X_test, Y_train, Y_test, output_cols=[])
     #plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk)
-    #plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk,with_separate_plot=with_separate_plot,with_line_plot=with_line_plot)
+    plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=output_cols, remove_zero_chk=remove_zero_chk,with_separate_plot=with_separate_plot,with_line_plot=with_line_plot)
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
     #plt.show()
@@ -300,8 +301,8 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
         axes_wells[ii].set_axisbelow(True)
         axes_tot.grid(which='major', linestyle='-')
         axes_tot.set_axisbelow(True)
-        axes_tot.set_xlim([-0.1, 2])
-        axes_wells[ii].set_xlim([-0.1, 21])
+        axes_tot.set_xlim([-0.1, 3])
+        axes_wells[ii].set_xlim([-0.1, 30])
         axes_wells[ii].set_ylim([20, 105])
         axes_tot.set_ylim([20, 105])
 
@@ -393,11 +394,11 @@ def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
 
     get_cumulative_deviation_plot_single(cumperf_train, cumperf_test,model.model_name)
 
-    #cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
-    #cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
+    cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
+    cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
 
-    #get_cumulative_flow_plot(cumperf_train, 'Training')
-    #get_cumulative_flow_plot(cumperf_test, 'Test')
+    get_cumulative_flow_plot(cumperf_train, 'Training')
+    get_cumulative_flow_plot(cumperf_test, 'Test')
     #get_cumulative_performance_plot_single(cumperf_test,'Test')
 
 
@@ -501,7 +502,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                     ax.set_title(KEY_MAP[output_tag], fontsize=FONTSIZETITLE)
                 else:
                     ax.set_title(output_tag.split('_')[0]+' '+output_tag.split('_')[1],fontsize=FONTSIZETITLE)
-                ax.set_ylabel('Gas flow rate '+ '[Sm3/h] (scaled)',fontsize=FONTSIZEY)
+                ax.set_ylabel(TRUE_AND_PREDICTED_Y_LABEL,fontsize=FONTSIZEY)
                 ax.set_xlabel('Sample number',fontsize=FONTSIZEX)
 
 

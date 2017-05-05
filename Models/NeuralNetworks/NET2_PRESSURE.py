@@ -30,7 +30,7 @@ class SSNET2(NN_BASE):
 
 
 
-        self.input_tags=['CHK']#,'PBH','PWH','PDC']
+        self.input_tags=['CHK','PBH','PWH','PDC']
         #Training config
         optimizer = 'adam'
         loss =huber
@@ -43,30 +43,32 @@ class SSNET2(NN_BASE):
         self.model_name = 'SIM_DATA_WITH_ONOFF_TEST'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
-        self.output_tags = SIM_OUTPUT_TAGS
+        self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
+        #self.output_tags = SIM_OUTPUT_TAGS
 
-        #self.well_names=['F1','B2','D3','E1']
-        self.well_names=['A','B','C','D']
+
+        self.well_names=['F1','B2','D3','E1']
+        #self.well_names=['A','B','C','D']
         self.input_tags={}
-        tags=['CHK']#,'PBH','PWH','PDC']
+        tags=['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
                 self.input_tags[name].append(name+'_'+tag)
-        #self.loss_weights = {
-        #    'F1_out': 0.0,
-        #    'B2_out': 0.0,
-        #    'D3_out': 0.0,
-        #    'E1_out': 0.0,
-        #    'GJOA_QGAS': 1.0
-        #}
         self.loss_weights = {
-            'A_out': 0.0,
-            'B_out': 0.0,
-            'C_out': 0.0,
-            'D_out': 0.0,
-            'Total_production': 1.0
-         }
+            'F1_out': 0.0,
+            'B2_out': 0.0,
+            'D3_out': 0.0,
+            'E1_out': 0.0,
+            'GJOA_QGAS': 1.0
+        }
+        #self.loss_weights = {
+        #    'A_out': 0.0,
+        #    'B_out': 0.0,
+        #    'C_out': 0.0,
+        #    'D_out': 0.0,
+        #    'Total_production': 1.0
+        # }
 
 
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
@@ -96,7 +98,7 @@ class SSNET2(NN_BASE):
             merged_outputs.append(merged_out)
             outputs.append(out)
 
-        merged_input = Add( name='Total_production')(merged_outputs)
+        merged_input = Add( name='GJOA_QGAS')(merged_outputs)
 
         all_outputs = merged_outputs + [merged_input]
        # merged_outputs.append(merged_input)
@@ -136,9 +138,9 @@ class SSNET2(NN_BASE):
 
         return aux_input, input_layer, merged_output, output_layer
 
-    def update_model(self):
-        self.nb_epoch=10000
-        self.output_layer_activation='relu'
+    def update_model(self,activation='relu',epoch=10000):
+        self.nb_epoch=epoch
+        self.output_layer_activation=activation
         self.aux_inputs=[]
         self.inputs=[]
         self.merged_outputs=[]
