@@ -114,7 +114,7 @@ def fetch_gjoa_data():
         cols=[]
         for key1 in well_names:
             cols=[]
-            for key in ['CHK','PBH','PWH','PDC','QGAS']:#['QGAS','PBH','PDC','PWH','CHK']:
+            for key in ['CHK','PBH','PWH','PDC','QOIL']:#['QGAS','PBH','PDC','PWH','CHK']:
                 cols.append(key1+'_'+key)
             #cols.append('B1' + '_' + 'QGAS')
             #cols.append('GJOA_RISER_OIL_B_CHK')
@@ -271,7 +271,7 @@ def set_chk_zero_values_to_zero(X,Y):
 
 def preprocesss(X,Y):
     #DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
-    DROP=[416,447,487,808,173,806,819,820,821,822,805,807]
+    DROP=[416,447,487,808,173,806,819,820,821,822,805,807]#,234,6,591]
 
     DROP_OIL=[287,130,132,292,290,196]
 

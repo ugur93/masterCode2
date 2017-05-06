@@ -27,17 +27,37 @@ def subsample(X,Y):
 
 def MAPE(Y_measured,Y_pred):
     abs_diff=np.abs(Y_measured-Y_pred)
+    abs_diff.fillna(0,inplace=True)
+    print(Y_measured)
 
-    sAPE=pd.DataFrame(data=np.where(Y_measured==Y_pred,0,abs_diff/(np.abs(Y_measured))),columns=abs_diff.columns,index=abs_diff.index)
+    remove_ind=Y_measured==Y_pred
+    print(np.sum(remove_ind))
+    for key in Y_measured.columns:
+        remove_ind_temp=Y_measured[key]==0
+        #remove_ind_temp=remove_ind_temp&Y_measured[key]==0
+        remove_ind[key]=remove_ind[key]|remove_ind_temp
+    abs_diff=abs_diff[~remove_ind]
+    Y_measured = Y_measured[~remove_ind]
+
+    sAPE=pd.DataFrame(data=np.where(remove_ind,0,abs_diff/(np.abs(Y_measured))),columns=abs_diff.columns,index=abs_diff.index)
 
     return np.mean(sAPE)*100
 
 def get_sample_deviation(measured,predicted):
     diff=np.abs(measured-predicted)
     delta=1e-100
+    diff.fillna(0, inplace=True)
+
+
+    remove_ind = measured == measured
+    print(np.sum(remove_ind))
+    for key in measured.columns:
+        remove_ind_temp = measured[key] == 0
+        # remove_ind_temp=remove_ind_temp&Y_measured[key]==0
+        remove_ind[key] = remove_ind[key] | remove_ind_temp
 
     #return np.abs(predicted/(measured+1e-10))*100
-    return pd.DataFrame(data=np.where(measured==predicted,0,diff/(measured)*100),columns=diff.columns,index=diff.index)
+    return pd.DataFrame(data=np.where(measured==0,0,diff/(measured)*100),columns=diff.columns,index=diff.index)
 
 
 def get_sample_deviation_flow(measured,predicted):
@@ -115,11 +135,12 @@ def get_chk_zero_ind(data,col):
 def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
 
     cols = model.output_tag_ordered_list
-    deviation_range = np.arange(0, 40, 0.5)
+    deviation_range = np.arange(0, 100, 0.5)
 
     measured, predicted=get_predicted_and_measured_df(model,data,X,Y)
 
     deviation_points = get_sample_deviation(measured, predicted)
+    deviation_points.fillna(0,inplace=True)
 
 
 

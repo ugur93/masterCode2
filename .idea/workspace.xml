@@ -5,21 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="81ce2653-27ac-48e4-befa-177bfea4b92f" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.pdf" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_ALL_DATA.pdf" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_ALL_DATA.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.pdf" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20.pdf" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20.pdf" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/SIM_DATA_WITHOUT_ONOFF.pdf" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/SIM_DATA_WITHOUT_ONOFF.pdf" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/SIM_DATA_WITH_ONOFF_TEST.pdf" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/model_figures/SIM_DATA_WITH_ONOFF_TEST.pdf" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/MasterThesisCode.iml" afterPath="$PROJECT_DIR$/.idea/MasterThesisCode.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/GJOA2.py" afterPath="$PROJECT_DIR$/Datasets/GJOA2.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Datasets/base.py" afterPath="$PROJECT_DIR$/Datasets/base.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/SIM_DATA_WITHOUT_ONOFF" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/SIM_DATA_WITHOUT_ONOFF" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/SIM_DATA_WITHOUT_ONOFF.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Weights/SIM_DATA_WITHOUT_ONOFF.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20.h5" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/SIM_DATA_WITHOUT_ONOFF.h5" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/hdf5_files/SIM_DATA_WITHOUT_ONOFF.h5" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" afterPath="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/Validate.py" afterPath="$PROJECT_DIR$/model_validation/Validate.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/Visualize.py" afterPath="$PROJECT_DIR$/model_validation/Visualize.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model_validation/base.py" afterPath="$PROJECT_DIR$/model_validation/base.py" />
@@ -35,7 +39,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/MasterThesisCode$main.coverage" NAME="main Coverage Results" MODIFIED="1494009575024" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/MasterThesisCode$main.coverage" NAME="main Coverage Results" MODIFIED="1494095550732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -53,46 +57,24 @@
     <favorites_list name="MasterThesisCode" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.19796307">
+    <splitter split-orientation="horizontal" split-proportion="0.2633559">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="NCNET1_GJOA2.py" pinned="false" current-in-tab="false">
+          <file leaf-file-name="NCNET1_GJOA2.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="272">
-                  <caret line="37" column="108" lean-forward="false" selection-start-line="37" selection-start-column="108" selection-end-line="37" selection-end-column="108" />
+                <state relative-caret-position="238">
+                  <caret line="38" column="111" lean-forward="false" selection-start-line="38" selection-start-column="107" selection-end-line="38" selection-end-column="111" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="SimulatedData.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Datasets/SimulatedData.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1547">
-                  <caret line="98" column="5" lean-forward="false" selection-start-line="98" selection-start-column="5" selection-end-line="98" selection-end-column="5" />
-                  <folding>
-                    <element signature="e#0#18#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="NCNET4_combined.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET4_combined.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="9333">
-                  <caret line="550" column="80" lean-forward="false" selection-start-line="550" selection-start-column="80" selection-end-line="550" selection-end-column="80" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="NET2_PRESSURE.py" pinned="false" current-in-tab="true">
+          <file leaf-file-name="NET2_PRESSURE.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="147">
-                  <caret line="116" column="47" lean-forward="true" selection-start-line="116" selection-start-column="47" selection-end-line="116" selection-end-column="47" />
+                <state relative-caret-position="-165">
+                  <caret line="24" column="33" lean-forward="false" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
                   <folding />
                 </state>
               </provider>
@@ -108,34 +90,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Gjoa.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1462">
-                  <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
-                  <folding>
-                    <element signature="e#3#22#0" expanded="true" />
-                    <marker date="1493978368339" expanded="true" signature="826:4272" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="2339:3124" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="2433:2870" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="2467:2628" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="2646:2870" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="3139:4249" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="3357:3455" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="3592:4229" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="3760:3920" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="4297:4815" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="4441:4739" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="4469:4639" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="4667:4739" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="4833:4981" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="4860:4968" ph="..." />
-                    <marker date="1493978368339" expanded="true" signature="5310:5407" ph="..." />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
         </leaf>
       </split-first>
       <split-second>
@@ -144,7 +98,7 @@
             <entry file="file://$PROJECT_DIR$/model_validation/base.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="323">
-                  <caret line="30" column="85" lean-forward="false" selection-start-line="30" selection-start-column="85" selection-end-line="30" selection-end-column="85" />
+                  <caret line="39" column="14" lean-forward="false" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
                   <folding />
                 </state>
               </provider>
@@ -153,8 +107,8 @@
           <file leaf-file-name="Visualize.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1251">
-                  <caret line="400" column="4" lean-forward="false" selection-start-line="400" selection-start-column="4" selection-end-line="400" selection-end-column="4" />
+                <state relative-caret-position="4454">
+                  <caret line="306" column="41" lean-forward="false" selection-start-line="306" selection-start-column="41" selection-end-line="306" selection-end-column="41" />
                   <folding />
                 </state>
               </provider>
@@ -163,8 +117,8 @@
           <file leaf-file-name="Validate.py" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="340">
-                  <caret line="29" column="4" lean-forward="false" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+                <state relative-caret-position="291">
+                  <caret line="423" column="42" lean-forward="false" selection-start-line="423" selection-start-column="42" selection-end-line="423" selection-end-column="42" />
                   <folding>
                     <element signature="e#1#41#0" expanded="true" />
                   </folding>
@@ -172,21 +126,11 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="GJOA_OIL_WELLS_GAS_FINAL" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="646">
-                  <caret line="38" column="29" lean-forward="true" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="GJOA2.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="387">
-                  <caret line="138" column="12" lean-forward="false" selection-start-line="138" selection-start-column="12" selection-end-line="138" selection-end-column="12" />
+                <state relative-caret-position="3728">
+                  <caret line="273" column="59" lean-forward="false" selection-start-line="273" selection-start-column="59" selection-end-line="273" selection-end-column="59" />
                   <folding>
                     <element signature="e#3#22#0" expanded="true" />
                   </folding>
@@ -194,11 +138,21 @@
               </provider>
             </entry>
           </file>
+          <file leaf-file-name="Gjoa.py" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="1080">
+                  <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
           <file leaf-file-name="base_class.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="629">
-                  <caret line="37" column="53" lean-forward="false" selection-start-line="37" selection-start-column="53" selection-end-line="37" selection-end-column="53" />
+                <state relative-caret-position="340">
+                  <caret line="89" column="36" lean-forward="false" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
                   <folding />
                 </state>
               </provider>
@@ -207,8 +161,8 @@
           <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/Datasets/base.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="238">
-                  <caret line="53" column="26" lean-forward="false" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
+                <state relative-caret-position="-2618">
+                  <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
                   <folding>
                     <element signature="e#1#95#0" expanded="true" />
                   </folding>
@@ -219,8 +173,8 @@
           <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/main.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="16" column="5" lean-forward="false" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+                <state relative-caret-position="204">
+                  <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
                   <folding />
                 </state>
               </provider>
@@ -239,9 +193,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>pressure_weights_path</find>
-      <find>p</find>
-      <find>pressure</find>
       <find>ca</find>
       <find>history</find>
       <find>size</find>
@@ -252,7 +203,6 @@
       <find>seab</find>
       <find>save_</find>
       <find>plot</find>
-      <find>get_line</find>
       <find>cumulat</find>
       <find>line</find>
       <find>\displ</find>
@@ -266,7 +216,11 @@
       <find>TICK_STE</find>
       <find>plot_</find>
       <find>cumulative</find>
+      <find>single</find>
+      <find>separate</find>
+      <find>tick_params</find>
       <find>mape</find>
+      <find>get_line</find>
       <find>CV</find>
       <find>{'seed': 3014, 'DATA': 'GAS', 'l2w': 0.0001, 'n_depth': 2, 'n_width': 20}</find>
     </findStrings>
@@ -277,9 +231,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/keras/callbacks.py" />
-        <option value="$PROJECT_DIR$/Validate.py" />
-        <option value="$PROJECT_DIR$/DataManager/Simulated/DataManager.py" />
         <option value="$PROJECT_DIR$/DataManager/Simulated/SimulatedData.py" />
         <option value="$PROJECT_DIR$/DataManager.py" />
         <option value="$PROJECT_DIR$/Results.txt" />
@@ -318,15 +269,18 @@
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/base.py" />
         <option value="$PROJECT_DIR$/Datasets/Gjoa.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL2" />
-        <option value="$PROJECT_DIR$/Datasets/base.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET_CHKPRES.py" />
-        <option value="$PROJECT_DIR$/model_validation/Visualize.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_TEST_2x20_MAPE" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_FINAL_TEST_2x100_MAPE_2" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_FINAL_TEST_2x100_MAPE_FINAL_2" />
+        <option value="$PROJECT_DIR$/Datasets/GJOA2.py" />
+        <option value="$PROJECT_DIR$/Datasets/base.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
-        <option value="$PROJECT_DIR$/Models/NeuralNetworks/base_class.py" />
         <option value="$PROJECT_DIR$/model_validation/base.py" />
-        <option value="$PROJECT_DIR$/Datasets/GJOA2.py" />
+        <option value="$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py" />
+        <option value="$PROJECT_DIR$/model_validation/Visualize.py" />
         <option value="$PROJECT_DIR$/model_validation/Validate.py" />
       </list>
     </option>
@@ -428,6 +382,54 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="NeuralNetworks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MasterThesisCode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MasterThesisCode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NeuralNetworks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SavedModels2" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="hdf5_files" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MasterThesisCode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MasterThesisCode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Models" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NeuralNetworks" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SavedModels2" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -767,13 +769,13 @@
     <frame x="-8" y="-8" width="1936" height="1176" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16257995" sideWeight="0.79820627" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29157782" sideWeight="0.79820627" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.48939395" sideWeight="0.2003231" order="6" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32942432" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="top" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3297456" sideWeight="0.49361023" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33072406" sideWeight="0.36261982" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2661448" sideWeight="0.7996769" order="9" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33757338" sideWeight="0.7996769" order="9" side_tool="false" content_ui="tabs" x="5" y="354" width="1238" height="323" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37802908" sideWeight="0.49095607" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.49573562" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1898223" sideWeight="0.20179372" order="2" side_tool="true" content_ui="tabs" />
@@ -863,84 +865,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PBH_INPUT_PWH_PDC_MODEL_wONOFFn9.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/SavedModels2/Architecture/GJOA_OIL_WELLS_PWH_MODEL" />
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_MODEL.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/keras/legacy/interfaces.py" />
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PBH_MODEL2.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/AppData/Local/Continuum/Anaconda3/envs/py35/Lib/site-packages/matplotlib/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_MODEL_PBH_MAE_FINAL.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_OIL2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET_VANILLA_GJOA2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_GAS_WELLS_2017_PRETRAINED_nMean33.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/ConfigFiles2/GJOA_OIL_WELLS_OIL_MODEL_FINAL_2_config_1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1569">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH_MODEL.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PRESSURE_ALL.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PWH_MODEL_PBH_MAE_FINAL_RISER.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/model_figures/GJOA_OIL_WELLS_PDC_MODEL_CHK_MAE_FINAL_SMALL.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -1034,16 +958,8 @@
         <state relative-caret-position="1547">
           <caret line="98" column="5" lean-forward="false" selection-start-line="98" selection-start-column="5" selection-end-line="98" selection-end-column="5" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_1">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="31" lean-forward="false" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1052,34 +968,8 @@
         <state relative-caret-position="3485">
           <caret line="212" column="27" lean-forward="false" selection-start-line="212" selection-start-column="27" selection-end-line="212" selection-end-column="27" />
           <folding>
-            <element signature="e#0#35#0" expanded="true" />
+            <element signature="e#0#35#0" expanded="false" />
             <marker date="1493814652672" expanded="true" signature="6152:10249" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1462">
-          <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
-          <folding>
-            <element signature="e#3#22#0" expanded="true" />
-            <marker date="1493978368339" expanded="true" signature="826:4272" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="2339:3124" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="2433:2870" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="2467:2628" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="2646:2870" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="3139:4249" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="3357:3455" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="3592:4229" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="3760:3920" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="4297:4815" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="4441:4739" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="4469:4639" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="4667:4739" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="4833:4981" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="4860:4968" ph="..." />
-            <marker date="1493978368339" expanded="true" signature="5310:5407" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1100,24 +990,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_sMAPE">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="476">
-          <caret line="55" column="29" lean-forward="true" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Datasets/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="53" column="26" lean-forward="false" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
-          <folding>
-            <element signature="e#1#95#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_TEST2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1505">
@@ -1129,47 +1001,151 @@
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="646">
-          <caret line="38" column="29" lean-forward="true" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+          <caret line="38" column="29" lean-forward="false" selection-start-line="38" selection-start-column="29" selection-end-line="38" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_QGAS_DEPTH_2_TEST_4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_QOIL_DEPTH_2_TEST_1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_QOIL_DEPTH_2_TEST_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_QOIL_3">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/GRID_SEARCH_OIL_WELLS_QOIL_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3">
+          <caret line="18" column="31" lean-forward="false" selection-start-line="18" selection-start-column="31" selection-end-line="18" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_1">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_sMAPE">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-224">
+          <caret line="55" column="29" lean-forward="true" selection-start-line="55" selection-start-column="4" selection-end-line="55" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_TEST_2x20_MAPE_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="54" column="9" lean-forward="true" selection-start-line="54" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_TEST_2x20_MAPE">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-632">
+          <caret line="58" column="29" lean-forward="true" selection-start-line="52" selection-start-column="7" selection-end-line="58" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_FINAL_TEST_2x100_MAPE_4">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_FINAL_TEST_2x100_MAPE_FINAL">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1238">
+          <caret line="117" column="0" lean-forward="false" selection-start-line="117" selection-start-column="0" selection-end-line="124" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_TEST_2x100_MAPE_FINAL">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-816">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_FINAL_TEST_2x100_MAPE_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="986">
+          <caret line="58" column="32" lean-forward="false" selection-start-line="58" selection-start-column="32" selection-end-line="58" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_GAS_FINAL_TEST_2x100_MAPE_FINAL_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1618">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="16" column="5" lean-forward="false" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
+        <state relative-caret-position="204">
+          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
+    <entry file="file://$PROJECT_DIR$/Datasets/Gjoa.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1251">
-          <caret line="400" column="4" lean-forward="false" selection-start-line="400" selection-start-column="4" selection-end-line="400" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="37" column="108" lean-forward="false" selection-start-line="37" selection-start-column="108" selection-end-line="37" selection-end-column="108" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="629">
-          <caret line="37" column="53" lean-forward="false" selection-start-line="37" selection-start-column="53" selection-end-line="37" selection-end-column="53" />
+        <state relative-caret-position="1080">
+          <caret line="87" column="13" lean-forward="false" selection-start-line="87" selection-start-column="13" selection-end-line="87" selection-end-column="13" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NET2_PRESSURE.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="147">
-          <caret line="116" column="47" lean-forward="true" selection-start-line="116" selection-start-column="47" selection-end-line="116" selection-end-column="47" />
+        <state relative-caret-position="-165">
+          <caret line="24" column="33" lean-forward="false" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1177,25 +1153,83 @@
     <entry file="file://$PROJECT_DIR$/model_validation/base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
-          <caret line="30" column="85" lean-forward="false" selection-start-line="30" selection-start-column="85" selection-end-line="30" selection-end-column="85" />
+          <caret line="39" column="14" lean-forward="false" selection-start-line="39" selection-start-column="14" selection-end-line="39" selection-end-column="14" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_OIL_WELLS_OIL_FINAL_TEST_2x100_MAPE_FINAL_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="58" column="32" lean-forward="false" selection-start-line="58" selection-start-column="26" selection-end-line="58" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Datasets/base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2618">
+          <caret line="47" column="29" lean-forward="false" selection-start-line="47" selection-start-column="29" selection-end-line="47" selection-end-column="29" />
+          <folding>
+            <element signature="e#1#95#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Datasets/GJOA2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="387">
-          <caret line="138" column="12" lean-forward="false" selection-start-line="138" selection-start-column="12" selection-end-line="138" selection-end-column="12" />
+        <state relative-caret-position="3728">
+          <caret line="273" column="59" lean-forward="false" selection-start-line="273" selection-start-column="59" selection-end-line="273" selection-end-column="59" />
           <folding>
             <element signature="e#3#22#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
+    <entry file="file://$PROJECT_DIR$/model_validation/Visualize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4454">
+          <caret line="306" column="41" lean-forward="false" selection-start-line="306" selection-start-column="41" selection-end-line="306" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Datasets/visualize.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/CV_results/GJOA_GAS_WELLS_GAS_FINAL_TEST_2x100_MAPE_FINAL_2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="10" lean-forward="false" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/base_class.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="340">
-          <caret line="29" column="4" lean-forward="false" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
+          <caret line="89" column="36" lean-forward="false" selection-start-line="89" selection-start-column="36" selection-end-line="89" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Models/NeuralNetworks/NCNET1_GJOA2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="38" column="111" lean-forward="false" selection-start-line="38" selection-start-column="107" selection-end-line="38" selection-end-column="111" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_validation/Validate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="423" column="42" lean-forward="false" selection-start-line="423" selection-start-column="42" selection-end-line="423" selection-end-column="42" />
           <folding>
             <element signature="e#1#41#0" expanded="true" />
           </folding>

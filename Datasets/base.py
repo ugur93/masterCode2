@@ -56,7 +56,8 @@ class CustomScaler:
             'QOIL': 1,
             'QWAT': 1
         }
-
+    #OIl: 0.2
+    #GAS: 2000
         self.TAGS={'PRESSURES3':['PBH','PWH','delta','PDC'],
                    #'PRESSURES2':['PBH'],
                    'QGAS':['QGAS','DEPRECATED'],

@@ -30,12 +30,13 @@ K.set_image_dim_ordering('th')
 sas=5708
 OUT = 'GAS'
 
-TRAIN_ES=3584-500
+TRAIN_ES=1720-500
+TRAIN_ES=1690-500
 class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2,n_width=20,l2w=0.0002,dp_rate=0,seed=3014,output_act='relu',n_epoch=TRAIN_ES,DATA='GAS'):
+    def __init__(self,n_depth=2,n_width=100,l2w=0.0002,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000,DATA='GAS'):
 
 
 
@@ -80,7 +81,7 @@ class NCNET1_GJOA2(NN_BASE):
         batch_size = 64
         self.activation='relu'
 
-        self.model_name ='GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA_2x20'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL2_TESTDATA_2x100_2'# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 

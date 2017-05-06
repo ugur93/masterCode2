@@ -17,20 +17,22 @@ for i,key in zip(range(1,len(well_names)+1),well_names):
 well_names=['F1','B2','D3','E1']
 for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well G{}'.format(i)
-KEY_MAP['GJOA_OIL_SUM_QGAS']='Total production flow rate'
+KEY_MAP['GJOA_OIL_SUM_QGAS']='Total production'
+KEY_MAP['GJOA_TOTAL_SUM_QOIL']='Total production'
+KEY_MAP['GJOA_QGAS']='Total production'
 #print(KEY_MAP)
 #exit()
 for key in ['A','B','C','D']:
     KEY_MAP[key+'_QGAS']='Well '+key
-TICKSIZE=20
+TICKSIZE=25
 FONTSIZELEGEND=25
 FONTSIZEX=25
 FONTSIZEY=25
 FONTSIZETITLE=30
-TRUE_DATA_TAG='(Simulated)'
+TRUE_DATA_TAG='(Measured)'
 PREDICTED_DATA_TAG='(Prediction)'
 TICK_STEP_SIZE=10
-TRUE_AND_PREDICTED_Y_LABEL='Simulated flow rate'
+TRUE_AND_PREDICTED_Y_LABEL='Oil flow rate [Sm3/h] (scaled)'
 
 TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
 TRUE_TEST_LABEL='Test '+TRUE_DATA_TAG
@@ -205,11 +207,11 @@ def get_line_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,r
 
     #ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
     #           ncol=2, mode="expand", borderaxespad=0.2)
-    ax.legend(fontsize=15)
+    ax.legend(fontsize=FONTSIZELEGEND)
     # plt.legend()
     fig.subplots_adjust(wspace=0.13, hspace=.2, top=0.95, bottom=0.06, left=0.05, right=0.99)
     fig.canvas.set_window_title(model.model_name)
-    ax.tick_params(axis='both', which='major', labelsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=TICKSIZE)
     return ax
 def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,remove_zero_chk=(False,'name',0)):
     ax = fig_par[-1]
@@ -302,7 +304,7 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
         axes_tot.grid(which='major', linestyle='-')
         axes_tot.set_axisbelow(True)
         axes_tot.set_xlim([-0.1, 3])
-        axes_wells[ii].set_xlim([-0.1, 30])
+        axes_wells[ii].set_xlim([-0.1, 20])
         axes_wells[ii].set_ylim([20, 105])
         axes_tot.set_ylim([20, 105])
 
@@ -323,7 +325,7 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
                           label='{} data'.format(data_type))
         #axes_tot.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
         axes_tot.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
-        axes_tot.set_ylabel('Cumulative (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
+        axes_tot.set_ylabel('Cumulative (% of training and test set sample points)'.format(data_type),fontsize=FONTSIZEY)
 
         axes_wells[ii].legend(fontsize=FONTSIZELEGEND)
 
@@ -497,7 +499,7 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                     ax = get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
                                    y_tag=output_tag, remove_zero_chk=zero_chk_param)
                 # plt.tight_layout()
-                if output_tag.split('_')[-1]=='QGAS':
+                if output_tag.split('_')[-1] in ['QGAS','QOIL']:
                     #ax.set_title('Well '+output_tag.split('_')[0], fontsize=20)
                     ax.set_title(KEY_MAP[output_tag], fontsize=FONTSIZETITLE)
                 else:

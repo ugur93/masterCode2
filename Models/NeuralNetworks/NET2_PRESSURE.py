@@ -17,10 +17,12 @@ import keras.backend as K
 #        seed=9035
 def abs(x):
     return K.abs(x)
+
+SIM=False
 class SSNET2(NN_BASE):
 
 
-    def __init__(self,n_width=10,n_depth=1,l2w=0.001,dp_rate=0,seed=3014,output_act='relu',n_epoch=2800):
+    def __init__(self,n_width=100,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
 
 
         self.SCALE=100
@@ -39,36 +41,42 @@ class SSNET2(NN_BASE):
         dp_rate=0
         self.add_onoff_state=True
 
-        #self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
-        self.model_name = 'SIM_DATA_WITH_ONOFF_TEST'
+        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
+        #self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
-        self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
-        #self.output_tags = SIM_OUTPUT_TAGS
+        if SIM:
+            self.output_tags = SIM_OUTPUT_TAGS
+            self.well_names = ['A', 'B', 'C', 'D']
+            self.loss_weights = {
+                'A_out': 0.0,
+                'B_out': 0.0,
+                'C_out': 0.0,
+                'D_out': 0.0,
+                'Total_production': 1.0
+            }
+        else:
+            self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
+            self.well_names = ['F1', 'B2', 'D3', 'E1']
+            self.loss_weights = {
+                'F1_out': 0.0,
+                'B2_out': 0.0,
+                'D3_out': 0.0,
+                'E1_out': 0.0,
+                'GJOA_QGAS': 1.0
+            }
 
 
-        self.well_names=['F1','B2','D3','E1']
-        #self.well_names=['A','B','C','D']
+        #
+
         self.input_tags={}
         tags=['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
                 self.input_tags[name].append(name+'_'+tag)
-        self.loss_weights = {
-            'F1_out': 0.0,
-            'B2_out': 0.0,
-            'D3_out': 0.0,
-            'E1_out': 0.0,
-            'GJOA_QGAS': 1.0
-        }
-        #self.loss_weights = {
-        #    'A_out': 0.0,
-        #    'B_out': 0.0,
-        #    'C_out': 0.0,
-        #    'D_out': 0.0,
-        #    'Total_production': 1.0
-        # }
+
+
 
 
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
