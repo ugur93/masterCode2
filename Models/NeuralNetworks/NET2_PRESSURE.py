@@ -22,7 +22,7 @@ SIM=False
 class SSNET2(NN_BASE):
 
 
-    def __init__(self,n_width=100,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
+    def __init__(self,n_width=90,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
 
 
         self.SCALE=100

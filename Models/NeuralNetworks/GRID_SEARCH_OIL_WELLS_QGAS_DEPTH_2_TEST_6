@@ -1,0 +1,37 @@
+Best results: 
+Best params:{'l2w': 0.0001, 'n_depth': 2, 'seed': 3014, 'DATA': 'GAS', 'n_width': 90} 
+Best COST: [ 1668.95135423] 
+BEST SCORES: 
+ {'RMSE_test': C1_QGAS             1595.49
+C2_QGAS             1069.81
+C3_QGAS             1262.57
+C4_QGAS             1236.83
+B1_QGAS             1057.82
+B3_QGAS             1449.35
+D1_QGAS             1377.44
+GJOA_OIL_SUM_QGAS   1668.95
+dtype: float64, 'RMSE_train': C1_QGAS             1752.83
+C2_QGAS             1046.69
+C3_QGAS              947.91
+C4_QGAS              733.83
+B1_QGAS              973.27
+B3_QGAS             1283.55
+D1_QGAS             1142.20
+GJOA_OIL_SUM_QGAS    938.04
+dtype: float64, 'R2_test': C1_QGAS             0.97
+C2_QGAS             0.98
+C3_QGAS             0.98
+C4_QGAS             0.96
+B1_QGAS             0.99
+B3_QGAS             0.98
+D1_QGAS             0.98
+GJOA_OIL_SUM_QGAS   1.00
+dtype: float64, 'R2_train': C1_QGAS             0.97
+C2_QGAS             0.99
+C3_QGAS             0.99
+C4_QGAS             0.99
+B1_QGAS             1.00
+B3_QGAS             0.99
+D1_QGAS             0.99
+GJOA_OIL_SUM_QGAS   1.00
+dtype: float64}

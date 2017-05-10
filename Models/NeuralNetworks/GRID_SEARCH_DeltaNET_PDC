@@ -1,0 +1,61 @@
+Best results: 
+Best params:{'seed': 3014, 'l2w': 0.00055000000000000014, 'n_width': 50, 'n_depth': 1} 
+Best COST: 40.740664808230335 
+BEST SCORES: 
+ {'R2_test': C1_PDC         0.54
+C1_delta_PDC   0.45
+C2_PDC         0.52
+C2_delta_PDC   0.46
+C3_PDC         0.53
+C3_delta_PDC   0.45
+C4_PDC         0.54
+C4_delta_PDC   0.48
+B3_PDC         0.52
+B3_delta_PDC   0.44
+B1_PDC         0.46
+B1_delta_PDC   0.38
+D1_PDC         0.52
+D1_delta_PDC   0.47
+dtype: float64, 'RMSE_train': C1_PDC         2.59
+C1_delta_PDC   2.71
+C2_PDC         2.63
+C2_delta_PDC   2.75
+C3_PDC         2.61
+C3_delta_PDC   2.75
+C4_PDC         2.62
+C4_delta_PDC   2.76
+B3_PDC         2.64
+B3_delta_PDC   2.78
+B1_PDC         2.84
+B1_delta_PDC   2.92
+D1_PDC         2.65
+D1_delta_PDC   2.82
+dtype: float64, 'RMSE_test': C1_PDC         2.90
+C1_delta_PDC   2.76
+C2_PDC         2.97
+C2_delta_PDC   2.82
+C3_PDC         2.95
+C3_delta_PDC   2.82
+C4_PDC         2.92
+C4_delta_PDC   2.78
+B3_PDC         2.97
+B3_delta_PDC   2.84
+B1_PDC         3.19
+B1_delta_PDC   3.01
+D1_PDC         2.97
+D1_delta_PDC   2.83
+dtype: float64, 'R2_train': C1_PDC         0.87
+C1_delta_PDC   0.57
+C2_PDC         0.86
+C2_delta_PDC   0.57
+C3_PDC         0.87
+C3_delta_PDC   0.57
+C4_PDC         0.86
+C4_delta_PDC   0.58
+B3_PDC         0.86
+B3_delta_PDC   0.56
+B1_PDC         0.85
+B1_delta_PDC   0.53
+D1_PDC         0.86
+D1_delta_PDC   0.57
+dtype: float64}

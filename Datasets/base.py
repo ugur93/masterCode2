@@ -51,9 +51,9 @@ class CustomScaler:
         self.InverseScales = {
             'PRESSURES3': 100,
             'PRESSURES2': 50,
-            'QGAS': 100000,
+            'QGAS': 2000,
             'CHK': 50,
-            'QOIL': 1,
+            'QOIL': 0.2,
             'QWAT': 1
         }
     #OIl: 0.2

@@ -1,0 +1,94 @@
+RMSE_TRAIN: 
+C1_QGAS              1174.177522
+C2_QGAS               644.549198
+C3_QGAS               829.370250
+C4_QGAS               950.211218
+B1_QGAS              1235.067059
+B3_QGAS              2178.007474
+D1_QGAS              1538.148117
+GJOA_OIL_SUM_QGAS    3095.067263
+dtype: float64
+RMSE_TEST: 
+C1_QGAS              2552.221469
+C2_QGAS               610.091214
+C3_QGAS              2535.430969
+C4_QGAS              1886.100081
+B1_QGAS              1837.253016
+B3_QGAS              3299.783775
+D1_QGAS              1899.708878
+GJOA_OIL_SUM_QGAS    2156.072317
+dtype: float64
+R2_TRAIN: 
+C1_QGAS              0.988225
+C2_QGAS              0.996480
+C3_QGAS              0.994537
+C4_QGAS              0.991764
+B1_QGAS              0.992606
+B3_QGAS              0.967678
+D1_QGAS              0.980810
+GJOA_OIL_SUM_QGAS    0.998048
+dtype: float64
+R2_TEST: 
+C1_QGAS              0.793668
+C2_QGAS              0.990152
+C3_QGAS              0.835083
+C4_QGAS              0.907806
+B1_QGAS              0.945935
+B3_QGAS              0.773101
+D1_QGAS              0.947361
+GJOA_OIL_SUM_QGAS    0.995541
+dtype: float64
+sMAPE_TRAIN: 
+C1_QGAS              2.330204
+C2_QGAS              4.092437
+C3_QGAS              1.771161
+C4_QGAS              2.251175
+B1_QGAS              3.174717
+B3_QGAS              5.872987
+D1_QGAS              4.024228
+GJOA_OIL_SUM_QGAS    1.461030
+dtype: float64
+sMAPE_TEST: 
+C1_QGAS              5.860481
+C2_QGAS              1.049122
+C3_QGAS              5.805258
+C4_QGAS              3.597708
+B1_QGAS              5.645457
+B3_QGAS              8.468659
+D1_QGAS              3.797443
+GJOA_OIL_SUM_QGAS    0.574427
+dtype: float64
+RMSE_TRAIN_SCORES: 
+       C1_QGAS     C2_QGAS    C3_QGAS     C4_QGAS      B1_QGAS      B3_QGAS  \
+0  1174.177522  644.549198  829.37025  950.211218  1235.067059  2178.007474   
+
+       D1_QGAS  GJOA_OIL_SUM_QGAS  
+0  1538.148117        3095.067263  
+RMSE_TEST_SCORES: 
+       C1_QGAS     C2_QGAS      C3_QGAS      C4_QGAS      B1_QGAS  \
+0  2552.221469  610.091214  2535.430969  1886.100081  1837.253016   
+
+       B3_QGAS      D1_QGAS  GJOA_OIL_SUM_QGAS  
+0  3299.783775  1899.708878        2156.072317  
+sMAPE_TRAIN_SCORES: 
+    C1_QGAS   C2_QGAS   C3_QGAS   C4_QGAS   B1_QGAS   B3_QGAS   D1_QGAS  \
+0  2.330204  4.092437  1.771161  2.251175  3.174717  5.872987  4.024228   
+
+   GJOA_OIL_SUM_QGAS  
+0            1.46103  
+sMAPE_TEST_SCORES: 
+    C1_QGAS   C2_QGAS   C3_QGAS   C4_QGAS   B1_QGAS   B3_QGAS   D1_QGAS  \
+0  5.860481  1.049122  5.805258  3.597708  5.645457  8.468659  3.797443   
+
+   GJOA_OIL_SUM_QGAS  
+0           0.574427  
+
+Well O1 & 1174.18 & 98.82% & 2.33% &  2552.22 & 79.37% & 5.86% \\ 
+ Well O2 & 644.55 & 99.65% & 4.09% &  610.09 & 99.02% & 1.05% \\ 
+ Well O3 & 829.37 & 99.45% & 1.77% &  2535.43 & 83.51% & 5.81% \\ 
+ Well O4 & 950.21 & 99.18% & 2.25% &  1886.10 & 90.78% & 3.60% \\ 
+ Well O5 & 1235.07 & 99.26% & 3.17% &  1837.25 & 94.59% & 5.65% \\ 
+ Well O6 & 2178.01 & 96.77% & 5.87% &  3299.78 & 77.31% & 8.47% \\ 
+ Well O7 & 1538.15 & 98.08% & 4.02% &  1899.71 & 94.74% & 3.80% \\ 
+ Total production flow rate & 3095.07 & 99.80% & 1.46% &  2156.07 & 99.55% & 0.57% \\ 
+ 

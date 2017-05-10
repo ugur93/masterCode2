@@ -45,6 +45,11 @@ def fetch_gjoa_data():
 
     X,Y=data_to_X_Y(data)
 
+    X['time_sample_days'] = (data['T2'] - data['T1']) / (1000 * 60 * 60*24)
+
+    mean_time = np.max(X['time_sample_days'])
+    print(mean_time)
+
     DROP = [900]#,443,605,442]
     X.drop(DROP, inplace=True)
     Y.drop(DROP, inplace=True)

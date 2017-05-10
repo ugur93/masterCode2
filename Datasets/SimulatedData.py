@@ -96,7 +96,7 @@ def fetchSimulatedData():
 
     Y=pd.concat([Y,X_Q],axis=1)
 
-    #plotData(X, X_Q, Y)
+    plotData(X, X_Q, Y)
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
 
@@ -116,11 +116,13 @@ def plotData(X,X_Q,Y):
     plt.subplot(2,1,2)
     plotWellOutputs(Y)
     plt.figure()
+    plt.grid(which='major', linestyle='-')
+
     plt.plot(Y['Total_production'])
     plt.title('Total production',fontsize=30)
-    plt.ylabel('Q', fontsize=30,rotation=0,labelpad=20)
-    plt.xlabel('Sample', fontsize=30)
-    plt.tick_params(axis='both', which='major', labelsize=20)
+    plt.ylabel('Q', fontsize=30,rotation=0,labelpad=30)
+    plt.xlabel('Sample number', fontsize=30)
+    plt.tick_params(axis='both', which='major', labelsize=30)
 
     plt.show()
 def plotChokeInputs(X):
@@ -131,24 +133,25 @@ def plotChokeInputs(X):
         plt.plot(X[WELL_NAMES[i-1]+'_CHK'],label=WELL_NAMES[i-1])
 
     plt.title('Choke opening',fontsize=30)
-    plt.ylabel('u',fontsize=30,rotation=0,labelpad=20)
-    plt.xlabel('Sample',fontsize=30)
+    plt.ylabel('u',fontsize=30,rotation=0,labelpad=30)
+    plt.xlabel('Sample number',fontsize=30)
     plt.legend(fontsize=20)
-    plt.tick_params(axis='both', which='major', labelsize=20)
+    plt.tick_params(axis='both', which='major', labelsize=30)
 
     #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
     #           ncol=4, mode="expand", borderaxespad=0., fontsize=20)
 
 
 def plotWellOutputs(X_Q):
-   for i in range(1,N_WELLS+1):
+    plt.grid(which='major', linestyle='-')
+    for i in range(1,N_WELLS+1):
        #plt.subplot(2, 2, i)
        plt.plot(X_Q[WELL_NAMES[i-1]+'_QGAS'],label=WELL_NAMES[i-1])
-   plt.title('Well productions',fontsize=30)
-   plt.ylabel('q', fontsize=30,rotation=0,labelpad=20)
-   plt.xlabel('Sample', fontsize=30)
-   plt.legend(fontsize=20)
-   plt.tick_params(axis='both', which='major', labelsize=20)
+    plt.title('Well productions',fontsize=30)
+    plt.ylabel('q', fontsize=30,rotation=0,labelpad=30)
+    plt.xlabel('Sample number', fontsize=30)
+    plt.legend(fontsize=20)
+    plt.tick_params(axis='both', which='major', labelsize=30)
 
    #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
    #           ncol=4, mode="expand", borderaxespad=0., fontsize=20)

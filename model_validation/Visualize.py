@@ -32,7 +32,7 @@ FONTSIZETITLE=30
 TRUE_DATA_TAG='(Measured)'
 PREDICTED_DATA_TAG='(Prediction)'
 TICK_STEP_SIZE=10
-TRUE_AND_PREDICTED_Y_LABEL='Oil flow rate [Sm3/h] (scaled)'
+TRUE_AND_PREDICTED_Y_LABEL='Gas flow rate [Sm3/h] (scaled)'
 
 TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
 TRUE_TEST_LABEL='Test '+TRUE_DATA_TAG
@@ -82,7 +82,7 @@ def ends_with(name,end_tag):
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[],with_line_plot=False,with_separate_plot=False):
 
     remove_zero_chk=False
-    #plot_history(model)
+    plot_history(model)
     plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test)
     #plot_input_vs_output(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                     remove_zero_chk=remove_zero_chk)
@@ -92,19 +92,43 @@ def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], inpu
     #plot_chk_vs_multiphase(model, data, X_train, X_test, Y_train, Y_test, input_cols=input_cols, output_cols=output_cols,
     #                       remove_zero_chk=remove_zero_chk)
     #plt.show()
+def resample(X,step):
+
+    N=len(X)
+    new_X=np.zeros((N//step,))
+    print(N//step)
+    j=0
+    for i in range(0,N-step,step):
+        new_X[j]=np.mean(X[i:i+step])
+        j+=1
+
+
+    return new_X
 
 def plot_history(model):
-
+    output_names=model.output_tags.keys()
+    #output_names=model.sort_names(output_names)
+    step_size=10
     fig,ax=plt.subplots(1,1)
     N=len(model.history.history['val_GJOA_TOTAL_loss'])
-    ax.plot(range(1,N+1 ),model.history.history['val_GJOA_TOTAL_loss'], label='Validation set loss',color='green',marker='o')
-    ax.plot(range(1,N+1),model.history.history['GJOA_TOTAL_loss'], label='Training set loss',color='blue', linestyle='--', marker='o')
-    ax.set_title('History',fontsize=20)
-    ax.set_xlabel('Time (epochs)',fontsize=20)
-    ax.set_ylabel('Loss',fontsize=20)
-    ax.legend(fontsize=20)
-    ax.tick_params(axis='both', labelsize=20)
-    plt.show()
+
+    for key in output_names:
+        X=resample(model.history.history['val_'+key+'_loss'],step_size)
+        ax.plot(range(1, (N//step_size)*step_size+1,step_size), X,marker='.', label=KEY_MAP[model.output_tags[key][0]])
+
+
+    #ax.plot(range(1,N+1),model.history.history['GJOA_TOTAL_loss'], label='Training set loss',color='blue', linestyle='--', marker='o')
+    #print(model.history.history)
+    ax.grid(which='major', linestyle='-')
+    ax.set_axisbelow(True)
+    ax.set_title('Test error',fontsize=FONTSIZETITLE)
+    ax.set_xlabel('Time (epochs)',fontsize=FONTSIZEX)
+    ax.set_ylabel('Loss',fontsize=FONTSIZEY)
+    ax.legend(fontsize=FONTSIZELEGEND)
+    ax.tick_params(axis='both', labelsize=TICKSIZE)
+    ax.set_yticklabels([])
+    #ax.xaxis.set_ticks(np.arange(0, N, step_size))
+    #plt.show()
 def tags_to_list(tags):
 
     tags_list=[]
@@ -299,26 +323,26 @@ def get_cumulative_flow_plot(cumperf,data_tag):
 def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
 
     def plot(cumperf,axes_wells,axes_tot, colors,ii, data_type):
-        axes_wells[ii].grid(which='major', linestyle='-')
-        axes_wells[ii].set_axisbelow(True)
+        axes_wells.grid(which='major', linestyle='-')
+        axes_wells.set_axisbelow(True)
         axes_tot.grid(which='major', linestyle='-')
         axes_tot.set_axisbelow(True)
         axes_tot.set_xlim([-0.1, 3])
-        axes_wells[ii].set_xlim([-0.1, 20])
-        axes_wells[ii].set_ylim([20, 105])
+        axes_wells.set_xlim([-0.1, 40])
+        axes_wells.set_ylim([20, 105])
         axes_tot.set_ylim([20, 105])
 
         #axes_tot.yaxis.set_ticks(np.arange(0, 110, TICK_STEP_SIZE))
         #axes_wells[ii].yaxis.set_ticks(np.arange(0, 110, TICK_STEP_SIZE))
 
         for i in range(len(cumperf.columns) - 1):
-            axes_wells[ii].plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=KEY_MAP[cumperf.columns[i]],
+            axes_wells.plot(cumperf.index, cumperf[cumperf_train.columns[i]], label=KEY_MAP[cumperf.columns[i]],
                           color=colors[i])
-            axes_wells[ii].set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
+            axes_wells.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
 
-        axes_wells[ii].set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
-        axes_wells[ii].set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
-        axes_wells[ii].tick_params(axis='both', which='major', labelsize=TICKSIZE)
+        axes_wells.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
+        axes_wells.set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
+        axes_wells.tick_params(axis='both', which='major', labelsize=TICKSIZE)
         axes_tot.tick_params(axis='both', which='major', labelsize=TICKSIZE)
 
         axes_tot.plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
@@ -327,14 +351,14 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
         axes_tot.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
         axes_tot.set_ylabel('Cumulative (% of training and test set sample points)'.format(data_type),fontsize=FONTSIZEY)
 
-        axes_wells[ii].legend(fontsize=FONTSIZELEGEND)
+        axes_wells.legend(fontsize=FONTSIZELEGEND)
 
-    fig_wells, axes_wells = plt.subplots(1, 2)
+    fig_wells, axes_wells = plt.subplots(1, 1)
     fig_tot, axes_tot = plt.subplots(1, 1)
     cmap = plt.get_cmap('Vega10')
     colors = [cmap(i) for i in np.linspace(0, 1, len(cumperf_train.columns))]
 
-    axes_wells = axes_wells.flatten()
+    #axes_wells = axes_wells.flatten()
     #axes_tot = axes_tot.flatten()
 
     fig_wells.canvas.set_window_title(data_tag)
@@ -343,7 +367,7 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
 
 
 
-    plot(cumperf_train,axes_wells,axes_tot,colors,0,'Training')
+    #plot(cumperf_train,axes_wells,axes_tot,colors,0,'Training')
     plot(cumperf_test,axes_wells,axes_tot,colors,1,'Test')
 
     axes_tot.legend(fontsize=FONTSIZELEGEND)

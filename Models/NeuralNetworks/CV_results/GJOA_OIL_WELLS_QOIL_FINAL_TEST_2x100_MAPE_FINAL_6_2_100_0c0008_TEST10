@@ -1,0 +1,94 @@
+RMSE_TRAIN: 
+C1_QOIL                1.835366
+C2_QOIL                1.066306
+C3_QOIL                0.823032
+C4_QOIL                0.995639
+B1_QOIL                1.561355
+B3_QOIL                2.090203
+D1_QOIL                0.747741
+GJOA_TOTAL_SUM_QOIL    1.621399
+dtype: float64
+RMSE_TEST: 
+C1_QOIL                3.971672
+C2_QOIL                0.776468
+C3_QOIL                0.847901
+C4_QOIL                0.747127
+B1_QOIL                4.411877
+B3_QOIL                1.112247
+D1_QOIL                1.495912
+GJOA_TOTAL_SUM_QOIL    1.338936
+dtype: float64
+R2_TRAIN: 
+C1_QOIL                0.879689
+C2_QOIL                0.951730
+C3_QOIL                0.973441
+C4_QOIL                0.957124
+B1_QOIL                0.962446
+B3_QOIL                0.678934
+D1_QOIL                0.974147
+GJOA_TOTAL_SUM_QOIL    0.997179
+dtype: float64
+R2_TEST: 
+C1_QOIL               -1.258934
+C2_QOIL                0.856639
+C3_QOIL                0.900064
+C4_QOIL                0.900094
+B1_QOIL               -0.063392
+B3_QOIL                0.460700
+D1_QOIL                0.766761
+GJOA_TOTAL_SUM_QOIL    0.989344
+dtype: float64
+sMAPE_TRAIN: 
+C1_QOIL                 7.537468
+C2_QOIL                 6.362696
+C3_QOIL                 3.832018
+C4_QOIL                 4.277551
+B1_QOIL                 6.517666
+B3_QOIL                11.916729
+D1_QOIL                 2.517309
+GJOA_TOTAL_SUM_QOIL     0.880240
+dtype: float64
+sMAPE_TEST: 
+C1_QOIL                17.956753
+C2_QOIL                 4.592195
+C3_QOIL                 4.259657
+C4_QOIL                 3.745091
+B1_QOIL                27.335607
+B3_QOIL                12.267206
+D1_QOIL                 6.345455
+GJOA_TOTAL_SUM_QOIL     0.753539
+dtype: float64
+RMSE_TRAIN_SCORES: 
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL   B3_QOIL   D1_QOIL  \
+0  1.835366  1.066306  0.823032  0.995639  1.561355  2.090203  0.747741   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             1.621399  
+RMSE_TEST_SCORES: 
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL   B3_QOIL   D1_QOIL  \
+0  3.971672  0.776468  0.847901  0.747127  4.411877  1.112247  1.495912   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             1.338936  
+sMAPE_TRAIN_SCORES: 
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL    B3_QOIL   D1_QOIL  \
+0  7.537468  6.362696  3.832018  4.277551  6.517666  11.916729  2.517309   
+
+   GJOA_TOTAL_SUM_QOIL  
+0              0.88024  
+sMAPE_TEST_SCORES: 
+     C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL    B1_QOIL    B3_QOIL   D1_QOIL  \
+0  17.956753  4.592195  4.259657  3.745091  27.335607  12.267206  6.345455   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             0.753539  
+
+Well O1 & 1.84 & 87.97% & 7.54% &  3.97 & -125.89% & 17.96% \\ 
+ Well O2 & 1.07 & 95.17% & 6.36% &  0.78 & 85.66% & 4.59% \\ 
+ Well O3 & 0.82 & 97.34% & 3.83% &  0.85 & 90.01% & 4.26% \\ 
+ Well O4 & 1.00 & 95.71% & 4.28% &  0.75 & 90.01% & 3.75% \\ 
+ Well O5 & 1.56 & 96.24% & 6.52% &  4.41 & -6.34% & 27.34% \\ 
+ Well O6 & 2.09 & 67.89% & 11.92% &  1.11 & 46.07% & 12.27% \\ 
+ Well O7 & 0.75 & 97.41% & 2.52% &  1.50 & 76.68% & 6.35% \\ 
+ Total production flow rate & 1.62 & 99.72% & 0.88% &  1.34 & 98.93% & 0.75% \\ 
+ 

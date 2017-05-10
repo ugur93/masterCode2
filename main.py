@@ -7,7 +7,6 @@ if __name__=='__main__':
 
 
 
-
     GjoaGAS = Gjoa.fetch_gjoa_data()
     GjoaOIL=GJOA2.fetch_gjoa_data()
     #GjoaOIL=GjoaGAS

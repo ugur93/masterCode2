@@ -28,10 +28,10 @@ def subsample(X,Y):
 def MAPE(Y_measured,Y_pred):
     abs_diff=np.abs(Y_measured-Y_pred)
     abs_diff.fillna(0,inplace=True)
-    print(Y_measured)
+    #print(Y_measured)
 
     remove_ind=Y_measured==Y_pred
-    print(np.sum(remove_ind))
+    #print(np.sum(remove_ind))
     for key in Y_measured.columns:
         remove_ind_temp=Y_measured[key]==0
         #remove_ind_temp=remove_ind_temp&Y_measured[key]==0

@@ -55,6 +55,12 @@ def fetch_gjoa_data():
     X, Y = data_to_X_Y(data)
     X['time'] = np.arange(0, len(X))
 
+
+    X['time_sample_days']=(data['T2']-data['T1'])/(1000*60*60*24)
+
+    mean_time=np.mean(X['time_sample_days'])*len(X)*0.2*0.0328
+    #print(mean_time)
+    #exit()
     X,Y=preprocesss(X, Y)
     X,Y=generate_total_export_variables(X,Y)
 
@@ -71,12 +77,12 @@ def fetch_gjoa_data():
             if ind_zero is None:
                 ind_zero = abs(X[key + '_delta_CHK']) > CTHRESH
                 ind_zero2 = abs(X[key + '_CHK']) ==0
-                ind_zero=ind_zero#|ind_zero2
+                #ind_zero=ind_zero#|ind_zero2
             else:
                 ind_temp = abs(X[key + '_delta_CHK']) > CTHRESH
                 ind_zero2 = ind_zero2 & abs(X[key + '_CHK']) == 0
                 ind_zero=ind_zero|ind_temp
-        ind_zero=ind_zero|ind_zero2
+        ind_zero=ind_zero#|ind_zero2
         GjoaData.X =GjoaData.X[~ind_zero]
         GjoaData.Y = GjoaData.Y[~ind_zero]
         GjoaData.X_transformed = GjoaData.X_transformed[~ind_zero]
@@ -176,6 +182,8 @@ def data_to_X_Y(data):
     X['X']=np.zeros((len(data),))
     Y['Y'] = np.zeros((len(data),))
 
+
+
     for name in well_names:
         for tag in X_tags:
             tag_name=name+'_'+tag
@@ -271,7 +279,7 @@ def set_chk_zero_values_to_zero(X,Y):
 
 def preprocesss(X,Y):
     #DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
-    DROP=[416,447,487,808,173,806,819,820,821,822,805,807]#,234,6,591]
+    DROP=[416,447,487,808,173,806,819,820,821,822,805,807,257]#,234,6,591]
 
     DROP_OIL=[287,130,132,292,290,196]
 
