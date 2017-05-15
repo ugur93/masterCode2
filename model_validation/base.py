@@ -48,13 +48,13 @@ def get_sample_deviation(measured,predicted):
     delta=1e-100
     diff.fillna(0, inplace=True)
 
-
-    remove_ind = measured == measured
-    print(np.sum(remove_ind))
-    for key in measured.columns:
-        remove_ind_temp = measured[key] == 0
-        # remove_ind_temp=remove_ind_temp&Y_measured[key]==0
-        remove_ind[key] = remove_ind[key] | remove_ind_temp
+    if False:
+        remove_ind = measured == measured
+        print(np.sum(remove_ind))
+        for key in measured.columns:
+            remove_ind_temp = measured[key] == 0
+            # remove_ind_temp=remove_ind_temp&Y_measured[key]==0
+            remove_ind[key] = remove_ind[key] | remove_ind_temp
 
     #return np.abs(predicted/(measured+1e-10))*100
     return pd.DataFrame(data=np.where(measured==0,0,diff/(measured)*100),columns=diff.columns,index=diff.index)
@@ -140,7 +140,7 @@ def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
     measured, predicted=get_predicted_and_measured_df(model,data,X,Y)
 
     deviation_points = get_sample_deviation(measured, predicted)
-    deviation_points.fillna(0,inplace=True)
+    #deviation_points.fillna(0,inplace=True)
 
 
 

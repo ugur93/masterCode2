@@ -10,7 +10,7 @@ import keras.backend as K
 class PRESSURE(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=100,l2w=0.001,seed=3014,dp_rate=0,tag='PWH',act='relu',n_epoch=10000):
+    def __init__(self,n_depth=2 ,n_width=30,l2w=0.0005,seed=3014,dp_rate=0,tag='PWH',act='relu',n_epoch=10000):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
@@ -37,11 +37,11 @@ class PRESSURE(NN_BASE):
         self.chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
 
         if self.tag=='PBH':
-            self.well_names = ['C1', 'C3', 'C4', 'B3', 'B1']
+            self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
 
         else:
 
-            self.well_names = ['C1', 'C2', 'C3', 'C4', 'B3','B1','D1']
+            self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1','B3','D1']
 
         self.delta_in=False
         self.input_tags={}
@@ -114,14 +114,14 @@ class PRESSURE(NN_BASE):
 class PRESSURE_DELTA(NN_BASE):
 
 
-    def __init__(self,n_depth=1 ,n_width=100,l2w=0.0001,seed=3014,dp_rate=0,tag='PWH',data='OIL',act='relu',n_epoch=10000):
+    def __init__(self,n_depth=2 ,n_width=60,l2w=0.0002,seed=3014,dp_rate=0,tag='PWH',data='OIL',act='relu',n_epoch=10000):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
         #PDC: {'l2w': 0.00020000000000000001, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
         #PBH {'l2w': 5.0000000000000002e-05, 'n_depth': 2, 'n_width': 30, 'seed': 3014}
         #PWH: {'l2w': 6.0000000000000002e-05, 'n_depth': 2, 'n_width': 50, 'seed': 3014} 
-        self.model_name='GJOA_'+data+'_WELLS_'+tag+'_ALL_DATA'
+        self.model_name='GJOA_deltaNET_'+data+'_WELLS_'+tag+'_ALL_DATA'
         self.out_act='linear'
 
         self.tag=tag
@@ -140,11 +140,11 @@ class PRESSURE_DELTA(NN_BASE):
             self.chk_names =['F1','B2','D3','E1']
             self.well_names=['F1','B2','D3','E1']
         else:
-            self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+            self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3','D1']
             if self.tag == 'PBH':
-                self.well_names = ['C1', 'C3', 'C4', 'B3', 'B1']
+                self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
             else:
-                self.well_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
+                self.well_names = ['C1', 'C2', 'C3', 'C4','B1', 'B3', 'D1']
         self.delta_in=False
         self.input_tags={}
 
@@ -185,7 +185,7 @@ class PRESSURE_DELTA(NN_BASE):
                 self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
             else:
                 self.output_tags[name + '_'+self.tag+'_out2'] = [name + '_'+self.tag]
-                self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
+                #self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
 
         self.output_zero_thresholds = {}
 
@@ -281,7 +281,7 @@ class PRESSURE_DELTA(NN_BASE):
 
             PWH_out2 = Add(name=key + '_'+self.tag+'_out2')([PWH_out, shifted_pressure_input])
             outputs.append(PWH_out2)
-            outputs.append(PWH_out)
+            #outputs.append(PWH_out)
             inputs.append(shifted_pressure_input)
             #inputs.append(chk_val)
 

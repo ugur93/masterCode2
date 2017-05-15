@@ -18,8 +18,9 @@ import keras.backend as K
 def abs(x):
     return K.abs(x)
 
-SIM=False
-class SSNET2(NN_BASE):
+SIM=True
+
+class VANILLANET(NN_BASE):
 
 
     def __init__(self,n_width=90,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
@@ -39,10 +40,114 @@ class SSNET2(NN_BASE):
         nb_epoch = n_epoch
         batch_size = 64
         dp_rate=0
-        self.add_onoff_state=True
+        self.add_onoff_state=False
 
-        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
+        self.model_name='VANILLA_SIM'
         #self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
+        #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
+
+        self.well_names = ['A']#, 'B', 'C', 'D']
+
+        self.input_tags={}
+        tags=['CHK']#,'PBH','PWH','PDC']
+        self.input_tags['main_input'] = []
+        for name in self.well_names:
+            for tag in tags:
+                self.input_tags['main_input'].append(name+'_'+tag)
+
+        self.output_tags={
+            'MAIN_OUT':['A_QGAS']
+
+        }
+
+
+
+
+        super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, seed=seed,
+                         optimizer=optimizer, loss=loss, nb_epoch=nb_epoch, batch_size=batch_size,dp_rate=dp_rate)
+
+
+    def initialize_model(self):
+        print('Initializing %s' % (self.model_name))
+
+        main_input=Input(shape=(len(self.input_tags['main_input']),), dtype='float32',
+                              name='main_input')
+
+        #chk_delta=Add(name='CHK_DELTA')([chk_input_prev,chk_input_now])
+
+        #chk_delta=ThresholdedReLU(theta=0.001)(chk_delta)
+
+
+        outputs = []
+        inputs = [main_input]
+
+        for key in self.well_names:
+
+            temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight),
+                                kernel_initializer=self.init,
+                                use_bias=True)(main_input)
+            for d in range(1,self.n_depth):
+                temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight),
+                                    kernel_initializer=self.init,
+                                    use_bias=True)(temp_output)
+
+
+
+
+            OUT = Dense(1,
+                            kernel_regularizer=l2(self.l2weight), activation=self.output_layer_activation, name='MAIN_OUT',
+                            kernel_initializer=self.init,use_bias=True)(temp_output)
+
+            outputs.append(OUT)
+
+            #inputs.append(chk_val)
+
+
+        self.model = Model(inputs=inputs, outputs=outputs)
+        self.model.compile(optimizer=self.optimizer, loss=self.loss)
+
+    def update_model(self,activation='relu',epoch=10000):
+        self.nb_epoch=epoch
+        self.output_layer_activation=activation
+        self.aux_inputs=[]
+        self.inputs=[]
+        self.merged_outputs=[]
+        self.outputs=[]
+
+        old_model=self.model
+        self.initialize_model()
+        weights=old_model.get_weights()
+        self.model.set_weights(weights)
+
+    def load_weights_from_file(self,PATH):
+        self.model.load_weights(PATH)
+
+
+
+class SSNET2(NN_BASE):
+
+
+    def __init__(self,n_width=10,n_depth=1,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
+
+
+        self.SCALE=100
+
+        self.output_layer_activation =output_act
+        # Input module config
+
+
+
+        self.input_tags=['CHK','PBH','PWH','PDC']
+        #Training config
+        optimizer = 'adam'
+        loss =huber
+        nb_epoch = n_epoch
+        batch_size = 64
+        dp_rate=0
+        self.add_onoff_state=False
+
+        #self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
+        self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         if SIM:
@@ -70,7 +175,7 @@ class SSNET2(NN_BASE):
         #
 
         self.input_tags={}
-        tags=['CHK','PBH','PWH','PDC']
+        tags=['CHK']#,'PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
@@ -106,7 +211,7 @@ class SSNET2(NN_BASE):
             merged_outputs.append(merged_out)
             outputs.append(out)
 
-        merged_input = Add( name='GJOA_QGAS')(merged_outputs)
+        merged_input = Add( name='Total_production')(merged_outputs)
 
         all_outputs = merged_outputs + [merged_input]
        # merged_outputs.append(merged_input)

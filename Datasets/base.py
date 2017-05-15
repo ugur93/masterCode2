@@ -43,7 +43,7 @@ class CustomScaler:
         self.SCALES={
                      'PRESSURES3':100,
                       'PRESSURES2':50,
-                     'QGAS':100000,
+                     'QGAS':1,
                      'CHK':50,
                      'QOIL':1,
                      'QWAT':1
@@ -51,7 +51,7 @@ class CustomScaler:
         self.InverseScales = {
             'PRESSURES3': 100,
             'PRESSURES2': 50,
-            'QGAS': 2000,
+            'QGAS': 1,#2000,
             'CHK': 50,
             'QOIL': 0.2,
             'QWAT': 1

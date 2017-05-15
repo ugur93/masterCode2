@@ -115,7 +115,9 @@ def validate_train_test_split(Data):
         #print(X.shape)
         #print(X_train.shape)
         #exit()
-        model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='GAsS')
+        #model = NET2_PRESSURE.VANILLANET()
+
+        #model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='GAsS')
         #model = NET2_PRESSURE.SSNET2()
 
         #model.fit(X_train, Y_train, X_val, Y_val)
@@ -128,7 +130,7 @@ def validate_train_test_split(Data):
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PBH()
 
-        #model = NCNET_CHKPRES.PRESSURE(tag='PBH')
+        model = NCNET_CHKPRES.PRESSURE(tag='PDC')
 
         #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PDC',data='OIL')
         #model.model.load_weights(PATH,by_name=True)
@@ -146,19 +148,21 @@ def validate_train_test_split(Data):
 
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
-        if True:
-            model.update_model(activation='linear', epoch=1)
-            model.fit(X_train, Y_train, X_val, Y_val)
+        if False:
+            #model.update_model(activation='linear', epoch=1)
+            #model.fit(X_train, Y_train, X_val, Y_val)
             #641
-            model.update_model(activation='relu', epoch=1051)
+            #model.update_model(activation='relu', epoch=141)
             model.fit(X_train, Y_train, X_val, Y_val)
             model.save_model_to_file(model.model_name)
 
         elif False:
-            validateCV(model, model.get_weights(), Data, save=True,filename='GJOA_OIL_WELLS_QOIL_FINAL_TEST_2x100_MAPE_FINAL_8_2_100_0c0095_TEST10')
+            validateCV(model, model.get_weights(), Data, save=True,filename=model.model_name)
             exit()
         else:
-            model.model.load_weights(PATH + 'GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
+            pass
+
+        model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
 
         # model.initialize_zero_thresholds(Data)
         start = time.time()
@@ -173,7 +177,7 @@ def validate_train_test_split(Data):
     scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
     scores=evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
     print(scores)
-    with_line_plot=False
+    with_line_plot=True
     with_separate_plot=True
    # exit()
     #model.save_model_config(scores)
@@ -183,11 +187,15 @@ def validate_train_test_split(Data):
     #plt.show()
     #get_choke_diff_deviation(model, Data, X_train, Y_train)
     #plot_history(model)
+    #plot_pressure_model(model, Data, X,Y,X_train, X_val, Y_train, Y_val, with_line_plot=False,
+    #                        with_separate_plot=False)
+    #plt.show()
     if False:
         #import seaborn
         tag = model.tag
 
         Y_p=model.predict(X).set_index(X.index)
+       #Y_p_test=model.predict(X_val).set_index(X_val.index)
 
 
         for name in model.well_names:
@@ -202,25 +210,29 @@ def validate_train_test_split(Data):
             axes[2].axvline(len(X_train)+X_train.index[0], -20, 20)
 
 
-            axes[0].plot(Data.inverse_transform(Y_p,'Y')[name+'_'+tag],'*',color='red',label=name+'_'+tag+'_predicted')
-            axes[0].plot(Data.inverse_transform(Y,'Y')[name+'_'+tag],'.',color='blue',label=name+'_'+tag)
+            axes[0].plot(Data.inverse_transform(Y_p,'Y')[name+'_'+tag], marker='.',color='black',label=name+'_'+tag+'_predicted')
+            axes[0].plot(Data.inverse_transform(Y,'Y')[name+'_'+tag], marker='.',color='blue',label=name+'_'+tag)
+            #axes[0].plot(Data.inverse_transform(Y_p_test, 'Y')[name + '_' + tag], marker='.', color='green',
+            #             label=name + '_' + tag + '_predicted')
+            #axes[0].plot(Data.inverse_transform(Y_val, 'Y')[name + '_' + tag], marker='.', color='red',
+            #             label=name + '_' + tag)
             axes[0].legend()
 
             if model.type=='DELTA':
                 axes[1].plot(Data.inverse_transform(X, 'X')[name + '_CHK'], '-.', label=name + '_CHK')
-                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_shifted_CHK'] * -1, '-.', color='red',
+                axes[1].plot(Data.inverse_transform(X, 'X')[name + '_shifted_CHK'] * -1, color='red',
                              label=name + '_shifted_CHK')
                 for key in model.chk_names:
-                    axes[1].plot(Data.inverse_transform(X,'X')[key+'_delta_CHK'], '-.',label=key+'_delta_CHK')
+                    axes[1].plot(Data.inverse_transform(X,'X')[key+'_delta_CHK'],label=key+'_delta_CHK')
                 if DATA_TYPE!='GAS' and model.tag=='PDC':
-                    axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_delta_CHK'], '-.', label='GJOA_RISER_delta_CHK')
+                    axes[1].plot(Data.inverse_transform(X, 'X')['GJOA_RISER_delta_CHK'] ,label='GJOA_RISER_delta_CHK')
                 axes[1].legend()
-                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_shifted_' + tag], '-.', color='red',
+                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_shifted_' + tag], color='red',
                              label=name + '_prev_' + tag)
-                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_' + tag], '.', color='blue', label=name + '_now_' + tag)
-                axes[2].plot(Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag], '-.', color='green',
+                axes[2].plot(Data.inverse_transform(X, 'X')[name + '_' + tag], color='blue', label=name + '_now_' + tag)
+                axes[2].plot(Data.inverse_transform(Y, 'Y')[name + '_delta_' + tag], color='green',
                              label=name + '_delta_' + tag)
-                axes[2].plot(Data.inverse_transform(Y_p, 'Y')[name + '_delta_' + tag], '-.',color='orange',
+                axes[2].plot(Data.inverse_transform(Y_p, 'Y')[name + '_delta_' + tag],color='orange',
                              label=name + '_delta_' + tag + '_predicted')
                 plt.legend()
             else:
@@ -261,10 +273,10 @@ def validate_train_test_split(Data):
 def train_and_evaluate(model,Data,X_train,X_val,Y_train,Y_val):
 
 
-    model.update_model(activation='linear',epoch=1)
-    model.fit(X_train,Y_train,X_val,Y_val)
+    #model.update_model(activation='linear',epoch=1)
+    #model.fit(X_train,Y_train,X_val,Y_val)
 
-    model.update_model(activation='relu',epoch=1051-500)
+    #model.update_model(activation='relu',epoch=641-500)
     model.fit(X_train, Y_train, X_val, Y_val)
 
     return evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
@@ -291,10 +303,9 @@ def results_to_latex(RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST,MAPE_TRAIN,MAPE_TEST,
     for key in ['A', 'B', 'C', 'D']:
         KEY_MAP[key + '_QGAS'] = 'Well ' + key
     R2_TRAIN=R2_TRAIN*100
-    R2_TEST = R2_TEST * 100
+    R2_TEST = R2_TEST
     for key in well_names:
-        temp_s+='{0:s} & {1:0.2f} & {2:0.2f}% & {3:0.2f}% &  {4:0.2f} & {5:0.2f}% & {6:0.2f}% \\\\ \n '.format(KEY_MAP[key],RMSE_TRAIN[key],R2_TRAIN[key],MAPE_TRAIN[key]
-                                                                  ,RMSE_TEST[key],R2_TEST[key],MAPE_TEST[key])
+        temp_s+='{0:s} & {1:0.2f} & {2:0.2f} & {3:0.2f}\\% \\\\ \n '.format(KEY_MAP[key],RMSE_TEST[key],R2_TEST[key],MAPE_TEST[key])
     return temp_s
 
 def validateCV(model,init_weights,Data,params=None,save=True,filename=''):
@@ -438,8 +449,8 @@ def generate_grid(search_params):
 def grid_searchCV(Data):
 
     L2_WEIGHTS=np.concatenate((np.arange(0.0001,0.001,0.00005),np.arange(0.001,0.003,0.0001)))
-    search_params={'n_depth':[2],'n_width':[20,50,90,100],
-                   'l2w':np.arange(0.0001,0.001,0.00005),'seed':[3014]}#,'DATA':['GAS']}
+    search_params={'n_depth':[2],'n_width':[20,30,50,60,80,90,100],
+                   'l2w':np.arange(0.0001,0.0005,0.00005),'seed':[3014]}#,'DATA':['GAS']}
     print(search_params['l2w'])
     #search_params = {'n_depth': [2], 'n_width': [50],
     #                 'l2w':[0.0001], 'seed': [3014]}
@@ -455,9 +466,9 @@ def grid_searchCV(Data):
     best_cost=1e100
     best_params={}
 
-    PRESSURE_TYPE='PDC'
-    #filename='GRID_SEARCH_DeltaNET_10REMOVED_'+PRESSURE_TYPE
-    filename = 'GRID_SEARCH_GAS_WELLS_QGAS_DEPTH_2_TEST_6'
+    PRESSURE_TYPE='PBH'
+    filename='GRID_SEARCH_DeltaNET_'+PRESSURE_TYPE
+    #filename = 'GRID_SEARCH_GAS_WELLS_QGAS_DEPTH_2_TEST_6'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
     #col_eval=['GJOA_OIL_SUM_QGAS']
@@ -472,9 +483,9 @@ def grid_searchCV(Data):
         ii+=1
 
         #model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='relu',n_epoch=10000)
-        model = NET2_PRESSURE.SSNET2(**params, output_act='relu', n_epoch=10000)
+        #model = NET2_PRESSURE.SSNET2(**params, output_act='relu', n_epoch=10000)
 
-        #model = NCNET_CHKPRES.PRESSURE(tag=PRESSURE_TYPE,n_epoch=10000)
+        model = NCNET_CHKPRES.PRESSURE_DELTA(tag=PRESSURE_TYPE,n_epoch=10000)
 
         #model = NCNET_CHKPRES.PRESSURE_DELTA(tag=PRESSURE_TYPE,data='OIL',n_epoch=10000)
         model.initialize_chk_thresholds(Data, True)
@@ -483,8 +494,8 @@ def grid_searchCV(Data):
 
         scores=validateCV(model,init_weights,Data,params,save=False)
 
-        current_cost =scores['RMSE_test'][col_eval].values
-        #current_cost = np.sum(scores['RMSE_test'])
+        #current_cost =scores['RMSE_test'][col_eval].values
+        current_cost = np.sum(scores['RMSE_test'])
         #print(np.sqrt(scores['MSE_test']))
         #print(current_cost)
         if current_cost<best_cost:

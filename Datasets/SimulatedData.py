@@ -96,7 +96,7 @@ def fetchSimulatedData():
 
     Y=pd.concat([Y,X_Q],axis=1)
 
-    plotData(X, X_Q, Y)
+    #plotData(X, X_Q, Y)
 
     print('Data generated with sample-size of: {}'.format(N_SAMPLES))
 

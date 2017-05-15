@@ -116,24 +116,26 @@ def fetch_gjoa_data():
         #cols = ['GJOA_QGAS','E1_QGAS']
         cols=[]
         #ols=['F1_PBH','F1_PWH','F1_PDC']
-        cols=['E1_QGAS','E1_CHK']
-        MAP_cols={'E1_QGAS':'G4 gas flow rate','E1_CHK':'G4 choke opening'}
+        cols=['F1_CHK']
+        MAP_cols={'D3_CHK':'G3 choke opening','E1_CHK':'G4 choke opening'}
         #for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
         #    cols.append(key+'_'+'QGAS')
-        fig, axes = plt.subplots(len(cols)-1, 1, sharex=True)
+        fig, axes = plt.subplots(len(cols), 1, sharex=True)
         axes=[axes]
 
         for i, key in zip(range(0, len(cols)), cols):
-            i=0
+            #i=0
             try:
-                axes[i].scatter(X['time'], GjoaData.X_transformed[key], color='red',label=MAP_cols[key])
+                axes[i].scatter(X['time'], GjoaData.X[key], color='black')
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='blue',label=MAP_cols[key])
+                axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='black')
            # axes[i].set_title('G2_QGAS',fontsize=30)
-            axes[i].set_xlabel('Sample number',fontsize=40)
-            axes[i].tick_params(labelsize=30)
-            axes[i].set_ylabel('Values [unitless]',fontsize=40)
-            plt.legend(fontsize=40)
+            axes[i].set_xlabel('Sample number',fontsize=25)
+            axes[i].tick_params(labelsize=25)
+            axes[i].set_ylabel('Choke opening [%]',fontsize=25)
+            #plt.legend(fontsize=40)
+            axes[i].grid(which='major', linestyle='-')
+            axes[i].set_axisbelow(True)
             fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
