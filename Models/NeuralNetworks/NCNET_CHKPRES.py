@@ -10,7 +10,7 @@ import keras.backend as K
 class PRESSURE(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=30,l2w=0.0005,seed=3014,dp_rate=0,tag='PWH',act='relu',n_epoch=10000):
+    def __init__(self,n_depth=2 ,n_width=80,l2w=0.00035,seed=3014,dp_rate=0,tag='PWH',act='relu',n_epoch=5010):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
@@ -23,6 +23,19 @@ class PRESSURE(NN_BASE):
         self.tag=tag
         self.type='ALPHA'
 
+        if tag=='PWH':
+            n_depth=2
+            n_width=30
+            l2w=0.0005
+        elif tag=='PDC':
+            n_depth = 2
+            n_width = 80
+            l2w = 0.00035
+        else:
+            n_depth = 2
+            n_width = 90
+            l2w = 0.0002
+
         self.n_lookback=10
         do_lookback=False
 
@@ -34,7 +47,9 @@ class PRESSURE(NN_BASE):
         dp_rate=0
 
 
-        self.chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+        self.chk_names=['C1', 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
+
+        #self.chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
 
         if self.tag=='PBH':
             self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
@@ -52,12 +67,9 @@ class PRESSURE(NN_BASE):
 
         if True:
             self.input_tags['CHK_INPUT_NOW'].append('GJOA_RISER_OIL_B_CHK')
-            self.input_tags['CHK_INPUT_PREV'].append('GJOA_RISER_OIL_B_shifted_CHK')
         for key in self.chk_names:
             for tag in ['CHK']:
                 self.input_tags['CHK_INPUT_NOW'].append(key + '_' + tag)
-                self.input_tags['CHK_INPUT_PREV'].append(key + '_shifted_' + tag)
-
         self.output_tags = {}
         for name in self.well_names:
             self.output_tags[name + '_'+self.tag+'_out'] = [name + '_'+self.tag]
@@ -83,12 +95,10 @@ class PRESSURE(NN_BASE):
     def initialize_model(self):
         print('Initializing %s' % (self.model_name))
 
-        chk_input_prev = Input(shape=(len(self.input_tags['CHK_INPUT_PREV']),), dtype='float32',
-                              name='CHK_INPUT_PREV')
+
         chk_input_now = Input(shape=(len(self.input_tags['CHK_INPUT_NOW']),), dtype='float32',
                           name='CHK_INPUT_NOW')
 
-        chk_input=Concatenate(name='ALL_CHOKES')([chk_input_now,chk_input_prev])
         outputs = []
         inputs = [chk_input_now]
 
@@ -124,6 +134,20 @@ class PRESSURE_DELTA(NN_BASE):
         self.model_name='GJOA_deltaNET_'+data+'_WELLS_'+tag+'_ALL_DATA'
         self.out_act='linear'
 
+        if tag == 'PWH':
+            n_depth = 2
+            n_width = 90
+            l2w = 0.0001
+        elif tag == 'PDC':
+            n_depth = 2
+            n_width = 60
+            l2w = 0.0002
+
+        else:
+            n_depth = 2
+            n_width = 80
+            l2w = 0.000035
+
         self.tag=tag
         self.type = 'DELTA'
 
@@ -140,7 +164,7 @@ class PRESSURE_DELTA(NN_BASE):
             self.chk_names =['F1','B2','D3','E1']
             self.well_names=['F1','B2','D3','E1']
         else:
-            self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3','D1']
+            self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1','D1']
             if self.tag == 'PBH':
                 self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
             else:
@@ -185,7 +209,7 @@ class PRESSURE_DELTA(NN_BASE):
                 self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
             else:
                 self.output_tags[name + '_'+self.tag+'_out2'] = [name + '_'+self.tag]
-                #self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
+               # self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
 
         self.output_zero_thresholds = {}
 

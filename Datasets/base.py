@@ -123,6 +123,10 @@ class CustomScaler:
             self.mean[key + '_shifted_PWH'] = self.mean[key + '_PWH']
             self.mean[key + '_shifted_PBH'] = self.mean[key + '_PBH']
 
+           # self.mean[key + '_delta_PDC'] = self.mean[key + '_PDC']
+           # self.mean[key + '_delta_PWH'] = self.mean[key + '_PWH']
+           # self.mean[key + '_delta_PBH'] = self.mean[key + '_PBH']
+
     def inverse_transform(self,data):
 
         data_transformed = data.copy()
@@ -159,7 +163,7 @@ class CustomScaler:
         #print(self.std)
         self.minmax_scale=data_transformed.max()-data_transformed.min()
         self.minmax_min=data_transformed.min()
-        self.change_scale_of_shifted_variables()
+        #self.change_scale_of_shifted_variables()
 
 
         return self.transform(data)

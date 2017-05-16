@@ -130,9 +130,9 @@ def validate_train_test_split(Data):
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PBH()
 
-        model = NCNET_CHKPRES.PRESSURE(tag='PDC')
+        #model = NCNET_CHKPRES.PRESSURE(tag='PWH')
 
-        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PDC',data='OIL')
+        model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PBH',data='OIL')
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE2(PATH)
@@ -148,6 +148,9 @@ def validate_train_test_split(Data):
 
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
+        print(model.get_config())
+        start = time.time()
+
         if False:
             #model.update_model(activation='linear', epoch=1)
             #model.fit(X_train, Y_train, X_val, Y_val)
@@ -155,6 +158,7 @@ def validate_train_test_split(Data):
             #model.update_model(activation='relu', epoch=141)
             model.fit(X_train, Y_train, X_val, Y_val)
             model.save_model_to_file(model.model_name)
+            #exit()
 
         elif False:
             validateCV(model, model.get_weights(), Data, save=True,filename=model.model_name)
@@ -164,14 +168,6 @@ def validate_train_test_split(Data):
 
         model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
 
-        # model.initialize_zero_thresholds(Data)
-        start = time.time()
-        print(model.get_config())
-        # print(model.model.get_config())
-        #model.fit(X_train,Y_train,X_val,Y_val)
-
-        # Fit with old data
-        #model.update_model()
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
     scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
@@ -277,7 +273,10 @@ def train_and_evaluate(model,Data,X_train,X_val,Y_train,Y_val):
     #model.fit(X_train,Y_train,X_val,Y_val)
 
     #model.update_model(activation='relu',epoch=641-500)
-    model.fit(X_train, Y_train, X_val, Y_val)
+    #model.fit(X_train, Y_train, X_val, Y_val)
+    PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
+
+    model.model.load_weights(PATH + model.model_name + '.h5', by_name=True)
 
     return evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
 

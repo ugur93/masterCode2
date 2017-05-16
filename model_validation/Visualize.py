@@ -14,7 +14,7 @@ for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key + '_PDC'] = 'Well O{} PDC'.format(i)
     KEY_MAP[key + '_PBH'] = 'Well O{} PBH'.format(i)
     KEY_MAP[key + '_PWH'] = 'Well O{} PWH'.format(i)
-    KEY_MAP[key + '_CHK'] = 'Well O{} delta choke'.format(i)
+    KEY_MAP[key + '_CHK'] = 'Well O{} choke'.format(i)
 well_names=['F1','B2','D3','E1']
 for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well G{}'.format(i)
@@ -123,6 +123,10 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
 
                 fig3,axes_pres_delta=plt.subplots(1,1,sharex=True)
 
+                axes_pres.axvline( X_test.index[0], -20, 20,color='darkblue')
+
+                axes_chk.axvline(X_test.index[0], -20, 20,color='darkblue')
+                axes_pres_delta.axvline(X_test.index[0], -20, 20,color='darkblue')
 
                 #fig2,axes_=plt.subplots(1,1,sharex=True)
                 #axes=axes.flatten()
@@ -148,8 +152,9 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                 # ax.set_title('Test error',fontsize=FONTSIZETITLE)
                 axes_pres.set_xlabel('Sample number', fontsize=FONTSIZEX-T)
                 axes_pres.set_ylabel(ylabel, fontsize=FONTSIZEY-T)
-                axes_pres.legend(fontsize=FONTSIZELEGEND-T)
+                axes_pres.legend(fontsize=20)
                 axes_pres.tick_params(axis='both', labelsize=TICKSIZE)
+                axes_pres.set_title(KEY_MAP[tag_name],fontsize=FONTSIZETITLE)
                 if model.type == 'ALPHA':
                     for chkname in model.chk_names:
                         axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_CHK'], marker='.',
@@ -190,20 +195,20 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                     axes_chk.set_ylabel('Delta choke', fontsize=FONTSIZEY - T)
                     axes_chk.legend(fontsize=15)
                     axes_chk.tick_params(axis='both', labelsize=TICKSIZE)
+                    if True:
+                        axes_pres_delta.grid(which='major', linestyle='-')
+                        axes_pres_delta.set_axisbelow(True)
 
-                    axes_pres_delta.grid(which='major', linestyle='-')
-                    axes_pres_delta.set_axisbelow(True)
+                        #axes_pres_delta.plot(Data.inverse_transform(Y, 'Y')[chkname + '_delta_' + tag], marker='.',
+                        #                     label=KEY_MAP[chkname + '_CHK'])
+                        axes_pres_delta = get_pressure_plot(axes_pres_delta, Data, Y_pred_train, Y_pred_test, Y_train, Y_test, name + '_delta_' + tag)
 
-                    #axes_pres_delta.plot(Data.inverse_transform(Y, 'Y')[chkname + '_delta_' + tag], marker='.',
-                    #                     label=KEY_MAP[chkname + '_CHK'])
-                    axes_pres_delta = get_pressure_plot(axes_pres_delta, Data, Y_pred_train, Y_pred_test, Y_train, Y_test, name + '_delta_' + tag)
-
-                    # ax.set_title('Test error',fontsize=FONTSIZETITLE)
-                    axes_pres_delta.set_xlabel('Sample number', fontsize=FONTSIZEX - T)
-                    axes_pres_delta.set_ylabel('Delta pressure', fontsize=FONTSIZEY - T)
-                    axes_pres_delta.legend(fontsize=FONTSIZELEGEND)
-                    axes_pres_delta.tick_params(axis='both', labelsize=TICKSIZE)
-                    fig1.subplots_adjust(wspace=0.2, hspace=.12, top=0.98, bottom=0.08, left=0.06, right=0.99)
+                        # ax.set_title('Test error',fontsize=FONTSIZETITLE)
+                        axes_pres_delta.set_xlabel('Sample number', fontsize=FONTSIZEX - T)
+                        axes_pres_delta.set_ylabel('Delta pressure', fontsize=FONTSIZEY - T)
+                        axes_pres_delta.legend(fontsize=20)
+                        axes_pres_delta.tick_params(axis='both', labelsize=TICKSIZE)
+                        fig1.subplots_adjust(wspace=0.2, hspace=.12, top=0.98, bottom=0.08, left=0.06, right=0.99)
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[],with_line_plot=False,with_separate_plot=False):
 
     remove_zero_chk=False

@@ -69,7 +69,7 @@ def fetch_gjoa_data():
 
     GjoaData=DataContainer(X,Y,name='GJOA2',well_names=well_names)
     print(len(GjoaData.X))
-    if False:
+    if True:
         CTHRESH=10
         ind_zero=None
         for key in well_names:
@@ -258,7 +258,7 @@ def set_chk_zero_values_to_zero(X,Y):
         X[key + '_delta_CHK'] = delta_CHK
         Y[key + '_delta_CHK'] = delta_CHK
 
-
+    X = set_index_values_to_zero(X, X['GJOA_RISER_OIL_B_CHK']<CHK_THRESHOLD,'GJOA_RISER_OIL_B_CHK')
     delta_CHK =  X['GJOA_RISER_OIL_B_CHK']-X['GJOA_RISER_OIL_B_CHK'].shift(1)
     X['GJOA_RISER_OIL_B_shifted_CHK'] = X['GJOA_RISER_OIL_B_CHK'].shift(1)*-1
     X['GJOA_RISER_delta_CHK']=delta_CHK
@@ -268,7 +268,7 @@ def set_chk_zero_values_to_zero(X,Y):
 
 def preprocesss(X,Y):
     #DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
-    DROP=[416,447,487,808,173,806,819,820,821,822,805,807,257]#,234,6,591]
+    DROP=[416,447,487,808,173,806,819,820,821,822,805,807,257,848,0]#,234,6,591]
 
     DROP_OIL=[287,130,132,292,290,196]
 
