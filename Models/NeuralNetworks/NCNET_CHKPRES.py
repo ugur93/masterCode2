@@ -137,14 +137,14 @@ class PRESSURE_DELTA(NN_BASE):
         if tag == 'PWH':
             n_depth = 2
             n_width = 90
-            l2w = 0.0001
+            l2w = 0.00001
         elif tag == 'PDC':
             n_depth = 2
             n_width = 60
             l2w = 0.0002
 
         else:
-            n_depth = 2
+            n_depth = 1
             n_width = 80
             l2w = 0.000035
 
@@ -209,7 +209,7 @@ class PRESSURE_DELTA(NN_BASE):
                 self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
             else:
                 self.output_tags[name + '_'+self.tag+'_out2'] = [name + '_'+self.tag]
-               # self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
+                #self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
 
         self.output_zero_thresholds = {}
 

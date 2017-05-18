@@ -122,7 +122,7 @@ def fetch_gjoa_data():
         cols=[]
         for key1 in well_names:
             cols=[]
-            for key in ['delta_CHK','PDC','delta_PDC']:#['QGAS','PBH','PDC','PWH','CHK']:
+            for key in ['delta_CHK','PDC','delta_PDC','CHK']:#['QGAS','PBH','PDC','PWH','CHK']:
                 cols.append(key1+'_'+key)
             #cols.append('B1' + '_' + 'QGAS')
             #cols.append('GJOA_RISER_OIL_B_CHK')
@@ -280,7 +280,7 @@ def preprocesss(X,Y):
         cols=[]
         TAG='PWH'
         for key in ['QGAS','PBH','PDC','PWH','CHK']:
-            cols.append('C2'+'_'+key)
+            cols.append('C1'+'_'+key)
         fig,axes=plt.subplots(len(cols),1,sharex=True)
         #axes=[axes]
 

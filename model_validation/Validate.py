@@ -117,7 +117,7 @@ def validate_train_test_split(Data):
         #exit()
         #model = NET2_PRESSURE.VANILLANET()
 
-        #model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='GAsS')
+        model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='GAS')
         #model = NET2_PRESSURE.SSNET2()
 
         #model.fit(X_train, Y_train, X_val, Y_val)
@@ -130,20 +130,23 @@ def validate_train_test_split(Data):
         #model=CNN_test.CNN_GJOAOIL()
         #model = NCNET_CHKPRES.PRESSURE_PBH()
 
+
         #model = NCNET_CHKPRES.PRESSURE(tag='PWH')
 
-        model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PBH',data='OIL')
+        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PDC',data='OIL')
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE2(PATH)
 
         #model=NCNET4_combined.NET4_W_PRESSURE3()
 
+        #x_last=X_test[-1]
 
+        #y_last = X_test[-1]
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
-        #model.model.load_weights(PATH+'GJOA_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
-       # model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA.h5', by_name=True)
+        #model.model.load_weights(PATH+'GJOA_deltaNET_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
+        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
        # exit()
 
         # model.initialize_zero_thresholds(Data)
@@ -157,16 +160,21 @@ def validate_train_test_split(Data):
             #641
             #model.update_model(activation='relu', epoch=141)
             model.fit(X_train, Y_train, X_val, Y_val)
-            model.save_model_to_file(model.model_name)
+            #model.save_model_to_file(model.model_name)
             #exit()
 
         elif False:
             validateCV(model, model.get_weights(), Data, save=True,filename=model.model_name)
             exit()
+        elif False:
+            model.model.load_weights(PATH + 'GJOA_deltaNET_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
+            model.model.load_weights(PATH + 'GJOA_deltaNET_OIL_WELLS_PWH_ALL_DATA.h5', by_name=True)
+            model.model.load_weights(PATH+'GJOA_deltaNET_OIL_WELLS_PBH_ALL_DATA.h5',by_name=True)
+            model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
         else:
             pass
 
-        model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
+       # model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
 
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
@@ -175,6 +183,10 @@ def validate_train_test_split(Data):
     print(scores)
     with_line_plot=True
     with_separate_plot=True
+    save_fig=False
+    PATH='C:/Users/ugurac/Documents/GITFOLDERS/Masteroppgave-2017/figures/Results/NCNET3/'
+    file_tag_name='OIL_WELLS_QOIL_'
+
    # exit()
     #model.save_model_config(scores)
 
@@ -259,7 +271,8 @@ def validate_train_test_split(Data):
                     plt.legend()
 
     else:
-        visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=[], input_cols=[],with_line_plot=with_line_plot,with_separate_plot=with_separate_plot)
+        visualize(model, Data, X_train, X_val, Y_train, Y_val, output_cols=[], input_cols=[],with_line_plot=with_line_plot,
+                  with_separate_plot=with_separate_plot,save_fig=save_fig,PATH=PATH,file_tag_name=file_tag_name)
 
     plt.show()
 

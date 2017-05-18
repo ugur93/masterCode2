@@ -38,7 +38,7 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2,n_width=100,l2w=0.00095,dp_rate=0,seed=3014,output_act='relu',n_epoch=1500,DATA='GAsS'):
+    def __init__(self,n_depth=2,n_width=90,l2w=0.00095,dp_rate=0,seed=3014,output_act='relu',n_epoch=1500,DATA='GAS'):
 
 
 
