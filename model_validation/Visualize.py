@@ -12,12 +12,22 @@ for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well O{}'.format(i)
     KEY_MAP[key + '_QOIL'] = 'Well O{}'.format(i)
     KEY_MAP[key + '_PDC'] = 'Well O{} PDC'.format(i)
+    KEY_MAP[key + '_delta_PDC'] = 'Well O{} Delta PDC'.format(i)
+    KEY_MAP[key + '_delta_PWH'] = 'Well O{} Delta PWH'.format(i)
+    KEY_MAP[key + '_delta_PBH'] = 'Well O{} Delta PBH'.format(i)
     KEY_MAP[key + '_PBH'] = 'Well O{} PBH'.format(i)
     KEY_MAP[key + '_PWH'] = 'Well O{} PWH'.format(i)
     KEY_MAP[key + '_CHK'] = 'Well O{} choke'.format(i)
 well_names=['F1','B2','D3','E1']
 for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well G{}'.format(i)
+    KEY_MAP[key + '_PDC'] = 'Well G{} PDC'.format(i)
+    KEY_MAP[key + '_delta_PDC'] = 'Well G{} Delta PDC'.format(i)
+    KEY_MAP[key + '_delta_PWH'] = 'Well G{} Delta PWH'.format(i)
+    KEY_MAP[key + '_delta_PBH'] = 'Well G{} Delta PBH'.format(i)
+    KEY_MAP[key + '_PBH'] = 'Well G{} PBH'.format(i)
+    KEY_MAP[key + '_PWH'] = 'Well G{} PWH'.format(i)
+    KEY_MAP[key + '_CHK'] = 'Well G{} choke'.format(i)
 KEY_MAP['GJOA_OIL_SUM_QGAS']='Total production'
 KEY_MAP['GJOA_TOTAL_SUM_QOIL']='Total production'
 KEY_MAP['GJOA_QGAS']='Total production'
@@ -32,17 +42,17 @@ colors=['red','blue','yellow','orange','black',
 for key in ['A','B','C','D']:
     KEY_MAP[key+'_QGAS']='Well '+key
 TICKSIZE=25
-FONTSIZELEGEND=25
+FONTSIZELEGEND=18
 FONTSIZEX=25
 FONTSIZEY=25
 FONTSIZETITLE=30
 TRUE_DATA_TAG='(Measured)'
 PREDICTED_DATA_TAG='(Prediction)'
 TICK_STEP_SIZE=10
-TRUE_AND_PREDICTED_Y_LABEL='Gas flow rate [Sm3/h] (scaled)'
+#TRUE_AND_PREDICTED_Y_LABEL='Oil flow rate [Sm3/h] (scaled)'
 #TRUE_AND_PREDICTED_Y_LABEL='Gas flow rate [Sm3/h] (scaled)'
 
-#TRUE_AND_PREDICTED_Y_LABEL='PWH [bar]'
+TRUE_AND_PREDICTED_Y_LABEL='PWH [bar]'
 
 
 TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
@@ -111,7 +121,7 @@ def get_chk_plot(axes,Data,X,tag_name):
     axes.plot(Data.inverse_transform(X, 'X')[tag_name], marker='.',
               label=KEY_MAP[tag_name])
     return axes
-def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_line_plot=False,with_separate_plot=False):
+def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_line_plot=False,with_separate_plot=False,save_fig=False):
             tag = model.tag
             if model.type=='ALPHA':
                 N_PLOTS=2
@@ -122,7 +132,7 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
             Y_pred_train=model.predict(X_train).set_index(X_train.index)
             Y_pred_test=model.predict(X_test).set_index(X_test.index)
             ylabel=pressure_map[tag]+' [bar]'
-            for name in ['C1']:
+            for name in ['F1']:
                 tag_name=name+'_'+tag
                 #if with_separate_plot:
                 fig1,axes_pres=plt.subplots(1,1,sharex=True)
@@ -132,11 +142,11 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
 
                 fig1.set_size_inches(WINDOW_Y_INCHES, WINDOW_X_INCHES)
 
-                fig2.set_size_inches(WINDOW_Y_INCHES, WINDOW_X_INCHES)
+                fig2.set_size_inches(WINDOW_Y_INCHES, WINDOW_X_INCHES+1)
                 fig3.set_size_inches(WINDOW_Y_INCHES, WINDOW_X_INCHES)
                 fig1.subplots_adjust(wspace=0.13, hspace=.2, top=0.91, bottom=0.15, left=0.08, right=0.99)
 
-                fig2.subplots_adjust(wspace=0.13, hspace=.2, top=0.91, bottom=0.15, left=0.08, right=0.99)
+                fig2.subplots_adjust(wspace=0.13, hspace=.2, top=0.91, bottom=0.15, left=0.09, right=0.99)
 
                 fig3.subplots_adjust(wspace=0.13, hspace=.2, top=0.91, bottom=0.15, left=0.08, right=0.99)
 
@@ -144,6 +154,7 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
 
                 axes_chk.axvline(X_test.index[0], -20, 20,color='darkblue')
                 axes_pres_delta.axvline(X_test.index[0], -20, 20,color='darkblue')
+
 
                 #fig2,axes_=plt.subplots(1,1,sharex=True)
                 #axes=axes.flatten()
@@ -177,6 +188,7 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                         axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_CHK'], marker='.',
                                   label=KEY_MAP[chkname+'_CHK'])
                     #ax.set_yticklabels([])
+
                     riser_choke='GJOA_RISER_OIL_B_CHK'
                     axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke], marker='.',
                                   label=KEY_MAP[riser_choke])
@@ -198,18 +210,32 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                     for chkname in model.chk_names:
                         axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_delta_CHK'], marker='.',
                                   label=KEY_MAP[chkname+'_CHK'])
-                    riser_choke = 'GJOA_RISER_delta_CHK'
-                    axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke], marker='.',
-                                  label=KEY_MAP[riser_choke])
+
+                    if model.data_type != 'GAS':
+                        riser_choke = 'GJOA_RISER_delta_CHK'
+                        axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke], marker='.',
+                                      label=KEY_MAP[riser_choke])
 
                     axes_chk.grid(which='major', linestyle='-')
                     axes_chk.set_axisbelow(True)
+                    axes_chk.annotate('713', xy=(713, 8), xytext=(710, 8))
 
+                    axes_chk.annotate('716', xy=(716, 9), xytext=(720, 9),
+
+                                      )
+                    axes_chk.annotate('733', xy=(733, 9), xytext=(735, 9),
+
+                                      )
                     # ax.set_title('Test error',fontsize=FONTSIZETITLE)
                     axes_chk.set_xlabel('Sample number', fontsize=FONTSIZEX - T)
                     axes_chk.set_ylabel('Delta choke opening [%]', fontsize=FONTSIZEY - T)
                     axes_chk.legend(fontsize=16)
                     axes_chk.tick_params(axis='both', labelsize=TICKSIZE)
+
+                    axes_chk.set_xlim([500, X.index[-1]])
+                    axes_pres.set_xlim([500, X.index[-1]])
+                    axes_pres_delta.set_xlim([500, X.index[-1]])
+
                     if True:
                         axes_pres_delta.grid(which='major', linestyle='-')
                         axes_pres_delta.set_axisbelow(True)
@@ -223,7 +249,14 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                         axes_pres_delta.set_ylabel('Delta pressure [bar]', fontsize=FONTSIZEY - T)
                         axes_pres_delta.legend(fontsize=16)
                         axes_pres_delta.tick_params(axis='both', labelsize=TICKSIZE)
-
+                if save_fig:
+                    PATH = 'C:/Users/ugurac/Documents/GITFOLDERS/Masteroppgave-2017/figures/Results/DeltaNET/'
+                    file_tag_name = 'DeltaNET_WELL_'+KEY_MAP[tag_name]+'_500_end'
+                    fig1.savefig(PATH+file_tag_name+'.pdf')
+                    file_tag_name = 'DeltaNET_WELL_delta_choke_' + KEY_MAP[tag_name]+'_500_end'
+                    fig2.savefig(PATH+file_tag_name+'.pdf')
+                    file_tag_name = 'DeltaNET_WELL_delta_pres_' + KEY_MAP[tag_name]+'_500_end'
+                    fig3.savefig(PATH+file_tag_name+'.pdf')
 
 def visualize(model,data, X_train, X_test, Y_train ,Y_test, output_cols=[], input_cols=[],with_line_plot=False,with_separate_plot=False,save_fig=False,PATH='',file_tag_name=''):
 
@@ -491,7 +524,7 @@ def get_cumulative_flow_plot(cumperf,data_tag):
     fig.suptitle('Cumulative performance of {} data'.format(data_tag))
     fig.subplots_adjust(wspace=0.17, hspace=.18, top=0.93, bottom=0.06, left=0.04, right=0.99)
     return fig, axes
-def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
+def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag,fig_wells=None,axes_wells=None):
 
     def plot(cumperf,axes_wells,axes_tot, colors,ii, data_type):
         axes_wells.grid(which='major', linestyle='-')
@@ -512,7 +545,7 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
             #print(cumperf.columns[i])
             if cumperf.columns[i].split('_')[-1] in ['QGAS','QOIL']:
                 if KEY_MAP[cumperf.columns[i]]!='Well G3':
-                    axes_wells.plot(cumperf.index, cumperf[cumperf_test.columns[i]], label=KEY_MAP[cumperf.columns[i]],
+                    axes_wells.plot(cumperf.index, cumperf[cumperf_test.columns[i]],linewidth=3, label=KEY_MAP[cumperf.columns[i]]+' dropout',
                               color=COLOR_MAP[cumperf_test.columns[i].split('_')[0]])
                     axes_wells.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
 
@@ -528,8 +561,8 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
         axes_tot.set_ylabel('Cumulative \n (% of training and test set sample points)'.format(data_type),fontsize=FONTSIZEY)
 
         axes_wells.legend(fontsize=FONTSIZELEGEND)
-
-    fig_wells, axes_wells = plt.subplots(1, 1)
+    if fig_wells is None:
+        fig_wells, axes_wells = plt.subplots(1, 1)
     fig_tot, axes_tot = plt.subplots(1, 1)
     cmap = plt.get_cmap('Vega10')
     colors = [cmap(i) for i in np.linspace(0, 1, len(cumperf_train.columns))]
@@ -556,7 +589,74 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag):
     fig_tot.subplots_adjust(wspace=0.17, hspace=.18, top=0.9, bottom=0.1, left=0.07, right=0.99)
     #fig_tot.set_xlim([0, 20])
     #return fig, axes
+    return fig_wells,axes_wells
 
+def get_cumulative_deviation_plot_single2(cumperf_train,cumperf_test,data_tag,fig_wells=None,axes_wells=None):
+
+    def plot(cumperf,axes_wells,axes_tot, colors,ii, data_type):
+        axes_wells.grid(which='major', linestyle='-')
+        axes_wells.set_axisbelow(True)
+        axes_tot.grid(which='major', linestyle='-')
+        axes_tot.set_axisbelow(True)
+        axes_tot.set_xlim([-0.1, 3])
+        axes_wells.set_xlim([-0.1, XLIM_CUMPERF])
+        axes_wells.set_ylim([1, 110])
+        axes_tot.set_ylim([20, 105])
+
+        axes_wells.yaxis.set_ticks(np.arange(0, 105, 10))
+        #axes_wells[ii].yaxis.set_ticks(np.arange(0, 110, TICK_STEP_SIZE))
+
+        for i in range(len(cumperf.columns)-1):
+            #print(cumperf.columns)
+            #exit()
+            #print(cumperf.columns[i])
+            if cumperf.columns[i].split('_')[-1] in ['QGAS','QOIL']:
+                if KEY_MAP[cumperf.columns[i]]!='Well G3':
+                    axes_wells.plot(cumperf.index, cumperf[cumperf_test.columns[i]],'--', alpha=0.8,label=KEY_MAP[cumperf.columns[i]],
+                              color=COLOR_MAP[cumperf_test.columns[i].split('_')[0]])
+                    axes_wells.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
+
+        axes_wells.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
+        axes_wells.set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
+        axes_wells.tick_params(axis='both', which='major', labelsize=TICKSIZE)
+        axes_tot.tick_params(axis='both', which='major', labelsize=TICKSIZE)
+
+        axes_tot.plot(cumperf.index, cumperf[cumperf_train.columns[-1]],
+                          label='{} data'.format(data_type))
+        #axes_tot.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
+        axes_tot.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
+        axes_tot.set_ylabel('Cumulative \n (% of training and test set sample points)'.format(data_type),fontsize=FONTSIZEY)
+
+        axes_wells.legend(fontsize=FONTSIZELEGEND)
+    if fig_wells is None:
+        fig_wells, axes_wells = plt.subplots(1, 1)
+    fig_tot, axes_tot = plt.subplots(1, 1)
+    cmap = plt.get_cmap('Vega10')
+    colors = [cmap(i) for i in np.linspace(0, 1, len(cumperf_train.columns))]
+
+    #axes_wells = axes_wells.flatten()
+    #axes_tot = axes_tot.flatten()
+
+    fig_wells.canvas.set_window_title(data_tag)
+    fig_tot.canvas.set_window_title(data_tag)
+
+
+
+
+    #plot(cumperf_train,axes_wells,axes_tot,colors,0,'Training')
+    plot(cumperf_test,axes_wells,axes_tot,colors,1,'Test')
+
+    #axes_tot.legend(fontsize=FONTSIZELEGEND)
+
+    fig_wells.suptitle('Cumulative performance',fontsize=30)
+    fig_wells.subplots_adjust(wspace=0.17, hspace=.18, top=0.88, bottom=0.09, left=0.08, right=0.99)
+
+
+    #fig_tot.suptitle('Cumulative performance of total production', fontsize=30)
+    fig_tot.subplots_adjust(wspace=0.17, hspace=.18, top=0.9, bottom=0.1, left=0.07, right=0.99)
+    #fig_tot.set_xlim([0, 20])
+    #return fig, axes
+    return fig_wells,axes_wells
 def get_cumulative_flow_plot_single(cumperf_train,cumperf_test,data_tag):
 
     def plot(cumperf,axes, ii, data_type):
@@ -594,7 +694,7 @@ def plot_cumulative_performance(model,data, X_train, X_test, Y_train, Y_test):
 
 
 
-    get_cumulative_deviation_plot_single(cumperf_train, cumperf_test,model.model_name)
+    fig,axes=get_cumulative_deviation_plot_single(cumperf_train, cumperf_test,model.model_name)
 
     cumperf_test = get_absolute_deviation(model, data, X_test, Y_test)
     cumperf_train = get_absolute_deviation(model, data, X_train, Y_train)
@@ -706,7 +806,13 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                     ax.set_title(KEY_MAP[output_tag], fontsize=FONTSIZETITLE)
 
                     #ax.set_title(output_tag.split('_')[0]+' '+output_tag.split('_')[1],fontsize=FONTSIZETITLE)
-                ax.set_ylabel(TRUE_AND_PREDICTED_Y_LABEL,fontsize=FONTSIZEY)
+                if output_tag.split('_')[1]=='delta':
+                    ax.set_ylim([-6, 6])
+
+                    ax.set_ylabel('Delta '+TRUE_AND_PREDICTED_Y_LABEL,fontsize=FONTSIZEY)
+                else:
+                    ax.set_ylabel(TRUE_AND_PREDICTED_Y_LABEL,fontsize=FONTSIZEY)
+
                 ax.set_xlabel('Sample number',fontsize=FONTSIZEX)
                 fig.set_size_inches(WINDOW_Y_INCHES, WINDOW_X_INCHES)
 

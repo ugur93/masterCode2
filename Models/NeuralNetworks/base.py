@@ -199,7 +199,7 @@ class LossHistory(Callback):
 
 def plotModel(model,file_name):
     try:
-        plot_model(model, to_file='Models/NeuralNetworks/model_figures/'+file_name+'.pdf', show_shapes=True)
+        plot_model(model, to_file='Models/NeuralNetworks/model_figures/'+file_name+'.pdf', show_shapes=False)
     except(NameError):
         print('Model not plotted')
 

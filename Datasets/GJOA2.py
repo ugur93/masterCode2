@@ -69,7 +69,7 @@ def fetch_gjoa_data():
 
     GjoaData=DataContainer(X,Y,name='GJOA2',well_names=well_names)
     print(len(GjoaData.X))
-    if True:
+    if False:
         CTHRESH=10
         ind_zero=None
         for key in well_names:

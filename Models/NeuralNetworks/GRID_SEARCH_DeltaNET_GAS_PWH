@@ -1,0 +1,37 @@
+Best results: 
+Best params:{'n_width': 80, 'n_depth': 2, 'seed': 3014, 'l2w': 0.00040000000000000002} 
+Best COST: 15.852188890611734 
+BEST SCORES: 
+ {'R2_train': F1_PWH          0.80
+F1_delta_PWH   -3.38
+B2_PWH          0.90
+B2_delta_PWH   -0.87
+D3_PWH          0.97
+D3_delta_PWH   -1.25
+E1_PWH          0.82
+E1_delta_PWH   -0.29
+dtype: float64, 'RMSE_test': F1_PWH         0.57
+F1_delta_PWH   0.57
+B2_PWH         2.87
+B2_delta_PWH   2.87
+D3_PWH         1.68
+D3_delta_PWH   1.67
+E1_PWH         2.80
+E1_delta_PWH   2.80
+dtype: float64, 'RMSE_train': F1_PWH         1.52
+F1_delta_PWH   3.75
+B2_PWH         4.39
+B2_delta_PWH   6.92
+D3_PWH         4.45
+D3_delta_PWH   6.91
+E1_PWH         4.79
+E1_delta_PWH   6.37
+dtype: float64, 'R2_test': F1_PWH          0.75
+F1_delta_PWH   -0.20
+B2_PWH          0.60
+B2_delta_PWH    0.13
+D3_PWH          0.99
+D3_delta_PWH    0.25
+E1_PWH         -0.39
+E1_delta_PWH    0.07
+dtype: float64}

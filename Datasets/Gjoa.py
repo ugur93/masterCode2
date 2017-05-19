@@ -90,7 +90,8 @@ def fetch_gjoa_data():
     Y = set_index_values_to_zero(Y, ind_zero_all, 'GJOA_QGAS')
 
     GjoaData=DataContainer(X,Y,name='GJOA',csv_path=MEAN_PATH,well_names=well_names)
-    if False:
+    print(len(GjoaData.X))
+    if True:
         CTHRESH=10
         ind_zero=None
         chk_zero=None
@@ -98,19 +99,19 @@ def fetch_gjoa_data():
 
             if ind_zero is None:
                 ind_zero = abs(X[key + '_delta_CHK']) > CTHRESH
-                chk_zero = abs(X[key + '_CHK']) ==0
+                #chk_zero = abs(X[key + '_CHK']) ==0
                 ind_zero=ind_zero#|ind_zero2
             else:
                 ind_temp = abs(X[key + '_delta_CHK']) > CTHRESH
-                chk_zero_temp = abs(X[key + '_CHK']) == 0
+                #chk_zero_temp = abs(X[key + '_CHK']) == 0
                 ind_zero=ind_zero|ind_temp#|ind_zero2
-                chk_zero=chk_zero&chk_zero_temp
-        ind_zero=ind_zero|chk_zero
+                #chk_zero=chk_zero#&chk_zero_temp
+        #ind_zero=ind_zero|chk_zero
         GjoaData.X =GjoaData.X[~ind_zero]
         GjoaData.Y = GjoaData.Y[~ind_zero]
         GjoaData.X_transformed = GjoaData.X_transformed[~ind_zero]
         GjoaData.Y_transformed = GjoaData.Y_transformed[~ind_zero]
-
+    print(len(GjoaData.X))
     if False:
 
         #cols = ['GJOA_QGAS','E1_QGAS']

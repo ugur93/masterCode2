@@ -1,0 +1,37 @@
+Best results: 
+Best params:{'l2w': 0.0001, 'seed': 3014, 'n_width': 60, 'n_depth': 2} 
+Best COST: 2.307832621552622 
+BEST SCORES: 
+ {'RMSE_train': F1_PBH         0.14
+F1_delta_PBH   4.35
+B2_PBH         0.22
+B2_delta_PBH   6.50
+D3_PBH         0.14
+D3_delta_PBH   6.37
+E1_PBH         0.17
+E1_delta_PBH   6.02
+dtype: float64, 'RMSE_test': F1_PBH         0.32
+F1_delta_PBH   0.35
+B2_PBH         0.30
+B2_delta_PBH   0.33
+D3_PBH         0.12
+D3_delta_PBH   0.21
+E1_PBH         0.33
+E1_delta_PBH   0.35
+dtype: float64, 'R2_test': F1_PBH          0.83
+F1_delta_PBH   -0.20
+B2_PBH          0.97
+B2_delta_PBH    0.39
+D3_PBH          0.99
+D3_delta_PBH   -0.00
+E1_PBH          0.89
+E1_delta_PBH   -0.03
+dtype: float64, 'R2_train': F1_PBH            1.00
+F1_delta_PBH   -435.63
+B2_PBH            1.00
+B2_delta_PBH   -377.80
+D3_PBH            1.00
+D3_delta_PBH   -608.25
+E1_PBH            1.00
+E1_delta_PBH   -240.69
+dtype: float64}

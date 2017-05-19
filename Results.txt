@@ -3,3 +3,21 @@ GS results
 
 OIL: Best params:{'n_depth': 2, 'n_width': 100, 'l2w': 0.00050000000000000012, 'DATA': 'GASs', 'seed': 3014}
 GAS: Best params:{'seed': 3014, 'n_depth': 2, 'n_width': 40, 'l2w': 0.00015000000000000001, 'DATA': 'GAS'}
+
+X_test=X_val
+        Y_test=Y_val
+        model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL_DP.h5', by_name=True)
+
+        model.initialize_chk_thresholds(Data, True)
+
+        cumperf_train = get_cumulative_deviation(model, Data, X_train, Y_train)
+        cumperf_test = get_cumulative_deviation(model, Data, X_test, Y_test)
+
+        fig, axes = get_cumulative_deviation_plot_single(cumperf_train, cumperf_test, model.model_name)
+        model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5', by_name=True)
+
+        cumperf_train = get_cumulative_deviation(model, Data, X_train, Y_train)
+        cumperf_test = get_cumulative_deviation(model, Data, X_test, Y_test)
+
+        fig, axes = get_cumulative_deviation_plot_single2(cumperf_train, cumperf_test, model.model_name,fig, axes)
+        plt.show()

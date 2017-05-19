@@ -17,7 +17,7 @@ MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
 
 
 
-DATA_TYPE='GAsS'
+DATA_TYPE='GAS'
 def validate(DataOIL,DataGAS):
 
     if DATA_TYPE=='GAS':
@@ -27,6 +27,7 @@ def validate(DataOIL,DataGAS):
     #bagging_test(Data)
     validate_train_test_split(Data)
     #ensemble_learning_bagging(Data)
+
     #grid_searchCV(Data)
     #validateRepeat(Data)
     #search_params = {'n_depth': 2, 'n_width': 100,
@@ -36,6 +37,7 @@ def validate(DataOIL,DataGAS):
 def validate_train_test_split(Data):
     X = Data.X_transformed#[1:-1]#[500:-1]
     Y = Data.Y_transformed#[1:-1]#[500:-1]
+
 
 
     #subsample(X,Y)
@@ -115,9 +117,10 @@ def validate_train_test_split(Data):
         #print(X.shape)
         #print(X_train.shape)
         #exit()
-        #model = NET2_PRESSURE.VANILLANET()
+        #model = NET2_PRESSURE.SSNET2()
+        print(len(X_val))
+        #model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='OIL')
 
-        model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='GAS')
         #model = NET2_PRESSURE.SSNET2()
 
         #model.fit(X_train, Y_train, X_val, Y_val)
@@ -131,22 +134,22 @@ def validate_train_test_split(Data):
         #model = NCNET_CHKPRES.PRESSURE_PBH()
 
 
-        #model = NCNET_CHKPRES.PRESSURE(tag='PWH')
+        #model = NCNET_CHKPRES.PRESSURE(tag='PDC')
 
-        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PDC',data='OIL')
+        model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PBH',data='GAS')
         #model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE2(PATH)
 
         #model=NCNET4_combined.NET4_W_PRESSURE3()
-
+        #exit()
         #x_last=X_test[-1]
 
         #y_last = X_test[-1]
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PBH_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
         #model.model.load_weights(PATH+'GJOA_deltaNET_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
-        model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
+        #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
        # exit()
 
         # model.initialize_zero_thresholds(Data)
@@ -154,13 +157,13 @@ def validate_train_test_split(Data):
         print(model.get_config())
         start = time.time()
 
-        if False:
+        if True:
             #model.update_model(activation='linear', epoch=1)
             #model.fit(X_train, Y_train, X_val, Y_val)
             #641
             #model.update_model(activation='relu', epoch=141)
             model.fit(X_train, Y_train, X_val, Y_val)
-            #model.save_model_to_file(model.model_name)
+            model.save_model_to_file(model.model_name)
             #exit()
 
         elif False:
@@ -170,12 +173,35 @@ def validate_train_test_split(Data):
             model.model.load_weights(PATH + 'GJOA_deltaNET_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
             model.model.load_weights(PATH + 'GJOA_deltaNET_OIL_WELLS_PWH_ALL_DATA.h5', by_name=True)
             model.model.load_weights(PATH+'GJOA_deltaNET_OIL_WELLS_PBH_ALL_DATA.h5',by_name=True)
-            model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
+            model.model.load_weights(PATH + 'GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
         else:
             pass
 
-       # model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
+        model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
+        if False:
+            cols=[]
+            for key in model.chk_names:
+                cols.append(key+'_CHK')
+                cols.append(key + '_shifted_CHK')
+                cols.append(key + '_shifted_PDC')
+            cols.append('GJOA_RISER_OIL_B_CHK')
+            cols.append('GJOA_RISER_OIL_B_shifted_CHK')
 
+            X_temp=X_val[cols]
+            cols_shifted=['C1_shifted_PDC', 'C2_shifted_PDC', 'C3_shifted_PDC', 'C4_shifted_PDC', 'B1_shifted_PDC', 'B3_shifted_PDC', 'D1_shifted_PDC']
+            cols=['C1_PDC', 'C2_PDC', 'C3_PDC', 'C4_PDC', 'B1_PDC', 'B3_CHK', 'D1_CHK']
+
+            OUT=X_val.loc[[X_temp.index[0]]][cols]
+            #OUT.reset_index(inplace=True)
+            print(OUT)
+            for i in X_temp.index:
+                X_temp.loc[[i]][cols_shifted]=OUT
+                OUT=model.predict(X_temp.loc[[i]])
+                a=True
+
+                print(OUT)
+
+            exit()
     end = time.time()
     print('Fitted with time: {}'.format(end - start))
     scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
@@ -183,9 +209,9 @@ def validate_train_test_split(Data):
     print(scores)
     with_line_plot=True
     with_separate_plot=True
-    save_fig=False
-    PATH='C:/Users/ugurac/Documents/GITFOLDERS/Masteroppgave-2017/figures/Results/NCNET3/'
-    file_tag_name='OIL_WELLS_QOIL_'
+    save_fig=True
+    PATH='C:/Users/ugurac/Documents/GITFOLDERS/Masteroppgave-2017/figures/Results/DeltaNET/'
+    file_tag_name='DeltaNET_GAS_WELLS_'
 
    # exit()
     #model.save_model_config(scores)
@@ -196,7 +222,7 @@ def validate_train_test_split(Data):
     #get_choke_diff_deviation(model, Data, X_train, Y_train)
     #plot_history(model)
     #plot_pressure_model(model, Data, X,Y,X_train, X_val, Y_train, Y_val, with_line_plot=False,
-    #                        with_separate_plot=False)
+    #                        with_separate_plot=False,save_fig=save_fig)
     #plt.show()
     if False:
         #import seaborn
@@ -286,10 +312,10 @@ def train_and_evaluate(model,Data,X_train,X_val,Y_train,Y_val):
     #model.fit(X_train,Y_train,X_val,Y_val)
 
     #model.update_model(activation='relu',epoch=641-500)
-    #model.fit(X_train, Y_train, X_val, Y_val)
-    PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
+    model.fit(X_train, Y_train, X_val, Y_val)
+    #PATH = 'Models/NeuralNetworks/SavedModels2/Weights/'
 
-    model.model.load_weights(PATH + model.model_name + '.h5', by_name=True)
+    #model.model.load_weights(PATH + model.model_name + '.h5', by_name=True)
 
     return evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
 
@@ -479,7 +505,7 @@ def grid_searchCV(Data):
     best_params={}
 
     PRESSURE_TYPE='PBH'
-    filename='GRID_SEARCH_DeltaNET_'+PRESSURE_TYPE
+    filename='GRID_SEARCH_DeltaNET_GAS_'+PRESSURE_TYPE
     #filename = 'GRID_SEARCH_GAS_WELLS_QGAS_DEPTH_2_TEST_6'
     ii=1
     pd.options.display.float_format = '{:.2f}'.format
@@ -497,7 +523,7 @@ def grid_searchCV(Data):
         #model=NCNET1_GJOA2.NCNET1_GJOA2(**params,output_act='relu',n_epoch=10000)
         #model = NET2_PRESSURE.SSNET2(**params, output_act='relu', n_epoch=10000)
 
-        model = NCNET_CHKPRES.PRESSURE_DELTA(tag=PRESSURE_TYPE,n_epoch=10000)
+        model = NCNET_CHKPRES.PRESSURE_DELTA(tag=PRESSURE_TYPE,n_epoch=10000,data='GAS')
 
         #model = NCNET_CHKPRES.PRESSURE_DELTA(tag=PRESSURE_TYPE,data='OIL',n_epoch=10000)
         model.initialize_chk_thresholds(Data, True)

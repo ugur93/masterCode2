@@ -18,7 +18,7 @@ import keras.backend as K
 def abs(x):
     return K.abs(x)
 
-SIM=True
+SIM=False
 
 class VANILLANET(NN_BASE):
 
@@ -39,7 +39,7 @@ class VANILLANET(NN_BASE):
         loss =huber
         nb_epoch = n_epoch
         batch_size = 64
-        dp_rate=0
+        dp_rate=0.1
         self.add_onoff_state=False
 
         self.model_name='VANILLA_SIM'
@@ -49,7 +49,7 @@ class VANILLANET(NN_BASE):
         self.well_names = ['A']#, 'B', 'C', 'D']
 
         self.input_tags={}
-        tags=['CHK']#,'PBH','PWH','PDC']
+        tags=['CHK','PBH','PWH','PDC']
         self.input_tags['main_input'] = []
         for name in self.well_names:
             for tag in tags:
@@ -127,7 +127,7 @@ class VANILLANET(NN_BASE):
 class SSNET2(NN_BASE):
 
 
-    def __init__(self,n_width=10,n_depth=1,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=10000):
+    def __init__(self,n_width=90,n_depth=2,l2w=0.0001,dp_rate=0.1,seed=3014,output_act='relu',n_epoch=141):
 
 
         self.SCALE=100
@@ -143,11 +143,11 @@ class SSNET2(NN_BASE):
         loss =huber
         nb_epoch = n_epoch
         batch_size = 64
-        dp_rate=0
-        self.add_onoff_state=False
+        dp_rate=dp_rate
+        self.add_onoff_state=True
 
-        #self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
-        self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
+        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL_DP'
+        #self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         if SIM:
@@ -175,7 +175,7 @@ class SSNET2(NN_BASE):
         #
 
         self.input_tags={}
-        tags=['CHK']#,'PBH','PWH','PDC']
+        tags=['CHK','PBH','PWH','PDC']
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
@@ -211,7 +211,7 @@ class SSNET2(NN_BASE):
             merged_outputs.append(merged_out)
             outputs.append(out)
 
-        merged_input = Add( name='Total_production')(merged_outputs)
+        merged_input = Add( name='GJOA_QGAS')(merged_outputs)
 
         all_outputs = merged_outputs + [merged_input]
        # merged_outputs.append(merged_input)
@@ -231,16 +231,16 @@ class SSNET2(NN_BASE):
 
 
         temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
-                            use_bias=True)(input_layer)
+                            use_bias=True,name=name+'_0')(input_layer)
         #temp_output=Dropout(0.05)(temp_output)
         for i in range(1,self.n_depth):
             if self.dp_rate>0:
-                temp_output = Dropout(self.dp_rate)(temp_output)
+                temp_output = Dropout(self.dp_rate,name=name+'_dp_'+str(i))(temp_output)
             temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
-                            use_bias=True)(temp_output)
+                            use_bias=True,name=name+'_'+str(i))(temp_output)
         #temp_output=Dropout(0.05)(temp_output)
         if self.add_onoff_state:
-            output_layer = Dense(1, kernel_initializer=self.init,activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
+            output_layer = Dense(1, kernel_initializer=self.init,activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True,name=name+'_o')(temp_output)
             aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
         else:
             output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,

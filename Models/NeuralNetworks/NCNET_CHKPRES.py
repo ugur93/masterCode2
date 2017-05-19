@@ -133,23 +133,38 @@ class PRESSURE_DELTA(NN_BASE):
         #PWH: {'l2w': 6.0000000000000002e-05, 'n_depth': 2, 'n_width': 50, 'seed': 3014} 
         self.model_name='GJOA_deltaNET_'+data+'_WELLS_'+tag+'_ALL_DATA'
         self.out_act='linear'
+        if False:
+            if data=='OIL':
+                if tag == 'PWH':
+                    n_depth = 2
+                    n_width = 90
+                    l2w = 0.00001
+                elif tag == 'PDC':
+                    n_depth = 2
+                    n_width = 60
+                    l2w = 0.0002
 
-        if tag == 'PWH':
-            n_depth = 2
-            n_width = 90
-            l2w = 0.00001
-        elif tag == 'PDC':
-            n_depth = 2
-            n_width = 60
-            l2w = 0.0002
+                else:
+                    n_depth = 1
+                    n_width = 80
+                    l2w = 0.000035
+            else:
+                if tag == 'PWH':
+                    n_depth = 2
+                    n_width = 80
+                    l2w = 0.0004
+                elif tag == 'PDC':
+                    n_depth = 2
+                    n_width = 20
+                    l2w = 0.00025
 
-        else:
-            n_depth = 1
-            n_width = 80
-            l2w = 0.000035
-
+                else:
+                    n_depth = 2
+                    n_width = 80
+                    l2w = 0.0001
         self.tag=tag
         self.type = 'DELTA'
+        self.data_type=data
 
         # Training config
         optimizer ='adam'
@@ -183,7 +198,7 @@ class PRESSURE_DELTA(NN_BASE):
             self.input_tags['CHK_INPUT_PREV'] = []
             #for key in self.well_names:
             #self.input_tags['CHK_VAL_'+'C1']=[]
-            if True:
+            if False:
                 self.input_tags['CHK_INPUT_NOW'].append('GJOA_RISER_OIL_B_CHK')
                 self.input_tags['CHK_INPUT_PREV'].append('GJOA_RISER_OIL_B_shifted_CHK')
             for key in self.chk_names:
@@ -209,7 +224,7 @@ class PRESSURE_DELTA(NN_BASE):
                 self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
             else:
                 self.output_tags[name + '_'+self.tag+'_out2'] = [name + '_'+self.tag]
-                #self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
+                self.output_tags[name + '_' + self.tag + '_out'] = [name + '_delta_' + self.tag]
 
         self.output_zero_thresholds = {}
 
@@ -305,7 +320,7 @@ class PRESSURE_DELTA(NN_BASE):
 
             PWH_out2 = Add(name=key + '_'+self.tag+'_out2')([PWH_out, shifted_pressure_input])
             outputs.append(PWH_out2)
-            #outputs.append(PWH_out)
+            outputs.append(PWH_out)
             inputs.append(shifted_pressure_input)
             #inputs.append(chk_val)
 
