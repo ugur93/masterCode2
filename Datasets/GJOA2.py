@@ -56,6 +56,7 @@ def fetch_gjoa_data():
     X['time'] = np.arange(0, len(X))
 
 
+
     X['time_sample_days']=(data['T2']-data['T1'])/(1000*60*60*24)
 
     mean_time=np.mean(X['time_sample_days'])*len(X)*0.2*0.0328
@@ -122,7 +123,7 @@ def fetch_gjoa_data():
         cols=[]
         for key1 in well_names:
             cols=[]
-            for key in ['delta_CHK','PDC','delta_PDC','CHK']:#['QGAS','PBH','PDC','PWH','CHK']:
+            for key in ['delta_PDC','delta_CHK']:#['QGAS','PBH','PDC','PWH','CHK']:
                 cols.append(key1+'_'+key)
             #cols.append('B1' + '_' + 'QGAS')
             #cols.append('GJOA_RISER_OIL_B_CHK')
@@ -138,43 +139,53 @@ def fetch_gjoa_data():
                     axes[i].scatter(X['time'], GjoaData.Y[key], color='blue')
                     #axes[i].hist( (GjoaData.Y[key])**2)
                 axes[i].set_title(key)
-                axes[i].set_xlabel('Time')
+                axes[i].set_xlabel('Sample number')
                 axes[i].set_ylabel(key)
                 fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
 
-    if False:
+    if True:
 
         #cols = ['GJOA_QGAS','E1_QGAS']
         cols=[]
 
 
         #ols=['F1_PBH','F1_PWH','F1_PDC']
-        cols=['C1_PDC','C1_shifted_PDC']
+        cols=['C1_delta_PDC','C1_delta_CHK']
         #cols=['C1_PBH','C2_PBH','C3_PBH','C4_PBH','B1_PBH','B3_PBH','D1_PBH']
-        MAP_cols={'C1_PDC':'O1 downstream choke pressure','C1_shifted_PDC':'O1 downstream choke pressure (shifted)','C1_PBH':'O1 bottom hole pressure','C1_PWH':'O1 wellhead pressure','D1_PBH':'O7'
+        MAP_cols={'C1_delta_CHK':'O1 Delta choke opening','C1_delta_PDC':'O1 Delta downstream choke pressure','C1_PBH':'O1 bottom hole pressure','C1_PWH':'O1 wellhead pressure','D1_PBH':'O7'
             ,'C1_CHK':'O1 choke','C4_PBH':'O4','B3_PBH':'O6'}
-        MAP_color={'C1_PDC':'red','C1_shifted_PDC':'blue'}
+        MAP_cols2 = {'C1_delta_CHK': 'Delta choke opening [%]',
+                    'C1_delta_PDC': 'Delta pressure [bar]', 'C1_PBH': 'O1 bottom hole pressure',
+                    'C1_PWH': 'O1 wellhead pressure', 'D1_PBH': 'O7'
+            , 'C1_CHK': 'O1 choke', 'C4_PBH': 'O4', 'B3_PBH': 'O6'}
+        MAP_color={'C1_delta_CHK':'blue','C1_shifted_PDC':'blue','C1_delta_PDC':'blue'}
 
         #for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
         #    cols.append(key+'_'+'QGAS')
-        fig, axes = plt.subplots(2, 1, sharex=True)
+
         #axes=[axes]
         #axes[0].plot(GjoaData.X['time'], GjoaData.X_transformed[key], color=MAP_color[key], label=MAP_cols[key])
-        axes[1].plot(GjoaData.X['time'], GjoaData.X['C1_CHK'])
+        #axes[1].plot(GjoaData.X['time'], GjoaData.X['C1_CHK'])
 
         for i, key in zip(range(0, len(cols)), cols):
+            fig, axes = plt.subplots(1, 1, sharex=True)
+            axes=[axes]
             i=0
+            axes[i].grid()
             try:
-                axes[i].plot(GjoaData.X['time'], GjoaData.X_transformed[key],color=MAP_color[key],label=MAP_cols[key])
+                axes[i].plot(GjoaData.X['time'], GjoaData.X[key],marker='.',color=MAP_color[key],label=MAP_cols[key])
             except(KeyError):
-                axes[i].scatter(X['time'], GjoaData.Y_transformed[key],label=MAP_cols[key])
+                axes[i].plot(X['time'], GjoaData.Y[key],marker='.',label=MAP_cols[key],color=MAP_color[key])
            # axes[i].set_title('G2_QGAS',fontsize=30)
-            axes[i].set_xlabel('Sample number',fontsize=40)
-            axes[i].tick_params(labelsize=30)
-            axes[i].set_ylabel('Downstream choke pressure (scaled)',fontsize=30)
-            axes[i].legend(fontsize=30)
+
+            axes[i].set_xlabel('Sample number',fontsize=25)
+            axes[i].tick_params(labelsize=25)
+            axes[i].set_ylabel(MAP_cols2[key],fontsize=25)
+            axes[i].set_title(MAP_cols[key], fontsize=30)
+
+            #axes[i].legend(fontsize=30)
             fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
 
         plt.show()
