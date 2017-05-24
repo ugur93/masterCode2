@@ -91,7 +91,7 @@ def fetch_gjoa_data():
 
     GjoaData=DataContainer(X,Y,name='GJOA',csv_path=MEAN_PATH,well_names=well_names)
     print(len(GjoaData.X))
-    if True:
+    if False:
         CTHRESH=10
         ind_zero=None
         chk_zero=None
@@ -118,7 +118,7 @@ def fetch_gjoa_data():
         cols=[]
         #ols=['F1_PBH','F1_PWH','F1_PDC']
         cols=['F1_CHK']
-        MAP_cols={'D3_CHK':'G3 choke opening','E1_CHK':'G4 choke opening'}
+        MAP_cols={'F1_CHK':'G1 choke opening','E1_CHK':'G4 choke opening'}
         #for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
         #    cols.append(key+'_'+'QGAS')
         fig, axes = plt.subplots(len(cols), 1, sharex=True)
@@ -131,9 +131,9 @@ def fetch_gjoa_data():
             except(KeyError):
                 axes[i].scatter(X['time'], GjoaData.Y_transformed[key], color='black')
            # axes[i].set_title('G2_QGAS',fontsize=30)
-            axes[i].set_xlabel('Sample number',fontsize=25)
-            axes[i].tick_params(labelsize=25)
-            axes[i].set_ylabel('Choke opening [%]',fontsize=25)
+            axes[i].set_xlabel('Sample number',fontsize=28)
+            axes[i].tick_params(labelsize=30)
+            axes[i].set_ylabel('Choke opening [%]',fontsize=28)
             #plt.legend(fontsize=40)
             axes[i].grid(which='major', linestyle='-')
             axes[i].set_axisbelow(True)

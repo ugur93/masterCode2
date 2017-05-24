@@ -18,7 +18,7 @@ import keras.backend as K
 def abs(x):
     return K.abs(x)
 
-SIM=False
+
 
 class VANILLANET(NN_BASE):
 
@@ -127,10 +127,11 @@ class VANILLANET(NN_BASE):
 class SSNET2(NN_BASE):
 
 
-    def __init__(self,n_width=90,n_depth=2,l2w=0.0001,dp_rate=0.1,seed=3014,output_act='relu',n_epoch=141):
+    def __init__(self,n_width=90,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=14101):
 
 
         self.SCALE=100
+        SIM = False
 
         self.output_layer_activation =output_act
         # Input module config
@@ -146,7 +147,7 @@ class SSNET2(NN_BASE):
         dp_rate=dp_rate
         self.add_onoff_state=True
 
-        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL_DP'
+        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
         #self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
@@ -159,10 +160,14 @@ class SSNET2(NN_BASE):
                 'C_out': 0.0,
                 'D_out': 0.0,
                 'Total_production': 1.0
+
             }
+            self.output_name = 'Total_production'
+            tags = ['CHK']#, 'PBH', 'PWH', 'PDC']
         else:
             self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
             self.well_names = ['F1', 'B2', 'D3', 'E1']
+            self.well_names2 =['B2', 'D3', 'E1', 'F1']
             self.loss_weights = {
                 'F1_out': 0.0,
                 'B2_out': 0.0,
@@ -170,12 +175,12 @@ class SSNET2(NN_BASE):
                 'E1_out': 0.0,
                 'GJOA_QGAS': 1.0
             }
-
-
+            tags = ['CHK' , 'PBH', 'PWH', 'PDC']
+            self.output_name='GJOA_QGAS'
         #
 
         self.input_tags={}
-        tags=['CHK','PBH','PWH','PDC']
+
         for name in self.well_names:
             self.input_tags[name]=[]
             for tag in tags:
@@ -201,7 +206,7 @@ class SSNET2(NN_BASE):
         merged_outputs=[]
         outputs=[]
 
-        for key in self.well_names:
+        for key in self.well_names2:
             n_input = len(self.input_tags[key])
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=self.n_depth, n_width=self.n_width,
                                                                     n_input=n_input, n_inception=0,
@@ -211,7 +216,7 @@ class SSNET2(NN_BASE):
             merged_outputs.append(merged_out)
             outputs.append(out)
 
-        merged_input = Add( name='GJOA_QGAS')(merged_outputs)
+        merged_input = Add( name=self.output_name)(merged_outputs)
 
         all_outputs = merged_outputs + [merged_input]
        # merged_outputs.append(merged_input)

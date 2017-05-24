@@ -145,7 +145,7 @@ def fetch_gjoa_data():
 
         plt.show()
 
-    if True:
+    if False:
 
         #cols = ['GJOA_QGAS','E1_QGAS']
         cols=[]

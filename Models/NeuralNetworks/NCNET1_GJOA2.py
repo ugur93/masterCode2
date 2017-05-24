@@ -38,23 +38,25 @@ class NCNET1_GJOA2(NN_BASE):
 
 
 
-    def __init__(self,n_depth=2,n_width=90,l2w=0.0001,dp_rate=0.1,seed=3014,output_act='relu',n_epoch=1500,DATA='GAS'):
+    def __init__(self,n_depth=2,n_width=90,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=1500,DATA='GAS'):
 
 
 
         self.input_tags = {}
 
         self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
-
+        self.well_names2 = ['B1', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1']
 
         if DATA=='GAS':
             n_depth=2
             n_width=90
             l2w=0.0001
+            n_epoch=1451
         else:
             n_width=100
             n_depth=2
             l2w=0.00095
+            n_epoch=541
 
         measurement_tags = ['CHK', 'PBH','PWH','PDC']
         for name in self.well_names:
@@ -92,7 +94,7 @@ class NCNET1_GJOA2(NN_BASE):
         batch_size = 64
         self.activation='relu'
 
-        self.model_name ='GJOA_OIL_WELLS_{}_HUBER_MODEL_FINAL2_TESTDATA2_DROPOUT_'.format(DATA)# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
+        self.model_name ='GJOA_OIL_WELLS_{}_HUBER_MODEL_FINAL2_TESTDATA2'.format(DATA)# 'GJOA_OIL2S_WELLS_{}_D{}_W{}_L2{}_DPR{}'.format(loss, n_depth, n_width, l2w,dp_rate)
 
 
 
@@ -115,7 +117,7 @@ class NCNET1_GJOA2(NN_BASE):
         merged_outputs=[]
         outputs=[]
 
-        for key in self.well_names:
+        for key in self.well_names2:
             n_input=len(self.input_tags[key])
             aux_input,input,merged_out,out=self.generate_input_module(name=key,n_input=n_input)
 

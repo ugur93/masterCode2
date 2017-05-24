@@ -276,8 +276,8 @@ class NN_BASE:
 
         score_test_MSE = metrics.mean_squared_error(data.inverse_transform(Y_test,'Y')[cols], Y_test_pred, multioutput='raw_values')
         score_train_MSE = metrics.mean_squared_error(data.inverse_transform(Y_train,'Y')[cols],Y_train_pred , multioutput='raw_values')
-        score_test_r2 = metrics.r2_score(data.inverse_transform(Y_test,'Y')[cols], Y_test_pred, multioutput='raw_values')
-        score_train_r2 = metrics.r2_score(data.inverse_transform(Y_train,'Y')[cols],Y_train_pred, multioutput='raw_values')
+        score_test_r2 = metrics.r2_score(data.inverse_transform(Y_test,'Y')[cols], Y_test_pred[cols], multioutput='raw_values')
+        score_train_r2 = metrics.r2_score(data.inverse_transform(Y_train,'Y')[cols],Y_train_pred[cols], multioutput='raw_values')
         if as_dict:
             score_train_MSE = pd.DataFrame(data=score_train_MSE, index=cols).T
             score_test_MSE = pd.DataFrame(data=score_test_MSE, index=cols).T

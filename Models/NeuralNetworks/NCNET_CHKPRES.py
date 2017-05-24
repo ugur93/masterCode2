@@ -10,14 +10,14 @@ import keras.backend as K
 class PRESSURE(NN_BASE):
 
 
-    def __init__(self,n_depth=2 ,n_width=80,l2w=0.00035,seed=3014,dp_rate=0,tag='PWH',act='relu',n_epoch=5010):
+    def __init__(self,n_depth=2 ,n_width=80,l2w=0.00035,seed=3014,dp_rate=0,tag='PWH',act='relu',n_epoch=5010,data='GAS'):
 
 
         #PWH: {'l2w': 0.00040000000000000002, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
         #PDC: {'l2w': 0.00020000000000000001, 'n_depth': 2, 'n_width': 40, 'seed': 3014}
         #PBH {'l2w': 5.0000000000000002e-05, 'n_depth': 2, 'n_width': 30, 'seed': 3014}
         #PWH: {'l2w': 6.0000000000000002e-05, 'n_depth': 2, 'n_width': 50, 'seed': 3014}
-        self.model_name='GJOA_OIL_WELLS_'+tag
+        self.model_name='GJOA_{}_WELLS_'.format(data)+tag
         self.out_act='linear'
 
         self.tag=tag
@@ -47,16 +47,20 @@ class PRESSURE(NN_BASE):
         dp_rate=0
 
 
-        self.chk_names=['C1', 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']
+        if data=='GAS':
+            self.chk_names =['F1','B2','D3','E1']
+            self.well_names=['F1','B2','D3','E1']
+            self.add_riser_chk = False
+        else:
+            self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1','D1']
+            if self.tag == 'PBH':
+                self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
+            else:
+                self.well_names = ['C1', 'C2', 'C3', 'C4','B1', 'B3', 'D1']
+            self.add_riser_chk=True
 
         #self.chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
 
-        if self.tag=='PBH':
-            self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
-
-        else:
-
-            self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1','B3','D1']
 
         self.delta_in=False
         self.input_tags={}
@@ -65,7 +69,7 @@ class PRESSURE(NN_BASE):
         self.input_tags['CHK_INPUT_NOW']=[]
         self.input_tags['CHK_INPUT_PREV'] = []
 
-        if True:
+        if self.add_riser_chk:
             self.input_tags['CHK_INPUT_NOW'].append('GJOA_RISER_OIL_B_CHK')
         for key in self.chk_names:
             for tag in ['CHK']:
@@ -133,7 +137,7 @@ class PRESSURE_DELTA(NN_BASE):
         #PWH: {'l2w': 6.0000000000000002e-05, 'n_depth': 2, 'n_width': 50, 'seed': 3014} 
         self.model_name='GJOA_deltaNET_'+data+'_WELLS_'+tag+'_ALL_DATA'
         self.out_act='linear'
-        if False:
+        if True:
             if data=='OIL':
                 if tag == 'PWH':
                     n_depth = 2
@@ -198,7 +202,7 @@ class PRESSURE_DELTA(NN_BASE):
             self.input_tags['CHK_INPUT_PREV'] = []
             #for key in self.well_names:
             #self.input_tags['CHK_VAL_'+'C1']=[]
-            if False:
+            if True:
                 self.input_tags['CHK_INPUT_NOW'].append('GJOA_RISER_OIL_B_CHK')
                 self.input_tags['CHK_INPUT_PREV'].append('GJOA_RISER_OIL_B_shifted_CHK')
             for key in self.chk_names:

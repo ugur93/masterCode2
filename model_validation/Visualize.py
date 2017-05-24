@@ -6,7 +6,9 @@ from .base import *
 OUTPUT_COLS_ON_SINGLE_PLOT=['Total production','GJOA_QGAS','GJOA_TOTAL_QOIL','GJOA_TOTAL_QOIL_SUM','GJOA_OIL_QGASss']
 
 N_PLOT_SUB=0
-well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+#well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
+well_names = ['B1','B3','C1','C2','C3','C4','D1']
+
 KEY_MAP={}
 for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well O{}'.format(i)
@@ -18,7 +20,7 @@ for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key + '_PBH'] = 'Well O{} PBH'.format(i)
     KEY_MAP[key + '_PWH'] = 'Well O{} PWH'.format(i)
     KEY_MAP[key + '_CHK'] = 'Well O{} choke'.format(i)
-well_names=['F1','B2','D3','E1']
+well_names=['B2','D3','E1','F1']
 for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key+'_QGAS']='Well G{}'.format(i)
     KEY_MAP[key + '_PDC'] = 'Well G{} PDC'.format(i)
@@ -29,10 +31,13 @@ for i,key in zip(range(1,len(well_names)+1),well_names):
     KEY_MAP[key + '_PWH'] = 'Well G{} PWH'.format(i)
     KEY_MAP[key + '_CHK'] = 'Well G{} choke'.format(i)
 KEY_MAP['GJOA_OIL_SUM_QGAS']='Total production'
+KEY_MAP['Total_production']='Total production'
+
 KEY_MAP['GJOA_TOTAL_SUM_QOIL']='Total production'
 KEY_MAP['GJOA_QGAS']='Total production'
+KEY_MAP['GJOA_OIL_QGAS']='Total production'
 KEY_MAP['GJOA_RISER_OIL_B_CHK'] = 'Riser O choke'
-KEY_MAP['GJOA_RISER_delta_CHK'] = 'Riser O delta choke'
+KEY_MAP['GJOA_RISER_delta_CHK'] = 'Riser O choke'
 COLOR_MAP={'C1':'red','C2':'blue','C3':'darkkhaki','C4':'green','B1':'brown','B3':'darkcyan','D1':'sandybrown','GJOA':'black'
            ,'F1':'red','B2':'blue','D3':'brown','E1':'darkkhaki','A':'red','B':'blue','C':'brown','D':'darkkhaki'}
 colors=['red','blue','yellow','orange','black',
@@ -41,20 +46,22 @@ colors=['red','blue','yellow','orange','black',
 #exit()
 for key in ['A','B','C','D']:
     KEY_MAP[key+'_QGAS']='Well '+key
-TICKSIZE=25
+TICKSIZE=30
 FONTSIZELEGEND=18
-FONTSIZEX=25
-FONTSIZEY=25
+FONTSIZEX=28
+FONTSIZEY=28
 FONTSIZETITLE=30
 TRUE_DATA_TAG='(Measured)'
 PREDICTED_DATA_TAG='(Prediction)'
 TICK_STEP_SIZE=10
-#TRUE_AND_PREDICTED_Y_LABEL='Oil flow rate [Sm3/h] (scaled)'
+LW_CUMPERF=2 #3
+TRUE_AND_PREDICTED_Y_LABEL='Gas flow rate [Sm3/h] (scaled)'
 #TRUE_AND_PREDICTED_Y_LABEL='Gas flow rate [Sm3/h] (scaled)'
 
-TRUE_AND_PREDICTED_Y_LABEL='PWH [bar]'
+#TRUE_AND_PREDICTED_Y_LABEL='PBH [bar]'
 
-
+MS=10
+LS=0.5
 TRUE_TRAIN_LABEL='Train '+TRUE_DATA_TAG
 TRUE_TEST_LABEL='Test '+TRUE_DATA_TAG
 PRED_TRAIN_LABEL='Train '+PREDICTED_DATA_TAG
@@ -105,14 +112,15 @@ def ends_with(name,end_tag):
     return False
 
 def get_pressure_plot(axes,Data,Y_pred_train,Y_pred_test,Y_train,Y_test,tag_name):
-    axes.plot(Data.inverse_transform(Y_train, 'Y')[tag_name], marker='.', color='blue',
+    LS=0.5
+    axes.plot(Data.inverse_transform(Y_train, 'Y')[tag_name],linewidth=LS, ms=MS, marker='.', color='blue',
               label='Train' + ' (measured)')
-    axes.plot(Data.inverse_transform(Y_pred_train, 'Y')[tag_name], marker='.', color='black',
+    axes.plot(Data.inverse_transform(Y_pred_train, 'Y')[tag_name],linewidth=LS, ms=MS, marker='.', color='black',
                  label='Train'+' (predicted)')
 
-    axes.plot(Data.inverse_transform(Y_test, 'Y')[tag_name], marker='.', color='red',
+    axes.plot(Data.inverse_transform(Y_test, 'Y')[tag_name],linewidth=LS, ms=MS, marker='.', color='red',
               label='Test' + ' (measured)')
-    axes.plot(Data.inverse_transform(Y_pred_test, 'Y')[tag_name], marker='.', color='green',
+    axes.plot(Data.inverse_transform(Y_pred_test, 'Y')[tag_name],linewidth=LS, ms=MS, marker='.', color='green',
                  label='Test'+' (predicted)')
 
     axes.legend()
@@ -128,11 +136,27 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
             else:
                 N_PLOTS=3
 
-            pressure_map={'PDC':'Downstream choke pressure','PBH':'Bottom hole pressure','PWH':'Wellhead choke pressure'}
+            pressure_map={'PDC':'PDC','PBH':'PBH','PWH':'PWH'}
+
+            if tag=='PBH':
+                axes_y_delta_chk_lim_1=-0.7
+                axes_y_delta_chk_lim_2=0.6
+                axes_y_chk_lim_1 = 147
+                axes_y_chk_lim_2 = 177
+            elif tag=='PWH':
+                axes_y_delta_chk_lim_1 = -2
+                axes_y_delta_chk_lim_2 = 2
+                axes_y_chk_lim_1 = 80
+                axes_y_chk_lim_2 = 140
+            elif tag=='PDC':
+                axes_y_delta_chk_lim_1 = -6
+                axes_y_delta_chk_lim_2 = 6
+                axes_y_chk_lim_1 = 30
+                axes_y_chk_lim_2 = 80
             Y_pred_train=model.predict(X_train).set_index(X_train.index)
             Y_pred_test=model.predict(X_test).set_index(X_test.index)
             ylabel=pressure_map[tag]+' [bar]'
-            for name in ['F1']:
+            for name in ['C1']:
                 tag_name=name+'_'+tag
                 #if with_separate_plot:
                 fig1,axes_pres=plt.subplots(1,1,sharex=True)
@@ -180,17 +204,17 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                 # ax.set_title('Test error',fontsize=FONTSIZETITLE)
                 axes_pres.set_xlabel('Sample number', fontsize=FONTSIZEX-T)
                 axes_pres.set_ylabel(ylabel, fontsize=FONTSIZEY-T)
-                axes_pres.legend(fontsize=16)
+                axes_pres.legend(fontsize=FONTSIZELEGEND)
                 axes_pres.tick_params(axis='both', labelsize=TICKSIZE)
                 axes_pres.set_title(KEY_MAP[tag_name],fontsize=FONTSIZETITLE)
                 if model.type == 'ALPHA':
                     for chkname in model.chk_names:
-                        axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_CHK'], marker='.',
+                        axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_CHK'], ms=MS,marker='.',
                                   label=KEY_MAP[chkname+'_CHK'])
                     #ax.set_yticklabels([])
 
                     riser_choke='GJOA_RISER_OIL_B_CHK'
-                    axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke], marker='.',
+                    axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke], ms=MS, marker='.',
                                   label=KEY_MAP[riser_choke])
 
                     axes_chk.grid(which='major', linestyle='-')
@@ -199,7 +223,7 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                 # ax.set_title('Test error',fontsize=FONTSIZETITLE)
                     axes_chk.set_xlabel('Sample number', fontsize=FONTSIZEX-T)
                     axes_chk.set_ylabel('Choke opening [%]', fontsize=FONTSIZEY-T)
-                    axes_chk.legend(fontsize=16)
+                    axes_chk.legend(fontsize=FONTSIZELEGEND)
                     axes_chk.tick_params(axis='both', labelsize=TICKSIZE)
                     print(len(X))
                     axes_chk.set_xlim([700, X.index[-1]])
@@ -208,33 +232,33 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
                 if model.type=='DELTA':
                     #axes_pres_delta=axes[1]
                     for chkname in model.chk_names:
-                        axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_delta_CHK'], marker='.',
+                        axes_chk.plot(Data.inverse_transform(X, 'X')[chkname+'_delta_CHK'],linewidth=1, ms=MS, marker='.',
                                   label=KEY_MAP[chkname+'_CHK'])
 
                     if model.data_type != 'GAS':
                         riser_choke = 'GJOA_RISER_delta_CHK'
-                        axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke], marker='.',
+                        axes_chk.plot(Data.inverse_transform(X, 'X')[riser_choke],linewidth=1, ms=MS, marker='.',
                                       label=KEY_MAP[riser_choke])
 
                     axes_chk.grid(which='major', linestyle='-')
                     axes_chk.set_axisbelow(True)
-                    axes_chk.annotate('713', xy=(713, 8), xytext=(710, 8))
+                    #axes_chk.annotate('713', xy=(713, 8), xytext=(710, 8))
 
-                    axes_chk.annotate('716', xy=(716, 9), xytext=(720, 9),
+                    #axes_chk.annotate('716', xy=(716, 9), xytext=(720, 9),
 
-                                      )
-                    axes_chk.annotate('733', xy=(733, 9), xytext=(735, 9),
+                    #                  )
+                    #axes_chk.annotate('733', xy=(733, 9), xytext=(735, 9),
 
-                                      )
+                     #                 )
                     # ax.set_title('Test error',fontsize=FONTSIZETITLE)
                     axes_chk.set_xlabel('Sample number', fontsize=FONTSIZEX - T)
                     axes_chk.set_ylabel('Delta choke opening [%]', fontsize=FONTSIZEY - T)
-                    axes_chk.legend(fontsize=16)
+                    axes_chk.legend(fontsize=FONTSIZELEGEND)
                     axes_chk.tick_params(axis='both', labelsize=TICKSIZE)
 
-                    axes_chk.set_xlim([500, X.index[-1]])
-                    axes_pres.set_xlim([500, X.index[-1]])
-                    axes_pres_delta.set_xlim([500, X.index[-1]])
+                    axes_chk.set_xlim([700, X.index[-1]])
+                    axes_pres.set_xlim([700, X.index[-1]])
+                    axes_pres_delta.set_xlim([700, X.index[-1]])
 
                     if True:
                         axes_pres_delta.grid(which='major', linestyle='-')
@@ -246,15 +270,19 @@ def plot_pressure_model(model,Data, X,Y,X_train, X_test, Y_train ,Y_test,with_li
 
                         # ax.set_title('Test error',fontsize=FONTSIZETITLE)
                         axes_pres_delta.set_xlabel('Sample number', fontsize=FONTSIZEX - T)
-                        axes_pres_delta.set_ylabel('Delta pressure [bar]', fontsize=FONTSIZEY - T)
-                        axes_pres_delta.legend(fontsize=16)
+                        axes_pres_delta.set_ylabel('Delta {} [bar]'.format(tag), fontsize=FONTSIZEY - T)
+                        axes_pres_delta.legend(fontsize=FONTSIZELEGEND)
                         axes_pres_delta.tick_params(axis='both', labelsize=TICKSIZE)
+                axes_pres.set_ylim([axes_y_chk_lim_1, axes_y_chk_lim_2])
+                axes_pres_delta.set_ylim([axes_y_delta_chk_lim_1, axes_y_delta_chk_lim_2])
+
                 if save_fig:
+
                     PATH = 'C:/Users/ugurac/Documents/GITFOLDERS/Masteroppgave-2017/figures/Results/DeltaNET/'
                     file_tag_name = 'DeltaNET_WELL_'+KEY_MAP[tag_name]+'_500_end'
-                    fig1.savefig(PATH+file_tag_name+'.pdf')
-                    file_tag_name = 'DeltaNET_WELL_delta_choke_' + KEY_MAP[tag_name]+'_500_end'
-                    fig2.savefig(PATH+file_tag_name+'.pdf')
+                    #fig1.savefig(PATH+file_tag_name+'.pdf')
+                    #file_tag_name = 'DeltaNET_WELL_delta_choke_' + KEY_MAP[tag_name]+'_500_end'
+                    #fig2.savefig(PATH+file_tag_name+'.pdf')
                     file_tag_name = 'DeltaNET_WELL_delta_pres_' + KEY_MAP[tag_name]+'_500_end'
                     fig3.savefig(PATH+file_tag_name+'.pdf')
 
@@ -294,7 +322,7 @@ def plot_history(model):
     for name in output_names_temp:
         key=name.split('_')[0]
         if key=='GJOA':
-            output_names.append(key+'_QGAS')
+            output_names.append(key+'_TOTAL')
         else:
             if key!='D3':
                 output_names.append(key+'_out')
@@ -302,7 +330,7 @@ def plot_history(model):
     #output_names=model.sort_names(output_names)
     step_size=5
     fig,ax=plt.subplots(1,1)
-    N=len(model.history.history['val_GJOA_QGAS_loss'])
+    N=len(model.history.history['val_GJOA_TOTAL_loss'])
     sum_pred=None
     for key in output_names:
         X=resample(model.history.history['val_'+key+'_loss'],step_size)
@@ -404,7 +432,7 @@ def get_scatter_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_ta
     #ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
     #           ncol=2, mode="expand", borderaxespad=0.2)
     ax.legend(fontsize=FONTSIZELEGEND)
-    fig.subplots_adjust(wspace=0.13, hspace=.2, top=0.91, bottom=0.15, left=0.08, right=0.99)
+    fig.subplots_adjust(wspace=0.13, hspace=.2, top=0.92, bottom=0.15, left=0.09, right=0.99)
     fig.canvas.set_window_title(model.model_name)
     ax.tick_params(axis='both', which='major', labelsize=TICKSIZE)
     ax.axvline(X_test.index[0], -20, 20, color='darkblue')
@@ -425,11 +453,11 @@ def get_line_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_tag,r
         Y_test = Y_test[ind_test]
     ax.grid(which='major', linestyle='-')
     ax.set_axisbelow(True)
-    ax.plot(data.inverse_transform(Y_train,'Y')[y_tag], marker='.', color='blue',label=TRUE_TRAIN_LABEL)
-    ax.plot(data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag], marker='.',color='black',label=PRED_TRAIN_LABEL)
+    ax.plot(data.inverse_transform(Y_train,'Y')[y_tag],linewidth=LS,ms=MS, marker='.', color='blue',label=TRUE_TRAIN_LABEL)
+    ax.plot(data.inverse_transform(model.predict(X_train),'Y').set_index(Y_train.index)[y_tag],linewidth=LS,ms=MS, marker='.',color='black',label=PRED_TRAIN_LABEL)
 
-    ax.plot(data.inverse_transform(Y_test,'Y')[y_tag], marker='.', color='red', label=TRUE_TEST_LABEL)
-    ax.plot(data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag], marker='.', color='green',label= PRED_TEST_LABEL)
+    ax.plot(data.inverse_transform(Y_test,'Y')[y_tag],linewidth=LS,ms=MS, marker='.', color='red', label=TRUE_TEST_LABEL)
+    ax.plot(data.inverse_transform(model.predict(X_test),'Y').set_index(Y_test.index)[y_tag],linewidth=LS,ms=MS, marker='.', color='green',label= PRED_TEST_LABEL)
 
     #ax.legend(bbox_to_anchor=(0., 1., 1.01, .0), loc=3,
     #           ncol=2, mode="expand", borderaxespad=0.2)
@@ -454,16 +482,19 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
         X_test=X_test[ind_test]
         Y_train = Y_train[ind_train]
         Y_test = Y_test[ind_test]
-
-    ax.scatter(Y_train.index,
-                data.inverse_transform(Y_train,'Y')[y_tag] - data.inverse_transform(model.predict(X_train),'Y')[
-                    y_tag].values,
+    x_line=np.linspace(np.min(data.inverse_transform(Y_test,'Y')[
+                    y_tag].values),np.max(data.inverse_transform(Y_test,'Y')[
+                    y_tag].values),1000)
+    y_line=x_line
+    ax.plot(x_line,y_line,color='blue',linewidth=2)
+    ax.scatter(data.inverse_transform(model.predict(X_train),'Y')[
+                    y_tag].values,data.inverse_transform(Y_train,'Y')[y_tag],
                 color='black',
                 label='train')
 
-    ax.scatter(Y_test.index,
-                data.inverse_transform(Y_test,'Y')[y_tag] - data.inverse_transform(model.predict(X_test),'Y')[
-                    y_tag].values,
+    ax.scatter(
+                data.inverse_transform(model.predict(X_test),'Y')[
+                    y_tag].values,data.inverse_transform(Y_test,'Y')[y_tag],
                 color='green',
                 label='test')
 
@@ -472,7 +503,7 @@ def get_residual_plot(fig_par,model,data,X_train,X_test,Y_train,Y_test,x_tag,y_t
 
     fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
     fig.canvas.set_window_title(model.model_name)
-    fig.tick_params(axis='both', which='major', labelsize=20)
+    ax.tick_params(axis='both', which='major', labelsize=20)
     return fig,ax
 
 def get_cumulative_performance_plot(cumperf,data_tag):
@@ -486,7 +517,7 @@ def get_cumulative_performance_plot(cumperf,data_tag):
 
     for i in range(len(cumperf.columns)):
         axes[i].plot(cumperf.index, cumperf[cumperf.columns[i]])
-        axes[i].set_title(cumperf.columns[i])
+        #axes[i].set_title(cumperf.columns[i])
         axes[i].set_xlabel('Deviation (%)')
         axes[i].set_ylabel('Cumulative (% of {} set sample points)'.format(data_tag))
         axes[i].tick_params(axis='both', which='major', labelsize=15)
@@ -544,10 +575,10 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag,fig
             #exit()
             #print(cumperf.columns[i])
             if cumperf.columns[i].split('_')[-1] in ['QGAS','QOIL']:
-                if KEY_MAP[cumperf.columns[i]]!='Well G3':
-                    axes_wells.plot(cumperf.index, cumperf[cumperf_test.columns[i]],linewidth=3, label=KEY_MAP[cumperf.columns[i]]+' dropout',
+                if KEY_MAP[cumperf.columns[i]]!='Well G2':
+                    axes_wells.plot(cumperf.index, cumperf[cumperf_test.columns[i]],linewidth=LW_CUMPERF, label=KEY_MAP[cumperf.columns[i]],
                               color=COLOR_MAP[cumperf_test.columns[i].split('_')[0]])
-                    axes_wells.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
+                    #axes_wells.set_title('{} data'.format(data_type),fontsize=FONTSIZETITLE)
 
         axes_wells.set_xlabel('Deviation (%)',fontsize=FONTSIZEX)
         axes_wells.set_ylabel('Cumulative \n (% of {} set sample points)'.format(data_type),fontsize=FONTSIZEY)
@@ -581,7 +612,7 @@ def get_cumulative_deviation_plot_single(cumperf_train,cumperf_test,data_tag,fig
 
     #axes_tot.legend(fontsize=FONTSIZELEGEND)
 
-    fig_wells.suptitle('Cumulative performance',fontsize=30)
+    #fig_wells.suptitle('Cumulative performance',fontsize=30)
     fig_wells.subplots_adjust(wspace=0.17, hspace=.18, top=0.88, bottom=0.09, left=0.08, right=0.99)
 
 
@@ -733,7 +764,7 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
             zero_chk_param = (True, output_tag.split('_')[0], model.get_chk_threshold())
             #print(model.get_chk_threshold())
 
-        ax = get_residual_plot((fig, ax), model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
+        fig,ax = get_residual_plot((fig, ax), model, data, X_train, X_test, Y_train, Y_test, x_tag='time', y_tag=output_tag,remove_zero_chk=zero_chk_param)
 
         ax.set_title(output_tag + '-' + 'Residuals (true-pred)')
 
@@ -741,7 +772,7 @@ def plot_residuals(model, data, X_train, X_test, Y_train, Y_test, output_cols=[]
 def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, output_cols=[],save_fig=False,file_tag_name='',PATH='',remove_zero_chk=False,with_line_plot=False,with_separate_plot=False):
     if len(output_cols) == 0:
         output_cols = model.output_tag_ordered_list
-
+    residuals=False
     N_sensors, tag_list=count_number_of_different_sensors_tags(output_cols)
     multi_output_col_list=split_col_list(output_cols,tag_list)
     N_PLOT_SUB=0
@@ -798,6 +829,14 @@ def plot_true_and_predicted(model, data, X_train, X_test, Y_train, Y_test, outpu
                 else:
                     fig,ax = get_scatter_plot(fig_par, model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
                                    y_tag=output_tag, remove_zero_chk=zero_chk_param)
+                if residuals:
+                    figr, axr = plt.subplots(sp_y, sp_x)
+                    axr.grid()
+                    figr, axr = get_residual_plot((figr, axr), model, data, X_train, X_test, Y_train, Y_test, x_tag='time',
+                                                y_tag=output_tag, remove_zero_chk=zero_chk_param)
+                    axr.set_xlabel(KEY_MAP[output_tag]+' measured', fontsize=FONTSIZEX)
+                    axr.set_ylabel(KEY_MAP[output_tag] + ' predicted', fontsize=FONTSIZEX)
+
                 # plt.tight_layout()
                 if output_tag.split('_')[-1] in ['QGAS','QOIL']:
                     #ax.set_title('Well '+output_tag.split('_')[0], fontsize=20)

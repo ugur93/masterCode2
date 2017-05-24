@@ -1,0 +1,21 @@
+Best results: 
+Best params:{'seed': 3014, 'l2w': 0.00035000000000000005, 'n_depth': 2, 'n_width': 90} 
+Best COST: 8.477978220813783 
+BEST SCORES: 
+ {'RMSE_train': F1_PDC   1.72
+B2_PDC   1.69
+D3_PDC   1.68
+E1_PDC   2.45
+dtype: float64, 'R2_train': F1_PDC   0.89
+B2_PDC   0.79
+D3_PDC   0.81
+E1_PDC   0.81
+dtype: float64, 'RMSE_test': F1_PDC   2.01
+B2_PDC   2.03
+D3_PDC   1.96
+E1_PDC   2.47
+dtype: float64, 'R2_test': F1_PDC   0.73
+B2_PDC   0.52
+D3_PDC   0.58
+E1_PDC   0.69
+dtype: float64}

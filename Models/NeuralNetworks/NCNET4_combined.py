@@ -520,7 +520,7 @@ class NET4_W_PRESSURE3(NN_BASE):
         verbose = 0
 
         n_depth = 2
-        n_width = 100
+        n_width = 90
         l2w = 0.00015
 
         self.n_depth_pdc = 2
@@ -564,7 +564,7 @@ class NET4_W_PRESSURE3(NN_BASE):
         #        self.input_tags['PRESSURE_INPUT'].append(key + '_' + '1_PBH')
         #self.input_tags['CHK_INPUT'].append('GJOA_RISER_OIL_B_CHK')
 
-        self.output_tags = OIL_WELLS_QOIL_OUTPUT_TAGS
+        self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
 
         for key in self.well_names:
             #print(key)
