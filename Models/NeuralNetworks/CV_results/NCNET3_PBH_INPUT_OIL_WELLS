@@ -1,0 +1,240 @@
+RMSE_TRAIN: 
+C1_PBH                 0.127279
+C1_PWH                 2.573396
+C1_PDC                 0.759740
+C2_PWH                 1.501714
+C2_PDC                 0.888831
+C3_PBH                 0.100979
+C3_PWH                 0.610471
+C3_PDC                 0.575450
+C4_PBH                 0.508484
+C4_PWH                 1.125891
+C4_PDC                 1.146589
+B1_PBH                 0.539123
+B1_PWH                 2.952688
+B1_PDC                 1.356687
+B3_PBH                 0.791232
+B3_PWH                 1.958334
+B3_PDC                 0.861603
+D1_PWH                 1.528956
+D1_PDC                 0.989495
+C1_QOIL                0.194672
+C2_QOIL                0.206607
+C3_QOIL                0.100806
+C4_QOIL                0.126228
+B1_QOIL                0.391087
+B3_QOIL                0.484854
+D1_QOIL                0.187100
+GJOA_TOTAL_SUM_QOIL    0.255978
+dtype: float64
+RMSE_TEST: 
+C1_PBH                 0.073110
+C1_PWH                 0.407048
+C1_PDC                 0.623688
+C2_PWH                 1.630477
+C2_PDC                 0.611694
+C3_PBH                 0.054036
+C3_PWH                 3.206029
+C3_PDC                 0.615555
+C4_PBH                 0.298657
+C4_PWH                 2.241310
+C4_PDC                 0.620394
+B1_PBH                 0.642960
+B1_PWH                 2.149066
+B1_PDC                 1.433174
+B3_PBH                 0.226591
+B3_PWH                 4.113065
+B3_PDC                 0.636092
+D1_PWH                 0.221452
+D1_PDC                 0.624466
+C1_QOIL                0.254508
+C2_QOIL                0.150648
+C3_QOIL                0.119291
+C4_QOIL                0.155516
+B1_QOIL                0.180593
+B3_QOIL                0.296045
+D1_QOIL                0.264589
+GJOA_TOTAL_SUM_QOIL    0.256172
+dtype: float64
+R2_TRAIN: 
+C1_PBH                 0.999621
+C1_PWH                 0.889219
+C1_PDC                 0.974682
+C2_PWH                 0.948169
+C2_PDC                 0.965175
+C3_PBH                 0.999739
+C3_PWH                 0.993141
+C3_PDC                 0.985513
+C4_PBH                 0.993375
+C4_PWH                 0.974895
+C4_PDC                 0.942169
+B1_PBH                 0.997627
+B1_PWH                 0.937733
+B1_PDC                 0.922070
+B3_PBH                 0.981601
+B3_PWH                 0.868664
+B3_PDC                 0.967648
+D1_PWH                 0.943996
+D1_PDC                 0.957198
+C1_QOIL                0.940670
+C2_QOIL                0.925231
+C3_QOIL                0.980518
+C4_QOIL                0.968302
+B1_QOIL                0.926457
+B3_QOIL                0.365740
+D1_QOIL                0.924572
+GJOA_TOTAL_SUM_QOIL    0.997012
+dtype: float64
+R2_TEST: 
+C1_PBH                 0.998922
+C1_PWH                 0.977617
+C1_PDC                 0.945794
+C2_PWH                 0.641782
+C2_PDC                 0.947905
+C3_PBH                 0.999245
+C3_PWH                 0.210626
+C3_PDC                 0.947219
+C4_PBH                 0.975722
+C4_PWH                 0.647796
+C4_PDC                 0.946690
+B1_PBH                 0.896630
+B1_PWH                 0.702028
+B1_PDC                 0.767579
+B3_PBH                 0.984212
+B3_PWH                 0.108313
+B3_PDC                 0.943464
+D1_PWH                 0.995006
+D1_PDC                 0.945947
+C1_QOIL                0.459894
+C2_QOIL                0.786049
+C3_QOIL                0.920146
+C4_QOIL                0.822566
+B1_QOIL                0.925326
+B3_QOIL               -0.345892
+D1_QOIL                0.584301
+GJOA_TOTAL_SUM_QOIL    0.983570
+dtype: float64
+sMAPE_TRAIN: 
+C1_PBH                  0.026498
+C1_PWH                  0.310733
+C1_PDC                  0.319220
+C2_PWH                  0.408349
+C2_PDC                  0.318704
+C3_PBH                  0.014009
+C3_PWH                  0.235769
+C3_PDC                  0.300467
+C4_PBH                  0.220043
+C4_PWH                  0.203640
+C4_PDC                  0.339944
+B1_PBH                  0.176238
+B1_PWH                  0.825404
+B1_PDC                  0.390157
+B3_PBH                  0.075661
+B3_PWH                  0.310121
+B3_PDC                  0.338390
+D1_PWH                  0.180623
+D1_PDC                  0.330467
+C1_QOIL                 3.632264
+C2_QOIL                 5.327143
+C3_QOIL                 1.909917
+C4_QOIL                 2.241049
+B1_QOIL                 6.411111
+B3_QOIL                15.813434
+D1_QOIL                 4.321161
+GJOA_TOTAL_SUM_QOIL     0.601996
+dtype: float64
+sMAPE_TEST: 
+C1_PBH                  0.031790
+C1_PWH                  0.177944
+C1_PDC                  0.501595
+C2_PWH                  0.606005
+C2_PDC                  0.462362
+C3_PBH                  0.018563
+C3_PWH                  0.548136
+C3_PDC                  0.485185
+C4_PBH                  0.142132
+C4_PWH                  0.402492
+C4_PDC                  0.479622
+B1_PBH                  0.219733
+B1_PWH                  0.976121
+B1_PDC                  0.674607
+B3_PBH                  0.072906
+B3_PWH                  0.658431
+B3_PDC                  0.519693
+D1_PWH                  0.108003
+D1_PDC                  0.488556
+C1_QOIL                 5.925115
+C2_QOIL                 4.147136
+C3_QOIL                 2.957619
+C4_QOIL                 4.354759
+B1_QOIL                 3.759476
+B3_QOIL                15.941428
+D1_QOIL                 6.223435
+GJOA_TOTAL_SUM_QOIL     0.680815
+dtype: float64
+RMSE_TRAIN_SCORES: 
+     C1_PBH    C1_PWH   C1_PDC    C2_PWH    C2_PDC    C3_PBH    C3_PWH  \
+0  0.127279  2.573396  0.75974  1.501714  0.888831  0.100979  0.610471   
+
+    C3_PDC    C4_PBH    C4_PWH         ...             D1_PWH    D1_PDC  \
+0  0.57545  0.508484  1.125891         ...           1.528956  0.989495   
+
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL   B3_QOIL  D1_QOIL  \
+0  0.194672  0.206607  0.100806  0.126228  0.391087  0.484854   0.1871   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             0.255978  
+
+[1 rows x 27 columns]
+RMSE_TEST_SCORES: 
+    C1_PBH    C1_PWH    C1_PDC    C2_PWH    C2_PDC    C3_PBH    C3_PWH  \
+0  0.07311  0.407048  0.623688  1.630477  0.611694  0.054036  3.206029   
+
+     C3_PDC    C4_PBH   C4_PWH         ...             D1_PWH    D1_PDC  \
+0  0.615555  0.298657  2.24131         ...           0.221452  0.624466   
+
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL   B3_QOIL   D1_QOIL  \
+0  0.254508  0.150648  0.119291  0.155516  0.180593  0.296045  0.264589   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             0.256172  
+
+[1 rows x 27 columns]
+sMAPE_TRAIN_SCORES: 
+     C1_PBH    C1_PWH   C1_PDC    C2_PWH    C2_PDC    C3_PBH    C3_PWH  \
+0  0.026498  0.310733  0.31922  0.408349  0.318704  0.014009  0.235769   
+
+     C3_PDC    C4_PBH   C4_PWH         ...             D1_PWH    D1_PDC  \
+0  0.300467  0.220043  0.20364         ...           0.180623  0.330467   
+
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL    B3_QOIL   D1_QOIL  \
+0  3.632264  5.327143  1.909917  2.241049  6.411111  15.813434  4.321161   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             0.601996  
+
+[1 rows x 27 columns]
+sMAPE_TEST_SCORES: 
+    C1_PBH    C1_PWH    C1_PDC    C2_PWH    C2_PDC    C3_PBH    C3_PWH  \
+0  0.03179  0.177944  0.501595  0.606005  0.462362  0.018563  0.548136   
+
+     C3_PDC    C4_PBH    C4_PWH         ...             D1_PWH    D1_PDC  \
+0  0.485185  0.142132  0.402492         ...           0.108003  0.488556   
+
+    C1_QOIL   C2_QOIL   C3_QOIL   C4_QOIL   B1_QOIL    B3_QOIL   D1_QOIL  \
+0  5.925115  4.147136  2.957619  4.354759  3.759476  15.941428  6.223435   
+
+   GJOA_TOTAL_SUM_QOIL  
+0             0.680815  
+
+[1 rows x 27 columns]
+
+Well O1 & 0.18 & 0.93 & 3.76\% \\ 
+ Well O2 & 0.30 & -0.35 & 15.94\% \\ 
+ Well O3 & 0.25 & 0.46 & 5.93\% \\ 
+ Well O4 & 0.15 & 0.79 & 4.15\% \\ 
+ Well O5 & 0.12 & 0.92 & 2.96\% \\ 
+ Well O6 & 0.16 & 0.82 & 4.35\% \\ 
+ Well O7 & 0.26 & 0.58 & 6.22\% \\ 
+ Total production flow rate & 0.26 & 0.98 & 0.68\% \\ 
+ 

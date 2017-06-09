@@ -134,7 +134,7 @@ def get_chk_zero_ind(data,col):
     return data[name+'_CHK']==0
 def get_cumulative_deviation(model,data,X,Y,do_remove_zeros=True):
 
-    cols = model.output_tag_ordered_list
+    cols = model.output_tag_ordered_list2
     deviation_range = np.arange(0, 100, 0.5)
 
     measured, predicted=get_predicted_and_measured_df(model,data,X,Y)

@@ -20,7 +20,7 @@ DATA_TYPE = 'mea'
 
 
 
-well_names=['C1','C2','C3','C4','B3','B1','D1']
+well_names=['C1','C2','C3','C4','B1','B3','D1']
 
 def huber(diff2):
     delta=1
@@ -57,9 +57,9 @@ def fetch_gjoa_data():
 
 
 
-    X['time_sample_days']=(data['T2']-data['T1'])/(1000*60*60*24)
+    #X['time_sample_days']=(data['T2']-data['T1'])/(1000*60*60*24)
 
-    mean_time=np.mean(X['time_sample_days'])*len(X)*0.2*0.0328
+    #mean_time=np.mean(X['time_sample_days'])*len(X)*0.2*0.0328
     #print(mean_time)
     #exit()
     X,Y=preprocesss(X, Y)
@@ -77,11 +77,11 @@ def fetch_gjoa_data():
 
             if ind_zero is None:
                 ind_zero = abs(X[key + '_delta_CHK']) > CTHRESH
-                #ind_zero2 = abs(X[key + '_CHK']) ==0
+                #ind_zero = abs(X[key + '_CHK']) ==0
                 #ind_zero=ind_zero#|ind_zero2
             else:
                 ind_temp = abs(X[key + '_delta_CHK']) > CTHRESH
-                #ind_zero2 = ind_zero2 & abs(X[key + '_CHK']) == 0
+                #ind_zero = ind_zero & abs(X[key + '_CHK']) == 0
                 ind_zero=ind_zero|ind_temp
         ind_zero=ind_zero#|ind_zero2
         GjoaData.X =GjoaData.X[~ind_zero]
@@ -89,6 +89,7 @@ def fetch_gjoa_data():
         GjoaData.X_transformed = GjoaData.X_transformed[~ind_zero]
         GjoaData.Y_transformed = GjoaData.Y_transformed[~ind_zero]
         ind_zero = abs(X['GJOA_RISER_delta_CHK']) > CTHRESH
+        #ind_zero = abs(X['GJOA_RISER_delta_CHK']) ==0
 
         GjoaData.X = GjoaData.X[~ind_zero]
         GjoaData.Y = GjoaData.Y[~ind_zero]
@@ -125,10 +126,11 @@ def fetch_gjoa_data():
             cols=[]
             for key in ['delta_PDC','delta_CHK']:#['QGAS','PBH','PDC','PWH','CHK']:
                 cols.append(key1+'_'+key)
+            cols=['GJOA_RISER_OIL_B_CHK']
             #cols.append('B1' + '_' + 'QGAS')
             #cols.append('GJOA_RISER_OIL_B_CHK')
             fig,axes=plt.subplots(len(cols),1,sharex=True)
-            #axes=[axes]
+            axes=[axes]
             #plt.scatter(Y['B1_QOIL'],X['B1_CHK'])
             #plt.show()
 
@@ -152,15 +154,15 @@ def fetch_gjoa_data():
 
 
         #ols=['F1_PBH','F1_PWH','F1_PDC']
-        cols=['C1_delta_PDC','C1_delta_CHK']
+        cols=['C1_CHK']
         #cols=['C1_PBH','C2_PBH','C3_PBH','C4_PBH','B1_PBH','B3_PBH','D1_PBH']
-        MAP_cols={'C1_delta_CHK':'O1 Delta choke opening','C1_delta_PDC':'O1 Delta downstream choke pressure','C1_PBH':'O1 bottom hole pressure','C1_PWH':'O1 wellhead pressure','D1_PBH':'O7'
+        MAP_cols={'B1_shifted_PDC':'O1 downstream choke pressure (shifted)','B1_PDC':'O1 downstream choke pressure','C1_PBH':'O3 Choke opening','C1_PWH':'O1 wellhead pressure'
             ,'C1_CHK':'O1 choke','C4_PBH':'O4','B3_PBH':'O6'}
         MAP_cols2 = {'C1_delta_CHK': 'Delta choke opening [%]',
                     'C1_delta_PDC': 'Delta pressure [bar]', 'C1_PBH': 'O1 bottom hole pressure',
                     'C1_PWH': 'O1 wellhead pressure', 'D1_PBH': 'O7'
             , 'C1_CHK': 'O1 choke', 'C4_PBH': 'O4', 'B3_PBH': 'O6'}
-        MAP_color={'C1_delta_CHK':'blue','C1_shifted_PDC':'blue','C1_delta_PDC':'blue'}
+        MAP_color={'B1_shifted_PDC':'red','C1_CHK':'black','C1_PBH':'blue','C1_1CHK':'blue'}
 
         #for key in well_names:#['QGAS','PBH','PDC','PWH','CHK']:
         #    cols.append(key+'_'+'QGAS')
@@ -168,22 +170,30 @@ def fetch_gjoa_data():
         #axes=[axes]
         #axes[0].plot(GjoaData.X['time'], GjoaData.X_transformed[key], color=MAP_color[key], label=MAP_cols[key])
         #axes[1].plot(GjoaData.X['time'], GjoaData.X['C1_CHK'])
-
+        fig, axes = plt.subplots(1, 1, sharex=True)
+        axes = [axes]
+        print(GjoaData.X.columns)
         for i, key in zip(range(0, len(cols)), cols):
-            fig, axes = plt.subplots(1, 1, sharex=True)
-            axes=[axes]
+
             i=0
             axes[i].grid()
+            x=np.linspace(-5,5,1000)
+            y=x.copy()
+            y[y<0]=0
             try:
-                axes[i].plot(GjoaData.X['time'], GjoaData.X[key],marker='.',color=MAP_color[key],label=MAP_cols[key])
-            except(KeyError):
-                axes[i].plot(X['time'], GjoaData.Y[key],marker='.',label=MAP_cols[key],color=MAP_color[key])
-           # axes[i].set_title('G2_QGAS',fontsize=30)
+                axes[i].scatter(x, y,color='blue',label=MAP_cols[key])
 
-            axes[i].set_xlabel('Sample number',fontsize=25)
-            axes[i].tick_params(labelsize=25)
-            axes[i].set_ylabel(MAP_cols2[key],fontsize=25)
-            axes[i].set_title(MAP_cols[key], fontsize=30)
+                #axes[i].scatter(GjoaData.X['time'], GjoaData.X[key],color=MAP_color[key],label=MAP_cols[key])
+            except(KeyError):
+                axes[i].plot(GjoaData.X['time'], GjoaData.Y[key],marker='.',ms=10,color=MAP_color[key],label=MAP_cols[key])
+            axes[i].set_title('ReLU',fontsize=50)
+            axes[i].set_axisbelow(True)
+            #axes[i].axvline(len(GjoaData.X)*0.9, -20, 20,color='darkblue')
+            #axes[i].set_xlabel('Sample number', fontsize=30)
+            axes[i].tick_params(labelsize=50)
+            #axes[i].set_ylabel('Choke opening [%]', fontsize=30)
+            #plt.legend(fontsize=30)
+            axes[i].grid(which='major', linestyle='-')
 
             #axes[i].legend(fontsize=30)
             fig.subplots_adjust(wspace=0.08, hspace=.18, top=0.95, bottom=0.06, left=0.04, right=0.99)
@@ -279,7 +289,7 @@ def set_chk_zero_values_to_zero(X,Y):
 
 def preprocesss(X,Y):
     #DROP = [808, 809, 807, 173,591,171,806, 416, 447, 487,685,670,257,258,286,475,181,167,63,234,590,6,594,64,671,712,713,764]#,764,713,685,670]
-    DROP=[416,447,487,808,173,806,819,820,821,822,805,807,257,848,0]#,234,6,591]
+    DROP=[416,447,487,808,173,806,819,820,821,822,805,807]#,257,848]#,234,6,591]
 
     DROP_OIL=[287,130,132,292,290,196]
 
@@ -314,17 +324,18 @@ def preprocesss(X,Y):
 
             if ind_zero is None:
                 ind_zero = abs(X[key+'_CHK']-X[key+'_CHK'].shift(1)) > CTHRESH
-                #ind_zero2 = abs(X[key + '_CHK']) ==0
+                #ind_zero = abs(X[key + '_CHK']) ==0
                 #ind_zero=ind_zero#|ind_zero2delta_CHK = X[key+'_CHK']-X[key+'_CHK'].shift(1)
             else:
                 ind_temp = abs(X[key+'_CHK']-X[key+'_CHK'].shift(1)) > CTHRESH
-                #ind_zero2 = ind_zero2 & abs(X[key + '_CHK']) == 0
-                ind_zero=ind_zero|ind_temp
+                #ind_zero = ind_zero & abs(X[key + '_CHK']) == 0
+                #ind_zero=ind_zero|ind_temp
         ind_zero=ind_zero#|ind_zero2
         X =X[~ind_zero]
         Y =Y[~ind_zero]
 
         ind_zero = abs(X['GJOA_RISER_OIL_B_CHK']-X['GJOA_RISER_OIL_B_CHK'].shift(1)) > CTHRESH
+        #ind_zero = abs(X['GJOA_RISER_OIL_B_CHK']) == 0
 
         X = X[~ind_zero]
         Y = Y[~ind_zero]
@@ -372,14 +383,17 @@ def generate_total_export_variables(X,Y):
     # Remove negative values
     Y = negative_values_to_zero(Y, 'GJOA_OIL_QGAS')
     if False:
+        DIVFAC=100000/2000
         fig, axes = plt.subplots(1, 1)
-        axes.scatter(np.arange(0, len(Y), 1), Y['GJOA_OIL_QGAS']/20000, color='black', label='Calculated total QGAS')
-        axes.scatter(np.arange(0, len(Y), 1), sum_gas/20000, color='green', label='Sum MPFM measurements')
-        axes.set_xlabel('Time', fontsize=20)
-        axes.set_ylabel('QGAS (scaled)', fontsize=20)
-        axes.tick_params(axis='both', labelsize=20)
-        #axes.grid()
-        axes.legend(fontsize=20)
+        axes.grid()
+        axes.set_axisbelow(True)
+
+        axes.scatter(np.arange(0, len(Y), 1), Y['GJOA_OIL_QGAS']/DIVFAC, color='black', label='Calculated total total gas production')
+        axes.scatter(np.arange(0, len(Y), 1), sum_gas/DIVFAC, color='green', label='Sum MPFM measurements')
+        axes.set_xlabel('Sample number', fontsize=30)
+        axes.set_ylabel('Gas flow rate [Sm3/h] (scaled)', fontsize=30)
+        axes.tick_params(axis='both', labelsize=30)
+        axes.legend(fontsize=30)
         plt.show()
 
     return X,Y

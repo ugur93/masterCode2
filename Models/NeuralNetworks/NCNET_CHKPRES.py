@@ -22,26 +22,42 @@ class PRESSURE(NN_BASE):
 
         self.tag=tag
         self.type='ALPHA'
+        if True:
+            if data=='OIL':
+                if tag == 'PWH':
+                    n_depth = 2
+                    n_width = 30
+                    l2w = 0.0005
+                elif tag == 'PDC':
+                    n_depth = 2
+                    n_width = 80
+                    l2w = 0.0003
+                else:
+                    n_depth = 2
+                    n_width = 90
+                    l2w = 0.0002
+            else:
+                if tag == 'PWH':
+                    n_depth = 2
+                    n_width = 60
+                    l2w = 0.0001
+                elif tag == 'PDC':
+                    n_depth = 2
+                    n_width = 90
+                    l2w = 0.00035
 
-        if tag=='PWH':
-            n_depth=2
-            n_width=30
-            l2w=0.0005
-        elif tag=='PDC':
-            n_depth = 2
-            n_width = 80
-            l2w = 0.00035
-        else:
-            n_depth = 2
-            n_width = 90
-            l2w = 0.0002
+                else:
+                    n_depth = 2
+                    n_width = 50
+                    l2w = 0.0001
+
 
         self.n_lookback=10
         do_lookback=False
 
         # Training config
         optimizer ='adam'
-        loss = huber
+        loss = huber(0.1)
         nb_epoch = n_epoch
         batch_size = 64
         dp_rate=0
@@ -49,14 +65,30 @@ class PRESSURE(NN_BASE):
 
         if data=='GAS':
             self.chk_names =['F1','B2','D3','E1']
+            #self.chk_names2=['B2','D3','E1','F1']
             self.well_names=['F1','B2','D3','E1']
+            self.well_names2 = ['B2','D3','E1','F1']
+
+
+            self.output_tag_ordered_list2 = []
+            for i in range(len(self.chk_names)):
+                self.output_tag_ordered_list2.append(self.well_names2[i] + '_' + tag)
             self.add_riser_chk = False
         else:
             self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1','D1']
+            self.chk_names2=['B1','B3','C1','C2','C3','C4','D1']
             if self.tag == 'PBH':
                 self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
+                self.well_names2 = ['B1', 'B3', 'C1', 'C3', 'C4']
+
             else:
-                self.well_names = ['C1', 'C2', 'C3', 'C4','B1', 'B3', 'D1']
+                self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']  #
+                self.well_names2 = ['B1', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1']
+
+
+            self.output_tag_ordered_list2 = []
+            for i in range(len(self.well_names2)):
+                self.output_tag_ordered_list2.append(self.well_names2[i] + '_' + tag)
             self.add_riser_chk=True
 
         #self.chk_names=['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']
@@ -172,7 +204,7 @@ class PRESSURE_DELTA(NN_BASE):
 
         # Training config
         optimizer ='adam'
-        loss =huber
+        loss =huber(0.1)
         nb_epoch = n_epoch
         batch_size = 64
         dp_rate=0
@@ -181,13 +213,23 @@ class PRESSURE_DELTA(NN_BASE):
 
         if data=='GAS':
             self.chk_names =['F1','B2','D3','E1']
-            self.well_names=['F1','B2','D3','E1']
+            self.chk_names2 = ['B2', 'D3', 'E1', 'F1']
+            self.well_names=['B2', 'D3', 'E1', 'F1']
         else:
             self.chk_names = ['C1', 'C2', 'C3', 'C4', 'B3', 'B1','D1']
+            self.chk_names2 = ['B1', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1']
             if self.tag == 'PBH':
-                self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3']
+                self.well_names = ['C1', 'C3', 'C4', 'B1', 'B3'] #['C1', 'C3', 'C4', 'B1', 'B3']
+                self.well_names2=['B1', 'B3', 'C1', 'C3', 'C4']
             else:
-                self.well_names = ['C1', 'C2', 'C3', 'C4','B1', 'B3', 'D1']
+                self.well_names = ['C1', 'C2', 'C3', 'C4','B1', 'B3', 'D1']#
+                self.well_names2 = ['B1', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1']
+
+
+            self.output_tag_ordered_list2 = []
+            for i in range(len(self.well_names2)):
+                self.output_tag_ordered_list2.append(self.well_names2[i] + '_'+tag)
+
         self.delta_in=False
         self.input_tags={}
 

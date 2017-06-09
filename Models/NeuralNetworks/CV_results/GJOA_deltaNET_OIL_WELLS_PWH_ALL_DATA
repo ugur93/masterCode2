@@ -1,148 +1,148 @@
 RMSE_TRAIN: 
-C1_PWH          2.451354
-C1_delta_PWH    2.451354
-C2_PWH          1.326189
-C2_delta_PWH    1.326189
-C3_PWH          0.685437
-C3_delta_PWH    0.685437
-C4_PWH          0.831320
-C4_delta_PWH    0.831320
-B1_PWH          3.008140
-B1_delta_PWH    3.008140
-B3_PWH          1.731167
-B3_delta_PWH    1.731167
-D1_PWH          1.454881
-D1_delta_PWH    1.454881
+C1_PWH          4.927993
+C1_delta_PWH    2.557546
+C2_PWH          6.350978
+C2_delta_PWH    1.733873
+C3_PWH          4.704050
+C3_delta_PWH    0.703931
+C4_PWH          5.432419
+C4_delta_PWH    0.791940
+B1_PWH          4.457600
+B1_delta_PWH    3.194289
+B3_PWH          5.560917
+B3_delta_PWH    1.702544
+D1_PWH          6.859382
+D1_delta_PWH    2.090050
 dtype: float64
 RMSE_TEST: 
-C1_PWH          0.175188
-C1_delta_PWH    0.175188
-C2_PWH          2.230329
-C2_delta_PWH    2.230329
-C3_PWH          4.475449
-C3_delta_PWH    4.475449
-C4_PWH          2.979478
-C4_delta_PWH    2.979479
-B1_PWH          0.653288
-B1_delta_PWH    0.653288
-B3_PWH          5.748394
-B3_delta_PWH    5.748394
-D1_PWH          0.116584
-D1_delta_PWH    0.116584
+C1_PWH          0.448045
+C1_delta_PWH    0.436281
+C2_PWH          2.273207
+C2_delta_PWH    2.255255
+C3_PWH          4.501070
+C3_delta_PWH    4.481433
+C4_PWH          3.041516
+C4_delta_PWH    3.013932
+B1_PWH          0.618398
+B1_delta_PWH    0.629442
+B3_PWH          5.770436
+B3_delta_PWH    5.752554
+D1_PWH          0.235126
+D1_delta_PWH    0.193481
 dtype: float64
 R2_TRAIN: 
-C1_PWH          0.909375
-C1_delta_PWH    0.004312
-C2_PWH          0.963866
-C2_delta_PWH    0.057221
-C3_PWH          0.992361
-C3_delta_PWH    0.890685
-C4_PWH          0.988253
-C4_delta_PWH    0.734737
-B1_PWH          0.943046
-B1_delta_PWH    0.007651
-B3_PWH          0.913054
-B3_delta_PWH    0.115273
-D1_PWH          0.957188
-D1_delta_PWH    0.061192
+C1_PWH          0.633903
+C1_delta_PWH   -0.085463
+C2_PWH          0.173042
+C2_delta_PWH   -0.613947
+C3_PWH          0.640496
+C3_delta_PWH    0.884532
+C4_PWH          0.498789
+C4_delta_PWH    0.758909
+B1_PWH          0.875145
+B1_delta_PWH   -0.120661
+B3_PWH          0.103920
+B3_delta_PWH    0.142990
+D1_PWH          0.048918
+D1_delta_PWH   -0.940398
 dtype: float64
 R2_TEST: 
-C1_PWH          0.974969
-C1_delta_PWH    0.189645
-C2_PWH         -0.232566
-C2_delta_PWH   -0.004759
-C3_PWH         -0.593090
-C3_delta_PWH   -0.003976
-C4_PWH          0.390044
-C4_delta_PWH   -0.002231
-B1_PWH          0.963509
-B1_delta_PWH    0.101952
-B3_PWH         -0.027220
-B3_delta_PWH   -0.009535
-D1_PWH          0.959557
-D1_delta_PWH    0.430657
+C1_PWH          0.836275
+C1_delta_PWH   -4.025715
+C2_PWH         -0.280413
+C2_delta_PWH   -0.027343
+C3_PWH         -0.611383
+C3_delta_PWH   -0.006663
+C4_PWH          0.364379
+C4_delta_PWH   -0.025544
+B1_PWH          0.967302
+B1_delta_PWH    0.166317
+B3_PWH         -0.035113
+B3_delta_PWH   -0.010996
+D1_PWH          0.835498
+D1_delta_PWH   -0.568105
 dtype: float64
 sMAPE_TRAIN: 
-C1_PWH             0.291281
-C1_delta_PWH     143.190639
-C2_PWH             0.372361
-C2_delta_PWH     775.654698
-C3_PWH             0.224413
-C3_delta_PWH    1057.398027
-C4_PWH             0.225321
-C4_delta_PWH    2778.990195
-B1_PWH             0.651855
-B1_delta_PWH     529.311739
-B3_PWH             0.200653
-B3_delta_PWH    1097.504715
-D1_PWH             0.159356
-D1_delta_PWH     520.058289
+C1_PWH             0.478487
+C1_delta_PWH     188.532949
+C2_PWH             0.498081
+C2_delta_PWH     415.213184
+C3_PWH             0.298555
+C3_delta_PWH     894.053048
+C4_PWH             0.452692
+C4_delta_PWH    2067.235703
+B1_PWH             0.711812
+B1_delta_PWH    1003.401835
+B3_PWH             0.360852
+B3_delta_PWH     446.773655
+D1_PWH             0.389548
+D1_delta_PWH     859.424436
 dtype: float64
 sMAPE_TEST: 
-C1_PWH             0.094507
-C1_delta_PWH     140.381960
-C2_PWH             0.775299
-C2_delta_PWH     399.887283
-C3_PWH             0.824669
-C3_delta_PWH    1242.883407
-C4_PWH             0.636919
-C4_delta_PWH    2535.687665
-B1_PWH             0.385534
-B1_delta_PWH    2020.188159
-B3_PWH             0.962587
-B3_delta_PWH     567.875055
-D1_PWH             0.064902
-D1_delta_PWH     485.274738
+C1_PWH             0.218278
+C1_delta_PWH     185.706112
+C2_PWH             0.745040
+C2_delta_PWH     265.967388
+C3_PWH             0.862180
+C3_delta_PWH    1176.482532
+C4_PWH             0.717003
+C4_delta_PWH    1917.334298
+B1_PWH             0.333433
+B1_delta_PWH    2627.153303
+B3_PWH             1.020058
+B3_delta_PWH     492.133091
+D1_PWH             0.136429
+D1_delta_PWH    1337.216870
 dtype: float64
 RMSE_TRAIN_SCORES: 
-     C1_PWH  C1_delta_PWH    C2_PWH  C2_delta_PWH    C3_PWH  C3_delta_PWH  \
-0  2.451354      2.451354  1.326189      1.326189  0.685437      0.685437   
+     C1_PWH  C1_delta_PWH    C2_PWH  C2_delta_PWH   C3_PWH  C3_delta_PWH  \
+0  4.927993      2.557546  6.350978      1.733873  4.70405      0.703931   
 
-    C4_PWH  C4_delta_PWH   B1_PWH  B1_delta_PWH    B3_PWH  B3_delta_PWH  \
-0  0.83132       0.83132  3.00814       3.00814  1.731167      1.731167   
+     C4_PWH  C4_delta_PWH  B1_PWH  B1_delta_PWH    B3_PWH  B3_delta_PWH  \
+0  5.432419       0.79194  4.4576      3.194289  5.560917      1.702544   
 
      D1_PWH  D1_delta_PWH  
-0  1.454881      1.454881  
+0  6.859382       2.09005  
 RMSE_TEST_SCORES: 
-     C1_PWH  C1_delta_PWH    C2_PWH  C2_delta_PWH    C3_PWH  C3_delta_PWH  \
-0  0.175188      0.175188  2.230329      2.230329  4.475449      4.475449   
+     C1_PWH  C1_delta_PWH    C2_PWH  C2_delta_PWH   C3_PWH  C3_delta_PWH  \
+0  0.448045      0.436281  2.273207      2.255255  4.50107      4.481433   
 
      C4_PWH  C4_delta_PWH    B1_PWH  B1_delta_PWH    B3_PWH  B3_delta_PWH  \
-0  2.979478      2.979479  0.653288      0.653288  5.748394      5.748394   
+0  3.041516      3.013932  0.618398      0.629442  5.770436      5.752554   
 
      D1_PWH  D1_delta_PWH  
-0  0.116584      0.116584  
+0  0.235126      0.193481  
 sMAPE_TRAIN_SCORES: 
      C1_PWH  C1_delta_PWH    C2_PWH  C2_delta_PWH    C3_PWH  C3_delta_PWH  \
-0  0.291281    143.190639  0.372361    775.654698  0.224413   1057.398027   
+0  0.478487    188.532949  0.498081    415.213184  0.298555    894.053048   
 
      C4_PWH  C4_delta_PWH    B1_PWH  B1_delta_PWH    B3_PWH  B3_delta_PWH  \
-0  0.225321   2778.990195  0.651855    529.311739  0.200653   1097.504715   
+0  0.452692   2067.235703  0.711812   1003.401835  0.360852    446.773655   
 
      D1_PWH  D1_delta_PWH  
-0  0.159356    520.058289  
+0  0.389548    859.424436  
 sMAPE_TEST_SCORES: 
-     C1_PWH  C1_delta_PWH    C2_PWH  C2_delta_PWH    C3_PWH  C3_delta_PWH  \
-0  0.094507     140.38196  0.775299    399.887283  0.824669   1242.883407   
+     C1_PWH  C1_delta_PWH   C2_PWH  C2_delta_PWH   C3_PWH  C3_delta_PWH  \
+0  0.218278    185.706112  0.74504    265.967388  0.86218   1176.482532   
 
      C4_PWH  C4_delta_PWH    B1_PWH  B1_delta_PWH    B3_PWH  B3_delta_PWH  \
-0  0.636919   2535.687665  0.385534   2020.188159  0.962587    567.875055   
+0  0.717003   1917.334298  0.333433   2627.153303  1.020058    492.133091   
 
      D1_PWH  D1_delta_PWH  
-0  0.064902    485.274738  
+0  0.136429    1337.21687  
 
-Well O1 delta & 0.18 & 0.19 & 140.38\% \\ 
- Well O2 delta & 2.23 & -0.00 & 399.89\% \\ 
- Well O3 delta & 4.48 & -0.00 & 1242.88\% \\ 
- Well O4 delta & 2.98 & -0.00 & 2535.69\% \\ 
- Well O5 delta & 0.65 & 0.10 & 2020.19\% \\ 
- Well O6 delta & 5.75 & -0.01 & 567.88\% \\ 
- Well O7 delta & 0.12 & 0.43 & 485.27\% \\ 
- Well O1 & 0.18 & 0.97 & 0.09\% \\ 
- Well O2 & 2.23 & -0.23 & 0.78\% \\ 
- Well O3 & 4.48 & -0.59 & 0.82\% \\ 
- Well O4 & 2.98 & 0.39 & 0.64\% \\ 
- Well O5 & 0.65 & 0.96 & 0.39\% \\ 
- Well O6 & 5.75 & -0.03 & 0.96\% \\ 
- Well O7 & 0.12 & 0.96 & 0.06\% \\ 
+Well O3 delta & 0.44 & -4.03 & 185.71\% \\ 
+ Well O4 delta & 2.26 & -0.03 & 265.97\% \\ 
+ Well O5 delta & 4.48 & -0.01 & 1176.48\% \\ 
+ Well O6 delta & 3.01 & -0.03 & 1917.33\% \\ 
+ Well O1 delta & 0.63 & 0.17 & 2627.15\% \\ 
+ Well O2 delta & 5.75 & -0.01 & 492.13\% \\ 
+ Well O7 delta & 0.19 & -0.57 & 1337.22\% \\ 
+ Well O3 & 0.45 & 0.84 & 0.22\% \\ 
+ Well O4 & 2.27 & -0.28 & 0.75\% \\ 
+ Well O5 & 4.50 & -0.61 & 0.86\% \\ 
+ Well O6 & 3.04 & 0.36 & 0.72\% \\ 
+ Well O1 & 0.62 & 0.97 & 0.33\% \\ 
+ Well O2 & 5.77 & -0.04 & 1.02\% \\ 
+ Well O7 & 0.24 & 0.84 & 0.14\% \\ 
  

@@ -74,14 +74,14 @@ SIM_OUTPUT_TAGS= {
 
 
 import keras.backend as K
-
-def huber(y_true, y_pred):
-    delta=0.1
-    diff = y_true - y_pred
-    a = 0.5 * (diff**2)
-    b = delta * (abs(diff) - delta / 2.0)
-    loss = K.switch(abs(diff) <= delta, a, b)
-    return loss.sum()
+def huber(delta=0.1):
+    def func(y_true, y_pred):
+        diff = y_true - y_pred
+        a = 0.5 * (diff**2)
+        b = delta * (abs(diff) - delta / 2.0)
+        loss = K.switch(abs(diff) <= delta, a, b)
+        return loss.sum()
+    return func
 
 def generate_pressure_sub_model(input_layer,name,init,l2weight,depth,n_width,dp_rate):
         i=0

@@ -1,94 +1,94 @@
 RMSE_TRAIN: 
-F1_PDC          0.844724
-F1_delta_PDC    3.087339
-B2_PDC          0.864806
-B2_delta_PDC    2.798168
-D3_PDC          0.777204
-D3_delta_PDC    2.771225
-E1_PDC          1.284078
-E1_delta_PDC    3.180967
+B2_PDC          0.883297
+B2_delta_PDC    2.868635
+D3_PDC          0.778413
+D3_delta_PDC    2.863158
+E1_PDC          1.286090
+E1_delta_PDC    3.296795
+F1_PDC          0.846038
+F1_delta_PDC    3.143263
 dtype: float64
 RMSE_TEST: 
-F1_PDC          1.221876
-F1_delta_PDC    1.224199
-B2_PDC          0.415505
-B2_delta_PDC    0.431281
-D3_PDC          0.777513
-D3_delta_PDC    0.777141
-E1_PDC          1.316867
-E1_delta_PDC    1.321472
+B2_PDC          0.413606
+B2_delta_PDC    0.418588
+D3_PDC          0.772225
+D3_delta_PDC    0.777408
+E1_PDC          1.308456
+E1_delta_PDC    1.314133
+F1_PDC          1.223293
+F1_delta_PDC    1.228666
 dtype: float64
 R2_TRAIN: 
-F1_PDC          0.969803
-F1_delta_PDC   -5.761640
-B2_PDC          0.938099
-B2_delta_PDC   -5.628905
-D3_PDC          0.952789
-D3_delta_PDC   -6.677149
-E1_PDC          0.940171
-E1_delta_PDC   -3.181871
+B2_PDC          0.935423
+B2_delta_PDC   -5.966985
+D3_PDC          0.952642
+D3_delta_PDC   -7.194963
+E1_PDC          0.939983
+E1_delta_PDC   -3.491964
+F1_PDC          0.969709
+F1_delta_PDC   -6.008817
 dtype: float64
 R2_TEST: 
-F1_PDC         -1.218260
-F1_delta_PDC    0.195625
-B2_PDC          0.902156
-B2_delta_PDC    0.686106
-D3_PDC          0.508724
-D3_delta_PDC    0.429085
-E1_PDC         -1.162945
-E1_delta_PDC    0.144920
+B2_PDC          0.903048
+B2_delta_PDC    0.704312
+D3_PDC          0.515385
+D3_delta_PDC    0.428693
+E1_PDC         -1.135404
+E1_delta_PDC    0.154390
+F1_PDC         -1.223408
+F1_delta_PDC    0.189744
 dtype: float64
 sMAPE_TRAIN: 
-F1_PDC          4.784216e-01
-F1_delta_PDC    1.254720e+19
-B2_PDC          4.826814e-01
-B2_delta_PDC    1.041520e+03
-D3_PDC          4.864189e-01
-D3_delta_PDC    4.061117e+02
-E1_PDC          5.595631e-01
-E1_delta_PDC    3.055431e+02
+B2_PDC          4.759241e-01
+B2_delta_PDC    7.570487e+02
+D3_PDC          4.585081e-01
+D3_delta_PDC    5.168448e+02
+E1_PDC          5.449331e-01
+E1_delta_PDC    2.521959e+02
+F1_PDC          4.541304e-01
+F1_delta_PDC    1.279350e+19
 dtype: float64
 sMAPE_TEST: 
-F1_PDC             0.460387
-F1_delta_PDC    1804.561233
-B2_PDC             0.314496
-B2_delta_PDC     568.548021
-D3_PDC             0.423202
-D3_delta_PDC     377.037530
-E1_PDC             0.527987
-E1_delta_PDC     881.935532
+B2_PDC             0.312643
+B2_delta_PDC     566.282565
+D3_PDC             0.392279
+D3_delta_PDC     367.948107
+E1_PDC             0.507695
+E1_delta_PDC    1141.384406
+F1_PDC             0.424602
+F1_delta_PDC    1799.755602
 dtype: float64
 RMSE_TRAIN_SCORES: 
-     F1_PDC  F1_delta_PDC    B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC  \
-0  0.844724      3.087339  0.864806      2.798168  0.777204      2.771225   
+     B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC   E1_PDC  E1_delta_PDC  \
+0  0.883297      2.868635  0.778413      2.863158  1.28609      3.296795   
 
-     E1_PDC  E1_delta_PDC  
-0  1.284078      3.180967  
+     F1_PDC  F1_delta_PDC  
+0  0.846038      3.143263  
 RMSE_TEST_SCORES: 
-     F1_PDC  F1_delta_PDC    B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC  \
-0  1.221876      1.224199  0.415505      0.431281  0.777513      0.777141   
+     B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC    E1_PDC  E1_delta_PDC  \
+0  0.413606      0.418588  0.772225      0.777408  1.308456      1.314133   
 
-     E1_PDC  E1_delta_PDC  
-0  1.316867      1.321472  
+     F1_PDC  F1_delta_PDC  
+0  1.223293      1.228666  
 sMAPE_TRAIN_SCORES: 
-     F1_PDC  F1_delta_PDC    B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC  \
-0  0.478422  1.254720e+19  0.482681   1041.520035  0.486419    406.111676   
+     B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC    E1_PDC  E1_delta_PDC  \
+0  0.475924    757.048688  0.458508    516.844801  0.544933    252.195877   
 
-     E1_PDC  E1_delta_PDC  
-0  0.559563    305.543078  
+    F1_PDC  F1_delta_PDC  
+0  0.45413  1.279350e+19  
 sMAPE_TEST_SCORES: 
-     F1_PDC  F1_delta_PDC    B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC  \
-0  0.460387   1804.561233  0.314496    568.548021  0.423202     377.03753   
+     B2_PDC  B2_delta_PDC    D3_PDC  D3_delta_PDC    E1_PDC  E1_delta_PDC  \
+0  0.312643    566.282565  0.392279    367.948107  0.507695   1141.384406   
 
-     E1_PDC  E1_delta_PDC  
-0  0.527987    881.935532  
+     F1_PDC  F1_delta_PDC  
+0  0.424602   1799.755602  
 
-Well O1 delta & 1.22 & 0.20 & 1804.56\% \\ 
- Well O2 delta & 0.43 & 0.69 & 568.55\% \\ 
- Well O3 delta & 0.78 & 0.43 & 377.04\% \\ 
- Well O4 delta & 1.32 & 0.14 & 881.94\% \\ 
- Well O1 & 1.22 & -1.22 & 0.46\% \\ 
- Well O2 & 0.42 & 0.90 & 0.31\% \\ 
- Well O3 & 0.78 & 0.51 & 0.42\% \\ 
- Well O4 & 1.32 & -1.16 & 0.53\% \\ 
+Well O1 delta & 0.42 & 0.70 & 566.28\% \\ 
+ Well O2 delta & 0.78 & 0.43 & 367.95\% \\ 
+ Well O3 delta & 1.31 & 0.15 & 1141.38\% \\ 
+ Well O4 delta & 1.23 & 0.19 & 1799.76\% \\ 
+ Well O1 & 0.41 & 0.90 & 0.31\% \\ 
+ Well O2 & 0.77 & 0.52 & 0.39\% \\ 
+ Well O3 & 1.31 & -1.14 & 0.51\% \\ 
+ Well O4 & 1.22 & -1.22 & 0.42\% \\ 
  

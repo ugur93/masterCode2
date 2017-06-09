@@ -127,11 +127,11 @@ class VANILLANET(NN_BASE):
 class SSNET2(NN_BASE):
 
 
-    def __init__(self,n_width=90,n_depth=2,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=14101):
+    def __init__(self,n_width=10,n_depth=1,l2w=0.0001,dp_rate=0,seed=3014,output_act='relu',n_epoch=14101):
 
 
         self.SCALE=100
-        SIM = False
+        SIM = True
 
         self.output_layer_activation =output_act
         # Input module config
@@ -141,19 +141,23 @@ class SSNET2(NN_BASE):
         self.input_tags=['CHK','PBH','PWH','PDC']
         #Training config
         optimizer = 'adam'
-        loss =huber
+        loss =huber(0.1)
         nb_epoch = n_epoch
         batch_size = 64
         dp_rate=dp_rate
         self.add_onoff_state=True
 
-        self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
-        #self.model_name = 'SIM_DATA_WITHOUT_ONOFF'
+        #self.model_name='GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL'
+        self.model_name = 'SIM_DATA_WITH_ONOFF'
         #self.model_name = 'GJOA_GAS_WELLS_{}_D{}_W{}_L2{}'.format(loss,n_depth,n_width,l2w)
 
         if SIM:
             self.output_tags = SIM_OUTPUT_TAGS
             self.well_names = ['A', 'B', 'C', 'D']
+            self.well_names2 = ['B2', 'D3', 'E1', 'F1']
+            self.output_tag_ordered_list2 = []
+            for i in range(len(self.well_names)):
+                self.output_tag_ordered_list2.append(self.well_names[i] + '_QGAS')
             self.loss_weights = {
                 'A_out': 0.0,
                 'B_out': 0.0,
@@ -168,6 +172,9 @@ class SSNET2(NN_BASE):
             self.output_tags = GAS_WELLS_QGAS_OUTPUT_TAGS
             self.well_names = ['F1', 'B2', 'D3', 'E1']
             self.well_names2 =['B2', 'D3', 'E1', 'F1']
+            self.output_tag_ordered_list2 = []
+            for i in range(len(self.well_names2)):
+                self.output_tag_ordered_list2.append(self.well_names2[i] + '_QGAS')
             self.loss_weights = {
                 'F1_out': 0.0,
                 'B2_out': 0.0,
@@ -206,7 +213,7 @@ class SSNET2(NN_BASE):
         merged_outputs=[]
         outputs=[]
 
-        for key in self.well_names2:
+        for key in self.well_names:
             n_input = len(self.input_tags[key])
             aux_input,input,merged_out,out=self.generate_input_module(n_depth=self.n_depth, n_width=self.n_width,
                                                                     n_input=n_input, n_inception=0,
@@ -227,7 +234,7 @@ class SSNET2(NN_BASE):
         self.model = Model(inputs=inputs, outputs=all_outputs)
         self.model.compile(optimizer=self.optimizer, loss=self.loss, loss_weights=self.loss_weights)
 
-    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
+    def generate_input_module2(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
 
         input_layer = Input(shape=(n_input,), dtype='float32', name=name)
 
@@ -250,6 +257,36 @@ class SSNET2(NN_BASE):
         else:
             output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,
                                  kernel_regularizer=l2(self.l2weight), use_bias=True,name=name+'_out')(temp_output)
+            merged_output=output_layer
+            aux_input=input_layer
+            #aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
+
+        return aux_input, input_layer, merged_output, output_layer
+
+
+    def generate_input_module(self,n_depth, n_width, l2_weight, name, n_input, thresholded_output, n_inception=0):
+
+        input_layer = Input(shape=(n_input,), dtype='float32', name=name)
+
+        #temp_output=BatchNormalization()(input_layer)
+        # temp_output=Dropout(0.1)(input_layer)
+
+
+        temp_output = Dense(self.n_width, activation='relu',kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
+                            use_bias=True)(input_layer)
+        #temp_output=Dropout(0.05)(temp_output)
+        for i in range(1,self.n_depth):
+            if self.dp_rate>0:
+                temp_output = Dropout(self.dp_rate,name=name+'_dp_'+str(i))(temp_output)
+            temp_output = Dense(self.n_width, activation='relu', kernel_regularizer=l2(self.l2weight), kernel_initializer=self.init,
+                            use_bias=True)(temp_output)
+        #temp_output=Dropout(0.05)(temp_output)
+        if self.add_onoff_state:
+            output_layer = Dense(1, kernel_initializer=self.init,activation=self.output_layer_activation,kernel_regularizer=l2(self.l2weight),use_bias=True)(temp_output)
+            aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)
+        else:
+            output_layer = Dense(1, kernel_initializer=self.init, activation=self.output_layer_activation,
+                                 kernel_regularizer=l2(self.l2weight), use_bias=True)(temp_output)
             merged_output=output_layer
             aux_input=input_layer
             #aux_input, merged_output = add_thresholded_output(output_layer, n_input, name)

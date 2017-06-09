@@ -111,9 +111,9 @@ def f_linear(a,b,c,x):
 
 
 def plotData(X,X_Q,Y):
-    plt.subplot(2,1,1)
+    plt.figure()
     plotChokeInputs(X)
-    plt.subplot(2,1,2)
+    plt.figure()
     plotWellOutputs(Y)
     plt.figure()
     plt.grid(which='major', linestyle='-')
@@ -135,7 +135,7 @@ def plotChokeInputs(X):
     plt.title('Choke opening',fontsize=30)
     plt.ylabel('u',fontsize=30,rotation=0,labelpad=30)
     plt.xlabel('Sample number',fontsize=30)
-    plt.legend(fontsize=20)
+    plt.legend(fontsize=25)
     plt.tick_params(axis='both', which='major', labelsize=30)
 
     #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,
@@ -150,7 +150,7 @@ def plotWellOutputs(X_Q):
     plt.title('Well productions',fontsize=30)
     plt.ylabel('q', fontsize=30,rotation=0,labelpad=30)
     plt.xlabel('Sample number', fontsize=30)
-    plt.legend(fontsize=20)
+    plt.legend(fontsize=25)
     plt.tick_params(axis='both', which='major', labelsize=30)
 
    #plt.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3,

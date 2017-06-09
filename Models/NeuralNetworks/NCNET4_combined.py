@@ -506,35 +506,60 @@ class NET4_W_PRESSURE2(NN_BASE):
 
 class NET4_W_PRESSURE3(NN_BASE):
 
-    def __init__(self):
+    def __init__(self,DATA='OIL'):
 
-        self.model_name = 'NCNET3_PBH_INPUT'
+        self.model_name = 'NCNET3_PBH_INPUT_OIL_WELLS'
 
         self.output_layer_activation = 'relu'
         # Training config
         optimizer = 'adam'  # SGD(momentum=0.9,nesterov=True)
-        loss = huber
+        loss = huber(0.1)
         self.activation = 'relu'
         nb_epoch = 1000
         batch_size = 64
         verbose = 0
 
         n_depth = 2
-        n_width = 90
+        n_width = 100
         l2w = 0.00015
 
-        self.n_depth_pdc = 2
-        self.n_depth_pwh = 2
-        self.n_depth_pbh = 1
+        if DATA=='OIL':
+            self.n_depth_pdc = 2
+            self.n_depth_pwh = 2
+            self.n_depth_pbh = 1
 
-        self.n_width_pdc = 60
-        self.n_width_pwh = 90
-        self.n_width_pbh = 80
+            self.n_width_pdc = 60
+            self.n_width_pwh = 90
+            self.n_width_pbh = 80
+            self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']  #
+            self.well_names2 = ['B1', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1']
+            self.output_name='GJOA_TOTAL'
+        else:
+            self.n_depth_pdc = 2
+            self.n_depth_pwh = 2
+            self.n_depth_pbh = 1
+
+            self.n_width_pdc = 60
+            self.n_width_pwh = 90
+            self.n_width_pbh = 80
+            self.well_names = ['F1', 'B2', 'D3', 'E1']
+            self.well_names2 = ['B2', 'D3', 'E1', 'F1']
+            self.output_name = 'GJOA_QGAS'
         self.presl2weight=0
         self.add_thresholded_output = True
 
         self.input_tags = {}
-        self.well_names = ['C1', 'C2', 'C3', 'C4', 'B1', 'B3', 'D1']  #
+
+
+
+        self.output_tag_ordered_list2=[]
+        for i in range(len(self.well_names2)):
+            self.output_tag_ordered_list2.append(self.well_names2[i]+'_QOIL')
+        #self.output_tag_ordered_list2.append('GJOA_OIL_SUM_QGAS')
+        self.output_tag_ordered_list2.append('GJOA_TOTAL_SUM_QOIL')
+       # self.output_tag_ordered_list2.append('GJOA_QGAS')
+
+
         tags = ['CHK']  # , 'PBH', 'PWH', 'PDC']
         for name in self.well_names:
             if name not in ['C2', 'D1']:
@@ -564,7 +589,7 @@ class NET4_W_PRESSURE3(NN_BASE):
         #        self.input_tags['PRESSURE_INPUT'].append(key + '_' + '1_PBH')
         #self.input_tags['CHK_INPUT'].append('GJOA_RISER_OIL_B_CHK')
 
-        self.output_tags = OIL_WELLS_QGAS_OUTPUT_TAGS
+        self.output_tags = OIL_WELLS_QOIL_OUTPUT_TAGS
 
         for key in self.well_names:
             #print(key)
@@ -572,44 +597,75 @@ class NET4_W_PRESSURE3(NN_BASE):
             self.output_tags[key + '_PDC_out2'] = [key + '_PDC']
             if key not in ['C2','D1']:
                 self.output_tags[key + '_PBH_out2'] = [key + '_PBH']
+
+        if True:
+
         #print(self.output_tags)
-        self.loss_weights = {
+            self.loss_weights = {
 
-            'C1_out': 0.0,
-            'C2_out': 0.0,
-            'C3_out': 0.0,
-            'C4_out': 0.0,
-            'D1_out': 0.0,
-            'B3_out': 0.0,
-            'B1_out': 0.0,
+                'C1_out': 0.0,
+                'C2_out': 0.0,
+                'C3_out': 0.0,
+                'C4_out': 0.0,
+                'D1_out': 0.0,
+                'B3_out': 0.0,
+                'B1_out': 0.0,
 
-            'C1_PBH_out2':0.0,
-            #'C2_PBH_out2': 0.0,
-            'C3_PBH_out2': 0.0,
-            'C4_PBH_out2': 0.0,
-            'B1_PBH_out2': 0.0,
-            'B3_PBH_out2': 0.0,
-            #'D1_PBH_out2': 0.0,
+                'C1_PBH_out2':0.0,
+                #'C2_PBH_out2': 0.0,
+                'C3_PBH_out2': 0.0,
+                'C4_PBH_out2': 0.0,
+                'B1_PBH_out2': 0.0,
+                'B3_PBH_out2': 0.0,
+                #'D1_PBH_out2': 0.0,
 
-            'C1_PDC_out2': 0.0,
-            'C2_PDC_out2': 0.0,
-            'C3_PDC_out2': 0.0,
-            'C4_PDC_out2': 0.0,
-            'B1_PDC_out2': 0.0,
-            'B3_PDC_out2': 0.0,
-            'D1_PDC_out2': 0.0,
+                'C1_PDC_out2': 0.0,
+                'C2_PDC_out2': 0.0,
+                'C3_PDC_out2': 0.0,
+                'C4_PDC_out2': 0.0,
+                'B1_PDC_out2': 0.0,
+                'B3_PDC_out2': 0.0,
+                'D1_PDC_out2': 0.0,
 
-            'C1_PWH_out2': 0.0,
-            'C2_PWH_out2': 0.0,
-            'C3_PWH_out2': 0.0,
-            'C4_PWH_out2': 0.0,
-            'B1_PWH_out2': 0.0,
-            'B3_PWH_out2': 0.0,
-            'D1_PWH_out2': 0.0,
+                'C1_PWH_out2': 0.0,
+                'C2_PWH_out2': 0.0,
+                'C3_PWH_out2': 0.0,
+                'C4_PWH_out2': 0.0,
+                'B1_PWH_out2': 0.0,
+                'B3_PWH_out2': 0.0,
+                'D1_PWH_out2': 0.0,
 
 
-            'GJOA_TOTAL': 1.0
-        }
+                'GJOA_TOTAL': 1.0
+            }
+        else:
+            self.loss_weights = {
+
+                'F1_out': 0.0,
+                'B2_out': 0.0,
+                'E1_out': 0.0,
+                'D3_out': 0.0,
+
+
+                'F1_PBH_out2': 0.0,
+                'B2_PBH_out2': 0.0,
+                'D3_PBH_out2': 0.0,
+                'E1_PBH_out2': 0.0,
+
+
+                'F1_PDC_out2': 0.0,
+                'B2_PDC_out2': 0.0,
+                'D3_PDC_out2': 0.0,
+                'E1_PDC_out2': 0.0,
+
+
+                'F1_PWH_out2': 0.0,
+                'B2_PWH_out2': 0.0,
+                'D3_PWH_out2': 0.0,
+                'E1_PWH_out2': 0.0,
+
+                'GJOA_QGAS': 1.0
+            }
 
         print(self.output_tags)
         super().__init__(n_width=n_width, n_depth=n_depth, l2_weight=l2w, dp_rate=0, seed=3014,
@@ -637,7 +693,7 @@ class NET4_W_PRESSURE3(NN_BASE):
             rate_outputs.append(merged_output)
             all_outputs.append(merged_output)
 
-        merged_input = Add(name='GJOA_TOTAL')(rate_outputs)
+        merged_input = Add(name=self.output_name)(rate_outputs)
 
         all_outputs = all_outputs + [merged_input]
 
@@ -653,7 +709,7 @@ class NET4_W_PRESSURE3(NN_BASE):
         PWH_out = pres_output_layers[0]
         PDC_out = pres_output_layers[1]
 
-        if name in ['C1', 'C3', 'C4', 'B1', 'B3']:
+        if name not in ['C2','D1']:
             PBH_out = pres_output_layers[2]
             all_inputs = Concatenate(name=name)([chk_input, PBH_out,PWH_out,PDC_out])
         else:
@@ -719,7 +775,7 @@ class NET4_W_PRESSURE3(NN_BASE):
         outputs = []
         inputs = [chk_input_now, chk_input_prev]
 
-        for key in ['C1', 'C2', 'C3', 'C4', 'B3', 'B1', 'D1']:
+        for key in self.well_names:
             sub_model_PWH = generate_pressure_sub_model(chk_delta, name=key + '_PWH', depth=self.n_depth_pwh,
                                                         n_width=self.n_width_pwh, dp_rate=self.dp_rate, init=self.init,
                                                         l2weight=self.presl2weight)
@@ -750,7 +806,7 @@ class NET4_W_PRESSURE3(NN_BASE):
 
             PDC_out = Add(name=key + '_PDC_out2')([PDC_out, shifted_pressure_input_PDC])
 
-            if key in ['C1', 'C3', 'C4', 'B1', 'B3']:
+            if key not in ['C2','D1']:
                 shifted_pressure_input_PBH = Input(shape=(len(self.input_tags['SHIFTED_PRESSURE_PBH_' + key]),),
                                                   dtype='float32',
                                                   name='SHIFTED_PRESSURE_PBH_' + key)

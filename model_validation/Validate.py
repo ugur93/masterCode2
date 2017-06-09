@@ -17,16 +17,8 @@ MODEL_SAVEFILE_NAME='SSNET2_PRETRAINING_2'
 
 
 
-DATA_TYPE='GA3S'
+DATA_TYPE='GASs'
 
-
-
-def save_model(Data,data_type='GAS',model_type='PRESSURE_PDC'):
-    X = Data.X_transformed  # [1:-1]#[500:-1]
-    Y = Data.Y_transformed  # [1:-1]#[500:-1]
-    X_train, Y_train, X_val, Y_val, X_test, Y_test = get_train_test_val_data(X, Y, test_size=0, val_size=0.1)
-    if data_type=='GAS':
-        model = NCNET1_GJOA2.NCNET1_GJOA2(DATA='GAS')
 def validate(DataOIL,DataGAS):
 
 
@@ -128,9 +120,9 @@ def validate_train_test_split(Data):
         #print(X_train.shape)
         #exit()
         #
-        model = NET2_PRESSURE.SSNET2()
-        print(len(X_val))
-        model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='OIL')
+        #model = NET2_PRESSURE.SSNET2()
+        #print(lenG
+        #model=NCNET1_GJOA2.NCNET1_GJOA2(DATA='GsAS')
 
         #model = NET2_PRESSURE.SSNET2()
 
@@ -145,14 +137,14 @@ def validate_train_test_split(Data):
         #model = NCNET_CHKPRES.PRESSURE_PBH()
 
 
-        #model = NCNET_CHKPRES.PRESSURE(tag='PBH',data='OIL')
+        model = NCNET_CHKPRES.PRESSURE(tag='PBH',data='OIL')
 
-        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PWH',data='OIL')
-        #model.model.load_weights(PATH,by_name=True)
+        #model = NCNET_CHKPRES.PRESSURE_DELTA(tag='PBH',data='OIL')
+        ##model.model.load_weights(PATH,by_name=True)
         #model = test_model.Test_model()
         #model=NCNET4_combined.NET4_W_PRESSURE2(PATH)
 
-        #model=NCNET4_combined.NET4_W_PRESSURE3()
+        #model=NCNET4_combined.NET4_W_PRESSURE3(DATA='OIL')
         #exit()
         #x_last=X_test[-1]
 
@@ -162,20 +154,37 @@ def validate_train_test_split(Data):
         #model.model.load_weights(PATH+'GJOA_deltaNET_OIL_WELLS_PWH_ALL_DATA.h5',by_name=True)
         #model.model.load_weights(PATH + 'GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
        # exit()
+        if False:
+            X_test = X_val
+            Y_test = Y_val
+            model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL_DP.h5', by_name=True)
 
+            model.initialize_chk_thresholds(Data, True)
+
+            cumperf_train = get_cumulative_deviation(model, Data, X_train, Y_train)
+            cumperf_test = get_cumulative_deviation(model, Data, X_test, Y_test)
+
+            fig, axes = get_cumulative_deviation_plot_single(cumperf_train, cumperf_test, model.model_name)
+            model.model.load_weights(PATH + 'GJOA_GAS_WELLS_QGAS_HUBER_MODEL_FINAL.h5', by_name=True)
+
+            cumperf_train = get_cumulative_deviation(model, Data, X_train, Y_train)
+            cumperf_test = get_cumulative_deviation(model, Data, X_test, Y_test)
+
+            fig, axes = get_cumulative_deviation_plot_single2(cumperf_train, cumperf_test, model.model_name, fig, axes)
+            plt.show()
         # model.initialize_zero_thresholds(Data)
         model.initialize_chk_thresholds(Data, True)
         print(model.get_config())
         start = time.time()
 
         if True:
-            model.update_model(activation='linear', epoch=1)
-            model.fit(X_train, Y_train, X_val, Y_val)
+            #model.update_model(activation='linear', epoch=1)
+            #model.fit(X_train, Y_train, X_val, Y_val)
             #641
-            model.update_model(activation='relu', epoch=541)
+            #model.update_model(activation='relu', epoch=554)
             model.fit(X_train, Y_train, X_val, Y_val)
             #model.save_model_to_file(model.model_name)
-            #exit()
+            exit()
 
         elif False:
             model.model.load_weights(PATH + model.model_name + '.h5', by_name=True)
@@ -185,10 +194,15 @@ def validate_train_test_split(Data):
             model.model.load_weights(PATH + 'GJOA_deltaNET_OIL_WELLS_PDC_ALL_DATA.h5', by_name=True)
             model.model.load_weights(PATH + 'GJOA_deltaNET_OIL_WELLS_PWH_ALL_DATA.h5', by_name=True)
             model.model.load_weights(PATH+'GJOA_deltaNET_OIL_WELLS_PBH_ALL_DATA.h5',by_name=True)
-            model.model.load_weights(PATH + 'GJOA_OIL_WELLS_GAS_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
+            model.model.load_weights(PATH + 'GJOA_OIL_WELLS_OIL_HUBER_MODEL_FINAL2_TESTDATA2.h5', by_name=True)
+            validateCV(model, model.get_weights(), Data, save=True,filename=model.model_name)
+            #exit()
+
         else:
             #pass
             model.model.load_weights(PATH + model.model_name+'.h5', by_name=True)
+            #validateCV(model, model.get_weights(), Data, save=True,filename=model.model_name)
+
 
 
         if False:
@@ -220,11 +234,11 @@ def validate_train_test_split(Data):
     scores, scores_latex = evaluate_model2(model, Data, X_train, X_val, Y_train, Y_val)
     scores=evaluate_model(model, Data, X_train, X_val, Y_train, Y_val)
     print(scores)
-    with_line_plot=False
+    with_line_plot=True
     with_separate_plot=True
     save_fig=False
     PATH='C:/Users/ugurac/Documents/GITFOLDERS/Masteroppgave-2017/figures/Results/NCNET2/OilWells/'
-    file_tag_name='GAS_WELLS_QGAS_'
+    file_tag_name='OIL_WELLS_QGAS_'
 
    # exit()
     #model.save_model_config(scores)
@@ -366,11 +380,11 @@ def results_to_latex(RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST,MAPE_TRAIN,MAPE_TEST,
     R2_TRAIN=R2_TRAIN*100
     R2_TEST = R2_TEST
     for key in well_names:
-        if key.split('_')[1]=='delta':
+        if key.split('_')[-1]=='QOIL':
             temp_s+='{0:s} & {1:0.2f} & {2:0.2f} & {3:0.2f}\\% \\\\ \n '.format(KEY_MAP[key],RMSE_TEST[key],R2_TEST[key],MAPE_TEST[key])
-    for key in well_names:
-        if key.split('_')[1]!='delta':
-            temp_s+='{0:s} & {1:0.2f} & {2:0.2f} & {3:0.2f}\\% \\\\ \n '.format(KEY_MAP[key],RMSE_TEST[key],R2_TEST[key],MAPE_TEST[key])
+    #for key in well_names:
+    #    if key.split('_')[1]!='delta':
+    #        temp_s+='{0:s} & {1:0.2f} & {2:0.2f} & {3:0.2f}\\% \\\\ \n '.format(KEY_MAP[key],RMSE_TEST[key],R2_TEST[key],MAPE_TEST[key])
     return temp_s
 
 def validateCV(model,init_weights,Data,params=None,save=True,filename=''):
@@ -477,7 +491,7 @@ def validateCV(model,init_weights,Data,params=None,save=True,filename=''):
         s += 'sMAPE_TEST_SCORES: \n{}\n'.format(scores_mape_test)
 
 
-        s+=results_to_latex(RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST,MAPE_TRAIN,MAPE_TEST,model.output_tag_ordered_list)
+        s+=results_to_latex(RMSE_TRAIN,RMSE_TEST,R2_TRAIN,R2_TEST,MAPE_TRAIN,MAPE_TEST,model.output_tag_ordered_list2)
 
 
 

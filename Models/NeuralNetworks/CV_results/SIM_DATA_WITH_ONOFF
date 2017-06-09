@@ -1,0 +1,55 @@
+RMSE_TRAIN: 
+A_QGAS               74.361957
+B_QGAS               50.297256
+C_QGAS               87.604449
+D_QGAS               56.545507
+Total_production    536.238097
+dtype: float64
+RMSE_TEST: 
+A_QGAS               63.619188
+B_QGAS               11.811112
+C_QGAS               91.011190
+D_QGAS               50.879399
+Total_production    547.606673
+dtype: float64
+R2_TRAIN: 
+A_QGAS             -24093.513080
+B_QGAS             -13059.591056
+C_QGAS              -2447.453743
+D_QGAS             -38430.148158
+Total_production      -28.189834
+dtype: float64
+R2_TEST: 
+A_QGAS             -1.342104e+06
+B_QGAS             -2.706235e+02
+C_QGAS             -3.153728e+05
+D_QGAS             -5.896432e+05
+Total_production   -1.916564e+02
+dtype: float64
+sMAPE_TRAIN: 
+A_QGAS              3045.555364
+B_QGAS              1743.992594
+C_QGAS              1173.212828
+D_QGAS              3553.810458
+Total_production      99.978204
+dtype: float64
+sMAPE_TEST: 
+A_QGAS              2843.395819
+B_QGAS               324.062458
+C_QGAS              1371.704696
+D_QGAS              3108.902141
+Total_production      99.982112
+dtype: float64
+RMSE_TRAIN_SCORES: 
+      A_QGAS     B_QGAS     C_QGAS     D_QGAS  Total_production
+0  74.361957  50.297256  87.604449  56.545507        536.238097
+RMSE_TEST_SCORES: 
+      A_QGAS     B_QGAS    C_QGAS     D_QGAS  Total_production
+0  63.619188  11.811112  91.01119  50.879399        547.606673
+sMAPE_TRAIN_SCORES: 
+        A_QGAS       B_QGAS       C_QGAS       D_QGAS  Total_production
+0  3045.555364  1743.992594  1173.212828  3553.810458         99.978204
+sMAPE_TEST_SCORES: 
+        A_QGAS      B_QGAS       C_QGAS       D_QGAS  Total_production
+0  2843.395819  324.062458  1371.704696  3108.902141         99.982112
+
